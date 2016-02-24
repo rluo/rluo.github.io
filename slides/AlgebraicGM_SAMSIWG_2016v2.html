@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Large-scale Graphical Models for Brain Networks: Algebraic (Non-likelihood) Methods</title>
+    <meta name="description" content="SCIO">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="./reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">-->
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js/css/print/pdf.css' : './reveal.js/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="reveal">
+        <source></source>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \( \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \)
+
+            <section>
+                <h2> <strong>Graphical Models for Brain Connectivity: <br> Algebraic (Non-likelihood) Methods</strong></h2>
+                <br>
+                <h3>Xi (Rossi) Luo</h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width=50%; ertical-align: middle;">
+                        <medium><strong>Brown University</strong>
+                            <br> Department of Biostatistics
+                            <br> Center for Statistical Sciences
+                            <br> Computation in Brain and Mind
+                            <br> Brown Institute for Brain Science</medium>
+                    </p> <img class="noborder inlinemiddle" style=" display: inline-block;
+                        height=100px;   ertical-align: middle;" src="Media/ABCDgroup/abcdLogo2_20150815.png"></img>
+                </div>
+                <br>
+                <p>
+                    <medium><strong>SAMSI Working Group</strong>
+                        <br> February 23, 2016 </medium>
+                </p>
+                <br>
+                <p>
+                    <small> Funding: NSF/DMS 1557467; NIH P20GM103645, P01AA019072, P30AI042853; AHA  </small>
+                </p>
+            </section>
+
+
+
+            <section data-state="intro">
+                <div width="100%">
+                    <img src="Media/Neuron/OptoGeneticNetwork.jpg" class="threecol noborder inlinemiddle" alt="" style="display: inline-block; vertical-align: middle;" width="40%">
+                    <span style="display:inline-block; width: 30px;"></span>
+                    <p class="inlinemiddle" style="display:inline-block; width: 50%">$10^{11}$ neurons
+                        <br>Ex: DTI, DWI, ...
+                        <br>or optogenetics modeling <cite>Luo et al, 16</cite>
+                    </p>
+                </div>
+                <br style="margin: 0px 0; line-height: 5px">
+                <div width="100%" style="vertical-align:middle;">
+                    <img src="Media/Gene/geneNetworkHIVBrainCut.png" class="threecol noborder inlinemiddle" alt="" style="display: inline-block; vertical-align: middle;" width="40%">
+                    <span style="display:inline-block; width: 30px;"></span>
+                    <p class="inlinemiddle" style="display:inline-block; width: 50%">$10^4$ genes, $10^6$ SNPs
+                        <br>Ex: Gene networks <cite>Liu & Luo, 15</cite></p>
+                </div>
+                <br>
+                <div width="100%" style="vertical-align:middle;">
+                    <img src="Media/fMRI/preSMANetworkCut.png" class="threecol noborder inlinemiddle" alt="" style="display: inline-block; vertical-align: middle;" width="40%">
+                    <span style="display:inline-block; width: 40px;"></span>
+                    <p style="display:inline-block; width: 50%">$10^6$ functional MRI voxels
+                        <br>
+                        <emph>This Talk</emph>
+                    </p>
+                </div>
+                <style>
+                    .intro source:after {
+                        content: "Image source: Ed Boyden and Massachusetts Institute of Technology McGovern Institute";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Other projects</li>
+                        <li>all numbers of rough scales</li>
+                        <li>This talk</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <!--            <div class="source">NSF</div>-->
+
+            <section data-state="fMRI">
+                <h2>fMRI</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Task fMRI: perform tasks under fMRI scanning</li>
+                        <li>Resting-state fMRI: "rest" in scanner</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>This talk: resting-state fMRI</p>
+                <style>
+                    .fMRI source:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>GO and stop means</li>
+                        <li>two parts</li>
+                        <li>similarity between resting-state</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
+                <!--                <h2>fMRI Data</h2>-->
+                <!--                <iframe src="Media/fMRI/ThreeJSBrainMaskColor.html" frameborder="0" width="800" , height="600"></iframe>-->
+                <video controls autoplay loop width="650" style="border: 0px;" src="Media/fMRI/BrainCubeColorWhiteHD.mp4" type="video/mp4"> </video>
+                <p><strong>fMRI data</strong>: blood-oxygen-level dependent signals from each
+                    <highlight>cube</highlight>/voxel (~millimeters),
+                    <emph>$10^5$ ~ $10^6$</emph> voxels in total. </p>
+                <aside class="notes">
+                    <ul>
+                        <li>Lego brain of real brain</li>
+                        <li>red cube is a voxel</li>
+                        <li>track activity from each cube at each time vector</li>
+                        <li>dimension: address temporal separately</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section>
+                <h2>fMRI Studies</h2>
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub 1, Sess 1 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>Time 1</p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>2</p>
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>~300</p>
+                </div>
+                <br>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub i, Sess j </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block;  text-align:left; "> Sub ~100, Sess ~4 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+
+                <p>
+                    <emph>Large, multilevel</emph> (subject, sess, voxel) data
+                    <br> $100 \times 4 \times 300 \times 10^6 \approx 100 $ billion data points </p>
+                <aside class="notes">
+                    <ul>
+                        <li>track one voxel through time</li>
+                        <li>deal large first</li>
+                        <li>multilevel later</li>
+                        <li>track all voxels get a matrix</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <h2>Data Matrix</h2>
+                <ul>
+                    <li>$X_{n \times d}$: $n$ observations from $d$ voxels</li>
+                    <li>Functional segregation: voxel clusters (ROIs)</li>
+                    <center><img src="Media/fMRI/voxelGrouping.png" alt="" class="noborder inlinemiddle" align="middle">
+                        <span style="display:inline-block; width: 30px;"></span>
+                        <img src="Media/MRI/freeSurfer.png" alt="" class="noborder inlinemiddle" width="30%"></center>
+                    <li>Dimension reduction: $X_{n\times p}$&mdash;averages from $p$ ROIs
+                        <ul>
+                            <li>Reduced computation: $p \approx 10^2 \ll d \approx 10^6$</li>
+                            <li>Statistically: introduce bias and reduce efficiency <cite>Luo, 14</cite></li>
+                            <li>Scientifically: ROI definitions can vary greatly</li>
+                            <li>Still a popular approach due to simplicity (will pursue in this talk)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Brain Connectivity</h2>
+                <ul>
+                    <li>
+                        <emph>
+                            Given $X_{n\times p}$, infer connections between $p$ ROIs.
+                        </emph>
+                    </li>
+                    <li>Intuition: connected ROIs have similar fluctuations</li>
+                    <li>Stat objective: infer the
+                        <emph>direct</emph> network connections</li>
+                    <li>"small n, large p": science, theory, method, computation, and data science</li>
+                    <li>Temporal dependence removed or small
+                        <ul>
+                            <li>Low sampling rate: 300 time points, ~2 seconds apart</li>
+                            <li>Standard preprocessing (AR models) <cite>Lindquist, 06; Bownman, 14</cite></li>
+                            <li>Causal nonparametric testing <cite>Luo et al, JASA 12</cite></li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>General stat issues</li>
+                        <li>certain standard techniques do not apply</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section>
+                <h1>Graphical Models</h1>
+            </section>
+
+
+            <section>
+                <h2>Overview</h2>
+                <ul>
+                    <li>Data: $n \times p$ matrix of $n$ activities from $p$ voxels
+                    </li>
+                    <li>Methods: biophysical interpretability $\propto$ scalability${}^{-1}$
+                        <ul>
+                            <li>Correlation</li>
+                            <li>PCA, independent component analysis (ICA) <cite>Calhoun, Guo, and colleagues</cite></li>
+                            <li>Graphical models (inverse covariance)</li>
+                            <li>Granger causality, autoregressive models<cite>Ding, Hu, Ombao, and colleagues</cite></li>
+                            <li>Bayesian models</li>
+                            <li>Dynamic models (partial differential equations) <cite>Friston and colleagues</cite></li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">Graphical model, what evidence, how ours different, Ying's work</aside>
+            </section>
+
+            <section>
+                <h2>Selected Methods and Opinions</h2>
+                <br>
+                <img src="Media/fMRI/fMRIConnectivityModels.png" alt="">
+            </section>
+
+            <section>
+                <h2>Intro: Graphical Models</h2>
+                <ul>
+                    <li>For simplicity, $X\sim^{\textrm{iid}} N(0, \Sigma_{p\times p})$
+                        <ul>
+                            <li>All data are centered and scaled usually</li>
+                            <li>Assumptions can be relaxed (e.g. non-normal data, spatialtemporal correlations), with modifications of our methods</li>
+                        </ul>
+                    </li>
+                    <li>Interested in estimating $\Omega = \Sigma^{-1}$ because $$ \Omega_{ij} = 0 \quad \iff \quad \mbox{variable } i \bot j \, | \, \mbox{others}$$
+                    </li>
+                    <li>Network representation: each variable is a node $$ \Omega_{ij} = 0 \quad \iff \quad \mbox{No edge node } i \not \sim j $$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>GM vs Correlation</h2>
+                <ul>
+                    <li>Matrix $\Omega$ $\iff$ network:
+                        <br>
+                        <div class="inlinemiddle">
+                            $$\small \Omega = \begin{pmatrix} 1 & 0.2 & {\color{red} 0} & {\color{red} 0}\\ 0.2 & 1 & -0.1 & 0.1\\ {\color{red} 0} & -0.1 & 1 & 0.3\\ {\color{red} 0} & 0.1 & 0.3 & 1\\ \end{pmatrix} $$
+                        </div>
+                        <p style="display:inline-block; width: 50px;"> $\iff$ </p>
+                        <div class="inlinemiddle">
+                            <img src="Media/GraphicalModels/simpleNetwork.png" alt="" class="noborder">
+                        </div>
+                    </li>
+                    <li>Correlation $\Sigma$ has few zero entries (empirically)
+                        <ul>
+                            <li>Path $1-2-3$, $1$ and $3$ correlated but not connected directly</li>
+                            <li>Correlation measures indirect connections</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <emph>Direct</emph> connections closer to causal interpretation</li>
+                    <li>$\Omega$ also related to (known as) partial correlation</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>cor matrix is full</li>
+                        <li>direct connection </li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section>
+                <h2>Review: Sparse GM Frameworks</h2>
+                <ul>
+                    <li>Sample cov $\hat{\Sigma}$ non-invertible when $p>n$
+                        <ul>
+                            <li>Bad "global" matrix properties: eigenvalues converge badly</li>
+                        </ul>
+                    </li>
+                    <li>Assume sparse $\Omega$: interpretability and stability</li>
+                    <li>Penalized conditional likelihood <cite>Meinshausen & Bulmann, 06</cite>
+                        <ul>
+                            <li>Penalized (e.g. $\ell_1$ or LASSO) regression: $X_j \sim X_{-j}$</li>
+                            <li>Colinearity/correlation makes variable selection challenging</li>
+                        </ul>
+                    </li>
+                    <li>Penalized likelihood using $\hat{\Sigma}$ <cite>Yuan & Lin, 07; Banerjee et al, 07; Friedman et al, 08</cite>
+                        <ul>
+                            <li>Matrix computation, misspecified likelihood</li>
+                            <li>Slow convergence due to bad global convergence</li>
+                        </ul>
+                    </li>
+                    <li>Algebraic (non-likelihood) approaches <cite>JASA, 11; JMVA 15</cite>
+                        <ul>
+                            <li>Leveraging good "local"/element-wise convergence</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Algebraic Approach 1: <emph>CLIME</emph></h2>
+                <Ul>
+                    <li>CLIME <cite>Cai, Liu, Luo, JASA, 11</cite> $$ \min \| \Omega \|_1 \quad \textrm{subject to: } \lVert \hat{\Sigma} \Omega - I \rVert_\infty\le \lambda $$
+                        <ul>
+                            <li> $\| \Omega \|_1 = \sum_{ij} \| \Omega_{ij} \|$, $\| M \|_\infty = \max_{i,j} \| M_{ij} \|$. </li>
+                            <li>Symmetrication: $\Omega = \min(\Omega, \Omega^T)$</li>
+                        </ul>
+                    </li>
+                    <li>Vector computation: solve columns $\Omega_{\cdot j}$ separately</li>
+                    <li>Algorithm: linear programming
+                        <ul>
+                            <li>Unique solutions, and fast algorithms</li>
+                        </ul>
+                    </li>
+                    <li>Penalty choice (LASSO) not critical</li>
+                </Ul>
+            </section>
+
+            <section>
+                <h2>Illustration</h2>
+                <br>
+                <img src="Media/GraphicalModels/AlgebraicIllustration.png" alt="">
+            </section>
+
+            <section>
+                <h2>Illustration</h2>
+                <br>
+                <img src="Media/GraphicalModels/AlgebraicIllustrationCol.png" alt="">
+            </section>
+
+            <section>
+                <h2>Theory</h2>
+                <ul>
+                    <li>Assumptions: large $p = O(\exp(n))$ and signal$>\lambda$</li>
+                    <li>
+                        <emph>Faster</emph> convergence rates than penalized likelihood
+                        <ul>
+                            <li>CLIME $n^{-1/2} \log^{1/2} p$ vs likelihood $n^{-1/2} p^{\xi}$ in polynomial-tail dist</li>
+                            <li>Minimax optimal <cite>Cai et al, 14</cite></li>
+                            <li>Works for semiparametric distributions <cite>Liu, Lafferty, Wasserman, and colleagues</cite></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <emph>Weaker</emph> assumptions than penalized likelihood
+                        <ul>
+                            <li>CLIME works under stronger "colinearity"</li>
+                        </ul>
+                    </li>
+                    <li> Limitations: tuning parameter selection and computation </li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Algebraic Approach 2: <emph>SCIO</emph></h2>
+                <ul>
+                    <li>SCIO <cite>Liu, Luo, JMVA, 15</cite> $$ \min_{\mathbf{\beta} = \Omega_{\cdot j}}\left\{ \frac{1}{2}\mathbf{\beta}^{T}\hat{\Sigma}\mathbf{\beta}-\mathbf{\beta}^{T}e_{i}+\lambda\left\Vert \mathbf{\beta}\right\Vert _{1}\right\} $$
+                    </li>
+                    <li>Generalization of conjugate gradient loss
+                        <ul>
+                            <li>Faster computation via convex programming</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <emph>Smaller</emph> (constants) than CLIME
+                        <ul>
+                            <li>Better rates than penalized likelihood</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>why algebraic name?</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <h2>New CV and Its <emph>Theory</emph></h2>
+                <ul>
+                    <li>Random split (training/validating): $n_\mbox{tr} \asymp n_\mbox{val} \asymp n$</li>
+                    <li>Select tuning $\lambda_i$ on a grid (size $N$) to min loss $$\hat{R}(\lambda_i)= \frac{1}{2}(\hat{\beta}^{\mbox{tr}}(\lambda_i))^{T}\hat{\Sigma}_{\mbox{val}} \hat{\beta}^{\mbox{tr}}(\lambda_i)-e^{T}\hat{\beta}^{\mbox{tr}}(\lambda_i)$$
+                    </li>
+                    <li>Use selected $\hat{\lambda}$ above for SCIO estimator $\hat{\Omega}_{\mbox{cv}}$</li>
+                </ul>
+                <div class="thm">
+                    <strong>Theorem</strong>. Under regularity conditions, $\log N = O(\log p)$, $n^{1/2} \log^{-1/2} p = o(N)$, as $n,\,p\rightarrow \infty$,
+                    <span style="font-style: normal;">
+                    $$\frac{1}{p} \left\| \hat{\Omega}_{\mbox{cv}} - \Omega \right\|_F^2 = O_p \left(\frac{\log p}{n} \right)$$
+                    </span>
+                </div>
+            </section>
+
+            <section>
+                <h1>Simulations</h1>
+            </section>
+
+            <section>
+                <h2>Matrix Loss Comparison</h2>
+                <br>
+                <img src="Media/GraphicalModels/ScioMatLossTable.png" alt="">
+                <br>
+                <p>SCIO has
+                    <emph>samller losses</emph> for most scenarios</p>
+            </section>
+
+            <section>
+                <h2>Network Recovery Comparison</h2>
+                <br>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/GraphicalModels/ScioSimuSparseModelTrue.png" alt="">
+                    <p>Truth</p>
+                </div>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/GraphicalModels/ScioSimuSparseModelScio.png" alt="">
+                    <p>SCIO</p>
+                </div>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/GraphicalModels/ScioSimuSparseModelGlasso.png" alt="">
+                    <p>Glasso</p>
+                </div>
+                <br>
+                <p>Heatmaps: black-nonzero over 100% runs; white-100% zero.</p>
+                <br>
+                <p>
+                    <emph>
+                        SCIO closer to the truth
+                    </emph>
+                </p>
+            </section>
+
+            <section data-state="fmriNetSimu">
+                <h2>fMRI Simulation</h2>
+                <br>
+                <div class="twocol inlinemiddle" style="width: 45%">
+                    <!--
+                    <img src="Media/GraphicalModels/networkFMRImodel.png" alt="" class="noborder" width="100%">
+                    <p>
+                        <medium>Model (part)</medium>
+                    </p>
+-->
+                    <img src="Media/GraphicalModels/scioVSglassoSimu.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 50%">
+                    <ul>
+                        <li>GM is among the
+                            <emph>top 3</emph> methods of 30+ by massive dynamic simulations (600+ citations) <cite>Smith et al, 10</cite></li>
+                        <li>Using their data,
+                            <highlight>SCIO</highlight> has
+                            <emph>better ROC</emph> of recovering the connections (non-zero $\Omega$), vs penalized likelihood (GLASSO)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h1>Real Data</h1>
+            </section>
+
+
+            <section>
+                <h2>ADHD</h2>
+                <ul>
+                    <li>ADHD affects about 10% children in US</li>
+                    <li>Data from the ADHD-200 project</li>
+                    <li>fMRI data from 61 Healthy, 22 ADHD cases
+                        <ul>
+                            <li>116 brain regions (AAL), 148 observations</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <img src="Media/GraphicalModels/ScioADHDfMRIComparison.png" style="width:60%;" alt="">
+                <p>Heatmaps: black-nonzero over 100% subs; white-100% zero.</p>
+                <p>
+                    SCIO:
+                    <emph>clearer contrasts</emph> between healthy and ADHD
+                </p>
+            </section>
+
+            <section>
+                <img src="Media/GraphicalModels/ScioRunningTimeComparison.png" style="width: 60%;" alt="">
+                <br>
+                <p>SCIO:
+                    <emph>faster</emph> computation and
+                    <emph>better</emph> scaling</p>
+            </section>
+
+            <section>
+                <h2>Another Data Example: HIV</h2>
+                <div class="twocol inlinemiddle" style="width: 60%;">
+                    <img src="Media/GraphicalModels/ScioHIVPrediction.png" style="width: 100%;" alt="">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 35%;">
+                    <ul>
+                        <li>Predicting HIV/non-HIV brains using gene exprs using LDA ($\Omega$)</li>
+                        <li>
+                            <highlight>SCIO</highlight>:
+                            <emph>higher</emph> pred accuracy</li>
+                    </ul>
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Summary</h2>
+                <ul>
+                    <li>New loss functions without likelihood
+                        <ul>
+                            <li>Improved accuracy and theory</li>
+                            <li>Fast computation</li>
+                            <li>Optimization: build methods to recover patterns</li>
+                        </ul>
+                    </li>
+                    <li>A step for big and complex (network) data
+                        <ul>
+                            <li>Accurate network recovery for brain networks</li>
+                            <li>For a broad range of distributions and data</li>
+                            <li>Utility: diagnosis and personalized medicine</li>
+                        </ul>
+                    </li>
+                    <li>Limitations and future work: complex models, faithful dimension reduction, implementation</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Collaborators</h2>
+                <div class="fbox"> <img src="Media/Personnel/TonyCai08.jpg" alt="" width="350" height="350">
+                    <p class="fbox"> Tony Cai
+                        <br>
+                        <small>Univ of Penn</small></p>
+                </div>
+                <span style="display:inline-block; width: 50px;"></span>
+                <div class="fbox"> <img src="Media/Personnel/WeidongLiuCut.png" alt="" width="350" height="350">
+                    <p class="fbox">Weidong Liu
+                        <br>
+                        <small>Shanghai JiaoTong Univ</small> </p>
+                </div>
+            </section>
+
+            <section>
+                <h2>References</h2>
+                <small>
+                   <ul>
+                    <li>Bunea, Giraud, X Luo. Community Estimation in G-models via CORD. Submitted to  Annals Stat</li>
+                    <li>Luo. A Hierarchical Graphical Model for Big Inverse Covariance Estimation with an Application to fMRI. Revision for Biostat</li>
+                    <li>Luo, Gee, Sohal, Small (2016). A Point-process Response Model for Optogenetics Experiments on Neural Circuits. Stat Med.</li>
+                    <li>Liu, Luo (2015). Fast and Adaptive Sparse Precision Matrix Estimation in High Dimensions. J Multivariate Analysis.</li>
+                    <li>Luo et al (2013) Cognitive control and gender specific neural predictors of relapse in cocaine dependence. Brain</li>
+                    <li>Luo, Small, Li, Rosenbaum (2012). Inference with Interference between Units in an fMRI Experiment of Motor Inhibition. JASA</li>
+                    <li>Cai, Liu, Luo (2011). A Constrained $\ell_1$ Minimization Approach to Sparse Precision Matrix Estimation. JASA</li>
+                    <li>R packages: clime, cord, pro, scio</li>
+                </ul>
+                </small>
+            </section>
+
+            <section>
+                <h1>Thank you!</h1>
+                <br>
+                <h3>
+                     <emph>Big</emph><highlight>Complex</highlight><span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
+                </h3>
+
+            </section>
+
+        </div>
+    </div>
+
+
+
+    <script src="./reveal.js/lib/js/head.min.js"></script>
+    <script src="./reveal.js/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                //                mathjax: './MathJax/MathJax.js',
+                mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+            // Optional reveal.js plugins
+            dependencies: [{
+                src: './reveal.js/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js/plugin/math/math.js',
+                async: true
+            }]
+        });
+
+    </script>
+
+</body>
+
+</html>
