@@ -55,7 +55,7 @@ body:-moz-full-screen {
 .reveal .slides > section > section {
     line-height: 1.2;
     font-weight: inherit;
-    /*            border: 1px black solid;*/
+/*                border: 1px black solid;*/
     /*    For debuging purpuses */
 }
 html {
@@ -574,4 +574,10 @@ html {
 .reveal .inlinemiddle {
     display: inline-block;
     vertical-align: middle;
+}
+
+.reveal .topleft {
+    position: absolute;
+    left: 10px;
+    top: 10px;
 }
