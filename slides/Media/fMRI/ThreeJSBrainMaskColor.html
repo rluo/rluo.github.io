@@ -21,7 +21,7 @@
 <body>
     <script src="../../JSLibrary/three.min.js"></script>
     <script src="../../JSLibrary/OrbitControls.js"></script>
-
+    <script src="http://threejs.org/build/three.min.js"></script>
     <script>
         var brainmask = [
             [7, 7, -1],
@@ -793,20 +793,20 @@
 
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(62, window.innerWidth / window.innerHeight, 1, 500);
-//                var camera = new THREE.PerspectiveCamera(62, 800 / 600, 1, 500);
+        //                var camera = new THREE.PerspectiveCamera(62, 800 / 600, 1, 500);
 
         var renderer = new THREE.WebGLRenderer({
             alpha: true
         });
 
-        renderer.setSize(window.innerWidth*0.9, window.innerHeight*0.9);
-//                renderer.setSize(800, 600);
+        renderer.setSize(window.innerWidth * 0.9, window.innerHeight * 0.9);
+        //                renderer.setSize(800, 600);
 
 
         document.body.appendChild(renderer.domElement);
 
         // background
-//        renderer.setClearColor(0xffffff, 0);
+        //        renderer.setClearColor(0xffffff, 0);
 
         camera.position.set(-20, -10, 0);
         camera.up = new THREE.Vector3(0, 0, 1);
