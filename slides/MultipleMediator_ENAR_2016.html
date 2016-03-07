@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Information Flow via Convex Optimization</title>
+    <meta name="description" content="SCIO">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="./reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">-->
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js/css/print/pdf.css' : './reveal.js/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="reveal">
+        <credit></credit>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \( \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \)
+
+            <section>
+                <h2> <strong>Estimating Brain Information Flow <br> via Convex Optimization</strong></h2>
+                <br>
+                <h3>Xi (Rossi) Luo</h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width=50%; ertical-align: middle;">
+                        <medium><strong>Brown University</strong>
+                            <br> Department of Biostatistics
+                            <br> Center for Statistical Sciences
+                            <br> Computation in Brain and Mind
+                            <br> Brown Institute for Brain Science</medium>
+                    </p> <img class="noborder inlinemiddle" style=" display: inline-block;
+                        height=100px;   ertical-align: middle;" src="Media/ABCDGroup/abcdLogo2_20150815.png"></img>
+                </div>
+                <br>
+                <p>
+                    <medium><strong>ENAR, Austin, Texas</strong>
+                        <br> March 8, 2016</medium>
+                </p>
+                <br>
+                <p>
+                    <small> Funding: NSF/DMS (BD2K) 1557467; NIH P20GM103645, P01AA019072, P30AI042853; AHA  </small>
+                </p>
+            </section>
+
+
+            <section>
+                <h2>Coauthor</h2>
+                <div class="fbox"> <img src="Media/Personnel/YiZhao12.jpg" alt="" width="350" height="350" class="imgborder">
+                    <p class="fbox">Yi Zhao
+                        <br>
+                        <small>
+                        (3rd Yr PhD Student)
+                        </small>
+                        <br>
+                        <small>Brown University</small>
+                    </p>
+                </div>
+            </section>
+
+            <!--            <div class="source">NSF</div>-->
+
+            <section data-state="fMRI">
+                <h2>Task fMRI</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <!--                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">-->
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Task fMRI: performs tasks under brain scanning</li>
+                        <li>Story vs Math task:
+                            <emph>listen</emph> to story (treatment stimulus) or math questions (control), eye closed</li>
+                        <li>Not resting-state: "rest" in scanner</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Goal: how brain processes story/math differently?
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section data-background-iframe="Media/fMRI/ThreeJSBrainMaskColor.html">
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
+                <!--                <h2>fMRI Data</h2>-->
+                <!--                <iframe id="brainCube" src="Media/fMRI/ThreeJSBrainMaskColor.html" frameborder="0" width="800" height="600" name="brainCube"></iframe>-->
+                <p style="margin-bottom: 650px;"></p>
+                <p><strong>fMRI data</strong>: blood-oxygen-level dependent (BOLD) signals from each
+                    <highlight>cube</highlight>/voxel (~millimeters),
+                    <emph>$10^5$ ~ $10^6$</emph> voxels in total. </p>
+                <aside class="notes">
+                    <ul>
+                        <li>Lego brain of real brain</li>
+                        <li>red cube is a voxel</li>
+                        <li>track activity from each cube at each time vector</li>
+                        <li>dimension: address temporal separately</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section>
+                <h2>fMRI Studies</h2>
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub 1, Sess 1 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>Time 1</p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>2</p>
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>~200</p>
+                </div>
+                <br>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub i, Sess j </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block;  text-align:left; "> Sub ~100, Sess ~4 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <br>
+                <br>
+                <p>
+                    This talk: one subject, two sessions (to test replicability)
+                </p>
+                <aside class="notes">
+                    <ul>
+                        <li>track one voxel time</li>
+                        <li>deal large first</li>
+                        <li>multilevel later</li>
+                        <li>track all voxels get a matrix</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <h2>Network Model with Stimulus</h2>
+                <img src="Media/Mediation/MediationModelStoryMath.png" alt="" class="noborder" width=80%>
+                <p><strong>Question</strong>: quantify
+                    <highlight>red</highlight>,
+                    <emph>blue</emph>, and other pathways
+                    <br> from stimulus to <span class="myorange"><strong>orange outcome</strong></span> circle/region <cite>Heim et al, 09</cite></p>
+            </section>
+
+            <section>
+                <h2>Pathway=Activation+Connectivity</h2>
+                <ul>
+                    <li><strong>Activation</strong>: stimulus $\rightarrow$ brain region activity</li>
+                    <li><strong>Connectivity</strong>: one brain region $\rightarrow$ another region
+                        <ul>
+                            <li>Whether not two or more brain regions "correlate"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Pathway</strong>: stimulus $\rightarrow$ brain region A $\rightarrow$ region B
+                    </li>
+                    <li>Strong path: strong activation
+                        <highlight>and</highlight> strong conn</li>
+                    <li>Zero path: zero activation
+                        <highlight>or</highlight> zero conn, including
+                        <ul>
+                            <li>Zero activation + strong conn = zero</li>
+                            <li>Strong activation + zero conn = zero</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Stefano and colleagues next talk</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <h1>Model</h1>
+            </section>
+
+
+
+            <section>
+                <h2>Mediation Analysis and SEM</h2>
+                <img src="Media/Mediation/SingleMedBrainAnnotCoef.png" alt="" class="noborder"> $$\begin{align*}M &= Z a + {U + \epsilon_1}\\ R &= Z c + M b + {U g + \epsilon_2}\end{align*}$$
+                <ul>
+                    <li>Pathway effect: $a \times b$<cite>indirect</cite>; residual: $c$<cite>direct</cite></li>
+                    <li>Mediation analysis
+                        <ul>
+                            <li><cite>Baron&Kenny, 86; Sobel, 82; Holland 88; Preacher&Hayes 08; Imai et al, 10; VanderWeele, 15;...</cite></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Mediation Analysis in fMRI</h2>
+                <ul>
+                    <li>Parametric <cite>Wager et al, 09</cite> and functional <cite>Lindquist, 12</cite> mediation, under (approx.) independent errors
+                        <ul>
+                            <li>Stimulus $\rightarrow$ brain $\rightarrow$ user reported ratings, one mediator</li>
+                            <li>Usual assumption: $U=0$ and $\epsilon_1 \bot \epsilon_2$</li>
+                        </ul>
+                    </li>
+                    <li>Parametric and multilevel mediation <cite>Yi and Luo, 15</cite>, with correlated errors for two brain regions
+                        <ul>
+                            <li>Stimulus $\rightarrow$ brain region A $\rightarrow$ brain region B, one mediator</li>
+                            <li>Correlations between $\epsilon_1$ and $\epsilon_2$</li>
+                        </ul>
+                    </li>
+                    <li>This talk: multiple mediator and multiple pathways
+                        <ul>
+                            <li>High dimensional: more mediators than sample size </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Full Pathway Model</h2>
+                <img src="Media/Mediation/FullModel.png" alt="" class="noborder" width="60%">
+                <ul>
+                    <li>Stimulus $Z$, $K$ mediating brain regions $M_1, \dotsc, M_K$, Outcome region $R$</li>
+                    <li>Strength of activation ($a_k$) and connectivity ($b_k$, $d_{ij}$)</li>
+                    <li>Too complex, even for small $K = 2$ <cite>Daniel et al, 14</cite>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Reduced Pathway Model</h2>
+                <img src="Media/Mediation/ReducedModel.png" alt="" class="noborder" width="60%"> $$\begin{align}M_k & = Z A_k + E_{1k},\, k=1,\dotsc, K\\ R & = Z C + \sum_{k=1}^{K} M_k B_k + E_2 \end{align}$$
+                <ul>
+                    <li>$A_k$: total inflow to mediator $M_k$; $B_k$: total conn
+                    </li>
+                    <li>Pathway effect: $A_k \times B_k$; Residual: $C$</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>regression model</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <h2>Relation to Full Model</h2>
+                <ul>
+                    <li><strong>Proposition</strong>: Our "total" parameters has explicit forms of "individual" flow parameters in the full model</li>
+                    <li><strong>Proposition</strong>: Our $E_k$'s are correlated, but won't affect estimation (will affect variance)</li>
+                    <li>Reduced model: a step to select spatial mediators
+                        <ul>
+                            <li>Strong overall inflow and strong conn flow</li>
+                        </ul>
+                    </li>
+                    <li>Favor reduced: challenging to determine the temporal order because of low temporal resolution</li>
+                </ul>
+                <aside class="notes">third talk, Jean-Marc will take the multi-model approach</aside>
+            </section>
+
+
+
+            <section>
+                <h1>Method</h1>
+            </section>
+
+            <section>
+                <h2>Regularized Regression</h2>
+                <ul>
+                    <li>Minimize the penalized least squares criterion
+                        <center>
+                            <medium>
+                                $$\sum_{k=1}^K \| M_k - Z A_k \|_2^2 + \| R - Z C - \sum_k M_k B_k \|_2^2 + \mbox{Pen}(A, B)$$
+                            </medium>
+                        </center>
+                        The choice of penalty $\mbox{Pen}(\cdot)$ to be discussed
+                        <ul>
+                            <li>All data are normalized (mean=0, sd=1)</li>
+                        </ul>
+                    </li>
+                    <li>Want to select sparse
+                        <emph>pathways</emph> for high-dim $K$</li>
+                    <li>Alternative approach: two-stage LASSO <cite>Tibshirani, 96</cite> to select sparse
+                        <emph>inflow</emph> and
+                        <emph>connection</emph> separately: $$ \sum_{k=1}^K \| M_k - Z A_k \|_2^2 + \lambda \sum_k | A_k | \\ \| R - Z C - \sum_k M_k B_k \|_2^2 + \lambda \sum_k |B_k| $$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Penalty: Pathway LASSO</h2>
+                <ul>
+                    <li>Select strong pathways effects: $A_k \times B_k$
+                        <ul>
+                            <li>TS-LASSO: shrink to zero when $A$&$B$ moderate but $A\times B$ large</li>
+                        </ul>
+                    </li>
+                    <li>Penalty (prototype) $$ \lambda \sum_{k=1}^K |A_k B_k| $$
+                        <ul>
+                            <li>Non-convex in $A_k$ and $B_k$</li>
+                            <li>Computationally heavy and non-unique solutions</li>
+                            <li>Hard to prove theory</li>
+                        </ul>
+                    </li>
+                    <li>We propose the following general class of penalties$$ \lambda \sum_{k=1}^K ( |A_k B_k| + \phi A_k^2 + \phi B_k^2) $$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <div class="thm">
+                    <strong>Theorem</strong> $$v(a,b) = |a b| + \phi (a^2 + b^2)$$ is convex
+                    <highlight>if and only if</highlight> $\phi\ge 1/2$. Strictly convex if $\phi > 1/2$.
+                </div>
+                <br>
+                <p><strong>Contour Plot of Different Penalties</strong></p>
+                <img src="Media/Mediation/PathLassoContour.png" alt="" class="twocol inlinemiddle" style="width: 35%;">
+                <div class="twocol inlinemiddle" style="width: 60%;">
+                    <ul>
+                        <li>
+                            <emph>Non-differentiable</emph> at points when $a\times b = 0$</li>
+                        <li>Shrink $a\times b$ to zero</li>
+                        <li>Special cases: $\ell_1$ or $\ell_2$</li>
+                        <li>TS-LASSO: different $|ab|$ effects though $|a|+|b|$ same</li>
+                    </ul>
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Algorithm: ADMM + AL</h2>
+                <ul>
+                    <li>SEM/regression loss: $u$; Non-differnetiable penalty: $v$ </li>
+                    <li>ADMM to address differentiability $$ \begin{aligned} \text{minimize} \quad & u(\Theta,D)+v(\alpha,\beta) \\ \text{subject to} \quad & \Theta=\alpha, \\ & D=\beta, \\ & \Theta e_{1}=1, \end{aligned}$$
+                    </li>
+                    <li>Augmented Lagrangian for multiple constraints</li>
+                    <li>Iteratively update the parameters</li>
+                    <li>We derive theorem on explicit (not simple) updates</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Complications</h2>
+                <ul>
+                    <li><strong>Mixed norm</strong> penalty $$\mbox{PathLasso} + \omega \sum_k (|A_k| + |B_k|)$$
+                    </li>
+                    <li><strong>Tuning parameter</strong> selection by cross validation
+                        <ul>
+                            <li>Reduce false positives via thresholding <cite>Johnston and Lu, 09</cite></li>
+                        </ul>
+                    </li>
+                    <li><strong>Inference/CI</strong>: bootstrap after refitting
+                        <ul>
+                            <li>Remove false positives with CIs covering zero <cite>Bunea et al, 10</cite></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Simulations</h1>
+            </section>
+
+            <section>
+                <h1>Simulations</h1>
+                <ul>
+                    <li>Our PathLasso compares with TSLasso</li>
+                    <li>Simulate with varying error correlations</li>
+                    <li>Tuning-free comparison: performance vs tuning parameter (estimated effect size)
+                        <ul>
+                            <li>PathLasso outperforms under CV</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Pathway Recovery</h2>
+                <br>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/Mediation/PathSimuRoc.png" alt="">
+                    <p>ROC</p>
+                </div>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/Mediation/PathSimuF1.png" alt="">
+                    <p>F1 Score</p>
+                </div>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/Mediation/PathSimuMSE.png" alt="">
+                    <p>MSE</p>
+                </div>
+                <br>
+                <p>Our PathLasso (<span class="myred">red</span>) outperforms two-stage Lasso (<span class="myblue">blue</span>)</p>
+                <p><cite>Other curves: variants of PathLasso and correlation settings</cite></p>
+            </section>
+
+            <section>
+                <h1>Real Data: HCP</h1>
+            </section>
+
+            <section>
+                <h2>Data: Human Connectome Project</h2>
+                <ul>
+                    <li>Two sessions (LR/RL), story/math task <cite>Binder et al, 11</cite></li>
+                    <li>gICA reduces voxel dimensions to 76 brain maps
+                        <ul>
+                            <li>ROIs/clusters after thresholding</li>
+                        </ul>
+                    </li>
+                    <li>Apply to two sess separately, compare replicability
+                        <ul>
+                            <li>Jaccard: whether selected pathways in two runs overlap</li>
+                            <li>$\ell_2$ diff: difference between estimated path effects</li>
+                        </ul>
+                    </li>
+                    <li>Tuning-free comparisons</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <div class="twocol inlinemiddle">
+                    <img src="Media/Mediation/HCPMathStoryJaccard.png" alt="">
+                    <p>Jaccard</p>
+                </div>
+                <div class="twocol inlinemiddle">
+                    <img src="Media/Mediation/HCPMathStoryL2.png" alt="">
+                    <p>$\ell_2$ Diff</p>
+                </div>
+                <br>
+                <p>Regardless of tuning, our PathLasso (<span class="myred">red</span>) has smaller cross-sess diff (selection and estimation) than TSLasso (<span class="myblue">blue</span>)</p>
+            </section>
+
+            <section>
+                <img src="Media/Mediation/HCPTwoMedMap.png" alt="" class="topright">
+                <img src="Media/Mediation/HCPmediationNodes2Anotated2.png" alt="" width="70%">
+                <p>Stim-M25-R and Stim-M65-R significant <cite>shown largest weight areas</cite></p>
+                <medium>
+                    <ul>
+                        <li>M65 responsible for language processing, larger flow under story</li>
+                        <li>M25 responsible for uncertainty, larger flow under math</li>
+                    </ul>
+                </medium>
+            </section>
+
+
+            <section>
+                <h2>Summary</h2>
+                <ul>
+                    <li>High dimensional pathway model </li>
+                    <li>Penalized SEM for pathway selection and estimation </li>
+                    <li>Convex optimization for non-convex products
+                        <ul>
+                            <li>Sufficient and necessary condition</li>
+                            <li>Algorithmic development for complex optimization</li>
+                        </ul>
+                    </li>
+                    <li>Improved estimation and selection accuracy</li>
+                    <li>Higher replicability in HCP data</li>
+                    <li>Manuscript on arXiv soon</li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Thank you!</h1>
+                <br>
+                <h3>
+                     <emph>Big</emph><highlight>Complex</highlight><span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
+                </h3>
+
+            </section>
+
+        </div>
+    </div>
+
+    <script src="./reveal.js/lib/js/head.min.js"></script>
+    <script src="./reveal.js/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                mathjax: './MathJax/MathJax.js',
+                //                mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+            // Optional reveal.js plugins
+            dependencies: [{
+                src: './reveal.js/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js/plugin/math/math.js',
+                async: true
+            }]
+        });
+
+    </script>
+
+</body>
+
+</html>

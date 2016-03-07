@@ -65,7 +65,7 @@ html {
 /* For debuging purpuses */
 
 .reveal .slides {
-    /*        border: 1px black solid;*/
+/*            border: 1px black solid;*/
 }
 .reveal aside.notes {
     font-size: 4em;
@@ -563,7 +563,7 @@ html {
     color: #4dbeee;
 }
 .reveal .myred {
-    color: #a2142f;
+    color: #a3142e;
 }
 .reveal figcaption {
     margin-top: 0em;
