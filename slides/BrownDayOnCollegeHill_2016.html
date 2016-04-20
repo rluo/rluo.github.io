@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>From Big Data to Knowledge: Brain and Beyond</title>
+    <meta name="description" content="SCIO">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="./reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js/css/print/pdf.css' : './reveal.js/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="reveal">
+        <credit></credit>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \( \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \DeclareMathOperator{\Ex}{\mathbb{E}} \DeclareMathOperator{\diag}{diag} \)
+
+            <section>
+                <h2> <strong>From Big Data to Knowledge: <br><br>Brain, Twitter, and Beyond</strong></h2>
+                <br>
+                <h3>Xi (Rossi) Luo</h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width=50%; ertical-align: middle;">
+                        <medium><strong>Brown University</strong>
+                            <br> Department of Biostatistics
+                            <br> Center for Statistical Sciences
+                            <br> Computation in Brain and Mind
+                            <br> Brown Institute for Brain Science</medium>
+                    </p> <img class="noborder inlinemiddle" style=" display: inline-block;
+                        height=100px;   ertical-align: middle;" src="Media/ABCDgroup/abcdLogo2_20150815.png"></img>
+                </div>
+                <br>
+                <p>
+                    <medium><strong>Brown University, ADOCH</strong>
+                        <br>April 20, 2016</medium>
+                </p>
+                <!--
+                <br>
+                <p>
+                    <small> Funding: NSF/DMS (BD2K) 1557467; NIH P20GM103645, P01AA019072, P30AI042853; AHA  </small>
+                </p>
+-->
+            </section>
+
+
+            <section>
+                <h2>Big Data and Brain</h2>
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder" width="60%">
+                <ul>
+                    <li>100 million (
+                        <emph>$10^{11}$</emph>) neurons</li>
+                    <li>100 trillion (
+                        <emph>$10^{14}$</emph>) neuronal connections</li>
+                </ul>
+            </section>
+
+
+            <section data-background-iframe="Media/fMRI/ThreeJSBrainMaskColor.html">
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
+                <!--                <h2>fMRI Data</h2>-->
+                <!--                <iframe id="brainCube" src="Media/fMRI/ThreeJSBrainMaskColor.html" frameborder="0" width="800" height="600" name="brainCube"></iframe>-->
+                <p style="margin-bottom: 650px;"></p>
+                <p><strong>fMRI data</strong>: blood-oxygen-level dependent (BOLD) signals from each
+                    <highlight>cube</highlight>/voxel (~millimeters),
+                    <emph>$10^5$ ~ $10^6$</emph> voxels in total. </p>
+                <aside class="notes">
+                    <ul>
+                        <li>Lego brain of real brain</li>
+                        <li>red cube is a voxel</li>
+                        <li>track activity from each cube at each time vector</li>
+                        <li>dimension: address temporal separately</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <h2>Complex Data: fMRI Studies</h2>
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub 1, Sess 1 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>Time 1</p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>2</p>
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>~200</p>
+                </div>
+                <br>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub i, Sess j </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block;  text-align:left; "> Sub ~100, Sess ~4 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>Large, multilevel</emph> (subject, sess, voxel) data
+                    <br> $100 \times 4 \times 300 \times 10^6 \approx 100 $ billion data points </p>
+                <aside class="notes">
+                    <ul>
+                        <li>track one voxel time</li>
+                        <li>deal large first</li>
+                        <li>multilevel later</li>
+                        <li>track all voxels get a matrix</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <h2>Predicting Cocaine Relapses</h2>
+                <p>
+                    <img src="Media/fMRI/brainCocPrediction.png" alt="" class="noborder" width="100%">
+                </p>
+                <credit>Image: Luo et al, 13</credit>
+
+            </section>
+
+            <section>
+                <h2>Complex Models: Brain Networks</h2>
+                <p>Find brain networks with 1 trillion (
+                    <emph>$10^{12}$</emph>) possible connections
+                    <img src="Media/fMRI/brainGeneNetworkJMVA.png" alt="" class="noborder" width="60%">
+                </p>
+                <credit>Image: Liu and Luo, 15</credit>
+                <aside class="notes">about the number of fishes in the ocean; number of cells in the human body</aside>
+            </section>
+
+
+
+            <section>
+                <h2><emph>Course:</emph> Stat Methods for Big Data</h2>
+                <p>
+                    <img src="Media/SMBD/DSCircle.png" alt="" class="noborder" width="85%">
+                </p>
+                <p>Applied Mathematics + Computer Science + Statistics</p>
+                <credit>Thanks to the support of Office of the Provost, the Sheridan Center, and School of Professional Studeis</credit>
+            </section>
+
+            <section>
+                <img src="https://upload.wikimedia.org/wikipedia/en/9/9f/Twitter_bird_logo_2012.svg" alt="" class="topright" width="100px">
+                <h2>Case Study: Twitter</h2>
+                <div class="twocol inlinemiddle">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Hillary_Clinton_official_Secretary_of_State_portrait_crop.jpg" alt="">
+                    <p>Hillary Clinton</p>
+                </div>
+                <div class="twocol inlinemiddle">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/de/Bernie_Sanders.jpg" alt="">
+                    <p>Bernie Sanders</p>
+                </div>
+                <credit>Imge: wikipedia</credit>
+            </section>
+
+            <section>
+                <h2>Excerpt of Data</h2>
+                <p>
+                    <img src="Media/SMBD/ClintonSandersTwittsData.png" alt="">
+                </p>
+                <credit>Jaime Zhang, student in SMBD</credit>
+            </section>
+
+            <section>
+                <div class="twocol inlinemiddle">
+                    <img src="Media/SMBD/HillaryTwitCloud.png" alt="">
+                </div>
+                <div class="twocol inlinemiddle">
+                    <img src="Media/SMBD/BernieTwitCloud.png" alt="">
+                </div>
+                <p>Statistical test: $p<10^{-4}$</p>
+                <credit>Jaime Zhang, student in SMBD</credit>
+            </section>
+
+           <section>
+               <h2>Summary</h2>
+               <ul>
+                   <li>Handle big  data</li>
+                   <li>Complex mathematical modeling</li>
+                   <li>Extract knowledge from data</li>
+                   <li>Course SMBD covers the above points</li>
+               </ul>
+           </section>
+
+            <section>
+                <h1>Thank you!</h1>
+                <br>
+                <h3>
+                     <emph>Big</emph><highlight>Complex</highlight><span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
+                </h3>
+
+            </section>
+
+        </div>
+    </div>
+
+    <script src="./reveal.js/lib/js/head.min.js"></script>
+    <script src="./reveal.js/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                //mathjax: './MathJax/MathJax.js',
+                                mathjax: '//cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+            // Optional reveal.js plugins
+            dependencies: [{
+                src: './reveal.js/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js/plugin/math/math.js',
+                async: true
+            }]
+        });
+
+    </script>
+
+</body>
+
+</html>
