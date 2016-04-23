@@ -55,7 +55,7 @@ body:-moz-full-screen {
 .reveal .slides > section > section {
     line-height: 1.2;
     font-weight: inherit;
-/*                border: 1px black solid;*/
+/*                border: 1px black solid; */
     /*    For debuging purpuses */
 }
 html {
@@ -212,7 +212,7 @@ html {
     font-style: italic;
     background: rgba(255, 255, 255, 0.05);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
-    border-left: 12px solid #DDD;
+    border-left: 12px solid #4d4d4d;
 }
 .reveal blockquote p:first-child,
 .reveal blockquote p:last-child {
@@ -224,7 +224,7 @@ html {
     content: "“";
     margin-left: -0.7em;
     font: 300%/1 Cochin, Georgia, "Times New Roman", serif;
-    color: #999;
+    color: #4d4d4d;
     float: left;
 }
 .reveal div.thm {
