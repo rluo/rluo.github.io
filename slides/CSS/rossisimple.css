@@ -55,7 +55,7 @@ body:-moz-full-screen {
 .reveal .slides > section > section {
     line-height: 1.2;
     font-weight: inherit;
-                border: 1px black solid;
+/*                border: 1px black solid;*/
     /*    For debuging purpuses */
 }
 html {
@@ -65,7 +65,7 @@ html {
 /* For debuging purpuses */
 
 .reveal .slides {
-            border: 1px black solid;
+/*            border: 1px black solid;*/
 }
 .reveal aside.notes {
     font-size: 4em;
