@@ -221,8 +221,10 @@
             <section>
                 <h2>Related Areas</h2>
                 <ul>
-                    <li><strong>Clustering</strong>: Kmeans and hierarchical clustering
+                    <li><strong>Clustering</strong>: Kmeans and Hierarchical Clustering
                         <ul>
+                            <li>Usually for clustering
+                                <emph>$n$ observations</emph> in $R^p$</li>
                             <li>Advantages: fast, general, popular</li>
                             <li>Limitations: low signal-noise-ratio, theory, NP-hard</li>
                             <li>Q: How to choose number of clusters? Theory?</li>
@@ -288,7 +290,8 @@
                         </center>
                     </li>
                     <li>Matrix math: $\cov(X) = \Sigma = G^TCG + d$</li>
-                    <li>We allow $|C_{11} | \lt | C_{12} |$ or <highlight>$C \prec 0$</highlight>
+                    <li>We allow $|C_{11} | \lt | C_{12} |$ or
+                        <highlight>$C \prec 0$</highlight>
                         <ul>
                             <li>Kmeans/HC leads to block-diagonal cor matrices (permutation)</li>
                         </ul>
@@ -314,7 +317,7 @@
                     <emph>iff</emph> $\var(X_{a})=\var(X_{b})$ and $\cov(X_{a},X_{c})=\cov(X_{b},X_{c})$ for all $c\neq a,b$. Moreover, if the matrix of covariances $C$ corresponding to the partition $G(X)$ is positive-semidefinite, then this is the unique minimal partition according to which ${X}$ admits a latent decomposition. </div>
                 <ul>
                     <li>We define the minimal cluster/partition.</li>
-                    <li>The minimal partition is unique under  conditions.</li>
+                    <li>The minimal partition is unique under conditions.</li>
                     <li>We will aim to recover the minimal partition (thus $K$).</li>
                 </ul>
             </section>
@@ -337,9 +340,12 @@
                             </li>
                         </ul>
                     </li>
-                    <li>Second, introduce <highlight>COR</highlight>relation <highlight>D</highlight>istance $$\d(a,b) := \max_{c\neq a,b}|R_{ac}-R_{bc}|$$</li>
+                    <li>Second, introduce
+                        <highlight>COR</highlight>relation
+                        <highlight>D</highlight>istance $$\d(a,b) := \max_{c\neq a,b}|R_{ac}-R_{bc}|$$</li>
                     <li>Third, group variables $a$, $b$ together if $\d(a,b) = 0$</li>
-                    <li>Do not care <emph>any pairwise distance</emph> between $a,b$</li>
+                    <li>Do not care
+                        <emph>any pairwise distance</emph> between $a,b$</li>
                     <li>"The enemy of my enemy is my friend"</li>
                 </ul>
             </section>
@@ -413,9 +419,9 @@
 
             <section>
                 <h2>Minimax</h2>
-                <div class="thm"><strong>Theorem:</strong> $P_{\Sigma}$ the likelihood based on $n$ independent observations of ${ X} \stackrel{d}{=} \mathcal{N}(0,\Sigma)$. For any \begin{equation}  0\leq \eta < \eta^{*}:= \frac{0.6\sqrt{\frac{ \log(p)}{n}}}{1+0.6\sqrt{\frac{ \log(p)}{n}}} \end{equation}
-                we have $$\inf_{\widehat G}\sup_{R \in \mathcal{R}(\eta)} P_{\Sigma}(\widehat G\neq G^{\beta}(X))\geq {1\over 2e+1}\geq {1\over 7} \,,$$ where the infimum is taken over all possible estimators. </div>
-                <p>Group separation condition on $\eta$ is optimal.</p>
+                <div class="thm"><strong>Theorem:</strong> $P_{\Sigma}$ the likelihood based on $n$ independent observations of ${ X} \stackrel{d}{=} \mathcal{N}(0,\Sigma)$. For any \begin{equation} 0\leq \eta
+                    < \eta^{*}:=\ frac{0.6\sqrt{\frac{ \log(p)}{n}}}{1+0.6\sqrt{\frac{ \log(p)}{n}}} \end{equation} we have $$\inf_{\widehat G}\sup_{R \in \mathcal{R}(\eta)} P_{\Sigma}(\widehat G\neq G^{\beta}(X))\geq {1\over 2e+1}\geq {1\over 7} \,,$$ where the infimum is taken over all possible estimators. </div>
+                        <p>Group separation condition on $\eta$ is optimal.</p>
             </section>
 
             <section>
@@ -491,7 +497,8 @@
                 <p>
                     <br>
                 </p>
-                <p><highlight>Recovery %</highlight> in red and <strong>CV loss</strong> in black.</p>
+                <p>
+                    <highlight>Recovery %</highlight> in red and <strong>CV loss</strong> in black.</p>
                 <p>CV selects the constants to yield close to 100% recovery, as predicted by our theory (at least for large $n>200$)</p>
             </section>
 
@@ -606,9 +613,9 @@
                     </li>
                     <li>$G$-models: $G$-latent, $G$-block, $G$-exchangeable</li>
                     <li>New metric, method, and theory
-                    <ul>
-                        <li>Defining clusters, consistency, minimax, and CV theory</li>
-                    </ul>
+                        <ul>
+                            <li>Defining clusters, consistency, minimax, and CV theory</li>
+                        </ul>
                     </li>
                     <li>Some new results using big data examples</li>
                     <li>Paper:
@@ -618,7 +625,7 @@
                         <ul>
                             <li>CV function available soon</li>
                         </ul>
-                        </li>
+                    </li>
                 </ul>
             </section>
 
@@ -627,85 +634,83 @@
                 <br>
                 <h2>Slides at: <emph>bit.ly/ICSA2016</emph></h2>
                 <img src="./Media/QR/ICSA2016.png" alt="" width="30%">
-                <br>
-                <br>
                 <h2>
                       Website: <emph>Big</emph><highlight>Complex</highlight><span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
                 </h2>
+                <p>Postdoc position available <br> funded by Whitehouse's Big Data and BRAIN Initiatives</p>
             </section>
-
+            </div>
         </div>
-    </div>
 
-    <script src="./reveal.js/lib/js/head.min.js"></script>
-    <script src="./reveal.js/js/reveal.js"></script>
+        <script src="./reveal.js/lib/js/head.min.js"></script>
+        <script src="./reveal.js/js/reveal.js"></script>
 
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
-    </script>
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+        </script>
 
-    <script>
-        // Full list of configuration options available at:
-        // https://github.com/hakimel/reveal.js#configuration
-        Reveal.initialize({
-            controls: false,
-            progress: true,
-            history: true,
-            center: true,
+        <script>
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: false,
+                progress: true,
+                history: true,
+                center: true,
 
-            transition: 'slide', // none/fade/slide/convex/concave/zoom
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
 
-            width: 1024,
-            height: 768,
+                width: 1024,
+                height: 768,
 
-            // Display the page number of the current slide
-            slideNumber: 'c/t',
+                // Display the page number of the current slide
+                slideNumber: 'c/t',
 
-            math: {
-                // mathjax: './MathJax/MathJax.js',
-                mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
-                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
-                    //                config: 'TeX-AMS-MML_SVG-full'
-            },
-
-            // Optional reveal.js plugins
-            dependencies: [{
-                src: './reveal.js/lib/js/classList.js',
-                condition: function() {
-                    return !document.body.classList;
-                }
-            }, {
-                src: './reveal.js/plugin/markdown/marked.js',
-                condition: function() {
-                    return !!document.querySelector('[data-markdown]');
-                }
-            }, {
-                src: './reveal.js/plugin/markdown/markdown.js',
-                condition: function() {
-                    return !!document.querySelector('[data-markdown]');
-                }
-            }, {
-                src: './reveal.js/plugin/highlight/highlight.js',
-                async: true,
-                condition: function() {
-                    return !!document.querySelector('pre code');
+                math: {
+                    // mathjax: './MathJax/MathJax.js',
+                    mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                    config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                        //                config: 'TeX-AMS-MML_SVG-full'
                 },
-                callback: function() {
-                    hljs.initHighlightingOnLoad();
-                }
-            }, {
-                src: './reveal.js/plugin/zoom-js/zoom.js',
-                async: true
-            }, {
-                src: './reveal.js/plugin/notes/notes.js',
-                async: true
-            }, {
-                src: './reveal.js/plugin/math/math.js',
-                async: true
-            }]
-        });
 
-    </script>
+                // Optional reveal.js plugins
+                dependencies: [{
+                    src: './reveal.js/lib/js/classList.js',
+                    condition: function() {
+                        return !document.body.classList;
+                    }
+                }, {
+                    src: './reveal.js/plugin/markdown/marked.js',
+                    condition: function() {
+                        return !!document.querySelector('[data-markdown]');
+                    }
+                }, {
+                    src: './reveal.js/plugin/markdown/markdown.js',
+                    condition: function() {
+                        return !!document.querySelector('[data-markdown]');
+                    }
+                }, {
+                    src: './reveal.js/plugin/highlight/highlight.js',
+                    async: true,
+                    condition: function() {
+                        return !!document.querySelector('pre code');
+                    },
+                    callback: function() {
+                        hljs.initHighlightingOnLoad();
+                    }
+                }, {
+                    src: './reveal.js/plugin/zoom-js/zoom.js',
+                    async: true
+                }, {
+                    src: './reveal.js/plugin/notes/notes.js',
+                    async: true
+                }, {
+                    src: './reveal.js/plugin/math/math.js',
+                    async: true
+                }]
+            });
+
+        </script>
 
 </body>
 
