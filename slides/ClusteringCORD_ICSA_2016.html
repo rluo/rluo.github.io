@@ -283,12 +283,12 @@
                         <br>
                         <center>
                             <small>
-                    $$\Sigma =\left(\begin{array}{ccccc} {\color{red} D_1} & {\color{red} C_{11} }&C_{12} & C_{12}& C_{12}\\ {\color{red} C_{11} }&{\color{red} D_1 }& C_{12} & C_{12}& C_{12} \\ C_{12} & C_{12} &{\color{green} D_{2}} & {\color{green} C_{22}}& {\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} D_2}&{\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} C_{22}}&{\color{green} D_2} \end{array}\right) $$
+                    $$\Sigma =\left(\begin{array}{ccccc} {\color{red} D_1} & {\color{red} C_{11} }&C_{12} & C_{12}& C_{12}\\ {\color{red} C_{11} }&{\color{red} D_1 }& C_{12} & C_{12}& C_{12} \\ C_{12} & C_{12} &{\color{green} D_{2}} & {\color{green} C_{22}}& {\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} D_2}&{\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} C_{22}}&{\color{green} D_2} \end{array}\right) \qquad  C = \left(\begin{array}{cc} {\color{red} C_{11} } & C_{12}\\ C_{12} &  {\color{green} C_{22}} \end{array}\right)  $$
                     </small>
                         </center>
                     </li>
                     <li>Matrix math: $\cov(X) = \Sigma = G^TCG + d$</li>
-                    <li>We allow $|C_{11} | \lt | C_{12} |$ or $C \prec 0$
+                    <li>We allow $|C_{11} | \lt | C_{12} |$ or <highlight>$C \prec 0$</highlight>
                         <ul>
                             <li>Kmeans/HC leads to block-diagonal cor matrices (permutation)</li>
                         </ul>
@@ -339,6 +339,7 @@
                     </li>
                     <li>Second, introduce <highlight>COR</highlight>relation <highlight>D</highlight>istance $$\d(a,b) := \max_{c\neq a,b}|R_{ac}-R_{bc}|$$</li>
                     <li>Third, group variables $a$, $b$ together if $\d(a,b) = 0$</li>
+                    <li>Do not care <emph>any pairwise distance</emph> between $a,b$</li>
                     <li>"The enemy of my enemy is my friend"</li>
                 </ul>
             </section>
@@ -412,8 +413,9 @@
 
             <section>
                 <h2>Minimax</h2>
-                <div class="thm"><strong>Theorem:</strong> $P_{\Sigma}$ the likelihood based on $n$ independent observations of ${ X} \stackrel{d}{=} \mathcal{N}(0,\Sigma)$. For any \begin{equation}\label{etamin} 0\leq \eta \lt \eta^{*}:={\sqrt{\log(p(p-1)/2)}\over \sqrt{(2+e^{-1})n} +\sqrt{\log(p(p-1)/2)}}\,, \end{equation} we have $$\inf_{\widehat G}\sup_{R \in \mathcal{R}(\eta)} P_{\Sigma}(\widehat G\neq G^{\beta}(X))\geq {1\over 2e+1}\geq {1\over 7} \,,$$ where the infimum is taken over all possible estimators. </div>
-                <p>Group separation condition on $\eta$ is necessary.</p>
+                <div class="thm"><strong>Theorem:</strong> $P_{\Sigma}$ the likelihood based on $n$ independent observations of ${ X} \stackrel{d}{=} \mathcal{N}(0,\Sigma)$. For any \begin{equation}  0\leq \eta < \eta^{*}:= \frac{0.6\sqrt{\frac{ \log(p)}{n}}}{1+0.6\sqrt{\frac{ \log(p)}{n}}} \end{equation}
+                we have $$\inf_{\widehat G}\sup_{R \in \mathcal{R}(\eta)} P_{\Sigma}(\widehat G\neq G^{\beta}(X))\geq {1\over 2e+1}\geq {1\over 7} \,,$$ where the infimum is taken over all possible estimators. </div>
+                <p>Group separation condition on $\eta$ is optimal.</p>
             </section>
 
             <section>
