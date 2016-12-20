@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Clustering via CORD</title>
+    <meta name="description" content="Rossi Luo's Slides">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="./reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js/css/print/pdf.css' : './reveal.js/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="reveal">
+        <credit></credit>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \( \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \DeclareMathOperator{\Ex}{\mathbb{E}} \DeclareMathOperator{\diag}{diag} \)
+
+            <section>
+                <h2> <strong>Variable Clustering via $G$-Models of Large Covariance Matrices</strong></h2>
+                <br>
+                <h3>Xi (Rossi) Luo</h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width=50%; ertical-align: middle;">
+                        <medium><strong>Brown University</strong>
+                            <br> Department of Biostatistics
+                            <br> Center for Statistical Sciences
+                            <br> Computation in Brain and Mind
+                            <br> Brown Institute for Brain Science
+                            <br> ABCD Research Group</medium>
+                    </p> <img class="noborder inlinemiddle" style=" display: inline-block;
+                          vertical-align: middle;" src="Media/ABCDgroup/abcdLogo2_BannerBigComplexDataCom.png" height="210px"></img>
+                </div>
+                <br>
+                <p>
+                    <medium><strong>ICSA 2016, Shanghai, CHINA</strong>
+                        <br>December 20, 2016</medium>
+                </p>
+                <br>
+                <p>
+                    <small>Funding: NIH R01EB022911; NSF/DMS (BD2K) 1557467; NIH P20GM103645, P01AA019072, P30AI042853; AHA</small>
+                </p>
+
+            </section>
+            <!--  25 Minutes    -->
+            <section>
+                <h2>Collaborators</h2>
+                <div class="fbox"> <img src="./Media/Personnel/FlorentinaBunea.jpg" alt="Florentina Bunea" width="350" height="350" class="clip-ellipse">
+                    <p class="fbox"> Florentina Bunea
+                        <br>
+                        <small>Cornell University </small></p>
+                </div>
+                <span style="display:inline-block; width: 50px;"></span>
+                <div class="fbox"> <img src="./Media/Personnel/ChristopheGiraud.jpg" alt="Florentina Bunea" width="350" height="350" class="clip-ellipse">
+                    <p class="fbox">Christophe Giraud
+                        <br>
+                        <small>Paris Sud University</small> </p>
+                </div>
+            </section>
+
+            <section>
+                <h2>Big Data Problem</h2>
+                <ul>
+                    <li>We are interested in
+                        <emph>big cov</emph> with many variables
+                        <ul>
+                            <li>
+                                <emph>Global</emph> property for certain
+                                <emph>joint</emph> distributions</li>
+                            <li>Real-world cov: maybe
+                                <emph>non-sparse</emph> and other structures
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Clustering successful for Big Data Science <cite>Donoho, 2015</cite>
+                        <ul>
+                            <li>Exploratory Data Analysis (EDA)<cite>Tukey, 1977</cite> </li>
+                            <li>Hierarchical clustering and Kmeans<cite>Hartigan & Wong, 1979</cite></li>
+                            <li>Mostly based on
+                                <emph>marginal/pairwise</emph> distances</li>
+                        </ul>
+                    </li>
+                    <li>Can we combine clustering and big cov estimation?</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example: SP 100 Data</h2>
+                <ul>
+                    <li>Daily returns from stocks in SP 100
+                        <ul>
+                            <li>Stocks listed in Standard & Poor 100 Index<cite>as of March 21, 2014</cite></li>
+                            <li> between January 1, 2006 to December 31, 2008 </li>
+                        </ul>
+                    </li>
+                    <li>Each stock is a variable</li>
+                    <li>Cov/Cor matrices (Pearson's or Kendall's tau)
+                        <ul>
+                            <li>
+                                <highlight>Re-order</highlight> stocks by clusters
+                            </li>
+                            <li>Compare cov patterns with different clustering/ordering</li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </section>
+
+            <section>
+                <h2>Cor after Grouping by Clusters</h2>
+                <figure class="twocol"><img src="Media/Clustering/StockCorKendallParulaKmeans.png" alt="" class="noborder">
+                    <figcaption>Kmeans</figcaption>
+                </figure>
+                <figure class="twocol"><img src="Media/Clustering/StockCorKendallParula.png" alt="" class="noborder">
+                    <figcaption>Our $G$-models</figcaption>
+                </figure>
+                <br>
+                <p>Ours yields stronger
+                    <emph>off-diagonal, tile</emph> patterns. Black = 1.
+                    <br>
+                    <strong>Color bars</strong>: variable groups/clusters
+                    <br> Off-diagonal: correlations across clusters</p>
+                <aside class="notes">
+                    mention color bar </aside>
+            </section>
+
+            <section>
+                <h2>Clustering Results</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th align="center">Industry</th>
+                            <th align="center">
+                                <highlight>Ours</highlight>
+                            </th>
+                            <th align="center">Kmeans</th>
+                            <th align="center">Hierarchical Clustering</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Home Improvement</td>
+                            <td>Home Depot, Lowe’s</td>
+                            <td>Home Depot, Lowe’s, Starbucks, Target</td>
+                            <td>Home Depot, Lowe’s, Starbucks, Target, Costco, Target, Wal-Mart, FedEx, United Parcel Service, Nike, McDonald’s</td>
+                        </tr>
+
+                        <tr>
+                            <td>Telecom</td>
+                            <td>ATT, Verizon</td>
+                            <td> ATT, Verizon, Exelon, Comcast, Walt Disney, Time Warner</td>
+                            <td>ATT, Verizon, Comcast, Walt Disney, Time Warner, AIG, Allstate, Metlife, American Express, Bank of America, Citigroup, US Bancorp, Wells Fargo, Capital One, Goldman Sachs, JP Morgan Chase, Morgan Stanley, Simon Property, General Electric</td>
+                        </tr>
+                        <tr>
+                            <td>Diversified Metals & Mining</td>
+                            <td>Freeport-McMoran</td>
+                            <td>Freeport-McMoran, National Oillwell Varco</td>
+                            <td>Freeport-McMoran, Apache Corp., Anadarko Petroleum, Devon Energy, Halliburton, National Oillwell Varco, Occidental Petroleum, Schlumberger, ConocoPhillips, Chevron, Exxon</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="4">$\cdots$</td>
+                        </tr>
+                    </tbody>
+                    <caption align="bottom">All methods yield 20 clusters.</caption>
+                </table>
+                <aside class="notes">mention interpretation</aside>
+            </section>
+
+
+            <section>
+                <h1>Model</h1>
+            </section>
+
+            <section>
+                <h2>Problem</h2>
+                <ul>
+                    <li>Let ${X} \in \real^p$ be a zero mean random vector
+                        <ul>
+                            <li>In certain problems, means are arbitrary</li>
+                        </ul>
+                    </li>
+                    <li>Divide variables into partitions/clusters
+                        <ul>
+                            <li>Example: $\{ \{X_1, X_3, X_7\}, \{X_2, X_5\}, \dotsc \}$</li>
+                        </ul>
+                    </li>
+                    <li><strong>Theoretical</strong>: Find a partition $G = \{G_k\}_{ 1 \leq k \leq K}$ of $\{1, \ldots, p\}$ such that all $X_a$ with $a \in G_k$ are
+                        <emph>"similar"</emph>
+                    </li>
+                    <li><strong>Big Data</strong>:
+                        <emph>"helpful"</emph> clustering that shows patterns</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Related Areas</h2>
+                <ul>
+                    <li><strong>Clustering</strong>: Kmeans and hierarchical clustering
+                        <ul>
+                            <li>Advantages: fast, general, popular</li>
+                            <li>Limitations: low signal-noise-ratio, theory, NP-hard</li>
+                            <li>Q: How to choose number of clusters? Theory?</li>
+                            <li>Q: Can clusters contain singletons?</li>
+                        </ul>
+                    </li>
+                    <li><strong>Community detection</strong>: huge literature <cite>see review Newman, 2003</cite> but start with
+                        <highlight>observed</highlight>
+                        adjacency matrices or networks
+                        <ul>
+                            <li>Ours for data that can be generated from
+                                <highlight>unknown</highlight> networks</li>
+                        </ul>
+                    </li>
+                    <li>These are related but different problems</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Model: Starting Point</h2>
+                <br>
+                <p>
+                    $$ X_{n\times p}=\underbrace{Z_{n\times k}}_\text{Source/Factor} \quad \underbrace{G_{k\times p}}_\text{Mixing/Loading} + \underbrace{E_{n\times p}}_{Error} \qquad Z \bot E$$
+                </p>
+                <ul>
+                    <li><strong>Clustering</strong>: $G$ is $0/1$ matrix for $k$ clusters/ROIs</li>
+                    <li><strong>Decomposition</strong>:
+                        <ul>
+                            <li><strong>PCA/factor analysis</strong>: orthogonality</li>
+                            <li><strong>ICA</strong>: orthogonality &rarr; independence</li>
+                            <li><strong>matrix decomposition</strong>: e.g. non-negativity</li>
+                        </ul>
+                    </li>
+                    <li>This model leads to
+                        <emph>block patterns</emph> in $\cov(X)$
+                        <ul>
+                            <li>$\cov(X) = G^T \cov(Z) G + \cov(E)$</li>
+                            <li>Note: not necessarily block-diagonal</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Will show existence identifiability</li>
+                        <li>trans: look at $G$ first</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+
+
+            <section>
+                <h2>Generalization: $G$-Block</h2>
+                <ul>
+                    <li>Example: $G=\ac{\ac{1,2};\ac{3,4,5}}$, $X \in \real^p$ is $G$-block
+                        <br>
+                        <center>
+                            <small>
+                    $$\Sigma =\left(\begin{array}{ccccc} {\color{red} D_1} & {\color{red} C_{11} }&C_{12} & C_{12}& C_{12}\\ {\color{red} C_{11} }&{\color{red} D_1 }& C_{12} & C_{12}& C_{12} \\ C_{12} & C_{12} &{\color{green} D_{2}} & {\color{green} C_{22}}& {\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} D_2}&{\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} C_{22}}&{\color{green} D_2} \end{array}\right) $$
+                    </small>
+                        </center>
+                    </li>
+                    <li>Matrix math: $\cov(X) = \Sigma = G^TCG + d$</li>
+                    <li>We allow $|C_{11} | \lt | C_{12} |$ or $C \prec 0$
+                        <ul>
+                            <li>Kmeans/HC leads to block-diagonal cor matrices (permutation)</li>
+                        </ul>
+                    </li>
+                    <li>Clustering based on $G$-Block
+                        <ul>
+                            <li>From $G$-block we can read out
+                                <emph>"negative"</emph> $\cov(Z)$</li>
+                            <li>Cov defined for semiparametric distributions</li>
+                            <li>Clusters can contain singletons</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">Multiple G-blocks Note the structures, compound symmetry, </aside>
+            </section>
+
+
+
+            <section>
+                <h2>Minimum $G$ Partition</h2>
+                <div class="thm"><strong>Theorem:</strong> $G^{\beta}(X)$ is the minimal partition induced by $a\stackrel{G^{\beta}}{\sim} b$
+                    <br>
+                    <emph>iff</emph> $\var(X_{a})=\var(X_{b})$ and $\cov(X_{a},X_{c})=\cov(X_{b},X_{c})$ for all $c\neq a,b$. Moreover, if the matrix of covariances $C$ corresponding to the partition $G(X)$ is positive-semidefinite, then this is the unique minimal partition according to which ${X}$ admits a latent decomposition. </div>
+                <ul>
+                    <li>We define the minimal cluster/partition.</li>
+                    <li>The minimal partition is unique under  conditions.</li>
+                    <li>We will aim to recover the minimal partition (thus $K$).</li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h1>Method</h1>
+            </section>
+
+            <section>
+                <h2>New Metric: CORD</h2>
+                <ul>
+                    <li>First, pairwise correlation distance (like Kmeans)
+                        <ul>
+                            <li>Gaussian copula: $$Y:=(h_1(X_1),\dotsc,h_p(X_p)) \sim N(0,R)$$</li>
+                            <li>Let $R$ be the correlation matrix
+                                <li>Gaussian: Pearson's</li>
+                                <li>Gaussian copula: Kendall's tau transformed, $R_{ab} = \sin (\frac{\pi}{2}\tau_{ab})$</li>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Second, introduce <highlight>COR</highlight>relation <highlight>D</highlight>istance $$\d(a,b) := \max_{c\neq a,b}|R_{ac}-R_{bc}|$$</li>
+                    <li>Third, group variables $a$, $b$ together if $\d(a,b) = 0$</li>
+                    <li>"The enemy of my enemy is my friend"</li>
+                </ul>
+            </section>
+
+
+
+            <!--
+            <section>
+                <h2>Chanllenge</h2>
+                <ul>
+                    <li>Goal: find the minimal partition such that $$\d(a,b) = 0 \quad \mbox{if } a \sim b$$
+                    </li>
+                    <li>An NP-hard problem in general, because large number of possible partitions: $O(exp(p))$ </li>
+                    <li>Address the noise in sample correlation $$\widehat \d(a,b):= \max_{c\neq a,b}|\widehat R_{ac}-\widehat R_{bc}| \ne 0$$</li>
+                    <li>Theory for clustering</li>
+                </ul>
+            </section>
+-->
+
+
+            <section>
+                <h2>Algorithm: Main Idea</h2>
+                <ul>
+                    <li>Greedy: one cluster at a time, avoiding NP-hard</li>
+                    <li>Cluster variables together if CORD metric $$\widehat \d(a,b) \lt \alpha$$ where $\alpha$ is a tuning parameter</li>
+                    <li>$\alpha$ is chosen by theory or CV</li>
+                </ul>
+            </section>
+
+            <!--
+            <section>
+                <h2>Algorithm</h2>
+                <ul>
+                    <li>Initialization: $S=\ac{1,\ldots,p}$, and $l=0$</li>
+                    <li>Repeat: while $S\neq \emptyset$
+                        <ul>
+                            <li>$l \leftarrow l+1$</li>
+                            <li>If $|S|=1$ Then $\widehat G_{l}=S$</li>
+                            <li> If $|S|>1$ Then
+                                <ul>
+                                    <li> $(a_{l},b_{l})=\mathop{\mathrm{argmin}}_{a,b\in S,\ a\neq b} \widehat \d(a,b)$</li>
+                                    <li>If $\widehat \d(a_{l},b_{l})>\alpha$ Then $\widehat G_{l} = \ac{a_{l}}$</li>
+                                    <li>If $\widehat \d(a_{l},b_{l})\leq \alpha$ Then $\widehat G_{l} = \ac{s\in S:\widehat \d(a_{l},s)\wedge \widehat \d(b_{l},s)\leq \alpha}$ </li>
+                                </ul>
+                            </li>
+                            <li>$S \leftarrow S\setminus \widehat G_{l}$</li>
+                        </ul>
+                    </li>
+                    <li>Output: the partition $\widehat G=(\widehat G_{l})_{l=1,\ldots,k}$</li>
+                </ul>
+                <aside class="notes">Greedy type of algorithm</aside>
+            </section>
+-->
+
+
+            <section>
+                <h1>Theory</h1>
+            </section>
+
+            <section>
+                <h2>Condition</h2>
+                <div class="thm">Let $\eta \geq 0$ be given. Let ${ X}$ be a zero mean random vector with a Gaussian copula distribution with parameter $R$. $$ \begin{multline} \mathcal{R}(\eta) := \{R: \ \d(a,b) := \max_{c\neq a,b}|R_{ac}-R_{bc}|>\eta\quad \\ \textrm{for all}\ a\stackrel{G(X)}{\nsim}b.\} \end{multline} $$ <strong>Group separation condition:</strong> $R \in \mathcal{R}(\eta)$.</div>
+                <p>The signal strength $\eta$ is large.</p>
+            </section>
+
+            <section>
+                <h2>Consistency</h2>
+                <div class="thm"><strong>Theorem:</strong> Define $\tau=|\widehat R-R|_{\infty}$ and we consider two parameters $(\alpha,\eta)$ fulfilling $$\begin{equation} \alpha\geq 2\tau\quad\textrm{and}\quad \eta\geq2\tau+\alpha. \end{equation}$$ Then, applying our algorithm we have $\widehat G=G(X)$ whp.</div>
+                <p>Ours recovers the exact clustering with high probability.</p>
+            </section>
+
+            <section>
+                <h2>Minimax</h2>
+                <div class="thm"><strong>Theorem:</strong> $P_{\Sigma}$ the likelihood based on $n$ independent observations of ${ X} \stackrel{d}{=} \mathcal{N}(0,\Sigma)$. For any \begin{equation}\label{etamin} 0\leq \eta \lt \eta^{*}:={\sqrt{\log(p(p-1)/2)}\over \sqrt{(2+e^{-1})n} +\sqrt{\log(p(p-1)/2)}}\,, \end{equation} we have $$\inf_{\widehat G}\sup_{R \in \mathcal{R}(\eta)} P_{\Sigma}(\widehat G\neq G^{\beta}(X))\geq {1\over 2e+1}\geq {1\over 7} \,,$$ where the infimum is taken over all possible estimators. </div>
+                <p>Group separation condition on $\eta$ is necessary.</p>
+            </section>
+
+            <section>
+                <h2>Choosing Number of Clusters</h2>
+                <ul>
+                    <li>Split data into <strong>3</strong> parts</li>
+                    <li>Use part 1 of data to estimate clusters $\hat{G}$ for each $\alpha$</li>
+                    <li>Use part 2 to compute between variable difference $$ \delta^{(2)}_{ab} = R_{ac}^{(2)} - R_{bc}^{(2)}, \quad c \ne a, b. $$
+                    </li>
+                    <li>Use part 3 to generate "CV" loss $$ \mbox{CV}(\hat{G}) = \sum_{a \lt b} \| \delta^{(3)}_{ab} - \delta^{(2)}_{ab} 1\{ a \mbox{ not clustered w/ } b \} \|^2_\infty. $$ </li>
+                    <li>Pick $\alpha$ with the smallest loss above</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Theory for CV</h2>
+                <div class="thm"><strong>Theorem:</strong> If either: (i) $X$ is sub-Gaussian with correlation matrix $R$; or (ii) $X$ has a copula distribution with copula correlation matrix $R$, then we have $E[\mbox{CV}(G^*)] \lt E[\mbox{CV}(G)]$, for any $G\ne G^*$.
+                </div>
+                This shows that our CV will select $G^*$ consistently.
+            </section>
+
+            <Section>
+                <h1>Simulations</h1>
+            </Section>
+
+            <section>
+                <h2>Setup</h2>
+                <ul>
+                    <li>Model $C$ ($\cov(Z)$): positive semidefinite or negative</li>
+                    <li>True $G^*$: singletons or no-singleton clusters</li>
+                    <li>Simulate $X$ from $G$-block cov</li>
+                    <li>Variable clustering using $X$</li>
+                    <li>Compare with K-means or Hierarchical Clustering:
+                        <ul>
+                            <li>Exact recovery of groups</li>
+                            <li>Cross validation loss and choosing $K$</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Exact Recovery</h2>
+                <figure class="threecol"><img src="Media/Clustering/CordERafterCVMno30AllMethodAllp.png" alt="" class="noborder">
+                    <figcaption>Semi-positive</figcaption>
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/CordERafterCVMno36AllMethodAllp.png" alt="" class="noborder">
+                    <figcaption>Negative</figcaption>
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/CordERafterCVMno30AllMethodAllpSingleton3.png" alt="" class="noborder">
+                    <figcaption>Singletons</figcaption>
+                </figure>
+                <p>
+                    <br>
+                </p>
+                <p>Different models for $C$="$\cov(Z)$" and $G$</p>
+                <p>HC and Kmeans fail even if inputting the true $K$ and $n \rightarrow \infty$</p>
+                <p>Our CORD methods recover both the true $G^*$ and $K$ as predicted by our theory.</p>
+            </section>
+
+
+
+            <section>
+                <h2>Cross Validation</h2>
+                <figure class="threecol"><img src="Media/Clustering/CValphaMno30MethodgFD22ANDn800p1600.png" alt="" class="noborder">
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/CValphaMno36MethodgFD22ANDn800p1600.png" alt="" class="noborder">
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/CValphaMno30MethodgFD22ANDn800p1600Singleton3.png" alt="" class="noborder">
+                </figure>
+                <p>
+                    <br>
+                </p>
+                <p><highlight>Recovery %</highlight> in red and <strong>CV loss</strong> in black.</p>
+                <p>CV selects the constants to yield close to 100% recovery, as predicted by our theory (at least for large $n>200$)</p>
+            </section>
+
+            <section>
+                <h1>Real Data</h1>
+            </section>
+
+            <!--      <section data-state="fMRI">
+                <h2>fMRI</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Perform tasks while under fMRI scanning</li>
+                                                <li>Press if instruction="go"; withhold pressing if "stop"</li>
+                        <li>Specific parts of the brain responsible for the task</li>
+                        <li>Remove task effects, data like "resting-state"</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Goal: how the whole-brain network is connected?
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                        <li>Process information</li>
+                    </ul>
+                </aside>
+            </section>-->
+
+
+            <!--  <section>
+                <h2>Data Matrix</h2>
+                <ul>
+                    <li>Matrix $X_{n \times p}$, all columns standardized
+                        <ul>
+                            <li>$n$ time points but temporal correlation removed, like iid</li>
+                            <li>$p$ voxels but with spatial corraltion</li>
+                        </ul>
+                        <center><img src="Media/fMRI/voxelGrouping.png" alt="" class="noborder inlinemiddle" align="middle">
+                            <span style="display:inline-block; width: 30px;"></span>
+                            <img src="Media/MRI/freeSurfer.png" alt="" class="noborder inlinemiddle" width="30%"></center>
+                    </li>
+                    <li>Interested in
+                        <emph>big</emph> spatial networks
+                        <ul>
+                            <li>Voxel level: $10^6 \times 10^6$ cov matrix but limited interpretability</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    mention genetics
+                </aside>
+            </section>-->
+
+
+            <section>
+                <h2>Functional MRI</h2>
+                <ul>
+                    <li>fMRI matrix: BOLD from different brain regions
+                        <ul>
+                            <li>Variable: different brain regions</li>
+                            <li>Sample: time series (after whitening or removing temporal correlations)</li>
+                            <li>
+                                <emph>Clusters</emph> of brain regions</li>
+                        </ul>
+                    </li>
+                    <li>Two data matrices from two scan sessions <cite>OpenfMRI.org</cite></li>
+                    <li>Use Power's 264 regions/nodes</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Test Prediction/Reproducibilty</h2>
+                <ul>
+                    <li>Find partitions using the first session data</li>
+                    <li>Average each block cor to improve estimation</li>
+                    <li>Compare with the cor matrix from the second scan $$ \| Avg_{\hat{G}}(\hat{\Sigma}_1) - \hat{\Sigma}_2 \|$$
+                    </li>
+                    <li>Difference is smaller if clustering $\hat{G}$ is better</li>
+                </ul>
+            </section>
+
+            <section>
+                <!--<h2>Prediction Comparison</h2>-->
+                <figure><img src="Media/Clustering/ResFrobLossKendall.png" alt="" class="noborder">
+                </figure>
+                <p>Vertical lines: fixed (solid) and data-driven (dashed) thresholds</p>
+                <p>Our CORD $\hat{G}$ leads to smaller between-session variability for almost all $K$, than HC and Kmeans.</p>
+            </section>
+
+            <section>
+                <h2>Discussion</h2>
+                <ul>
+                    <li>Cov + clustering:
+                        <ul>
+                            <li>Identifiability, accuracy, optimality</li>
+                        </ul>
+                    </li>
+                    <li>$G$-models: $G$-latent, $G$-block, $G$-exchangeable</li>
+                    <li>New metric, method, and theory
+                    <ul>
+                        <li>Defining clusters, consistency, minimax, and CV theory</li>
+                    </ul>
+                    </li>
+                    <li>Some new results using big data examples</li>
+                    <li>Paper:
+                        <emph>bit.ly/cordCluster</emph> (arXiv <a href="http://arxiv.org/abs/1410.7217">1508.01939</a>)</li>
+                    <li>R package:
+                        <emph>cord</emph> on CRAN
+                        <ul>
+                            <li>CV function available soon</li>
+                        </ul>
+                        </li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Thank you!</h1>
+                <br>
+                <h2>Slides at: <emph>bit.ly/SLDS16</emph></h2>
+                <img src="./Media/QR/SLDS16.png" alt="" width="30%">
+                <h2>
+                      Website: <emph>Big</emph><highlight>Complex</highlight><span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
+                </h2>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="./reveal.js/lib/js/head.min.js"></script>
+    <script src="./reveal.js/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: './MathJax/MathJax.js',
+                mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+            // Optional reveal.js plugins
+            dependencies: [{
+                src: './reveal.js/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js/plugin/math/math.js',
+                async: true
+            }]
+        });
+
+    </script>
+
+</body>
+
+</html>
