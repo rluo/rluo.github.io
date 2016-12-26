@@ -602,3 +602,8 @@ html {
   -webkit-clip-path: ellipse(40% 50% at 50% 50%);
   clip-path: ellipse(40% 50% at 50% 50%);
 }
+
+
+html.opaqueBackImg .slide-background {
+    opacity: 0.5 !important;
+}
