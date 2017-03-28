@@ -15,24 +15,28 @@
     <!-- Code syntax highlighting -->
     <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
 
-    <link rel="stylesheet" type="text/css" href="coverflowjs/coverflow.css" />
+    <!--
     <script
     src="https://code.jquery.com/jquery-3.2.1.js"
     integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
     crossorigin="anonymous"></script>
-    <script src="coverflowjs/coverflow.min.js"></script>
-
-
+-->
+    <!--    Cover Flow   -->
+    <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
+    <script src="JSLibrary/jquery-3.2.1.js"></script>
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
     <!-- Coverflow styles -->
     <style>
-    .ui-coverflow {
-        position: relative;
-        padding-bottom: 12px;
-    }
-    .ui-coverflow > img, .ui-coverflow > figure {
-        height: 440px !important;
-        width: auto;
-    }
+        .ui-coverflow {
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        .ui-coverflow>img,
+        .ui-coverflow>figure {
+            height: 440px !important;
+            width: auto;
+        }
     </style>
 
     <!-- Printing and PDF exports -->
@@ -42,7 +46,6 @@
         link.type = 'text/css';
         link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js/css/print/pdf.css' : './reveal.js/css/print/paper.css';
         document.getElementsByTagName('head')[0].appendChild(link);
-
     </script>
 
     <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
@@ -132,7 +135,6 @@
                     .fMRI credit:after {
                         content: "Image source: NSF";
                     }
-
                 </style>
                 <aside class="notes">
                     <ul>
@@ -523,7 +525,9 @@
             </section>
 
             <section>
-                <h2>New Metric: <highlight>CORD</highlight></h2>
+                <h2>New Metric:
+                    <highlight>CORD</highlight>
+                </h2>
                 <ul>
                     <li>First, pairwise correlation distance (like Kmeans)
                         <ul>
@@ -683,6 +687,7 @@
                 <p>
                     <br>
                 </p>
+                <p><br></p>
                 <p>Different models for $C$="$\cov(Z)$" and $\alpha = 2 n^{-1/2} \log^{1/2} p$ </p>
                 <p> Vertical lines: theoretical sample size based on our lower bound </p>
                 <p>HC and Kmeans fail even if inputting the true $K$.</p>
@@ -712,31 +717,40 @@
 
             <section>
                 <h2>Cross Validation</h2>
-                <figure class="threecol"><img src="Media/Clustering/CValpha19d.png" alt="" class="noborder">
-                </figure>
-                <figure class="threecol"><img src="Media/Clustering/CValpha27d.png" alt="" class="noborder">
-                </figure>
-                <figure class="threecol"><img src="Media/Clustering/CValpha28d.png" alt="" class="noborder">
-                </figure>
+
+                <div class='coverflow'>
+                    <figure><img src="Media/Clustering/CValpha19d.png" alt="" class="noborder">
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure><img src="Media/Clustering/CValpha27d.png" alt="" class="noborder">
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure><img src="Media/Clustering/CValpha28d.png" alt="" class="noborder">
+                        <div class='fragment'></div>
+                    </figure>
+                </div>
                 <p>
                     <br>
                 </p>
                 <p>Recovery % in red and CV loss in black.</p>
-<br>
+                <br>
                 <emph>CV selects the tuning to yield close to 100% recovery</emph>
             </section>
 
 
             <section>
                 <h2>Metric Comparison: Without Threhold</h2>
-                <figure class="threecol"><img src="Media/Clustering/FDD19frd.png" alt="" class="noborder">
-                </figure>
-                <figure class="threecol"><img src="Media/Clustering/FDD27frd.png" alt="" class="noborder">
-                </figure>
-                <figure class="threecol"><img src="Media/Clustering/FDD28frd.png" alt="" class="noborder">
-                </figure>
-
-                <p>HC and Kmeans metrics yield more false discoveries (FD) as the threshold (or $K$) varies.</p>
+                <div class="coverflow">
+                    <figure><img src="Media/Clustering/FDD19frd.png" alt="" class="noborder">
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure><img src="Media/Clustering/FDD27frd.png" alt="" class="noborder">
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure><img src="Media/Clustering/FDD28frd.png" alt="" class="noborder">
+                        <div class='fragment'></div>
+                    </figure>
+                </div> <p>HC and Kmeans metrics yield more false discoveries (FD) as the threshold (or $K$) varies.</p>
                 <br>
                 <emph>Better metric for clustering regardless of threshold</emph>
             </section>
@@ -898,7 +912,10 @@
                     <li>Average each block cor to improve estimation</li>
                     <li>Compare with the cor matrix from the second scan $$ \| Avg_{\hat{G}}(\hat{\Sigma}_1) - \hat{\Sigma}_2 \|$$
                     </li>
-                    <li>Difference is <emph>smaller</emph> if clustering $\hat{G}$ is <emph>better</emph></li>
+                    <li>Difference is
+                        <emph>smaller</emph> if clustering $\hat{G}$ is
+                        <emph>better</emph>
+                    </li>
                 </ul>
             </section>
 
@@ -911,10 +928,10 @@
             </section>
 
 
-           <section>
-               <img src="Media/Clustering/CordFMRIClusters.png" width="80%" alt="">
-               <p>Our visual-motor task!</p>
-           </section>
+            <section>
+                <img src="Media/Clustering/CordFMRIClusters.png" width="80%" alt="">
+                <p>Our visual-motor task!</p>
+            </section>
 
             <section>
                 <h2>Discussion</h2>
@@ -937,10 +954,14 @@
             <section>
                 <h1>Thank you!</h1>
                 <br>
-                <h2>Slides at: <emph>bit.ly/XLICSA16</emph></h2>
+                <h2>Slides at:
+                    <emph>bit.ly/XLICSA16</emph>
+                </h2>
                 <img src="./Media/QR/XLICSA16.png" alt="" width="30%">
                 <h2>
-                      Website: <emph>Big</emph><highlight>Complex</highlight><span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
+                    Website:
+                    <emph>Big</emph>
+                    <highlight>Complex</highlight><span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
                 </h2>
             </section>
 
@@ -975,7 +996,7 @@
                 //mathjax: './MathJax/MathJax.js',
                 mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
                 config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
-                    //                config: 'TeX-AMS-MML_SVG-full'
+                //                config: 'TeX-AMS-MML_SVG-full'
             },
 
             // Optional reveal.js plugins
@@ -1014,25 +1035,23 @@
                 async: true
             }]
         });
-
     </script>
 
     <!-- Coverflow event listeners -->
     <script>
-        Reveal.addEventListener( 'fragmentshown', function( event ) {
+        Reveal.addEventListener('fragmentshown', function(event) {
             $(event.fragment).closest('.ui-coverflow').coverflow('next');
         });
-        Reveal.addEventListener( 'fragmenthidden', function( event ) {
+        Reveal.addEventListener('fragmenthidden', function(event) {
             $(event.fragment).closest('.ui-coverflow').coverflow('prev');
         });
-        Reveal.addEventListener( 'slidechanged', function( event ) {
+        Reveal.addEventListener('slidechanged', function(event) {
             $(event.currentSlide).find('.coverflow').coverflow();
             $(event.currentSlide).find('.coverflow').coverflow('select', 0);
             $(event.currentSlide).find('.coverflow').find('.fragment')
                 .removeClass('visible').removeClass('currentSlide');
         });
         $(Reveal.getCurrentSlide()).find('.coverflow').coverflow(); // For first slide
-
     </script>
 </body>
 
