@@ -1026,7 +1026,10 @@
             $(event.fragment).closest('.ui-coverflow').coverflow('prev');
         });
         Reveal.addEventListener( 'slidechanged', function( event ) {
-            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow();
+            $(event.currentSlide).find('.coverflow').coverflow();
+            $(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            $(event.currentSlide).find('.coverflow').find('.fragment')
+                .removeClass('visible').removeClass('currentSlide');
         });
         $(Reveal.getCurrentSlide()).find('.coverflow').coverflow(); // For first slide
 
