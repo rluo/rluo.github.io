@@ -15,12 +15,12 @@
     <!-- Code syntax highlighting -->
     <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
 
-    <link rel="stylesheet" type="text/css" href="coverflow/dist/coverflow.css" />
+    <link rel="stylesheet" type="text/css" href="coverflowjs/coverflow.css" />
     <script
     src="https://code.jquery.com/jquery-3.2.1.js"
     integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
     crossorigin="anonymous"></script>
-    <script src="coverflow/dist/coverflow.min.js"></script>
+    <script src="coverflowjs/coverflow.min.js"></script>
 
 
     <!-- Coverflow styles -->
@@ -655,7 +655,7 @@
             <section>
                 <h2>Exact Recovery</h2>
 
-                <div id="exactRecoveryCoverflow">
+                <div class='coverflow'>
                     <figure>
                         <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="">
                         <figcaption>Block</figcaption>
@@ -671,11 +671,6 @@
                         <figcaption>Negative</figcaption>
                     </figure>
                 </div>
-                <script>
-                $(function() {
-                    $('#exactRecoveryCoverflow').coverflow();
-                });
-                </script>
                 <!-- <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="" class="noborder">
                     <figcaption>Block</figcaption>
                 </figure>
@@ -1030,6 +1025,11 @@
         Reveal.addEventListener( 'fragmenthidden', function( event ) {
             $(event.fragment).closest('.ui-coverflow').coverflow('prev');
         });
+        Reveal.addEventListener( 'slidechanged', function( event ) {
+            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow();
+        });
+        $(Reveal.getCurrentSlide()).find('.coverflow').coverflow(); // For first slide
+
     </script>
 </body>
 
