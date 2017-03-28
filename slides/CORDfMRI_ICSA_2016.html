@@ -15,6 +15,26 @@
     <!-- Code syntax highlighting -->
     <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
 
+    <link rel="stylesheet" type="text/css" href="coverflow/dist/coverflow.css" />
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+    <script src="coverflow/dist/coverflow.min.js"></script>
+
+
+    <!-- Coverflow styles -->
+    <style>
+    .ui-coverflow {
+        position: relative;
+        padding-bottom: 12px;
+    }
+    .ui-coverflow > img, .ui-coverflow > figure {
+        height: 440px !important;
+        width: auto;
+    }
+    </style>
+
     <!-- Printing and PDF exports -->
     <script>
         var link = document.createElement('link');
@@ -24,6 +44,8 @@
         document.getElementsByTagName('head')[0].appendChild(link);
 
     </script>
+
+    <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
 
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
@@ -632,7 +654,29 @@
 
             <section>
                 <h2>Exact Recovery</h2>
-                <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="" class="noborder">
+
+                <div id="exactRecoveryCoverflow">
+                    <figure>
+                        <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="">
+                        <figcaption>Block</figcaption>
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure>
+                        <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel28d.png" alt="" class="noborder">
+                        <figcaption>Sparse</figcaption>
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure>
+                        <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel29d.png" alt="" class="noborder">
+                        <figcaption>Negative</figcaption>
+                    </figure>
+                </div>
+                <script>
+                $(function() {
+                    $('#exactRecoveryCoverflow').coverflow();
+                });
+                </script>
+                <!-- <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="" class="noborder">
                     <figcaption>Block</figcaption>
                 </figure>
                 <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel28d.png" alt="" class="noborder">
@@ -640,7 +684,7 @@
                 </figure>
                 <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel29d.png" alt="" class="noborder">
                     <figcaption>Negative</figcaption>
-                </figure>
+                </figure> -->
                 <p>
                     <br>
                 </p>
@@ -978,6 +1022,15 @@
 
     </script>
 
+    <!-- Coverflow event listeners -->
+    <script>
+        Reveal.addEventListener( 'fragmentshown', function( event ) {
+            $(event.fragment).closest('.ui-coverflow').coverflow('next');
+        });
+        Reveal.addEventListener( 'fragmenthidden', function( event ) {
+            $(event.fragment).closest('.ui-coverflow').coverflow('prev');
+        });
+    </script>
 </body>
 
 </html>
