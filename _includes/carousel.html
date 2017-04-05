@@ -12,7 +12,7 @@
     <div class="carousel-inner">
         {% for image in page.carousel %}
         <div class="item{% if forloop.first %} active{% endif %}">
-            <div class="fill" style="background-image:url('{{ site.placeholderimagesbaseurl }}{{ image.img }}{% if img.txt %}&text={{ img.txt }}{% endif %}');"></div>
+            <div class="fill" style="background-image:url('{{ image.img }}{% if img.txt %}&text={{ img.txt }}{% endif %}');"></div>
             <div class="carousel-caption">
                 <h2>{{ image.caption }}</h2>
             </div>
@@ -29,4 +29,3 @@
     </a>
 </header>
 {% endif %}
-

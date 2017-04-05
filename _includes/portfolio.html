@@ -7,7 +7,7 @@
     {% for portfolioitem in page.portfolio.items %}
     <div class="col-md-4 col-sm-6">
         <a href="{{  portfolioitem.link }}">
-            <img class="img-responsive img-portfolio img-hover" src="{{ site.placeholderimagesbaseurl }}{{ portfolioitem.img }}" alt="{{ portfolioitem.alt }}">
+            <img class="img-responsive img-portfolio img-hover" src="{{ portfolioitem.img }}" alt="{{ portfolioitem.alt }}">
         </a>
     </div>
     {% endfor %}

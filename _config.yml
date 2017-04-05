@@ -2,13 +2,11 @@
 title: Analytics for Big and Complex Data
 email: xi.rossi.luo@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Analytics for big and complex data.
 baseurl: "" # the subpath of your site, e.g. /blog/
-##url: "http://rluo.github.io" # the base hostname & protocol for your site
-url: "http://127.0.0.1:4000"
-twitter_username: jekyllrb
+url: "http://rluo.github.io" # the base hostname & protocol for your site
+###url: "http://127.0.0.1:4000"
+twitter_username: xrluo
 github_username:  rluo
 
 # Build settings
@@ -18,8 +16,8 @@ markdown: kramdown
 permalink: /:year/:title
 
 # These are new (in addition to Jekyll's elements above )
-organization: The ABCD Group
+organization: ABCD Group
 placeholderimagesbaseurl: http://placehold.it/
 
 timezone: "America/New_York"
-production: false
+production: true
