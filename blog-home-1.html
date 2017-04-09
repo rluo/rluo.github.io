@@ -31,9 +31,9 @@ layout: default
                 <a href="{{url_base}}/{{ post.url }}">{{ post.title }}</a>
             </h2>
             <p class="lead">
-                by <a href="{{url_base}}/index.php">{{ post.author }}</a>
+                by <a href="{{url_base}}/about.html">{{ post.author }}</a>
             </p>
-            <p><i class="fa fa-clock-o"></i> Posted on {{ post.date | date: "%B %-d, %Y" }} at 10:00 PM</p>
+            <p><i class="fa fa-clock-o"></i> Posted on {{ post.date | date: "%B %-d, %Y" }}</p>
             <hr>
             <a href="blog-post.html">
                 <img class="img-responsive img-hover" src="{{ post.previewimage }}" alt="">
@@ -41,7 +41,7 @@ layout: default
             <hr>
             <p>{{ post.excerpt }}</p>
             <a class="btn btn-primary" href="{{url_base}}/{{ post.url }}">Read More <i class="fa fa-angle-right"></i></a>
-            <div class="fb-like" data-href="{{url_base}}/{{ post.url }}" data-layout="standard" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+            <div class="fb-like" data-href="{{url_base}}/{{ post.url }}" data-layout="standard" data-action="like" data-size="large" data-show-faces="true" data-share="true" style="align: center; text-align: center; vertical-align: middle; display: inline-block"></div>
             <hr>
 
         {% endfor %}

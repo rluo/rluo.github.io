@@ -2,7 +2,7 @@
 title: Analytics for Big and Complex Data
 email: xi.rossi.luo@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  Analytics for big and complex data.
+  Analytics for Big and Complex Data (ABCD) Group
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://rluo.github.io" # the base hostname & protocol for your site
 ###url: "http://127.0.0.1:4000"
