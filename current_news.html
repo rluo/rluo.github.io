@@ -2,6 +2,11 @@
 layout: default
 
 ---
+{% if site.github.url %}
+  {% assign url_base = site.github.url %}
+{% else %}
+  {% assign url_base = site.url %}
+{% endif %}
 
 <!-- Page Heading/Breadcrumbs -->
 <div class="row">
@@ -17,100 +22,21 @@ layout: default
 </div>
 <!-- /.row -->
 
-<!-- Projects Row -->
-<div class="row">
-    <div class="col-md-4 img-portfolio">
-        <a href="{{url_base}}/portfolio-item.html">
-            <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-        </a>
-        <h3>
-            <a href="https://arxiv.org/abs/1603.07749">Travel Award</a>
-        </h3>
-        <p>Yi Zhao (PhD student) received Travel Award to present our paper at Challenges & Advances on Big Data in Neuroimaging conference</p>
-    </div>
-    <div class="col-md-4 img-portfolio">
-        <a href="{{url_base}}/portfolio-item.html">
-            <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-        </a>
-        <h3>
-            <a href="https://arxiv.org/abs/1508.01939">Clustering fMRI</a>
-        </h3>
-        <p>I will give an invited talk at the 25th International Chinese Statistical Association Symposium on Clustering and fMRI, see slides</p>
-    </div>
-    <div class="col-md-4 img-portfolio">
-        <a href="portfolio-item.html">
-            <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-        </a>
-        <h3>
-            <a href="https://arxiv.org/abs/1508.01939">Big Clustering Data</a>
-        </h3>
-        <p>I will give an invited talk at the 2016 Conference on Statistical Learning and Data Science on Big Data Clustering, see slides. PhD student Yi Zhao is also invited to present a poster at the conference.</p>
-    </div>
-</div>
-<!-- /.row -->
-
-<!-- Projects Row -->
-<div class="row">
-    <div class="col-md-4 img-portfolio">
-        <a href="{{url_base}}/portfolio-item.html">
-            <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-        </a>
-        <h3>
-            <a href="https://arxiv.org/abs/1603.07749">Student Paper Award</a>
-        </h3>
-        <p>PhD student Yi Zhao's paper won Student Paper Award for the 2nd Annual Conference on Statistical Methods on Imaging in 2016</p>
-    </div>
-    <div class="col-md-4 img-portfolio">
-        <a href="{{url_base}}/portfolio-item.html">
-            <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-        </a>
-        <h3>
-            <a href="https://arxiv.org/abs/1410.7217">Samsi / Casual Inference</a>
-        </h3>
-        <p>I will give an invited talk at the SAMSI on Big Data + Causal Inference, see slides</p>
-    </div>
-    <div class="col-md-4 img-portfolio">
-        <a href="{{url_base}}/portfolio-item.html">
-            <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-        </a>
-        <h3>
-            <a href="https://arxiv.org/abs/1603.07749">Brain Pathways</a>
-        </h3>
-        <p>I will give an invited talk at the New England Statistics Symposium on Brain Pathways, see slides.</p>
-    </div>
+<div class='row'>
+    {% for news_post in site.categories.news %}
+        <div class="col-md-4 img-portfolio" style="height: 410px">
+            <a href="{{url_base}}/portfolio-item.html">
+                <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+            </a>
+            <h3>
+                <a href="https://arxiv.org/abs/1603.07749">{{ news_post.title }}</a>
+            </h3>
+            <p><i class="fa fa-clock-o"></i> Posted on {{ news_post.date | date: "%B %-d, %Y" }}</p>
+            {{ news_post.excerpt }}
+        </div>
+    {% endfor %}
 </div>
 
-<!-- Projects Row -->
-<div class="row">
-    <div class="col-md-4 img-portfolio">
-        <a href="{{url_base}}/portfolio-item.html">
-            <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-        </a>
-        <h3>
-            <a href="https://arxiv.org/abs/1603.07749">Pathway Lasso</a>
-        </h3>
-        <p>I will give an invited talk at the 2016 ENAR Meeting on Pathway Lasso, see slides</p>
-    </div>
-    <div class="col-md-4 img-portfolio">
-        <a href="{{url_base}}/portfolio-item.html">
-            <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-        </a>
-        <h3>
-            <a href="http://www.nature.com/nrendo/journal/v12/n3/full/nrendo.2016.2.html">Nature Reviews</a>
-        </h3>
-        <p>PhD student Mary Lacy's paper on predicting diabetes diagnosis is highlighted by a paper in Nature Reviews.</p>
-    </div>
-    <div class="col-md-4 img-portfolio">
-        <a href="{{url_base}}/portfolio-item.html">
-            <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-        </a>
-        <h3>
-            <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1557467">Biomedical Data/ Precision Medicine</a>
-        </h3>
-        <p>Our ABCD group received an NSF award, in partnership with the NIH BD2K initiative, on methods for Big Biomedical Data and Precision Medicine!</p>
-    </div>
-</div>
-<!-- /.row -->
 
 <hr>
 

@@ -26,7 +26,7 @@ layout: default
     <!-- Blog Entries Column -->
     <div class="col-md-8">
 
-        {% for post in site.posts %}
+        {% for post in site.categories.blog %}
             <h2>
                 <a href="{{url_base}}/{{ post.url }}">{{ post.title }}</a>
             </h2>
