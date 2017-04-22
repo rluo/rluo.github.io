@@ -22,4 +22,3 @@ placeholderimagesbaseurl: http://placehold.it/
 timezone: "America/New_York"
 production: true
 
-exclude: ['slides']
