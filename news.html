@@ -1,0 +1,59 @@
+---
+layout: default
+
+---
+{% if site.github.url %}
+  {% assign url_base = site.github.url %}
+{% else %}
+  {% assign url_base = site.url %}
+{% endif %}
+
+<!-- Page Heading/Breadcrumbs -->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">News
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{{url_base}}/index.html">Home</a>
+            </li>
+            <li class="active">News</li>
+        </ol>
+    </div>
+</div>
+<!-- /.row -->
+
+<div class='row'>
+    {% for news_post in site.categories.news %}
+        <div class="col-md-4 img-portfolio" style="height: 410px">
+            <a href="{{url_base}}/portfolio-item.html">
+                <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+            </a>
+            <h3>
+                <a href="https://arxiv.org/abs/1603.07749">{{ news_post.title }}</a>
+            </h3>
+            <p><i class="fa fa-clock-o"></i> Posted on {{ news_post.date | date: "%B %-d, %Y" }}</p>
+            {{ news_post.excerpt }}
+        </div>
+    {% endfor %}
+</div>
+
+
+<hr>
+
+<!-- Pagination -->
+<div class="row text-center">
+    <div class="col-lg-12">
+        <ul class="pagination">
+            <li>
+                <a href="#">&laquo;</a>
+            </li>
+            <li class="active">
+                <a href="#">1</a>
+            </li>
+            <li>
+                <a href="#">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- /.row -->
