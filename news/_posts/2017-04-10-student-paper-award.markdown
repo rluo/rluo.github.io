@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Student Paper Award
-author: Start Bootstrap
+author: Xi Luo
 link: https://arxiv.org/abs/1603.07749
 previewimage: 900x300
 
