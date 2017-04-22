@@ -1,0 +1,10 @@
+---
+layout: news
+title: Abi's  CFAR Award
+author: Xi Luo
+previewimage:  abcd700x400.jpg
+tags: award
+externallink: https://www.brown.edu/academics/medical/about-us/research/centers-institutes-and-programs/aids/
+
+---
+Abi Kulshreshtha (Undergraduate, '15) won CFAR Undergraduate Research Internship Award from Brown/Tufts/Lifespan CFAR, for his work on a Data Science project in my group.

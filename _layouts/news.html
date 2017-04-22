@@ -2,12 +2,20 @@
 layout: default
 
 ---
+{% if site.github.url %}
+  {% assign url_base = site.github.url %}
+{% else %}
+  {% assign url_base = site.url %}
+{% endif %}
+
+ 
+
 <!-- Page Heading/Breadcrumbs -->
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">{{ page.title }}
-            <small>by <a href="#">{{ page.author }}</a>
-            </small>
+            <!--<small>by <a href="#">{{ page.author }}</a>
+            </small>-->
         </h1>
         <ol class="breadcrumb">
             <li><a href="/index.html">Home</a>
@@ -30,13 +38,23 @@ layout: default
         <hr>
 
         <!-- Date/Time -->
-        <p><i class="fa fa-clock-o"></i> Posted on {{ page.date | date: "%B %-d, %Y" }} at 9:00 PM</p>
-
+        <p style="vertical-align: middle; display: inline-block;"><i class="fa fa-clock-o"></i> Posted on {{ page.date | date: "%B %-d, %Y" }}</p>
+        <!--facebook icon -->
+         <div class="fb-like" data-href="{{url_base}}{{ page.url }}" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true" style="vertical-align: middle; display: inline-block; float: right"></div>
         <hr>
-
         {% if page.previewimage %}
         <!-- Preview Image -->
-        <img class="img-responsive" src="{{ site.placeholderimagesbaseurl }}{{ page.previewimage }}" alt="">
+            {% if page.externallink %} 
+                <a href="{{page.externallink}}">
+                    <img class="img-responsive" src="/img/news/{{ page.previewimage }}" alt="">
+                </a>
+            {%  else %}
+                <img class="img-responsive" src="/img/news/{{ page.previewimage }}" alt="">
+            {%  endif %}
+        {%  else %}
+
+         <img class="img-responsive" src="http://placehold.it/700x400" alt="">
+
         {% endif %}
 
         <hr>
