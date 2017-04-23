@@ -1,0 +1,72 @@
+---
+layout: default
+
+---
+{% if site.github.url %}
+  {% assign url_base = site.github.url %}
+{% else %}
+  {% assign url_base = site.url %}
+{% endif %}
+
+{% assign url_base =  "rluo.github.io"" %}
+
+<!-- Page Heading/Breadcrumbs -->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">{{ page.title }}
+            <!--<small>by <a href="#">{{ page.author }}</a>
+            </small>-->
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/index.html">Home</a>
+            </li>
+            <li><a href="/talks.html">Talks</a></li>
+            <li class="active">{{ page.excerpt | remove: '<p>' | remove: '</p>'  }}</li>
+        </ol>
+    </div>
+</div>
+<!-- /.row -->
+
+<!-- Content Row -->
+<div class="row">
+
+    <!-- Blog Post Content Column -->
+    <div class="col-lg-8">
+
+        <!-- Blog Post -->
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p style="vertical-align: middle; display: inline-block;"><i class="fa fa-clock-o"></i> On {{ page.date | date: "%B %-d, %Y" }} at {{ page.title }}</p>
+        <!--facebook icon -->
+         <div class="fb-like" data-href="{{url_base}}{{ page.url }}" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true" style="vertical-align: middle; display: inline-block; float: right"></div>
+        <hr>
+ 
+        {% if page.previewimage %}
+
+        <iframe src="http://{{ url_base }}/slides/{{ page.previewimage }}" frameborder="0" width="1024" height="768"></iframe>
+    
+        {% else %}
+        <img class="img-responsive img-hover" src="http://placehold.it/1024x768" alt=""> 
+        {% endif %}
+
+        <hr>
+
+        <!-- Post Content -->
+<!--
+        {% if page.excerpt %}
+        <p class="lead">{{ page.excerpt }}</p>
+        {% endif %}
+-->
+
+         {{ content }}
+         <a class="btn btn-primary" href="http://{{url_base}}/slides/{{ page.externallink }}" target="_blank">View Slides <i class="fa fa-angle-right"></i></a>
+        <hr>
+
+    </div>
+
+ 
+
+</div>
+<!-- /.row -->

@@ -8,34 +8,44 @@ layout: default
   {% assign url_base = site.url %}
 {% endif %}
 
+{% assign url_base = "rluo.github.io" %}
+
+
 <!-- Page Heading/Breadcrumbs -->
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">News
+        <h1 class="page-header">Talks
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{url_base}}/index.html">Home</a>
             </li>
-            <li class="active">News</li>
+            <li class="active">Talks</li>
         </ol>
     </div>
 </div>
 <!-- /.row -->
 
 <div class='row'>
-    {% for news_post in site.categories.news %}
-        <div class="col-md-4 img-portfolio" style="height: 410px">
-            <a href="{{url_base}}/portfolio-item.html">
-                <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
-            </a>
-            <h3>
-                <a href="https://arxiv.org/abs/1603.07749">{{ news_post.title }}</a>
-            </h3>
-            <p><i class="fa fa-clock-o"></i> Posted on {{ news_post.date | date: "%B %-d, %Y" }}</p>
-            {{ news_post.excerpt }}
-        </div>
+    {% for post in site.categories.talks %}
+    <div class="col-md-4 img-portfolio" style="height: 410px">
+
+        <a href="/{{ post.url  }}">
+        {% if post.previewimage %}
+
+        <iframe src="http://{{ url_base }}/slides/{{ post.previewimage }}" frameborder="0" width="512" height="384"></iframe>
+    
+        {% else %}
+        <img class="img-responsive img-hover" src="http://placehold.it/512x384" alt=""> 
+        {% endif %}
+        
+        </a>
+                  <h4> <a href="http://{{url_base}}/slides/{{ post.externallink }}" target="_blank"> {{ post.excerpt  | remove: '<p>' | remove: '</p>' }} </a> </h4>
+        <p><i class="fa fa-clock-o"></i> On {{ post.date | date: "%B %-d, %Y" }}  at {{ post.title }} </p>
+                 <!--<a class="btn btn-primary" href="http://{{url_base}}/slides/{{ post.externallink }}" target="_blank">View Slides <i class="fa fa-angle-right"></i></a>-->
+    </div>
     {% endfor %}
 </div>
+
 
 
 <hr>
