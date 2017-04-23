@@ -29,16 +29,18 @@ layout: default
     {% for post in site.categories.talks %}
     <div class="col-md-4 img-portfolio" style="height: 410px">
 
-        <a href="/{{ post.url  }}">
+        <!--<a href="/{{ post.url  }}">       </a>-->
         {% if post.previewimage %}
 
+        <div>
         <iframe src="http://{{ remote_url_base }}/slides/{{ post.previewimage }}" frameborder="0" width="341" height="256"></iframe>
-    
+    <a href="http://{{remote_url_base}}/slides/{{ post.externallink }}" style="position:absolute; top:0; left:0; display:inline-block; width:341px; height:256px; z-index:5;" target="_blank">></a>
+        </div>
         {% else %}
         <img class="img-responsive img-hover" src="http://placehold.it/512x384" alt=""> 
         {% endif %}
         
-        </a>
+ 
                   <h4> <a href="http://{{remote_url_base}}/slides/{{ post.externallink }}" target="_blank"> {{ post.excerpt  | remove: '<p>' | remove: '</p>' }} </a> </h4>
         <p><i class="fa fa-clock-o"></i> On {{ post.date | date: "%B %-d, %Y" }}  at {{ post.title }} </p>
                  <!--<a class="btn btn-primary" href="http://{{remote_url_base}}/slides/{{ post.externallink }}" target="_blank">View Slides <i class="fa fa-angle-right"></i></a>-->
