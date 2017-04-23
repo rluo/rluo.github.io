@@ -8,7 +8,7 @@ layout: default
   {% assign url_base = site.url %}
 {% endif %}
 
-{% assign url_base =  "rluo.github.io"" %}
+{% assign remote_url_base =  "rluo.github.io"" %}
 
 <!-- Page Heading/Breadcrumbs -->
 <div class="row">
@@ -45,7 +45,7 @@ layout: default
  
         {% if page.previewimage %}
 
-        <iframe src="http://{{ url_base }}/slides/{{ page.previewimage }}" frameborder="0" width="1024" height="768"></iframe>
+        <iframe src="http://{{ remote_url_base }}/slides/{{ page.previewimage }}" frameborder="0" width="1024" height="768"></iframe>
     
         {% else %}
         <img class="img-responsive img-hover" src="http://placehold.it/1024x768" alt=""> 
@@ -61,7 +61,7 @@ layout: default
 -->
 
          {{ content }}
-         <a class="btn btn-primary" href="http://{{url_base}}/slides/{{ page.externallink }}" target="_blank">View Slides <i class="fa fa-angle-right"></i></a>
+         <a class="btn btn-primary" href="http://{{remote_url_base}}/slides/{{ page.externallink }}" target="_blank">View Slides <i class="fa fa-angle-right"></i></a>
         <hr>
 
     </div>
