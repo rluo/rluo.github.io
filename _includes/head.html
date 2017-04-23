@@ -1,9 +1,5 @@
 <head>
-    {% if site.github.url %}
-      {% assign url_base = site.github.url %}
-    {% else %}
-      {% assign url_base = site.url %}
-    {% endif %}
+    {% if site.github.url %} {% assign url_base = site.github.url %} {% else %} {% assign url_base = site.url %} {% endif %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,17 +7,24 @@
     <meta name="author" content="">
 
     <title>
-      {% if page.title %}
-        {{ page.title }}
-      {% else %}
-        {{ site.title }}
-      {% endif %}
+        {% if page.title %} {{ page.title }} {% else %} {{ site.title }} {% endif %}
     </title>
 
 
+    <!--
     <link rel="icon" type="image/png" href="http://www.bigcomplexdata.com/favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="http://www.bigcomplexdata.com/favicon-16x16.png" sizes="16x16" />
     <link rel="icon" type="image/png" href="http://www.bigcomplexdata.com/favicon-128.png" sizes="128x128" />
+-->
+
+    <!--new favicon for all platforms-->
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
 
 
     <!-- Bootstrap Core CSS -->
@@ -41,9 +44,14 @@
     <![endif]-->
 
     {% if page.style %}
-      <style>
-        {{ page.style }}
-      </style>
+    <style>
+        {
+            {
+                page.style
+            }
+        }
+
+    </style>
     {% endif %}
 
 </head>
