@@ -1,0 +1,32 @@
+{
+  "name": "rluo.github.io",
+  "version": "1.0.0",
+  "description": "Website for Analytics for Big and Complex Data Group. Copyright 2016-2017 Xi Luo.",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leb2/rluo.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leb2/rluo.github.io/issues"
+  },
+  "homepage": "https://github.com/leb2/rluo.github.io#readme",
+  "devDependencies": {
+    "fs": "0.0.1-security",
+    "gulp": "^3.9.1",
+    "gulp-exec": "^2.1.3",
+    "gulp-front-matter": "^1.3.0",
+    "gulp-transform": "^1.1.0",
+    "gulp-util": "^3.0.8",
+    "gulp-webshot": "^0.2.3",
+    "system": "^1.3.0",
+    "through2": "^2.0.3",
+    "transform": "^1.1.2",
+    "url-to-screenshot": "^0.6.2"
+  }
+}
