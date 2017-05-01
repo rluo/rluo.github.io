@@ -10,10 +10,10 @@ var through = require('through2');
 
 fileExists = function() {
   return through.obj(function(file, encoding, callback) {
-      var exists = fs.existsSync('./talk-images/' + file.frontmatter.externallink + '.png');
+      var exists = fs.existsSync('./img/talkScreeenshots/' + file.frontmatter.externallink + '.png');
       if (!exists) {
           gutil.log("Starting screenshot for " + file.frontmatter.previewimage);
-          var command = 'phantomjs screenshot.js ' + file.frontmatter.previewimage + ' ' + file.frontmatter.externallink + ".png";
+          var command = './node_modules/phantomjs/bin/phantomjs screenshot.js ' + file.frontmatter.previewimage + ' ' + file.frontmatter.externallink + ".png";
           file.command = command;
           callback(null, file);
       } else {
