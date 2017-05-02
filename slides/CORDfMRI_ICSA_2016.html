@@ -659,7 +659,7 @@
             <section>
                 <h2>Exact Recovery</h2>
 
-                <div class='coverflow' style="bottom: 20px">
+                <div class='coverflow' style="bottom: 20px; display: block;">
                     <figure>
                         <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="">
                         <figcaption>Block</figcaption>
@@ -684,11 +684,8 @@
                 <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel29d.png" alt="" class="noborder">
                     <figcaption>Negative</figcaption>
                 </figure> -->
-
-                <p>
-                    <br>
-                </p>
-                <p><br></p>
+                <br>
+                <hr style="margin-top: 10px;">
                 <p>Different models for $C$="$\cov(Z)$" and $\alpha = 2 n^{-1/2} \log^{1/2} p$ </p>
                 <p> Vertical lines: theoretical sample size based on our lower bound </p>
                 <p>HC and Kmeans fail even if inputting the true $K$.</p>
@@ -1054,6 +1051,9 @@
         });
         $(Reveal.getCurrentSlide()).find('.coverflow').coverflow(); // For first slide
     </script>
+
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
 </body>
 
 </html>
