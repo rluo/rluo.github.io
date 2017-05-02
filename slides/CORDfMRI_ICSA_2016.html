@@ -30,12 +30,14 @@
         .ui-coverflow {
             position: relative;
             padding-bottom: 12px;
+            margin-bottom: 5px; 
         }
 
         .ui-coverflow>img,
         .ui-coverflow>figure {
             height: 440px !important;
             width: auto;
+            min-width: 440px !important; 
         }
     </style>
 
@@ -684,8 +686,7 @@
                 <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel29d.png" alt="" class="noborder">
                     <figcaption>Negative</figcaption>
                 </figure> -->
-                <br>
-                <hr style="margin-top: 10px;">
+
                 <p>Different models for $C$="$\cov(Z)$" and $\alpha = 2 n^{-1/2} \log^{1/2} p$ </p>
                 <p> Vertical lines: theoretical sample size based on our lower bound </p>
                 <p>HC and Kmeans fail even if inputting the true $K$.</p>
@@ -1049,7 +1050,10 @@
             $(event.currentSlide).find('.coverflow').find('.fragment')
                 .removeClass('visible').removeClass('currentSlide');
         });
-        $(Reveal.getCurrentSlide()).find('.coverflow').coverflow(); // For first slide
+        setTimeout(
+              function() { $(Reveal.getCurrentSlide()).find('.coverflow').coverflow() },  5000); 
+     
+      
     </script>
 
     <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
