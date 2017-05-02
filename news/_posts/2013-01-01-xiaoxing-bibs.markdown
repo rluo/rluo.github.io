@@ -1,6 +1,6 @@
 ---
 layout: news
-title: Ekaterina's Summer Award
+title: Xiaoxing's BIBS Award
 author: Xi Luo
 previewimage:  abcd700x400.jpg
 tags: award
