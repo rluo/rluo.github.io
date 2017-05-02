@@ -1050,8 +1050,8 @@
             $(event.currentSlide).find('.coverflow').find('.fragment')
                 .removeClass('visible').removeClass('currentSlide');
         });
-        setTimeout(
-              function() { $(Reveal.getCurrentSlide()).find('.coverflow').coverflow() },  15000); 
+        $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow() });
+        setTimeout( function() { $(Reveal.getCurrentSlide()).find('.coverflow').coverflow() },  15000); 
      
       
     </script>
