@@ -134,7 +134,7 @@
 
 
             <section>
-                <h2>Case 1: Genes and HIV Brains</h2>
+                <h2>Ex 1: Genes and HIV Brains</h2>
                 <ul>
                     <li>Gene expression arrays on post-mortem brain tissues <cite>Borjabad et al, 2011</cite>
                         <ul>
@@ -298,63 +298,63 @@
         // Full list of configuration options available at:
         // https://github.com/hakimel/reveal.js.3.5#configuration
         Reveal.initialize({
-            controls: false,
-            progress: true,
-            history: true,
-            center: true,
+                controls: false,
+                progress: true,
+                history: true,
+                center: true,
 
-            transition: 'slide', // none/fade/slide/convex/concave/zoom
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
 
-            width: 1024,
-            height: 768,
+                width: 1024,
+                height: 768,
 
-            // Display the page number of the current slide
-            slideNumber: 'c/t',
+                // Display the page number of the current slide
+                slideNumber: 'c/t',
 
-            math: {
-                //mathjax: './MathJax/MathJax.js',
-                mathjax: 'bower_components/MathJax/MathJax.js',
-                //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
-                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                math: {
+                    //mathjax: './MathJax/MathJax.js',
+                    mathjax: 'bower_components/MathJax/MathJax.js',
+                    //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                    config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
                     //                config: 'TeX-AMS-MML_SVG-full'
-            },
-
-            // Optional reveal.js.3.5 plugins
-            dependencies: [{
-                src: './reveal.js.3.5/lib/js/classList.js',
-                condition: function() {
-                    return !document.body.classList;
-                }
-            }, {
-                src: './reveal.js.3.5/plugin/markdown/marked.js',
-                condition: function() {
-                    return !!document.querySelector('[data-markdown]');
-                }
-            }, {
-                src: './reveal.js.3.5/plugin/markdown/markdown.js',
-                condition: function() {
-                    return !!document.querySelector('[data-markdown]');
-                }
-            }, {
-                src: './reveal.js.3.5/plugin/highlight/highlight.js',
-                async: true,
-                condition: function() {
-                    return !!document.querySelector('pre code');
                 },
-                callback: function() {
-                    hljs.initHighlightingOnLoad();
-                }
-            }, {
-                src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
-                async: true
-            }, {
-                src: './reveal.js.3.5/plugin/notes/notes.js',
-                async: true
-            }, {
-                src: './reveal.js.3.5/plugin/math/math.js',
-                async: true
-            }]
-        });
+
+                // Optional reveal.js.3.5 plugins
+                dependencies: [{
+                    src: './reveal.js.3.5/lib/js/classList.js',
+                    condition: function () {
+                        return !document.body.classList;
+                    }
+                }, {
+                    src: './reveal.js.3.5/plugin/markdown/marked.js',
+                    condition: function () {
+                        return !!document.querySelector('[data-markdown]');
+                    }
+                }, {
+                    src: './reveal.js.3.5/plugin/markdown/markdown.js',
+                    condition: function () {
+                        return !!document.querySelector('[data-markdown]');
+                    }
+                }, {
+                    src: './reveal.js.3.5/plugin/highlight/highlight.js',
+                    async: true,
+                    condition: function () {
+                        return !!document.querySelector('pre code');
+                    },
+                    callback: function () {
+                        hljs.initHighlightingOnLoad();
+                    }
+                }, {
+                    src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
+                    async: true
+                }, {
+                    src: './reveal.js.3.5/plugin/notes/notes.js',
+                    async: true
+                }, {
+                    src: './reveal.js.3.5/plugin/math/math.js',
+                    async: true
+                }, { src: 'bower_components/reveal.js-menu/menu.js' }]
+            });
 
     </script>
 
