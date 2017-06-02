@@ -1,2 +1,14 @@
 _site/
 node_modules/
+slides/MathJax/
+.DS_Store
+slides/JSLibrary/animo.js/
+slides/JSLibrary/move.js/
+.vscode/
+.bundle/
+slides/Media/PollEv/
+slides/Media/Scene/
+slides/JSLibrary/jquery-ui-1.11.4/
+slides/JSLibrary/jquery-ui-themes-1.11.4/
+slides/JSLibrary/coverflow-3.0.2/
+Gemfile*
