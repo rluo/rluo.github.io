@@ -7,4 +7,4 @@ tags: award
 externallink: http://www.nsf.gov/awardsearch/showAward?AWD_ID=1557467
 
 ---
-Our ABCD group received an [NSF](http://www.nsf.gov/awardsearch/showAward?AWD_ID=1557467) award, in partnership with the [NIH BD2K](https://datascience.nih.gov/bd2k) initiative, on methods for Big Biomedical Data!
+Our ABCD group received an [NSF](http://www.nsf.gov/awardsearch/showAward?AWD_ID=1557467) award, in partnership with the [NIH Big Data to Knowledge](https://datascience.nih.gov/bd2k) initiative, on methods for Big Biomedical Data!
