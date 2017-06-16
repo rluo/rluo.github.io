@@ -94,24 +94,23 @@
                 <br>
                 <p>
                     <medium><strong>EcoSta 2017, HKUST, Hong Kong</strong>
-                        <br>June 15, 2017</medium>
+                        <br>June 16, 2017</medium>
                 </p>
                 <p>
                     <small> Funding: NSF/DMS (BD2K) 1557467; NIH R01EB022911, P20GM103645, P01AA019072, P30AI042853</small>
                 </p>
-
             </section>
 
 
             <section>
                 <h2>Collaborators</h2>
-                <div class="fbox"> <img src="./Media/Personnel/FlorentinaBunea.jpg" alt="Florentina Bunea" width="350" height="350">
+                <div class="fbox"> <img src="./Media/Personnel/FlorentinaBunea.jpg" alt="Florentina Bunea" width="350" height="350" class="clip-ellipse">
                     <p class="fbox"> Florentina Bunea
                         <br>
                         <small>Cornell University </small></p>
                 </div>
                 <span style="display:inline-block; width: 50px;"></span>
-                <div class="fbox"> <img src="./Media/Personnel/ChristopheGiraud.jpg" alt="Florentina Bunea" width="350" height="350">
+                <div class="fbox"> <img src="./Media/Personnel/ChristopheGiraud.jpg" alt="Florentina Bunea" width="350" height="350" class="clip-ellipse">
                     <p class="fbox">Christophe Giraud
                         <br>
                         <small>Paris Sud University</small> </p>
@@ -198,17 +197,6 @@
                 </aside>
             </section>
 
-
-            <section>
-                <h2>General Pipeline</h2>
-                <br>
-                <img src="Media/fMRI/generalNetworkPipeline.png" alt="" width="100%">
-                <br>
-                <br>
-                <p>This talk: how to do clustering with justification?</p>
-                <aside class="notes">
-                    focus on data-driven cluster because Trans: look at first few clusters </aside>
-            </section>
 
 
 
@@ -441,13 +429,13 @@
                 <img src="Media/Clustering/MatrixModelGLatent.png" width="100%" alt="">
                 <br>
                 <ul>
-                    <li>Our model identifiable if $\cor(Z_1, Z_2) \ne 0$
+                    <li>Our model <emph>identifiable</emph>  if $\cor(Z_1, Z_2) \ne 0$
                         <ul>
                             <li>Two brain clusters <span class="mypink">red</span>/<span class="mysky">blue</span> talk to each other</li>
                         </ul>
                     </li>
-                    <li>Still identifiable if "$\cor(Z_1, Z_2) \gt \var(Z_1)\gt \var(Z_2)$"</li>
-                    <li>PCA: $\cor(Z_1, Z_2) = 0$</li>
+                    <li>Identifiable if "$\cor(Z_1, Z_2) \gt \var(Z_1)\gt \var(Z_2)$"</li>
+                    <li>Other models <emph>identifiable</emph> usually if $\cor(Z_1, Z_2) = 0$</li>
                 </ul>
             </section>
 
@@ -500,21 +488,6 @@
             </section>
 
 
-            <section>
-                <h2>Defining Order of Partitions</h2>
-                <ul>
-                    <li>$G\leq G^{\prime}$ if $G^{\prime}$ is a sub-partition of $G$
-                        <ul>
-                            <li>Example: $G^{\prime} =\{\{1\}, \{2\}, \{3\}\}$, $G=\{1,2,3\}$ </li>
-                        </ul>
-                    </li>
-                    <li>Denote $a\stackrel{G(X)}{\sim} b$ by $G(X)$ if $\var(X_{a})=\var(X_{b})$ and $\cov(X_{a},X_{c})=\cov(X_{b},X_{c})$ for all $c\neq a,b$
-                    </li>
-                    <li>Note that $a\stackrel{G^{\prime}(X)}{\sim} b$ if $G\leq G^{\prime}$ </li>
-                    <li>Exist
-                        <emph>multiple</emph> partitions that yield $G$-block cov</li>
-                </ul>
-            </section>
 
             <section>
                 <h2>Minimum $G$ Partition</h2>
@@ -646,6 +619,25 @@
                 <highlight>Our method is minimax optimal.</highlight>
             </section>
 
+            <section>
+                <h2>Choosing Number of Clusters</h2>
+                <ul>
+                    <li>Split data into <strong>3</strong> parts</li>
+                    <li>Use part 1 of data to estimate clusters $\hat{G}$ for each $\alpha$</li>
+                    <li>Use part 2 to compute between variable difference $$ \delta^{(2)}_{ab} = R_{ac}^{(2)} - R_{bc}^{(2)}, \quad c \ne a, b. $$
+                    </li>
+                    <li>Use part 3 to generate "CV" loss $$ \mbox{CV}(\hat{G}) = \sum_{a \lt b} \| \delta^{(3)}_{ab} - \delta^{(2)}_{ab} 1\{ a \mbox{ not clustered w/ } b \} \|^2_\infty. $$ </li>
+                    <li>Pick $\alpha$ with the smallest loss above</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Theory for CV</h2>
+                <div class="thm"><strong>Theorem:</strong> If either: (i) $X$ is sub-Gaussian with correlation matrix $R$; or (ii) $X$ has a copula distribution with copula correlation matrix $R$, then we have $E[\mbox{CV}(G^*)] \lt E[\mbox{CV}(G)]$, for any $G\ne G^*$.
+                </div>
+                This shows that our CV will select $G^*$ consistently.
+            </section>
 
             <Section>
                 <h1>Simulations</h1>
@@ -664,7 +656,6 @@
                     </li>
                 </ul>
             </section>
-
 
 
             <section>
@@ -695,7 +686,7 @@
                 <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel29d.png" alt="" class="noborder">
                     <figcaption>Negative</figcaption>
                 </figure> -->
-
+                <p>&nbsp;</p>
                 <p>Different models for $C$="$\cov(Z)$" and $\alpha = 2 n^{-1/2} \log^{1/2} p$ </p>
                 <p> Vertical lines: theoretical sample size based on our lower bound </p>
                 <p>HC and Kmeans fail even if inputting the true $K$.</p>
@@ -722,24 +713,42 @@
                 </ul>
             </section>
 
+            <section>
+                <h2>Cross Validation</h2>
+                <figure class="threecol"><img src="Media/Clustering/CValphaMno30MethodgFD22ANDn800p1600.png" alt="" class="noborder">
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/CValphaMno36MethodgFD22ANDn800p1600.png" alt="" class="noborder">
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/CValphaMno30MethodgFD22ANDn800p1600Singleton3.png" alt="" class="noborder">
+                </figure>
+                <p>
+                    <br>
+                </p>
+                <p>
+                    <highlight>Recovery %</highlight> in red and <strong>CV loss</strong> in black.</p>
+                <p>CV selects the constants to yield close to 100% recovery, as predicted by our theory (at least for large $n>200$)</p>
+            </section>
+
+
 
             <section>
                 <h2>Cross Validation</h2>
 
                 <div class='coverflow'>
                     <figure><img src="Media/Clustering/CValpha19d.png" alt="" class="noborder">
+                       <figcaption>Block</figcaption>
                         <div class='fragment'></div>
                     </figure>
                     <figure><img src="Media/Clustering/CValpha27d.png" alt="" class="noborder">
+                        <figcaption>Sparse</figcaption>
                         <div class='fragment'></div>
                     </figure>
                     <figure><img src="Media/Clustering/CValpha28d.png" alt="" class="noborder">
+                        <figcaption>Negative</figcaption>
                         <div class='fragment'></div>
                     </figure>
                 </div>
-                <p>
-                    <br>
-                </p>
+                 <p>&nbsp;</p>
                 <p>Recovery % in red and CV loss in black.</p>
                 <br>
                 <emph>CV selects the tuning to yield close to 100% recovery</emph>
@@ -1111,7 +1120,6 @@
 //               elements[j].coverflow();
 //           }
 //        });
-
     </script>
 
 
