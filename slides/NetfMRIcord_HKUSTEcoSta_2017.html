@@ -197,21 +197,21 @@
                 </aside>
             </section>
 
-<section>
+            <section>
                 <h2>"Network of Networks"</h2>
                 <ul>
                     <li>Hierarchical Covariance Model (a latent var model)
                     </li>
                     <center><img src="Media/GraphicalModels/HGMillustrate.png" alt="" class="noborder"></center>
                     <li>Some ongoing research related to this model
-                    <ul>
-                        <li>How to cluster variables together?</li>
-                        <li>How to estimate cluster signals?</li>
-                        <li>How to estimate between-cluster connections?</li>
-                        <li>...</li>
-                    </ul>
+                        <ul>
+                            <li>How to cluster variables together?</li>
+                            <li>How to estimate cluster signals?</li>
+                            <li>How to estimate between-cluster connections?</li>
+                            <li>...</li>
+                        </ul>
                     </li>
-                    <li>Will focus on how to group nodes together
+                    <li>Will focus on how to group nodes together today
                         <ul>
                             <li>Usually NP-hard and limited theory</li>
                         </ul>
@@ -449,13 +449,15 @@
                 <img src="Media/Clustering/MatrixModelGLatent.png" width="100%" alt="">
                 <br>
                 <ul>
-                    <li>Our model <emph>identifiable</emph>  if $\cor(Z_1, Z_2) \ne 0$
+                    <li>Our model
+                        <emph>identifiable</emph> if $\cor(Z_1, Z_2) \ne 0$
                         <ul>
                             <li>Two brain clusters <span class="mypink">red</span>/<span class="mysky">blue</span> talk to each other</li>
                         </ul>
                     </li>
                     <li>Identifiable if "$\cor(Z_1, Z_2) \gt \var(Z_1)\gt \var(Z_2)$"</li>
-                    <li>Other models <emph>identifiable</emph> usually if $\cor(Z_1, Z_2) = 0$</li>
+                    <li>Other models
+                        <emph>identifiable</emph> usually if $\cor(Z_1, Z_2) = 0$</li>
                 </ul>
             </section>
 
@@ -756,7 +758,7 @@
 
                 <div class='coverflow'>
                     <figure><img src="Media/Clustering/CValpha19d.png" alt="" class="noborder">
-                       <figcaption>Block</figcaption>
+                        <figcaption>Block</figcaption>
                         <div class='fragment'></div>
                     </figure>
                     <figure><img src="Media/Clustering/CValpha27d.png" alt="" class="noborder">
@@ -768,7 +770,7 @@
                         <div class='fragment'></div>
                     </figure>
                 </div>
-                 <p>&nbsp;</p>
+                <p>&nbsp;</p>
                 <p>Recovery % in red and CV loss in black.</p>
                 <br>
                 <emph>CV selects the tuning to yield close to 100% recovery</emph>
@@ -1106,12 +1108,13 @@
                 src: 'JSLibrary/coverflowjs/coverflow.min.js'
             }]
         });
-//{
-//                src: './reveal.js.3.5/plugin/anything/anything.js'
-//            },
-//        ,  {
-//                src: 'bower_components/reveal.js-menu/menu.js'
-//            }
+        //{
+        //                src: './reveal.js.3.5/plugin/anything/anything.js'
+        //            },
+        //        ,  {
+        //                src: 'bower_components/reveal.js-menu/menu.js'
+        //            }
+
     </script>
 
     <!-- Coverflow event listeners -->
@@ -1134,12 +1137,13 @@
         //        setTimeout(function() {
         //            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()
         //        }, 15000);
-//        Reveal.addEventListener('ready', function(event) {
-//           let elements =  document.getElementsByClassName('coverflow')
-//           for (let j=0; j<elements.length; j++) {
-//               elements[j].coverflow();
-//           }
-//        });
+        //        Reveal.addEventListener('ready', function(event) {
+        //           let elements =  document.getElementsByClassName('coverflow')
+        //           for (let j=0; j<elements.length; j++) {
+        //               elements[j].coverflow();
+        //           }
+        //        });
+
     </script>
 
 
