@@ -1,0 +1,1197 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Network Clustering for fMRI</title>
+    <meta name="description" content="Analytics for Big and Complex Data Group">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./reveal.js.3.5/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js.3.5/lib/css/zenburn.css">
+
+    <!--
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+-->
+    <!--    Cover Flow   -->
+    <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
+
+    <script src="JSLibrary/jquery-3.2.1.js"></script>
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <!-- Coverflow styles -->
+    <style>
+        .ui-coverflow {
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 5px;
+        }
+
+        .ui-coverflow>img,
+        .ui-coverflow>figure {
+            height: 440px !important;
+            width: auto;
+            min-width: 440px !important;
+        }
+
+    </style>
+
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js.3.5/css/print/pdf.css' : './reveal.js.3.5/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+
+    <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+</head>
+
+<body>
+    <div class="reveal">
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \( \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \DeclareMathOperator{\Ex}{\mathbb{E}} \DeclareMathOperator{\diag}{diag} \)
+
+            <section>
+                <h2><strong>A Covariance Matrix Approach to Variable Clustering
+                     </strong></h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width:43%; vertical-align: middle;">
+                        <medium><strong>Brown University</strong>
+                            <br> Department of Biostatistics
+                            <br> Center for Statistical Sciences
+                            <br> Computation in Brain and Mind
+                            <br> Brown Institute for Brain Science
+                            <br> Brown Data Science Initiative
+                            <br> ABCD Research Group</medium>
+                    </p> <img class="noborder inlinemiddle" style="display: inline-block;
+                          vertical-align: middle;" src="Media/ABCDgroup/abcdLogo2_BannerBigComplexDataCom.png" height="210px">
+                </div>
+                <br>
+                <p>
+                    <medium><strong>Southwestern Univ of Finance and Economics, Chengdu, CHINA</strong>
+                        <br>June 20, 2017</medium>
+                </p>
+                <p>
+                    <small> Funding: NSF/DMS (BD2K) 1557467; NIH R01EB022911, P20GM103645, P01AA019072, P30AI042853</small>
+                </p>
+            </section>
+
+
+            <section>
+                <h2>Collaborators</h2>
+                <div class="fbox"> <img src="./Media/Personnel/FlorentinaBunea.jpg" alt="Florentina Bunea" width="350" height="350" class="clip-ellipse">
+                    <p class="fbox"> Florentina Bunea
+                        <br>
+                        <small>Cornell University </small></p>
+                </div>
+                <span style="display:inline-block; width: 50px;"></span>
+                <div class="fbox"> <img src="./Media/Personnel/ChristopheGiraud.jpg" alt="Florentina Bunea" width="350" height="350" class="clip-ellipse">
+                    <p class="fbox">Christophe Giraud
+                        <br>
+                        <small>Paris Sud University</small> </p>
+                </div>
+            </section>
+
+
+
+            <!--
+            <section data-state="fMRI">
+                <h2>Task fMRI</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Perform tasks while under fMRI scanning</li>
+                                                <li>Press if instruction="go"; withhold pressing if "stop"</li>
+                        <li>Specific parts of the brain responsible for the task</li>
+                        <li>Remove task effects, data like "resting-state"</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Goal: which parts of the brain function together?
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                        <li>Process information</li>
+                    </ul>
+                </aside>
+            </section>
+-->
+
+            <section>
+                <h2>Motivation</h2>
+                <ul>
+                    <li>Big data:
+                        <emph>huge</emph> number of variables</li>
+                    <li>Large covariance estimation is fundamental
+                        <ul>
+                            <li>Portfolio selection</li>
+                            <li>Classification</li>
+                            <li>Graphs and networks</li>
+                        </ul>
+                    </li>
+                    <li>Can these two approaches be combined?</li>
+                </ul>
+            </section>
+
+
+
+
+            <section data-background-iframe="Media/fMRI/ThreeJSBrainMaskColor.html">
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
+                <!--                <h2>fMRI Data</h2>-->
+                <!--                <iframe id="brainCube" src="Media/fMRI/ThreeJSBrainMaskColor.html" frameborder="0" width="800" height="600" name="brainCube"></iframe>-->
+                <p style="margin-bottom: 650px;"></p>
+                <p><strong>fMRI data</strong>: blood-oxygen-level dependent (BOLD) signals from each
+                    <highlight>cube</highlight>/voxel (~millimeters),
+                    <emph>$10^5$ ~ $10^6$</emph> voxels in total. </p>
+                <aside class="notes">
+                    <ul>
+                        <li>Lego brain of real brain</li>
+                        <li>red cube is a voxel</li>
+                        <li>track activity from each cube at each time vector</li>
+                        <li>dimension: address temporal separately</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section>
+                <h2>Data Matrix</h2>
+                <ul>
+                    <li>Matrix $X_{n \times p}$, all columns standardized
+                        <ul>
+                            <li>$n$ time points but temporal correlation removed, like iid</li>
+                            <li>$p$ voxels but with spatial corraltion</li>
+                        </ul>
+                        <center><img src="Media/fMRI/voxelGrouping.png" alt="" class="noborder inlinemiddle" align="middle">
+                            <span style="display:inline-block; width: 30px;"></span>
+                            <img src="Media/MRI/freeSurfer.png" alt="" class="noborder inlinemiddle" width="30%"></center>
+                    </li>
+                    <li>Interested in
+                        <emph>big</emph> spatial networks
+                        <ul>
+                            <li>Voxel level: $10^6 \times 10^6$ cov matrix but limited interpretability</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    mention genetics
+                </aside>
+            </section>
+
+            <section>
+                <h2>"Network of Networks"</h2>
+                <ul>
+                    <li>Hierarchical Covariance Model (a latent var model)
+                    </li>
+                    <center><img src="Media/GraphicalModels/HGMillustrate.png" alt="" class="noborder"></center>
+                    <li>Some ongoing research related to this model
+                        <ul>
+                            <li>How to cluster variables together?</li>
+                            <li>How to estimate cluster signals?</li>
+                            <li>How to estimate between-cluster connections?</li>
+                            <li>...</li>
+                        </ul>
+                    </li>
+                    <li>Will focus on how to group nodes together today
+                        <ul>
+                            <li>Usually NP-hard and limited theory</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Big Picture</h2>
+                <ul>
+                    <li>We are interested in
+                        <emph>big cov</emph> with many variables
+                        <ul>
+                            <li>
+                                <span class="myorange">Global</span> property for certain
+                                <span class="myorange">joint</span> distributions</li>
+                            <li>Real-world cov: maybe
+                                <highlight>non-sparse</highlight> and other structures
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Clustering successful for > 40 years and for DS<cite>Donoho, 2015</cite>
+                        <ul>
+                            <li>Exploratory Data Analysis (EDA)<cite>Tukey, 1977</cite> </li>
+                            <li>Hierarchical clustering and Kmeans<cite>Hartigan & Wong, 1979</cite></li>
+                            <li>Usually based on
+                                <span class="myorange">marginal/pairwise</span> distances</li>
+                        </ul>
+                    </li>
+                    <li>Can clustering and big cov estimation be <strong>combined</strong>?</li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Example</h1>
+            </section>
+
+            <section>
+                <h2>Example: SP 100 Data</h2>
+                <ul>
+                    <li>Daily returns from stocks in SP 100
+                        <ul>
+                            <li>Stocks listed in Standard & Poor 100 Index<cite>as of March 21, 2014</cite></li>
+                            <li> between January 1, 2006 to December 31, 2008 </li>
+                        </ul>
+                    </li>
+                    <li>Each stock is a variable</li>
+                    <li>Cov/Cor matrices (Pearson's or Kendall's tau)
+                        <ul>
+                            <li>
+                                <highlight>Re-order</highlight> stocks by clusters
+                            </li>
+                            <li>Compare cov patterns with different clustering/ordering</li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </section>
+
+            <section>
+                <h2>Cor after Grouping by Clusters</h2>
+                <figure class="twocol"><img src="Media/Clustering/StockCorKendallParulaKmeans.png" alt="" class="noborder">
+                    <figcaption>Kmeans</figcaption>
+                </figure>
+                <figure class="twocol"><img src="Media/Clustering/StockCorKendallParula.png" alt="" class="noborder">
+                    <figcaption>Our $G$-models</figcaption>
+                </figure>
+                <br>
+                <p>Ours yields stronger
+                    <emph>off-diagonal, tile</emph> patterns. Black = 1.
+                    <br>
+                    <strong>Color bars</strong>: variable groups/clusters
+                    <br> Off-diagonal: correlations across clusters</p>
+                <aside class="notes">
+                    mention color bar </aside>
+            </section>
+
+            <section>
+                <h2>Clustering Results</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th align="center">Industry</th>
+                            <th align="center">
+                                <highlight>Ours</highlight>
+                            </th>
+                            <th align="center">Kmeans</th>
+                            <th align="center">Hierarchical Clustering</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Telecom</td>
+                            <td>ATT, Verizon</td>
+                            <td>ATT, Verizon, Pfizer, Merck, Lilly, Bristol-Myers</td>
+                            <td>ATT, Verizon</td>
+                        </tr>
+                        <tr>
+                            <td>Railroads</td>
+                            <td>Norfolk Southern, Union Pacific</td>
+                            <td>Norfolk Southern, Union Pacific</td>
+                            <td>Norfolk Southern, Union Pacific, Du Pont, Dow, Monsanto</td>
+                        </tr>
+                        <tr>
+                            <td> Home Improvement</td>
+                            <td>Home Depot, Lowe’s</td>
+                            <td> Home Depot, Lowe’s, Starbucks</td>
+                            <td>Home Depot, Lowe’s, Starbucks, Costco, Target, Wal-Mart, FedEx, United Parcel Service</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">$\cdots$</td>
+                        </tr>
+                    </tbody>
+                    <caption align="bottom">All methods yield 30 clusters.</caption>
+                </table>
+                <aside class="notes">mention interpretation</aside>
+            </section>
+
+
+            <section>
+                <h1>Model</h1>
+            </section>
+
+            <section>
+                <h2>Problem</h2>
+                <ul>
+                    <li>Let ${X} \in \real^p$ be a zero mean random vector</li>
+                    <li>Divide variables into partitions/clusters
+                        <ul>
+                            <li>Example: $\{ \{X_1, X_3, X_7\}, \{X_2, X_5\}, \dotsc \}$</li>
+                        </ul>
+                    </li>
+                    <li><strong>Theoretical</strong>: define
+                        <highlight>uniquely</highlight> <strong class="myorange">identifiable</strong> partition $G$ such that all $X_a$ in $G_k$ are statistically
+                        <emph>"similar"</emph>
+                    </li>
+                    <li><strong>DS</strong>: find
+                        <emph>"helpful"</emph> partition that show cov patterns</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Related Methods</h2>
+                <ul>
+                    <li><strong>Clustering</strong>: Kmeans and hierarchical clustering
+                        <ul>
+                            <li>Advantages: fast, general, popular</li>
+                            <li>Limitations: low signal-noise-ratio, theory</li>
+                            <li>Usually cluster
+                                <highlight>data</highlight> points</li>
+                        </ul>
+                    </li>
+                    <li><strong>Community detection</strong>: huge literature <cite>see review Newman, 2003</cite>, deals with observed
+                        <emph>square adjacency</emph> matrices
+                        <ul>
+                            <li>Usually binary matrices</li>
+                            <li>Cluster
+                                <highlight>nodes</highlight> in networks</li>
+                        </ul>
+                    </li>
+
+                    <li><strong>Ours</strong>: cluster
+                        <highlight>variables</highlight> based on
+                        <emph>non-square data</emph>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Kmeans</h2>
+                <div class="twocol inlinemiddle">
+                    <img class="noborder" src="./Media/Clustering/kmeans.png" width="100%" alt="">
+                    <br>
+                    <br>
+                    <p>Low noise</p>
+                </div>
+                <div class="twocol inlinemiddle">
+                    <img class="noborder" src="./Media/Clustering/kmeans2.png" width="100%" alt="">
+                    <p>High noise</p>
+                </div>
+
+                <ul>
+                    <li>Cluster points together if pairwise distance small</li>
+                    <li>Clustering accuracy
+                        <emph>depends</emph> on the noise</li>
+                </ul>
+
+                <aside class="notes">
+                    <ul>
+                        <li>General philosophy of K-means</li>
+                        <li>Mention </li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section>
+                <h2>Kmeans: Generative Model</h2>
+                <ul>
+                    <li>Data $X_{n\times p}$: $p$ variables from partition $G$: $$G=\{ \{X_1, X_3, X_7\}, \{X_2, X_5\}, \dotsc \}$$ </li>
+                    <li>Mixture Gaussian: if variable $X_j \in \real^n$ comes from cluster $G_k$ <cite>Hartigan, 1975</cite> $$X_{j} = Z_k + \epsilon_j, \quad Z_k \bot \epsilon_j $$</li>
+                    <li>Kmeans minimizes over $G$ (and centroid $Z$): $$\sum_{k=1}^K \sum_{j\in G_k} \left\| X_j - Z_k \right\|_2^2 $$</li>
+                </ul>
+                <note>Strictly, Kmeans considers <u>data points</u> in $\real^p$ from $K$ populations </note>
+                <aside class="notes">emphasize small covariance</aside>
+            </section>
+
+
+            <section>
+                <h2>$G$-Latent Cov</h2>
+                <ul>
+                    <li>We call $G$-latent model: $$X_{j} = Z_k + \epsilon_j, \quad Z_k \bot \epsilon_j \mbox{ and } j\in G_k $$</li>
+                    <li>WLOG, all variables are standardized</li>
+                    <li>Intuition: variables $j\in G_k$ form net communities<cite>Luo, 2014</cite></li>
+                </ul>
+                <aside class="notes">mention the impact of $d_k$, correlation depends only on group, use cov and cor interchangeably</aside>
+            </section>
+
+
+            <section>
+                <h2>Matrix Representation</h2>
+                <br>
+                <p>
+                    $$ X_{n\times p}=\underbrace{Z_{n\times k}}_\text{Source/Factor} \quad \underbrace{G_{k\times p}}_\text{Mixing/Loading} + \underbrace{E_{n\times p}}_{Error} \qquad Z \bot E$$
+                </p>
+                <ul>
+                    <li><strong>Clustering</strong>: $G$ is $0/1$ matrix for $k$ clusters/ROIs</li>
+                    <li><strong>Decomposition</strong>: under
+                        <emph>conditions</emph>
+                        <ul>
+                            <li><strong>PCA/factor analysis</strong>: orthogonality</li>
+                            <li><strong>ICA</strong>: orthogonality &rarr; independence</li>
+                            <li><strong>matrix decomposition</strong>: e.g. non-negativity</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Will show existence identifiability</li>
+                        <li>trans: look at $G$ first</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section>
+                <img src="Media/Clustering/MatrixModelGLatent.png" width="100%" alt="">
+                <br>
+                <ul>
+                    <li>Our model
+                        <emph>identifiable</emph> if $\cor(Z_1, Z_2) \ne 0$
+                        <ul>
+                            <li>Two brain clusters <span class="mypink">red</span>/<span class="mysky">blue</span> talk to each other</li>
+                        </ul>
+                    </li>
+                    <li>Identifiable if "$\cor(Z_1, Z_2) \gt \var(Z_1)\gt \var(Z_2)$"</li>
+                    <li>Other models
+                        <emph>identifiable</emph> usually if $\cor(Z_1, Z_2) = 0$</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Principals Behind Other Clustering</h2>
+                <ul>
+                    <li>The Euclidean distance for hierarchical clustering and Kmeans, for two columns/voxles $X_a$ and $X_b$: $$ \|X_a - X_b \|_2^2 = 2(1-\cor(X_a, X_b)) $$</li>
+                    <li>Recall $X_i = Z_k + E_i$ $i \in G_k$</li>
+                    <li>Cor depends
+                        <emph>mainly</emph> on $\var(E)$ if SNR is low</li>
+                    <li>Distance
+                        <ul>
+                            <li><span class="myorange">larger</span> even if generated by <span class="mygreen">same</span> $Z$ and large error</li>
+                            <li><span class="mygreen">smaller</span> even if generated by <span class="myorange">different</span> $Z$ and small error</li>
+                        </ul>
+                    </li>
+                    <li>Worse, clusters close because of correlated $Z$</li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Generalization</h1>
+            </section>
+
+            <section>
+                <h2>Example: $G$-Block</h2>
+                <ul>
+                    <li>
+                        Set $G=\ac{\ac{1,2};\ac{3,4,5}}$, $X \in \real^p$ is $G$-block
+                        <br>
+                        <center>
+                            <small>
+                    $$\Sigma =\left(\begin{array}{ccccc} {\color{red} D_1} & {\color{red} C_{11} }&C_{12} & C_{12}& C_{12}\\ {\color{red} C_{11} }&{\color{red} D_1 }& C_{12} & C_{12}& C_{12} \\ C_{12} & C_{12} &{\color{green} D_{2}} & {\color{green} C_{22}}& {\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} D_2}&{\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} C_{22}}&{\color{green} D_2} \end{array}\right) $$
+                    </small>
+                        </center>
+                    </li>
+                    <li>Matrix math: $\Sigma = G^TCG + d$</li>
+                    <li>We allow $|C_{11} | \lt | C_{12} |$ or negative "covariance"
+                        <ul>
+                            <li>Kmeans/HC leads to block-diagonal cor matrices (permutation)</li>
+                            <li>$\cov(X_1, X_2)=\var(Z_1) = C_{11}$, $\var(Z_2) = C_{22}$</li>
+                            <li>$\cov(X_1, X_3)=\cov(Z_1, Z_2) = C_{12}$</li>
+                        </ul>
+                    </li>
+                    <li>Our clustering method based on $G$-Block
+                    </li>
+                </ul>
+                <aside class="notes">Multiple G-blocks Note the structures, compound symmetry, </aside>
+            </section>
+
+
+
+            <section>
+                <h2>Minimum $G$ Partition</h2>
+                <div class="thm"><strong>Theorem:</strong> $G^{\beta}(X)$ is the minimal partition induced by $a\stackrel{G^{\beta}}{\sim} b$
+                    <br>
+                    <emph>iff</emph> $\var(X_{a})=\var(X_{b})$ and $\cov(X_{a},X_{c})=\cov(X_{b},X_{c})$ for all $c\neq a,b$. Moreover, if the matrix of covariances $C$ corresponding to the partition $G(X)$ is positive-semidefinite, then this is the unique minimal partition according to which ${X}$ admits a latent decomposition. </div>
+                <br>
+                <p>
+                    <highlight>
+                        The minimal partition is unique under regularity conditions.
+                    </highlight>
+                </p>
+            </section>
+
+
+
+            <section>
+                <h1>Method</h1>
+            </section>
+
+            <section>
+                <h2>New Metric:
+                    <highlight>CORD</highlight>
+                </h2>
+                <ul>
+                    <li>First, pairwise correlation distance (like Kmeans)
+                        <ul>
+                            <li>Gaussian copula: $$Y:=(h_1(X_1),\dotsc,h_p(X_p)) \sim N(0,R)$$</li>
+                            <li>Let $R$ be the correlation matrix
+                                <li>Gaussian: Pearson's</li>
+                                <li>Gaussian copula: Kendall's tau transformed, $R_{ab} = \sin (\frac{\pi}{2}\tau_{ab})$</li>
+
+                        </ul>
+                        </li>
+                        <li>Second, maximum difference of correlation distances $$\d(a,b) := \max_{c\neq a,b}|R_{ac}-R_{bc}|$$</li>
+                        <li>Third, group variables $a$, $b$ together if $\d(a,b) = 0$</li>
+                </ul>
+            </section>
+
+            <section data-background-image="http://sutherland-careers.com/wp-content/uploads/2016/01/tomj1.jpg">
+                <h2 style="color:white;">The enemy of my enemy is my friend!</h2>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <cite style="color:white;">Image credit: http://sutherland-careers.com/</cite>
+            </section>
+
+
+            <section>
+                <h2>Chanllenge</h2>
+                <ul>
+                    <li>Goal: find the minimal partition such that $$\d(a,b) = 0 \quad \mbox{if } a \sim b$$
+                    </li>
+                    <li>An NP-hard problem in general, because large number of possible partitions: $O(exp(p))$ </li>
+                    <li>Address the noise in sample correlation $$\widehat \d(a,b):= \max_{c\neq a,b}|\widehat R_{ac}-\widehat R_{bc}| \ne 0$$</li>
+                    <li>Theory for clustering</li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Algorithm: Main Idea</h2>
+                <ul>
+                    <li>Greedy: one cluster at a time, avoiding NP-hard</li>
+                    <li>Cluster variables together if CORD metric $$ \max_{c\neq a,b}|\hat{R}_{ac}-\hat{R}_{bc}| \lt \alpha$$ where $\alpha$ is a tuning parameter</li>
+                    <li>$\alpha$ is chosen by theory or CV</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Algorithm</h2>
+                <ul>
+                    <li>Initialization: $S=\ac{1,\ldots,p}$, and $l=0$</li>
+                    <li>Repeat: while $S\neq \emptyset$
+                        <ul>
+                            <li>$l \leftarrow l+1$</li>
+                            <li>If $|S|=1$ Then $\widehat G_{l}=S$</li>
+                            <li> If $|S|>1$ Then
+                                <ul>
+                                    <li> $(a_{l},b_{l})=\mathop{\mathrm{argmin}}_{a,b\in S,\ a\neq b} \widehat \d(a,b)$</li>
+                                    <li>If $\widehat \d(a_{l},b_{l})>\alpha$ Then $\widehat G_{l} = \ac{a_{l}}$</li>
+                                    <li>If $\widehat \d(a_{l},b_{l})\leq \alpha$ Then $\widehat G_{l} = \ac{s\in S:\widehat \d(a_{l},s)\wedge \widehat \d(b_{l},s)\leq \alpha}$ </li>
+                                </ul>
+                            </li>
+                            <li>$S \leftarrow S\setminus \widehat G_{l}$</li>
+                        </ul>
+                    </li>
+                    <li>Output: the partition $\widehat G=(\widehat G_{l})_{l=1,\ldots,k}$</li>
+                </ul>
+                <aside class="notes">Greedy type of algorithm</aside>
+            </section>
+
+
+
+            <section>
+                <h1>Theory</h1>
+            </section>
+
+            <section>
+                <h2>Condition</h2>
+                <div class="thm">Let $\eta \geq 0$ be given. Let ${ X}$ be a zero mean random vector with a Gaussian copula distribution with parameter $R$. $$ \begin{multline} \mathcal{R}(\eta) := \{R: \ \d(a,b) := \max_{c\neq a,b}|R_{ac}-R_{bc}|>\eta\quad \\ \textrm{for all}\ a\stackrel{G(X)}{\nsim}b.\} \end{multline} $$ <strong>Group separation condition:</strong> $R \in \mathcal{R}(\eta)$.</div>
+                <br>
+                <highlight>The signal strength $\eta$ need to be large.</highlight>
+            </section>
+
+            <section>
+                <h2>Consistency</h2>
+                <div class="thm"><strong>Theorem:</strong> Define $\tau=|\widehat R-R|_{\infty}$ and we consider two parameters $(\alpha,\eta)$ fulfilling $$\begin{equation} \alpha\geq 2\tau\quad\textrm{and}\quad \eta\geq2\tau+\alpha. \end{equation}$$ Then, applying our algorithm we have $\widehat G=G(X)$ whp.</div>
+                <br>
+                <highlight>Ours recovers exact clustering with high probability.</highlight>
+            </section>
+
+            <section>
+                <h2>Minimax</h2>
+                <div class="thm"><strong>Theorem:</strong> $P_{\Sigma}$ the likelihood based on $n$ independent observations of ${ X} \stackrel{d}{=} \mathcal{N}(0,\Sigma)$. For any \begin{equation}\label{etamin} 0\leq \eta \lt \eta^{*}:={\sqrt{\log(p(p-1)/2)}\over \sqrt{(2+e^{-1})n} +\sqrt{\log(p(p-1)/2)}}\,, \end{equation} we have $$\inf_{\widehat G}\sup_{R \in \mathcal{R}(\eta)} P_{\Sigma}(\widehat G\neq G^{\beta}(X))\geq {1\over 2e+1}\geq {1\over 7} \,,$$ where the infimum is taken over all possible estimators. </div>
+                <br>
+                <highlight>Our method is minimax optimal.</highlight>
+            </section>
+
+            <section>
+                <h2>Choosing Number of Clusters</h2>
+                <ul>
+                    <li>Split data into <strong>3</strong> parts</li>
+                    <li>Use part 1 of data to estimate clusters $\hat{G}$ for each $\alpha$</li>
+                    <li>Use part 2 to compute between variable difference $$ \delta^{(2)}_{ab} = R_{ac}^{(2)} - R_{bc}^{(2)}, \quad c \ne a, b. $$
+                    </li>
+                    <li>Use part 3 to generate "CV" loss $$ \mbox{CV}(\hat{G}) = \sum_{a \lt b} \| \delta^{(3)}_{ab} - \delta^{(2)}_{ab} 1\{ a \mbox{ not clustered w/ } b \} \|^2_\infty. $$ </li>
+                    <li>Pick $\alpha$ with the smallest loss above</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Theory for CV</h2>
+                <div class="thm"><strong>Theorem:</strong> If either: (i) $X$ is sub-Gaussian with correlation matrix $R$; or (ii) $X$ has a copula distribution with copula correlation matrix $R$, then we have $E[\mbox{CV}(G^*)] \lt E[\mbox{CV}(G)]$, for any $G\ne G^*$.
+                </div>
+                <highlight>Theoretical support for recovering $G^*$ from data.</highlight>
+            </section>
+
+            <Section>
+                <h1>Simulations</h1>
+            </Section>
+
+            <section>
+                <h2>Setup</h2>
+                <ul>
+                    <li>Generate from various $C$: block, sparse, negative</li>
+                    <li>Compare:
+                        <ul>
+                            <li>Exact recovery of groups (theoretical tuning parameter)</li>
+                            <li>Cross validation (data-driven tuning parameter)</li>
+                            <li>Cord metric vs (semi)parametetric cor (regardless of tuning)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Exact Recovery</h2>
+
+                <div class='coverflow' style="bottom: 20px; display: block;">
+                    <figure>
+                        <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="">
+                        <figcaption>Block</figcaption>
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure>
+                        <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel28d.png" alt="" class="noborder">
+                        <figcaption>Sparse</figcaption>
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure>
+                        <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel29d.png" alt="" class="noborder">
+                        <figcaption>Negative</figcaption>
+                    </figure>
+                </div>
+                <!-- <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="" class="noborder">
+                    <figcaption>Block</figcaption>
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel28d.png" alt="" class="noborder">
+                    <figcaption>Sparse</figcaption>
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel29d.png" alt="" class="noborder">
+                    <figcaption>Negative</figcaption>
+                </figure> -->
+                <p>&nbsp;</p>
+                <p>Different models for $C$="$\cov(Z)$" and $\alpha = 2 n^{-1/2} \log^{1/2} p$ </p>
+                <p> Vertical lines: theoretical sample size based on our lower bound </p>
+                <p>HC and Kmeans fail even if inputting the true $K$.</p>
+            </section>
+
+
+            <section>
+                <h2>Improve Cov Estimation: Averaging</h2>
+                <ul>
+                    <li>Introduce block averaging operator $\left[\varUpsilon\left(R,G\right)\right]_{ab} =$
+                        <medium>
+                            $$\begin{cases} \left|G_{k}\right|^{-1}\left(\left|G_{k}\right|-1\right)^{-1}\sum_{i,j\in G_{k},i\ne j}R_{ij} & \mbox{if } a\ne b \mbox{ and } k=k^{\prime}\\ \left|G_{k}\right|^{-1}\left|G_{k^{\prime}}\right|^{-1}\sum_{i\in G_{k},j\in G_{k^{\prime}}}R_{ij} & \mbox{if } a\ne b \mbox{ and } k\ne k^{\prime}\\ 1 & \mbox{if }a=b. \end{cases} $$
+                        </medium>
+                    </li>
+                    <img src="Media/Clustering/CordBlockAveraging.png" width="100%" alt="">
+
+                </ul>
+            </section>
+
+
+
+
+
+
+            <section>
+                <h2>Cross Validation</h2>
+
+                <div class='coverflow'>
+                    <figure><img src="Media/Clustering/CValpha19d.png" alt="" class="noborder">
+                        <figcaption>Block</figcaption>
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure><img src="Media/Clustering/CValpha27d.png" alt="" class="noborder">
+                        <figcaption>Sparse</figcaption>
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure><img src="Media/Clustering/CValpha28d.png" alt="" class="noborder">
+                        <figcaption>Negative</figcaption>
+                        <div class='fragment'></div>
+                    </figure>
+                </div>
+                <p>&nbsp;</p>
+                <p>Recovery % in red and CV loss in black.</p>
+                <br>
+                <emph>CV selects the tuning to yield close to 100% recovery</emph>
+            </section>
+
+            <section>
+                <h2>Data-driven Evaluation of Cov Estimation</h2>
+                <ul>
+                    <li>Perform variable clustering and then averaging on the training data covariance</li>
+                    <li>Evalute cov estimation using $\hat{R}_{test}$ of the testing data: $$\| \varUpsilon\left(\hat R,G_\alpha \right) - \hat{R}_{test}\|_F^2 $$</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>CV Estimation</h2>
+
+                <div class="coverflow">
+                    <figure class="threecol"><img src="Media/Clustering/CValphaMno30MethodgFD22ANDn800p1600.png" alt="" class="noborder">
+                        <div class="fragment"></div>
+                    </figure>
+                    <figure class="threecol"><img src="Media/Clustering/CValphaMno36MethodgFD22ANDn800p1600.png" alt="" class="noborder">
+                        <div class="fragment"></div>
+                    </figure>
+                    <figure class="threecol"><img src="Media/Clustering/CValphaMno30MethodgFD22ANDn800p1600Singleton3.png" alt="" class="noborder">
+                        <div class="fragment"></div>
+                    </figure>
+                </div>
+                <p>
+                    <br>
+                </p>
+                <p>
+                    <highlight>Cluster recovery %</highlight> in red and <strong>cov  loss</strong> in black.</p>
+                <p>
+                    <emph>Smallest</emph> cov loss with
+                    <emph>exact</emph> clustering </p>
+            </section>
+
+            <section>
+                <h2>Metric Comparison: Without Threhold</h2>
+                <div class="coverflow">
+                    <figure><img src="Media/Clustering/FDD19frd.png" alt="" class="noborder">
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure><img src="Media/Clustering/FDD27frd.png" alt="" class="noborder">
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure><img src="Media/Clustering/FDD28frd.png" alt="" class="noborder">
+                        <div class='fragment'></div>
+                    </figure>
+                </div>
+                <p>HC and Kmeans metrics yield more false discoveries (FD) as the threshold (or $K$) varies.</p>
+                <br>
+                <emph>Better metric for clustering regardless of threshold</emph>
+            </section>
+
+            <section>
+                <h1>Another Real Data Example</h1>
+            </section>
+
+            <!--      <section data-state="fMRI">
+                <h2>fMRI</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Perform tasks while under fMRI scanning</li>
+                                                <li>Press if instruction="go"; withhold pressing if "stop"</li>
+                        <li>Specific parts of the brain responsible for the task</li>
+                        <li>Remove task effects, data like "resting-state"</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Goal: how the whole-brain network is connected?
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                        <li>Process information</li>
+                    </ul>
+                </aside>
+            </section>-->
+
+
+
+            <section>
+                <h2>fMRI Studies</h2>
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width: 200; text-align:left;"> Sub 1, Sess 1 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>Time 1</p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>2</p>
+                </div>
+                <p style="display:inline-block; width:160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>~200</p>
+                </div>
+                <br>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width: 200; text-align:left;"> Sub i, Sess j </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width:160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block;  text-align:left; "> Sub ~100, Sess ~4 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width:160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <br>
+                <br>
+                <p>
+                    This talk: one subject, two sessions (to test replicability)
+                </p>
+                <aside class="notes">
+                    <ul>
+                        <li>track one voxel time</li>
+                        <li>deal large first</li>
+                        <li>multilevel later</li>
+                        <li>track all voxels get a matrix</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <!--  <section>
+                <h2>Data Matrix</h2>
+                <ul>
+                    <li>Matrix $X_{n \times p}$, all columns standardized
+                        <ul>
+                            <li>$n$ time points but temporal correlation removed, like iid</li>
+                            <li>$p$ voxels but with spatial corraltion</li>
+                        </ul>
+                        <center><img src="Media/fMRI/voxelGrouping.png" alt="" class="noborder inlinemiddle" align="middle">
+                            <span style="display:inline-block; width: 30px;"></span>
+                            <img src="Media/MRI/freeSurfer.png" alt="" class="noborder inlinemiddle" width="30%"></center>
+                    </li>
+                    <li>Interested in
+                        <emph>big</emph> spatial networks
+                        <ul>
+                            <li>Voxel level: $10^6 \times 10^6$ cov matrix but limited interpretability</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    mention genetics
+                </aside>
+            </section>-->
+
+
+            <section>
+                <h2>Functional MRI</h2>
+                <ul>
+                    <li>fMRI matrix: BOLD from different brain regions
+                        <ul>
+                            <li>Variable: different brain regions</li>
+                            <li>Sample: time series (after whitening or removing temporal correlations)</li>
+                            <li>
+                                <emph>Clusters</emph> of brain regions</li>
+                        </ul>
+                    </li>
+                    <li>Two data matrices from two scan sessions <cite>OpenfMRI.org</cite></li>
+                    <li>Use Power's 264 regions/nodes</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Test Prediction/Reproducibilty</h2>
+                <ul>
+                    <li>Find partitions using the first session data</li>
+                    <li>Average each block cor to improve estimation</li>
+                    <li>Compare with the cor matrix from the second scan $$ \| Avg_{\hat{G}}(\hat{\Sigma}_1) - \hat{\Sigma}_2 \|$$
+                    </li>
+                    <li>Difference is
+                        <emph>smaller</emph> if clustering $\hat{G}$ is
+                        <emph>better</emph>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <!--<h2>Prediction Comparison</h2>-->
+                <figure><img src="Media/Clustering/ResFrobLossKendall.png" alt="" class="noborder">
+                </figure>
+                <p>Vertical lines: fixed (solid) and data-driven (dashed) thresholds</p>
+                <emph>Smaller replication difference for almost all $K$</emph>
+            </section>
+
+
+            <section>
+                <img src="Media/Clustering/CordFMRIClusters.png" width="80%" alt="">
+                <p>Our visual-motor task!</p>
+            </section>
+
+            <section>
+                <h2>Discussion</h2>
+                <ul>
+                    <li>Clustering + Covariance Estimation
+                        <ul>
+                            <li>Identifiability, accuracy, optimality</li>
+                        </ul>
+                    </li>
+                    <li>$G$-models: $G$-latent, $G$-block, $G$-exchangeable</li>
+                    <li>New metric, method, and theory
+                    </li>
+                    <li>Paper: google
+                        <emph>"cord clustering"</emph>(arXiv <a href="http://arxiv.org/abs/1410.7217">1508.01939</a>)</li>
+                    <li>R package:
+                        <emph>cord</emph> on CRAN</li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Thank you!</h1>
+                <br>
+                <h2>Comments? Questions?</h2>
+                <br>
+                <h2>Slides at:
+                    <!--
+                    <emph>bit.ly/XLICSA16</emph>
+                </h2>
+                <img src="./Media/QR/XLICSA16.png" alt="" width="30%">
+                <h2>
+                    OR:
+-->
+                     <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
+                    <br> <br> or
+                    <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span>
+
+
+                    <!--
+
+                    <emph>Brain</emph><highlight>
+    Data</highlight><span class="mypurple" style="font-weight: bold;">Science</span><strong>.com</strong>
+<br>
+<br> or
+<emph>Big</emph>
+<highlight>Complex</highlight>
+<span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
+-->
+                </h2>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="./reveal.js.3.5/lib/js/head.min.js"></script>
+    <script src="./reveal.js.3.5/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js.3.5#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                //mathjax: './MathJax/MathJax.js',
+                mathjax: 'bower_components/MathJax/MathJax.js',
+                //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+
+            //anything to load other libraries
+            anything: [{
+                className: "coverflow",
+                initialize: (function(container, options) {
+                    if (typeof container.coverflow === 'function') {
+                        container.coverflow()
+                    }
+                })
+            }],
+
+            // Optional reveal.js.3.5 plugins
+            dependencies: [{
+                src: './reveal.js.3.5/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/math/math.js',
+                async: true
+            }, {
+                src: 'JSLibrary/jquery-3.2.1.js'
+            }, {
+                src: 'JSLibrary/coverflowjs/coverflow.min.js'
+            }]
+        });
+        //{
+        //                src: './reveal.js.3.5/plugin/anything/anything.js'
+        //            },
+        //        ,  {
+        //                src: 'bower_components/reveal.js-menu/menu.js'
+        //            }
+
+    </script>
+
+    <!-- Coverflow event listeners -->
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <script>
+        Reveal.addEventListener('fragmentshown', function(event) {
+            $(event.fragment).closest('.ui-coverflow').coverflow('next');
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            $(event.fragment).closest('.ui-coverflow').coverflow('prev');
+        });
+        Reveal.addEventListener('slidechanged', function(event) {
+            $(event.currentSlide).find('.coverflow').coverflow();
+            $(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            $(event.currentSlide).find('.coverflow').find('.fragment')
+                .removeClass('visible').removeClass('currentSlide');
+        });
+        // $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()  });
+        //        setTimeout(function() {
+        //            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()
+        //        }, 15000);
+        //        Reveal.addEventListener('ready', function(event) {
+        //           let elements =  document.getElementsByClassName('coverflow')
+        //           for (let j=0; j<elements.length; j++) {
+        //               elements[j].coverflow();
+        //           }
+        //        });
+
+    </script>
+
+
+</body>
+
+</html>
