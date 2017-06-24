@@ -1,6 +1,6 @@
 ---
 layout: talks
-title: EcoSta Conference HKUST Business School
+title: 2017 ICSA Symposium
 author: Xi Luo
 previewimage: CorrelatedMediator_ICSA_2017.html#/21
 externallink: CorrelatedMediator_ICSA_2017.html
