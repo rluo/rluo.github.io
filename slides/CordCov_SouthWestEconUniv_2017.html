@@ -749,18 +749,6 @@
             </section>
 
 
-            <section>
-                <h2>Improve Cov Estimation: Averaging</h2>
-                <ul>
-                    <li>Introduce block averaging operator $\left[\varUpsilon\left(R,G\right)\right]_{ab} =$
-                        <medium>
-                            $$\begin{cases} \left|G_{k}\right|^{-1}\left(\left|G_{k}\right|-1\right)^{-1}\sum_{i,j\in G_{k},i\ne j}R_{ij} & \mbox{if } a\ne b \mbox{ and } k=k^{\prime}\\ \left|G_{k}\right|^{-1}\left|G_{k^{\prime}}\right|^{-1}\sum_{i\in G_{k},j\in G_{k^{\prime}}}R_{ij} & \mbox{if } a\ne b \mbox{ and } k\ne k^{\prime}\\ 1 & \mbox{if }a=b. \end{cases} $$
-                        </medium>
-                    </li>
-                    <img src="Media/Clustering/CordBlockAveraging.png" width="100%" alt="">
-
-                </ul>
-            </section>
 
 
 
@@ -788,6 +776,19 @@
                 <p>Recovery % in red and CV loss in black.</p>
                 <br>
                 <emph>CV selects the tuning to yield close to 100% recovery</emph>
+            </section>
+
+                <section>
+                <h2>Improve Cov Estimation: Averaging</h2>
+                <ul>
+                    <li>Introduce block averaging operator $\left[\varUpsilon\left(R,G\right)\right]_{ab} =$
+                        <medium>
+                            $$\begin{cases} \left|G_{k}\right|^{-1}\left(\left|G_{k}\right|-1\right)^{-1}\sum_{i,j\in G_{k},i\ne j}R_{ij} & \mbox{if } a\ne b \mbox{ and } k=k^{\prime}\\ \left|G_{k}\right|^{-1}\left|G_{k^{\prime}}\right|^{-1}\sum_{i\in G_{k},j\in G_{k^{\prime}}}R_{ij} & \mbox{if } a\ne b \mbox{ and } k\ne k^{\prime}\\ 1 & \mbox{if }a=b. \end{cases} $$
+                        </medium>
+                    </li>
+                    <img src="Media/Clustering/CordBlockAveraging.png" width="100%" alt="">
+
+                </ul>
             </section>
 
             <section>
