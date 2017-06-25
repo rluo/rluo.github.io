@@ -122,7 +122,7 @@
             <section>
                 <h3>Math Problem: <br> Infer Causality from Observational Data Only</h3>
                 <img src="Media/fMRI/MediationCausalBigPic.png" alt="">
-                <p>Many unmodeled factors: vascular, respriatory, mind wandering, ...</p>
+                <p>Many unmodeled factors: vascular, respiratory, mind wandering, ...</p>
             </section>
 
 
@@ -378,7 +378,7 @@
                             <li>Special case: <strong>2</strong>-level data, mixed becomes anova</li>
                         </ul>
                     </li>
-                    <li>We will optimize the multilevel likelihood $$\underbrace{\sum_{\mbox{Sub }i} \sum_{\mbox{Sess }k}\ell(\mbox{brain activities in trials} | A_{ik}, B_{ik}, C_{ik}, \Sigma_{ik})}_{\mbox{first level likelihood}} \\ + \underbrace{\sum_i \ell(A_{i1},\dotsc,A_{iK}, B_{i1},\dotsc | A, B, C, \Sigma)}_{\mbox{second and third level likelihood}}$$
+                    <li>We will optimize the multilevel likelihood $$\underbrace{\sum_{\mbox{Sub }i} \sum_{\mbox{Sess }k}\ell(\mbox{brain activities in trials} | A_{ik}, B_{ik}, C_{ik}, \Theta_{ik})}_{\mbox{first level likelihood}} \\ + \underbrace{\sum_i \ell(A_{i1},\dotsc,A_{iK}, B_{i1},\dotsc | A, B, C, \Theta)}_{\mbox{second and third level likelihood}}$$
                     </li>
                 </ul>
             </section>
@@ -515,7 +515,7 @@
                     <strong>Theorem</strong>: Under certain regularity conditions, asymptotically, the joint
                     <highlight>multilevel likelihood</highlight> has a unique maximum and the maximizer is consistent for $\delta$.
                 </div>
-                <p>Contributions: data-driven estimation of confounding and consistency in SEM</p>
+                <p>Contributions: data-driven estimation of confounding and consistency proof for SEM</p>
             </section>
 
 
@@ -588,7 +588,7 @@
                     <li>Random stimuli and scalar activations for each trial</li>
                     <li>Stimuli: go = press; stop = not pressing
                         <ul>
-                            <li>stop is expected to supress motor area (PMC)</li>
+                            <li>stop is expected to suppress motor area (PMC)</li>
                         </ul>
                     </li>
                     <li>96 subjects &times; 4 sessions &times; 100 trials &times; 2 regions</li>
@@ -609,7 +609,7 @@
             <section>
                 <img src="Media/Mediation/singleMedfMRIResultTable.png" alt="">
                 <ul>
-                    <li>Ours show stop directly supresses PMC significantly while other methods fail to recover this</li>
+                    <li>Ours show stop directly suppresses PMC significantly while other methods fail to recover this</li>
                     <li>Motion (part of $U$) correction decreases our $\delta$ estimate but do not change our causal estimates</li>
                 </ul>
                 <p> </p>
@@ -784,7 +784,7 @@
         //            }
         Reveal.configure({
             keyboard: {
-                13: 'next', // go to the next slide when the ENTER key is pressed
+                //13: 'next', // go to the next slide when the ENTER key is pressed
                 //                27: function() {}, // do something custom when ESC is pressed
                 //                32: null // don't do anything when SPACE is pressed (i.e. disable a reveal.js default binding)
                 34: 'next',
