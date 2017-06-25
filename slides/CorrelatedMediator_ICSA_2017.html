@@ -94,7 +94,7 @@
                 <br>
                 <p>
                     <medium><strong>ICSA, Chicago, USA</strong>
-                        <br>June 25, 2017</medium>
+                        <br>June, 2017</medium>
                 </p>
                 <p>
                     <small> Funding: NIH R01EB022911, P20GM103645, P01AA019072; NSF/DMS (Big Data) 1557467</small>
@@ -318,7 +318,7 @@
 
                     <li>Parametric <cite>Wager et al, 09</cite> and functional <cite>Lindquist, 12</cite> mediation, under (approx.) independent errors
                         <ul>
-                            <li>Stimulus $\rightarrow$ brain $\rightarrow$ user reported ratings, one brain mediator</li>
+                            <li>Stimulus $\rightarrow$ brain $\rightarrow$ <highlight>user reported ratings</highlight>, one brain mediator</li>
                             <li>Assuming $U=0$ between ratings and brain</li>
                         </ul>
                     </li>
@@ -328,8 +328,36 @@
                             <li>Pathway Lasso penalization <cite>Zhao, Luo, 16</cite> (Session #159, Wed 11:45am)</li>
                         </ul>
                     </li>
-                    <li><strong>This talk</strong>: causal estimation under $U\ne 0$ (its effect size $\delta \ne 0$) when modeling two brain regions</li>
+                    <li><strong>This talk</strong>: causal estimation under <emph>$U\ne 0$ (its effect size $\delta \ne 0$)</emph> when modeling <highlight>two brain regions</highlight></li>
                 </ul>
+            </section>
+
+   <section>
+                <h2>Pathway=Activation+Connectivity</h2>
+                <ul>
+                    <li><strong>Activation</strong>: stimulus $\rightarrow$ brain region activity</li>
+                    <li><strong>Connectivity</strong>: one brain region $\rightarrow$ another region
+                        <ul>
+                            <li>Whether not two or more brain regions "correlate"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Pathway</strong>: stimulus $\rightarrow$ brain region A $\rightarrow$ region B
+                    </li>
+                    <li>Strong path: strong activation
+                        <highlight>and</highlight> strong conn</li>
+                    <li>Zero path: zero activation
+                        <highlight>or</highlight> zero conn, including
+                        <ul>
+                            <li>Zero activation + strong conn = zero</li>
+                            <li>Strong activation + zero conn = zero</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Stefano and colleagues next talk</li>
+                    </ul>
+                </aside>
             </section>
 
             <section data-state="natureSciSpon">
@@ -655,8 +683,6 @@
                     </li>
                 </ul>
             </section>
-
-
 
             <section data-background="Media/Scene/chicago17.jpg" data-state="opaqueBackImg">
                 <h1>Thank you!</h1>
