@@ -3,47 +3,78 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Consistent Mediation under Confounding</title>
-    <meta name="description" content="SCIO">
+    <title>Large-scale Multilevel Pathway Modeling</title>
+    <meta name="description" content="Analytics for Big and Complex Data Group">
     <meta name="author" content="Xi (Rossi) LUO">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-    <link rel="stylesheet" href="./reveal.js/css/reveal.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./reveal.js.3.5/css/reveal.css">
     <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
     <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
     <!-- Code syntax highlighting -->
-    <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
+    <link rel="stylesheet" href="./reveal.js.3.5/lib/css/zenburn.css">
+
+    <!--
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+-->
+    <!--    Cover Flow   -->
+    <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
+    <!--
+    <script src="JSLibrary/jquery-3.2.1.js"></script>
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+-->
+    <!-- Coverflow styles -->
+    <style>
+        .ui-coverflow {
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 5px;
+        }
+
+        .ui-coverflow>img,
+        .ui-coverflow>figure {
+            height: 440px !important;
+            width: auto;
+            min-width: 440px !important;
+        }
+
+    </style>
+
 
     <!-- Printing and PDF exports -->
     <script>
         var link = document.createElement('link');
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js/css/print/pdf.css' : './reveal.js/css/print/paper.css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js.3.5/css/print/pdf.css' : './reveal.js.3.5/css/print/paper.css';
         document.getElementsByTagName('head')[0].appendChild(link);
 
     </script>
 
+    <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+
+    <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
+
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
     </script>
-    <!--[if lt IE 9]>
-    <script src="lib/js/html5shiv.js"></script>
-    <![endif]-->
 </head>
 
 <body>
+
     <div class="reveal">
         <credit></credit>
         <!-- Any section element inside of this container is displayed as a slide -->
         <div class="slides">
             \( \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \)
-
-
-
             <section>
-                <h2><strong>Estimating Brain Pathway Effects Using Large-scale Multilevel Models
+                <h2><strong>Estimating Brain Pathways Using Large-scale Multilevel Models
                      </strong></h2>
                 <br>
                 <h3>Xi (Rossi) <strong>LUO</strong></h3>
@@ -66,19 +97,19 @@
                         <br>June 25, 2017</medium>
                 </p>
                 <p>
-                    <small> Funding: NSF/DMS (BD2K) 1557467; NIH R01EB022911, P20GM103645, P01AA019072, P30AI042853</small>
+                    <small> Funding: NIH R01EB022911, P20GM103645, P01AA019072; NSF/DMS (Big Data) 1557467</small>
                 </p>
             </section>
 
 
             <section>
                 <h2>Coauthor</h2>
-                <div class="fbox"> <img src="Media/Personnel/YiZhao12.jpg" alt="" width="350" height="350" class="clip-ellipse">
+                <div class="fbox"> <img src="Media/Personnel/YiZhao17.jpg" alt="" width="350" height="350" class="clip-ellipse">
                     <p class="fbox">Yi Zhao
                         <br>
                         <small>
-                       (4rd Yr PhD Student, <highlight>on job market this year</highlight>) <br>
-                       Receipient of multiple student awards, including the 2015 ENAR distinguished paper
+                       (Brown PhD 2017, starting postdoc at <strong>JHU Biostat</strong>) <br>
+                       This work received the 2015 ENAR distinguished paper award.
                        </small>
                         <br>
                         <small><strong>Brown University</strong></small>
@@ -89,11 +120,10 @@
 
 
             <section>
-                <h2>Math Problem: <br> Infer Causality from Obs. Data Only</h2>
+                <h3>Math Problem: <br> Infer Causality from Observational Data Only</h3>
                 <img src="Media/fMRI/MediationCausalBigPic.png" alt="">
                 <p>Many unmodeled factors: vascular, respriatory, mind wandering, ...</p>
             </section>
-
 
 
             <section data-state="fMRI">
@@ -229,9 +259,12 @@
                 <div class="inlinemiddle">
                     <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
                 </div>
-                <p>Our data: 98 subjects &times; 4 sessions &times; 100 trials &times; 2 regions </p>
+                <p>Our data: 96 subjects &times; 4 sessions &times; 100 trials &times; 2 regions </p>
                 <p>
-                    <strong>Question</strong>: can "big and complex" fMRI data be helpful?
+                    <strong>Question</strong>: can "
+                    <emph>big</emph> and
+                    <emph>complex</emph>" fMRI reveal
+                    <highlight>causality</highlight>?
                 </p>
                 <aside class="notes">
                     <ul>
@@ -279,10 +312,8 @@
             <section>
                 <h2>Mediation Analysis in fMRI</h2>
                 <ul>
-                    <li>Mediation analysis (usually assuming $U=0$)
-                        <ul>
-                            <li><cite>Baron&Kenny, 86; Sobel, 82; Holland 88; Preacher&Hayes 08; Imai et al, 10; VanderWeele, 15;...</cite></li>
-                        </ul>
+                    <li>Mediation analysis (usually assuming $U=0$)<cite>Baron&Kenny, 86; Sobel, 82; Holland 88; Preacher&Hayes 08; Imai et al, 10; VanderWeele, 15;...</cite>
+
                     </li>
 
                     <li>Parametric <cite>Wager et al, 09</cite> and functional <cite>Lindquist, 12</cite> mediation, under (approx.) independent errors
@@ -294,7 +325,7 @@
                     <li>Multiple mediator and multiple pathways
                         <ul>
                             <li>Dimension reduction by arXiv1511.09354<cite>Chen, Crainiceanu, Ogburn, Caffo, Wager, Lindquist, 15</cite></li>
-                            <li>Pathway Lasso penalization <cite>Zhao, Luo, 16</cite></li>
+                            <li>Pathway Lasso penalization <cite>Zhao, Luo, 16</cite> (Session #159, Wed 11:45am)</li>
                         </ul>
                     </li>
                     <li><strong>This talk</strong>: causal estimation under $U\ne 0$ (its effect size $\delta \ne 0$) when modeling two brain regions</li>
@@ -338,9 +369,41 @@
                 <h1>Method</h1>
             </section>
 
+            <section>
+                <ul>
+                    <li>Recall <strong>3</strong>-level data: subjects, sessions, trials</li>
+                    <li>
+                        <highlight>Correlated</highlight> mediation model for trials, mixed model for mediation effects among higher levels
+                        <ul>
+                            <li>Special case: <strong>2</strong>-level data, mixed becomes anova</li>
+                        </ul>
+                    </li>
+                    <li>We will optimize the multilevel likelihood $$\underbrace{\sum_{\mbox{Sub }i} \sum_{\mbox{Sess }k}\ell(\mbox{brain activities in trials} | A_{ik}, B_{ik}, C_{ik}, \Sigma_{ik})}_{\mbox{first level likelihood}} \\ + \underbrace{\sum_i \ell(A_{i1},\dotsc,A_{iK}, B_{i1},\dotsc | A, B, C, \Sigma)}_{\mbox{second and third level likelihood}}$$
+                    </li>
+                </ul>
+            </section>
+
 
             <section>
-                <h2>Our Approach: Step 1</h2>
+                <h2>Challenges</h2>
+                <ul>
+                    <li>Unmeasured confounding and causal inference
+                        <ul>
+                            <li>Usually impossible in many other statistical models</li>
+                        </ul>
+                    </li>
+                    <li>Prove our model is identifiable or our multilevel likelihood has a unique maximum
+                        <ul>
+                            <li>Usually the likelihood is mutlimodal in many other cases</li>
+                        </ul>
+                    </li>
+                    <li>Prove our MLE is unbiased and consistent under minimal assumptions</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Our Level-1 Model</h2>
                 <ul>
                     <li>Bivariate
                         <emph>single-level</emph> model $$\begin{align*}\begin{pmatrix}M & R\end{pmatrix} & = \begin{pmatrix}Z & M\end{pmatrix} \begin{pmatrix}a & c\\ 0 & b \end{pmatrix} + \begin{pmatrix}E_{1} & E_{2}\end{pmatrix}\\ (E_1, E_2) & \sim MVN(\boldsymbol{0}, \boldsymbol{\Sigma}) \quad \boldsymbol{\Sigma}=\begin{pmatrix}\sigma_{1}^{2} & \delta\sigma_{1}\sigma_{2}\\ \delta\sigma_{1}\sigma_{2} & \sigma_{2}^{2} \end{pmatrix} \end{align*}$$
@@ -364,7 +427,7 @@
                         <strong>Others</strong> assume (e.g. randomized brain stimulation) $$r_{i}\left(z_{i}^{\prime},m_{i}\right)\bot m_{i}\left(z_{i}\right)|Z_{i}=z_{i}$$
                     </li>
                     <li>We do
-                        <highlight>not</highlight> need this assumption given $\delta$</li>
+                        <highlight>not</highlight> need this assumption when we can estimate $\delta$</li>
                 </ul>
             </section>
 
@@ -380,11 +443,12 @@
                 </ul>
             </section>
 
+            <!--
             <section>
                 <h1>Maximum Likelihood: “Tragedy may lurk around a corner”</h1>
                 <small>[Stigler 2007]</small>
             </section>
-
+-->
 
             <section>
                 <h1>"Tragedy" of ML</h1>
@@ -405,27 +469,27 @@
             <section>
                 <img src="Media/Mediation/singleMedTwoModelSameData.png" alt="">
                 <br>
-                <p>Two different models generate same single-trial BOLD activations if only observing $Z$, $M$, and $R$</p>
+                <p>Two different models generate the same single-trial BOLD activations if only observing $Z$, $M$, and $R$</p>
                 <cite>without measuring $U$</cite>
             </section>
 
 
             <section>
-                <h2>Our Approach: Step 2</h2>
+                <h2>Our Higher Level Models</h2>
                 <div class="twocol inlinemiddle"><img src="Media/Mediation/singleMedMultiSubSess.png" alt=""></div>
                 <div class="twocol inlinemiddle">
                     <ul>
                         <li>Cannot identify $\delta$ from single sub and single sess (see our theorem)</li>
-                        <li>Intuition: leverage complex data structure to infer $\delta$</li>
+                        <li>Intuition: leverage <strong>complex</strong> data structure to infer $\delta$</li>
                     </ul>
                     <p></p>
                 </div>
             </section>
 
             <section>
-                <h2>Step 2: Some Details</h2>
+                <h2>Some Details</h2>
                 <ul>
-                    <li>Step 1 model for each sub and each sess
+                    <li>Level-1 model for each sub and each sess
                         <medium>
                             $$\begin{pmatrix}{M}_{ik} & {R}_{ik}\end{pmatrix}=\begin{pmatrix}{Z}_{ik} & {M}_{ik}\end{pmatrix}\begin{pmatrix}{a}_{ik} & {b}_{ik}\\ 0 & {c}_{ik} \end{pmatrix}+\begin{pmatrix}{E}_{1_{ik}} & {E}_{2_{ik}}\end{pmatrix}$$
                         </medium>
@@ -436,22 +500,27 @@
                 </ul>
             </section>
 
-            <!--   <section>
-                <h2>Option 1: Two-stage Fitting</h2>
+            <section>
+                <h2>Algorithm 1: Two-stage Fitting</h2>
                 <ul>
                     <li><strong>Stage 1</strong>: fit $(\hat{A}_{ik}(\delta), \hat{B}_{ik}(\delta), \hat{C}_{ik}(\delta))$ for each $i$ and $k$ for varying $\delta$ using our step 1 <strong>single-level</strong> model</li>
                     <li><strong>Stage 2</strong>: Find $\hat{\delta}$ that $(\hat{A}_{ik}(\hat{\delta}), \hat{B}_{ik}(\hat{\delta}), \hat{C}_{ik}(\hat{\delta}))$ yields maximum likelihood for random effects model</li>
                     <li>Small-scale computing</li>
-                    <li>However, estimation error in stage 1 not accounted
-                        <ul>
-                            <li>Complicates our goal on determining the variance</li>
-                        </ul>
-                    </li>
                 </ul>
-            </section> -->
+            </section>
 
             <section>
-                <h2>Option 2: Integrated Modeling</h2>
+                <h2>Theory for SEM and Confounding</h2>
+                <div class="thm">
+                    <strong>Theorem</strong>: Under certain regularity conditions, asymptotically, the joint
+                    <highlight>multilevel likelihood</highlight> has a unique maximum and the maximizer is consistent for $\delta$.
+                </div>
+                <p>Contributions: data-driven estimation of confounding and consistency in SEM</p>
+            </section>
+
+
+            <section>
+                <h2>Alternative Likelihood under Our Framework</h2>
                 <ul>
                     <li>Optimize all parameters in joint likelihood $$\begin{align*} &\sum_{i=1}^{N}\sum_{k=1}^{K}\log\Pr\left(R_{ik},M_{ik}|Z_{ik},\delta,b_{ik},\sigma_{1_{ik}},\sigma_{2_{ik}}\right)\quad \mbox{Data}\\ & + \sum_{i=1}^{N}\sum_{k=1}^{K}\log\Pr\left(b_{ik}|u_{i},b,\boldsymbol{\Lambda}\right)\quad \mbox{Subject variation}\\ & +\sum_{i=1}^{N}\log\Pr\left(u_{i}|\boldsymbol{{\Psi}}\right) \quad \mbox{Prior}\end{align*}$$</li>
                     <li><strong>Large computation</strong>: $5NK + 3N + 11 > 2000$ paras</li>
@@ -459,7 +528,7 @@
             </section>
 
             <section>
-                <h2>Algorithm</h2>
+                <h2>Algorithm 2</h2>
                 <div class="thm">
                     <strong>Theorem</strong>: The joint likelihood is conditional convex for groups of parameters.
                 </div>
@@ -469,17 +538,6 @@
                 <p>Leverage conditional convexity to reduce computation</p>
                 <cite>details in our paper</cite>
             </section>
-
-            <section>
-                <h2>Theory for SEM and Confounding</h2>
-                <div class="thm">
-                    <strong>Theorem</strong>: Asymptotically, the joint
-                    <highlight>multilevel likelihood</highlight> has a unique maximum and the maximizer is consistent for $\delta$.
-                </div>
-                <p>Contributions: data-driven estimation of confounding and consistency in SEM</p>
-            </section>
-
-
 
             <section>
                 <h1>Simulations</h1>
@@ -513,8 +571,8 @@
                     <p>Low bias for effects</p>
                 </div>
                 <br>
-                <p>Our large-scale multilevel model (
-                    <highlight>CMA</highlight>) performs best;
+                <p>Our large-scale multilevel model
+                    <highlight>(CMA)</highlight> performs best;
                     <br> Bias can be large (100%) without estimating $\delta$</p>
             </section>
 
@@ -533,7 +591,7 @@
                             <li>stop is expected to supress motor area (PMC)</li>
                         </ul>
                     </li>
-                    <li>98 subjects &times; 4 sessions &times; 100 trials &times; 2 regions</li>
+                    <li>96 subjects &times; 4 sessions &times; 100 trials &times; 2 regions</li>
                     <li>Temporal dependence removed using whitened data and single-trial beta deconvolution<cite>Wager et al, 08</cite></li>
                 </ul>
             </section>
@@ -582,14 +640,14 @@
             <section>
                 <h2>Discussion</h2>
                 <ul>
-                    <li>Extensions: temporal models, functional models, multiple pathways<cite>Pathway Lasso, our arXiv 1603.07749</cite></li>
-                    <li>Manuscript: 2015 ENAR Student Paper Award, revision for JASA, (arXiv <a href="http://arxiv.org/abs/1410.7217">1410.7217</a>)
+                    <li>Extensions: functional models, multiple pathways<cite>Pathway Lasso, our arXiv 1603.07749</cite>, temporal <cite>2017 JSM Mental Health Student Paper Award Section</cite></li>
+                    <li>Manuscript: arXiv <a href="http://arxiv.org/abs/1410.7217">1410.7217</a>
                     </li>
                     <li>R package:
                         <highlight>macc</highlight>
                         <br>
                         <div class="twocol inlinemiddle">
-                            <img src="Media/IT/mac2011Annot.jpg" alt="">
+                            <img src="Media/IT/mac2017.jpg" alt="">
                         </div>
                         <div class="twocol inlinemiddle">
                             <h1><highlight>c</highlight>ausality</h1>
@@ -599,19 +657,6 @@
             </section>
 
 
-            <section data-background="Media/Scene/sanya.jpg" data-state="opaqueBackImg">
-                <h1>Thank you!</h1>
-                <br>
-                <h2>Slides at: <emph>bit.ly/sanya16</emph></h2>
-                <img src="./Media/QR/sanya16.png" alt="" width="30%">
-                <h2>
-                     More info: <emph>Big</emph><highlight>Complex</highlight><span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
-                </h2>
-                <p>Postdoc position available
-                    <br> funded by Obama's
-                    <highlight>Big Data</highlight> and
-                    <emph>BRAIN</emph> Initiatives</p>
-            </section>
 
             <section>
                 <h1>Thank you!</h1>
@@ -625,10 +670,10 @@
                 <img src="./Media/QR/XLICSA16.png" alt="" width="30%">
                 <h2>
                     OR:
--->
+-->         <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span> <br> <br> or
                      <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
-                    <br> <br> or
-                    <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span>
+
+
 
 
                     <!--
@@ -646,9 +691,10 @@
 
         </div>
     </div>
+    <!--   bottom configuration -->
 
-    <script src="./reveal.js/lib/js/head.min.js"></script>
-    <script src="./reveal.js/js/reveal.js"></script>
+    <script src="./reveal.js.3.5/lib/js/head.min.js"></script>
+    <script src="./reveal.js.3.5/js/reveal.js"></script>
 
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
@@ -656,7 +702,7 @@
 
     <script>
         // Full list of configuration options available at:
-        // https://github.com/hakimel/reveal.js#configuration
+        // https://github.com/hakimel/reveal.js.3.5#configuration
         Reveal.initialize({
             controls: false,
             progress: true,
@@ -672,30 +718,42 @@
             slideNumber: 'c/t',
 
             math: {
-                //                mathjax: './MathJax/MathJax.js',
-                mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                //mathjax: './MathJax/MathJax.js',
+                mathjax: 'bower_components/MathJax/MathJax.js',
+                //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
                 config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
                     //                config: 'TeX-AMS-MML_SVG-full'
             },
 
-            // Optional reveal.js plugins
+
+            //anything to load other libraries
+            //            anything: [{
+            //                className: "coverflow",
+            //                initialize: (function(container, options) {
+            //                    if (typeof container.coverflow === 'function') {
+            //                        container.coverflow()
+            //                    }
+            //                })
+            //            }],
+
+            // Optional reveal.js.3.5 plugins
             dependencies: [{
-                src: './reveal.js/lib/js/classList.js',
+                src: './reveal.js.3.5/lib/js/classList.js',
                 condition: function() {
                     return !document.body.classList;
                 }
             }, {
-                src: './reveal.js/plugin/markdown/marked.js',
+                src: './reveal.js.3.5/plugin/markdown/marked.js',
                 condition: function() {
                     return !!document.querySelector('[data-markdown]');
                 }
             }, {
-                src: './reveal.js/plugin/markdown/markdown.js',
+                src: './reveal.js.3.5/plugin/markdown/markdown.js',
                 condition: function() {
                     return !!document.querySelector('[data-markdown]');
                 }
             }, {
-                src: './reveal.js/plugin/highlight/highlight.js',
+                src: './reveal.js.3.5/plugin/highlight/highlight.js',
                 async: true,
                 condition: function() {
                     return !!document.querySelector('pre code');
@@ -704,23 +762,31 @@
                     hljs.initHighlightingOnLoad();
                 }
             }, {
-                src: './reveal.js/plugin/zoom-js/zoom.js',
+                src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
                 async: true
             }, {
-                src: './reveal.js/plugin/notes/notes.js',
+                src: './reveal.js.3.5/plugin/notes/notes.js',
                 async: true
             }, {
-                src: './reveal.js/plugin/math/math.js',
+                src: './reveal.js.3.5/plugin/math/math.js',
                 async: true
+            }, {
+                src: 'JSLibrary/jquery-3.2.1.js'
+            }, {
+                src: 'JSLibrary/coverflowjs/coverflow.min.js'
             }]
         });
-
-
+        //{
+        //                src: './reveal.js.3.5/plugin/anything/anything.js'
+        //            },
+        //        ,  {
+        //                src: 'bower_components/reveal.js-menu/menu.js'
+        //            }
         Reveal.configure({
             keyboard: {
-                13: 'next',  // go to the next slide when the ENTER key is pressed
-//                27: function() {}, // do something custom when ESC is pressed
-//                32: null // don't do anything when SPACE is pressed (i.e. disable a reveal.js default binding)
+                13: 'next', // go to the next slide when the ENTER key is pressed
+                //                27: function() {}, // do something custom when ESC is pressed
+                //                32: null // don't do anything when SPACE is pressed (i.e. disable a reveal.js default binding)
                 34: 'next',
                 33: 'prev',
                 38: 'prev',
@@ -729,6 +795,36 @@
         });
 
     </script>
+
+    <!-- Coverflow event listeners -->
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <script>
+        Reveal.addEventListener('fragmentshown', function(event) {
+            $(event.fragment).closest('.ui-coverflow').coverflow('next');
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            $(event.fragment).closest('.ui-coverflow').coverflow('prev');
+        });
+        Reveal.addEventListener('slidechanged', function(event) {
+            $(event.currentSlide).find('.coverflow').coverflow();
+            $(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            $(event.currentSlide).find('.coverflow').find('.fragment')
+                .removeClass('visible').removeClass('currentSlide');
+        });
+        // $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()  });
+        //        setTimeout(function() {
+        //            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()
+        //        }, 15000);
+        //        Reveal.addEventListener('ready', function(event) {
+        //           let elements =  document.getElementsByClassName('coverflow')
+        //           for (let j=0; j<elements.length; j++) {
+        //               elements[j].coverflow();
+        //           }
+        //        });
+
+    </script>
+
 
 </body>
 

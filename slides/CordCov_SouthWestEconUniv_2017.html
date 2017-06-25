@@ -24,8 +24,10 @@
     <!--    Cover Flow   -->
     <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
 
+<!--
     <script src="JSLibrary/jquery-3.2.1.js"></script>
     <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+-->
 
     <!-- Coverflow styles -->
     <style>
@@ -1072,6 +1074,9 @@
         </div>
     </div>
 
+
+<!--   bottom configuration -->
+
     <script src="./reveal.js.3.5/lib/js/head.min.js"></script>
     <script src="./reveal.js.3.5/js/reveal.js"></script>
 
@@ -1161,7 +1166,17 @@
         //        ,  {
         //                src: 'bower_components/reveal.js-menu/menu.js'
         //            }
-
+      Reveal.configure({
+            keyboard: {
+                13: 'next',  // go to the next slide when the ENTER key is pressed
+//                27: function() {}, // do something custom when ESC is pressed
+//                32: null // don't do anything when SPACE is pressed (i.e. disable a reveal.js default binding)
+                34: 'next',
+                33: 'prev',
+                38: 'prev',
+                40: 'next'
+            }
+        });
     </script>
 
     <!-- Coverflow event listeners -->
