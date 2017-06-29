@@ -1106,6 +1106,8 @@
                 src: 'JSLibrary/jquery-3.2.1.js'
             }, {
                 src: 'JSLibrary/coverflowjs/coverflow.min.js'
+            }, {
+                src: 'bower_components/reveal.js-menu/menu.js'
             }]
         });
         //{
@@ -1122,15 +1124,15 @@
 
     <script>
         Reveal.addEventListener('fragmentshown', function(event) {
-            $(event.fragment).closest('.ui-coverflow').coverflow('next');
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('next');
         });
         Reveal.addEventListener('fragmenthidden', function(event) {
-            $(event.fragment).closest('.ui-coverflow').coverflow('prev');
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('prev');
         });
         Reveal.addEventListener('slidechanged', function(event) {
-            $(event.currentSlide).find('.coverflow').coverflow();
-            $(event.currentSlide).find('.coverflow').coverflow('select', 0);
-            $(event.currentSlide).find('.coverflow').find('.fragment')
+            jQuery(event.currentSlide).find('.coverflow').coverflow();
+            jQuery(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            jQuery(event.currentSlide).find('.coverflow').find('.fragment')
                 .removeClass('visible').removeClass('currentSlide');
         });
         // $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()  });
