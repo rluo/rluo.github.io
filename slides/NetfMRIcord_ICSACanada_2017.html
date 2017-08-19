@@ -119,6 +119,7 @@
 
 
 
+<!--
             <section data-state="fMRI">
                 <h2>Task fMRI</h2>
                 <div class="twocol inlinemiddle" style="width: 35%">
@@ -128,7 +129,7 @@
                 <div class="twocol inlinemiddle" style="width: 60%">
                     <ul>
                         <li>Perform tasks while under fMRI scanning</li>
-                        <!--                        <li>Press if instruction="go"; withhold pressing if "stop"</li>-->
+                                                <li>Press if instruction="go"; withhold pressing if "stop"</li>
                         <li>Specific parts of the brain responsible for the task</li>
                         <li>Remove task effects, data like "resting-state"</li>
                     </ul>
@@ -153,6 +154,7 @@
                     </ul>
                 </aside>
             </section>
+-->
 
             <section data-background-iframe="Media/fMRI/ThreeJSBrainMaskColor.html">
                 <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
@@ -208,11 +210,10 @@
                             <li>How to cluster variables together?</li>
                             <li>How to estimate cluster signals?</li>
                             <li>How to estimate between-cluster connections?</li>
-                            <li>...</li>
                         </ul>
                     </li>
-                    <li>Will focus on how to group nodes together today
-                        <ul>
+                    <li>This talk on how to <emph>group(clustering)</emph> nodes
+                           <ul>
                             <li>Usually NP-hard and limited theory</li>
                         </ul>
                     </li>
@@ -220,6 +221,7 @@
             </section>
 
 
+<!--
             <section>
                 <h2>Big Picture</h2>
                 <ul>
@@ -245,6 +247,7 @@
                     <li>Can clustering and big cov estimation be <strong>combined</strong>?</li>
                 </ul>
             </section>
+-->
 
             <section>
                 <h1>Example</h1>
@@ -450,7 +453,7 @@
                 <br>
                 <ul>
                     <li>Our model
-                        <emph>identifiable</emph> if $\cor(Z_1, Z_2) \ne 0$
+                        <emph>identifiable</emph> even if $\cor(Z_1, Z_2) \ne 0$
                         <ul>
                             <li>Two brain clusters <span class="mypink">red</span>/<span class="mysky">blue</span> talk to each other</li>
                         </ul>
@@ -465,6 +468,8 @@
                 <h2>Principals Behind Other Clustering</h2>
                 <ul>
                     <li>The Euclidean distance for hierarchical clustering and Kmeans, for two columns/voxles $X_a$ and $X_b$: $$ \|X_a - X_b \|_2^2 = 2(1-\cor(X_a, X_b)) $$</li>
+                    <li>Cluster $a$ and $b$ based on these <emph>two</emph> variables only, and this is <highlight>NOT</highlight> what we will consider in $G$-models</li>
+                    <ul>
                     <li>Recall $X_i = Z_k + E_i$ $i \in G_k$</li>
                     <li>Cor depends
                         <emph>mainly</emph> on $\var(E)$ if SNR is low</li>
@@ -475,11 +480,14 @@
                         </ul>
                     </li>
                     <li>Worse, clusters close because of correlated $Z$</li>
+                    </ul>
                 </ul>
             </section>
 
             <section>
-                <h1>Generalization</h1>
+                <h1>Generalization: <br>
+                Latent Var $\rightarrow$ Block Cov
+                </h1>
             </section>
 
             <section>
@@ -716,26 +724,6 @@
 
 
             <section>
-                <h2>Data-driven choice of $\alpha$: Averaging</h2>
-                <ul>
-                    <li>Introduce block averaging operator $\left[\varUpsilon\left(R,G\right)\right]_{ab} =$
-                        <medium>
-                            $$\begin{cases} \left|G_{k}\right|^{-1}\left(\left|G_{k}\right|-1\right)^{-1}\sum_{i,j\in G_{k},i\ne j}R_{ij} & \mbox{if } a\ne b \mbox{ and } k=k^{\prime}\\ \left|G_{k}\right|^{-1}\left|G_{k^{\prime}}\right|^{-1}\sum_{i\in G_{k},j\in G_{k^{\prime}}}R_{ij} & \mbox{if } a\ne b \mbox{ and } k\ne k^{\prime}\\ 1 & \mbox{if }a=b. \end{cases} $$
-                        </medium>
-                    </li>
-                    <img src="Media/Clustering/CordBlockAveraging.png" width="100%" alt="">
-
-                </ul>
-            </section>
-
-            <section>
-                <h2>Data-driven choice of $\alpha$: Prediction</h2>
-                <ul>
-                    <li>Choose $\alpha$ via cross validation using minimization over a grid of $\alpha$: $$\min_\alpha \| \varUpsilon\left(\hat R,G_\alpha \right) - \hat{R}_{test}\|_F^2 $$</li>
-                </ul>
-            </section>
-
-            <section>
                 <h2>Cross Validation</h2>
                 <figure class="threecol"><img src="Media/Clustering/CValphaMno30MethodgFD22ANDn800p1600.png" alt="" class="noborder">
                 </figure>
@@ -751,49 +739,6 @@
                 <p>CV selects the constants to yield close to 100% recovery, as predicted by our theory (at least for large $n>200$)</p>
             </section>
 
-
-
-            <section>
-                <h2>Cross Validation</h2>
-
-                <div class='coverflow'>
-                    <figure><img src="Media/Clustering/CValpha19d.png" alt="" class="noborder">
-                        <figcaption>Block</figcaption>
-                        <div class='fragment'></div>
-                    </figure>
-                    <figure><img src="Media/Clustering/CValpha27d.png" alt="" class="noborder">
-                        <figcaption>Sparse</figcaption>
-                        <div class='fragment'></div>
-                    </figure>
-                    <figure><img src="Media/Clustering/CValpha28d.png" alt="" class="noborder">
-                        <figcaption>Negative</figcaption>
-                        <div class='fragment'></div>
-                    </figure>
-                </div>
-                <p>&nbsp;</p>
-                <p>Recovery % in red and CV loss in black.</p>
-                <br>
-                <emph>CV selects the tuning to yield close to 100% recovery</emph>
-            </section>
-
-
-            <section>
-                <h2>Metric Comparison: Without Threhold</h2>
-                <div class="coverflow">
-                    <figure><img src="Media/Clustering/FDD19frd.png" alt="" class="noborder">
-                        <div class='fragment'></div>
-                    </figure>
-                    <figure><img src="Media/Clustering/FDD27frd.png" alt="" class="noborder">
-                        <div class='fragment'></div>
-                    </figure>
-                    <figure><img src="Media/Clustering/FDD28frd.png" alt="" class="noborder">
-                        <div class='fragment'></div>
-                    </figure>
-                </div>
-                <p>HC and Kmeans metrics yield more false discoveries (FD) as the threshold (or $K$) varies.</p>
-                <br>
-                <emph>Better metric for clustering regardless of threshold</emph>
-            </section>
 
             <section>
                 <h1>Real Data</h1>
@@ -951,6 +896,7 @@
                     <li>Find partitions using the first session data</li>
                     <li>Average each block cor to improve estimation</li>
                     <li>Compare with the cor matrix from the second scan $$ \| Avg_{\hat{G}}(\hat{\Sigma}_1) - \hat{\Sigma}_2 \|$$
+                    where we used $\hat{G}$ to do block-averaging.
                     </li>
                     <li>Difference is
                         <emph>smaller</emph> if clustering $\hat{G}$ is
@@ -970,7 +916,7 @@
 
             <section>
                 <img src="Media/Clustering/CordFMRIClusters.png" width="80%" alt="">
-                <p>Our visual-motor task!</p>
+                <p>Visual-motor task!</p>
             </section>
 
             <section>
