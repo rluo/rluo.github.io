@@ -1,0 +1,11 @@
+---
+layout: news
+title: AHA Grants
+author: Xi Luo
+previewimage:  abcd700x400.jpg
+tags: award
+externallink:  http://professional.heart.org/idc/groups/ahamah-public/@wcm/@sop/@rsch/documents/downloadable/ucm_492229.pdf
+
+---
+
+Our group with PIs Dr Simin Liu and Dr Xiaochen Lin received two highly competitive AHA grants to use machine learning to uncover new patterns in cardiovascular disease.
