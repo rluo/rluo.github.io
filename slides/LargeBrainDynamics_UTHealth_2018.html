@@ -1,0 +1,1426 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Network Clustering for fMRI</title>
+    <meta name="description" content="Analytics for Big and Complex Data Group">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./reveal.js.3.5/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js.3.5/lib/css/zenburn.css">
+
+    <!--
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+-->
+    <!--    Cover Flow   -->
+    <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
+
+    <script src="JSLibrary/jquery-3.2.1.js"></script>
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <!-- Coverflow styles -->
+    <style>
+        .ui-coverflow {
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 5px;
+        }
+
+        .ui-coverflow>img,
+        .ui-coverflow>figure {
+            height: 440px !important;
+            width: auto;
+            min-width: 440px !important;
+        }
+
+    </style>
+
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js.3.5/css/print/pdf.css' : './reveal.js.3.5/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+
+    <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+</head>
+
+<body>
+    <div class="reveal">
+<!--      place holder for credits -->
+       <credit></credit>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \( \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \DeclareMathOperator{\Ex}{\mathbb{E}} \DeclareMathOperator{\diag}{diag}  \newcommand{\bm}[1]{\boldsymbol{#1}} \)
+
+            <section>
+                <h2><strong>Statistical Methods for Unraveling Large-scale Brain Dynamics
+                     </strong></h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width:43%; vertical-align: middle;">
+                        <medium><strong>Brown University</strong>
+                            <br> Department of Biostatistics
+                            <br> Center for Statistical Sciences
+                            <br> Computation in Brain and Mind
+                            <br> Brown Institute for Brain Science
+                            <br> Brown Data Science Initiative
+                            <br> ABCD Research Group</medium>
+                    </p> <img class="noborder inlinemiddle" style="display: inline-block;
+                          vertical-align: middle;" src="Media/ABCDgroup/abcdLogo2_BannerBigComplexDataCom.png" height="210px">
+                </div>
+                <br>
+                <p>
+                    <medium><strong>UTHealth Biostatistics and Data Science, Houston, TX</strong>
+                        <br>June 7, 2018</medium>
+                </p>
+                <p>
+                    <small> Funding: NIH R01EB022911, P20GM103645, P01AA019072, P30AI042853; NSF/DMS (BD2K) 1557467</small>
+                </p>
+            </section>
+
+            <section>
+                <h1>Slides viewable on web:
+
+                </h1>
+            </section>
+
+<!-- Over view -->
+
+            <section data-state="intro">
+               <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="10%">
+                <div width="100%">
+                    <img src="Media/Neuron/OptoGeneticNetwork.jpg" class="threecol noborder inlinemiddle" alt="" style="display: inline-block; vertical-align: middle;" width="40%">
+                    <span style="display:inline-block; width: 30px;"></span>
+                    <p class="inlinemiddle" style="display:inline-block; width: 50%">$10^{11}$ neurons
+                        <br>Ex: DTI, DWI, ...
+                        <br>or optogenetics modeling <cite>Luo et al, Stat in Med, 16</cite>
+                    </p>
+                </div>
+                <br style="margin: 0px 0; line-height: 5px">
+                <div width="100%" style="vertical-align:middle;">
+                    <img src="Media/Gene/geneNetworkHIVBrainCut.png" class="threecol noborder inlinemiddle" alt="" style="display: inline-block; vertical-align: middle;" width="40%">
+                    <span style="display:inline-block; width: 30px;"></span>
+                    <p class="inlinemiddle" style="display:inline-block; width: 50%">$10^4$ genes, $10^6$ SNPs
+                        <br>Ex: Gene networks <cite>Cai, Liu Luo, JASA 11; Liu & Luo, JMVA, 15</cite></p>
+                </div>
+                <br>
+                <div width="100%" style="vertical-align:middle;">
+                    <img src="Media/fMRI/preSMANetworkCut.png" class="threecol noborder inlinemiddle" alt="" style="display: inline-block; vertical-align: middle;" width="40%">
+                    <span style="display:inline-block; width: 40px;"></span>
+                    <p style="display:inline-block; width: 50%">$10^6$ functional MRI voxels <cite>Luo et al, JASA, 12</cite>
+                        <br>
+                        <emph>Today's talk</emph>
+                    </p>
+                </div>
+                <style>
+                    .intro credit:after {
+                        content: "Image source: Ed Boyden and Massachusetts Institute of Technology McGovern Institute";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Other projects</li>
+                        <li>all numbers of rough scales</li>
+                        <li>This talk</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+
+            <section data-state="fMRI">
+                <h2>fMRI Experiments</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Task fMRI: performs tasks under brain scanning</li>
+                        <li>
+                            <emph>Randomized</emph> stop/go task:
+                            <ul>
+                                <li> <strong>press</strong> button if "go"; </li>
+                                <li><strong>withhold</strong> pressing if "stop"</li>
+                            </ul>
+                        </li>
+                        <li>Resting-state: "do nothing" during scanning</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Data: brain activities, behavioral information, subject coveriates, cognitive outcoomes, and much more
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section data-background-iframe="Media/fMRI/ThreeJSBrainMaskColor.html">
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
+                <!--                <h2>fMRI Data</h2>-->
+                <!--                <iframe id="brainCube" src="Media/fMRI/ThreeJSBrainMaskColor.html" frameborder="0" width="800" height="600" name="brainCube"></iframe>-->
+                <p style="margin-bottom: 650px;"></p>
+                <p><strong>fMRI data</strong>: blood-oxygen-level dependent (BOLD) signals from each
+                    <highlight>cube</highlight>/voxel (~millimeters),
+                    <emph>$10^5$ ~ $10^6$</emph> voxels in total. </p>
+                <aside class="notes">
+                    <ul><li>visualization is big challenge, too</li>
+                        <li>Lego brain of real brain</li>
+                        <li>red cube is a voxel</li>
+                        <li>track activity from each cube at each time vector</li>
+                        <li>dimension: address temporal separately</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section>
+                <h2>Data Matrix</h2>
+                <ul>
+                    <li>$X_{n \times d}$: $n$ observations from $d$ voxels</li>
+                    <li>Functional segregation: voxel clusters (ROIs)</li>
+                    <center><img src="Media/fMRI/voxelGrouping.png" alt="" class="noborder inlinemiddle" align="middle">
+                        <span style="display:inline-block; width: 30px;"></span>
+                        <img src="Media/MRI/freeSurfer.png" alt="" class="noborder inlinemiddle" width="30%"></center>
+                    <li>Dimension reduction: $X_{n\times p}$&mdash;averages from $p$ ROIs
+                        <ul>
+                            <li>Reduced computation: $p \approx 10^2 \ll d \approx 10^6$</li>
+                            <li>Statistically: introduce bias and reduce efficiency <cite>Luo, 14</cite></li>
+                            <li>Scientifically: ROI definitions can vary greatly</li>
+                            <li>Still a popular approach due to simplicity</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Complex Data: fMRI Studies</h2>
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub 1, Sess 1 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>Time 1</p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>2</p>
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>~200</p>
+                </div>
+                <br>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub i, Sess j </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block;  text-align:left; "> Sub ~100, Sess ~4 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>Large, multilevel</emph> (subject, session, voxel) data
+                    <br> $1000 \times 4 \times 300 \times 10^6 \approx 1 $ trillion data points </p>
+                <aside class="notes">
+                    <ul>
+                        <li>track one voxel time</li>
+                        <li>deal large first</li>
+                        <li>multilevel later</li>
+                        <li>track all voxels get a matrix</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section>
+                <h2>Scientific and Statistical Problems</h2>
+                <ul>
+                    <li>Which brain areas process the stimulus  information?
+                        <ul>
+                            <li>Uncovering this leads to better disease prediction <cite>Luo et al, Brain, 13</cite></li>
+                            <li>Causal inference for complex outcomes (e.g. time series) <cite>Luo et al, JASA, 12</cite></li>
+                        </ul>
+                    </li>
+                    <li>How do the areas collaborate with each other?
+                    <ul>
+                        <li>Hot topic in neuroscience, e.g. using correlations between areas</li>
+                        <li>Algebraic precision matrix estimation <cite>Cai, Liu Luo, JASA 11; Liu & Luo, JMVA, 15</cite></li>
+                        <li><emph>Covariance matrix based clustering</emph> <cite>Bunea, Giraud, Luo, et, al</cite></li>
+                    </ul>
+                    </li>
+                    <li>Studying  the above two together?
+                        <ul>
+                            <li><emph>Mediation analysis</emph>, with student Yi Zhao <cite>JSM, ENAR student paper awards</cite>, and most recently Johns Hopkins  colleagues  Caffo, Lindquist</li>
+                            <li><emph>Causal ODE modeling</emph>, with student Xuefei Cao <cite>JSM award</cite>, and Brown Math colleague Sandstede</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+<!-- cord -->
+
+            <section>
+                <h1><emph>Covariance Based Clustering</emph></h1>
+            </section>
+
+                  <section>
+                <h2>Problem</h2>
+                <ul>
+                    <li>Let ${X} \in \real^p$ be a zero mean random vector</li>
+                    <li>Divide variables into partitions/clusters
+                        <ul>
+                            <li>Example: $\{ \{X_1, X_3, X_7\}, \{X_2, X_5\}, \dotsc \}$</li>
+                        </ul>
+                    </li>
+                    <li><strong>Theoretical</strong>: define
+                        <highlight>uniquely</highlight> <strong class="myorange">identifiable</strong> partition $G$ such that all $X_a$ in $G_k$ are statistically
+                        <emph>"similar"</emph>
+                    </li>
+                    <li><strong>DS</strong>: find
+                        <emph>"helpful"</emph> partition that show cov patterns</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Related Methods</h2>
+                <ul>
+                    <li><strong>Clustering</strong>: Kmeans and hierarchical clustering
+                        <ul>
+                            <li>Advantages: fast, general, popular</li>
+                            <li>Limitations: low signal-noise-ratio, theory</li>
+                            <li>Usually cluster two variables without examining all other variables</li>
+                        </ul>
+                    </li>
+                    <li><strong>Community detection</strong>: huge literature <cite>see review Newman, 2003</cite> but start with observed
+                        <emph>adjacency</emph> matrices</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Matrix Representation</h2>
+                <br>
+                <p>
+                    $$ X_{n\times p}=\underbrace{Z_{n\times k}}_\text{Source/Factor} \quad \underbrace{G_{k\times p}}_\text{Mixing/Loading} + \underbrace{E_{n\times p}}_{Error} \qquad Z \bot E$$
+                </p>
+                <ul>
+                    <li><strong>Clustering</strong>: $G$ is $0/1$ matrix for $k$ clusters/ROIs</li>
+                    <li><strong>Decomposition</strong>: under
+                        <emph>conditions</emph>
+                        <ul>
+                            <li><strong>PCA/factor analysis</strong>: orthogonality</li>
+                            <li><strong>ICA</strong>: orthogonality &rarr; independence</li>
+                            <li><strong>matrix decomposition</strong>: e.g. non-negativity (NMF)</li>
+                        </ul>
+                    </li>
+                   <li>We will introduce a new structure for $Z$ and provide a more general clustering model</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Will show existence identifiability</li>
+                        <li>trans: look at $G$ first</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+
+
+
+
+
+<!--
+            <section data-state="fMRI">
+                <h2>Task fMRI</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Perform tasks while under fMRI scanning</li>
+                                                <li>Press if instruction="go"; withhold pressing if "stop"</li>
+                        <li>Specific parts of the brain responsible for the task</li>
+                        <li>Remove task effects, data like "resting-state"</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Goal: which parts of the brain function together?
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                        <li>Process information</li>
+                    </ul>
+                </aside>
+            </section>
+-->
+
+
+            <section>
+                <h2>"Network of Networks"</h2>
+                <ul>
+                    <li>Hierarchical Covariance Model (a latent var model)
+                    </li>
+                    <center><img src="Media/GraphicalModels/HGMillustrate.png" alt="" class="noborder"></center>
+                    <li>Some ongoing research related to this model
+                        <ul>
+                            <li>How to cluster variables together?</li>
+                            <li>How to estimate cluster signals?</li>
+                            <li>How to estimate between-cluster connections?</li>
+                        </ul>
+                    </li>
+                    <li>This talk on how to <emph>group(clustering)</emph> nodes
+                           <ul>
+                            <li>Usually NP-hard and limited theory</li>
+                            <li>$Z$ can be correlated</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Example: Cor after Grouping by Clusters</h2>
+                <figure class="twocol"><img src="Media/Clustering/StockCorKendallParulaKmeans.png" alt="" class="noborder">
+                    <figcaption>Kmeans</figcaption>
+                </figure>
+                <figure class="twocol"><img src="Media/Clustering/StockCorKendallParula.png" alt="" class="noborder">
+                    <figcaption>Our $G$-models</figcaption>
+                </figure>
+                <br>
+                <p>Ours yields stronger
+                    <emph>off-diagonal, tile</emph> patterns. Black = 1.
+                    <br>
+                    <strong>Color bars</strong>: variable groups/clusters
+                    <br> Off-diagonal: correlations across clusters</p>
+                <aside class="notes">
+                    mention color bar </aside>
+            </section>
+
+            <section>
+                <h2>Model: $G$-Block Cov</h2>
+                <ul>
+                    <li>
+                        Set $G=\ac{\ac{1,2};\ac{3,4,5}}$, $X \in \real^p$ has $G$-block cov
+                        <br>
+                        <center>
+                            <small>
+                    $$\Sigma =\left(\begin{array}{ccccc} {\color{red} D_1} & {\color{red} C_{11} }&C_{12} & C_{12}& C_{12}\\ {\color{red} C_{11} }&{\color{red} D_1 }& C_{12} & C_{12}& C_{12} \\ C_{12} & C_{12} &{\color{green} D_{2}} & {\color{green} C_{22}}& {\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} D_2}&{\color{green} C_{22}}\\ C_{12} & C_{12} &{\color{green} C_{22}} &{\color{green} C_{22}}&{\color{green} D_2} \end{array}\right) $$
+                    </small>
+                        </center>
+                    </li>
+                    <li>Matrix math: $\Sigma = G^TCG + d$</li>
+                    <li>We allow $|C_{11} | \lt | C_{12} |$ or $C \prec 0$
+                        <ul>
+                            <li>Kmeans/HC leads to block-diagonal cor matrices (permutation)</li>
+                        </ul>
+                    </li>
+                    <li>Clustering based on $G$-Block <emph>patterns</emph> shown above
+                        <ul>
+                            <li>Generalizing $G$-Latent which requires $C\succ 0$</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">Multiple G-blocks Note the structures, compound symmetry, </aside>
+            </section>
+
+
+
+            <section>
+                <h2>Minimum $G$ Partition</h2>
+                <div class="thm"><strong>Theorem:</strong> $G^{\beta}(X)$ is the minimal partition induced by $a\stackrel{G^{\beta}}{\sim} b$
+                    <br>
+                    <emph>iff</emph> $\var(X_{a})=\var(X_{b})$ and $\cov(X_{a},X_{c})=\cov(X_{b},X_{c})$ for all $c\neq a,b$. Moreover, if the matrix of covariances $C$ corresponding to the partition $G(X)$ is positive-semidefinite, then this is the unique minimal partition according to which ${X}$ admits a latent decomposition. </div>
+                <br>
+                <p>
+                    <highlight>
+                        The minimal partition is unique under regularity conditions.
+                    </highlight>
+                </p>
+            </section>
+
+
+             <section>
+                <h2>New Metric:
+                    <highlight>CORD</highlight>
+                </h2>
+                <ul>
+                    <li>First, pairwise correlation distance (like Kmeans)
+                        <ul>
+                            <li>Gaussian copula: $$Y:=(h_1(X_1),\dotsc,h_p(X_p)) \sim N(0,R)$$</li>
+                            <li>Let $R$ be the correlation matrix
+                                <li>Gaussian: Pearson's</li>
+                                <li>Gaussian copula: Kendall's tau transformed, $R_{ab} = \sin (\frac{\pi}{2}\tau_{ab})$</li>
+
+                        </ul>
+                        </li>
+                        <li>Second, maximum difference of correlation distances $$\d(a,b) := \max_{c\neq a,b}|R_{ac}-R_{bc}|$$</li>
+                        <li>Third, group variables $a$, $b$ together if $\d(a,b) = 0$</li>
+                </ul>
+            </section>
+
+            <section data-background-image="http://sutherland-careers.com/wp-content/uploads/2016/01/tomj1.jpg">
+                <h2 style="color:white;">The enemy of my enemy is my friend!</h2>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <cite style="color:white;">Image credit: http://sutherland-careers.com/</cite>
+            </section>
+
+            <!--
+            <section>
+                <h2>Chanllenge</h2>
+                <ul>
+                    <li>Goal: find the minimal partition such that $$\d(a,b) = 0 \quad \mbox{if } a \sim b$$
+                    </li>
+                    <li>An NP-hard problem in general, because large number of possible partitions: $O(exp(p))$ </li>
+                    <li>Address the noise in sample correlation $$\widehat \d(a,b):= \max_{c\neq a,b}|\widehat R_{ac}-\widehat R_{bc}| \ne 0$$</li>
+                    <li>Theory for clustering</li>
+                </ul>
+            </section>
+-->
+
+
+            <section>
+                <h2>Algorithm: Main Idea</h2>
+                <ul>
+                    <li>Greedy: one cluster at a time, avoiding NP-hard</li>
+                    <li>Cluster variables together if CORD metric $$ \max_{c\neq a,b}|\hat{R}_{ac}-\hat{R}_{bc}| \lt \alpha$$ where $\alpha$ is a tuning parameter</li>
+                    <li>$\alpha$ is chosen by theory or CV</li>
+                </ul>
+            </section>
+
+            <!--
+            <section>
+                <h2>Algorithm</h2>
+                <ul>
+                    <li>Initialization: $S=\ac{1,\ldots,p}$, and $l=0$</li>
+                    <li>Repeat: while $S\neq \emptyset$
+                        <ul>
+                            <li>$l \leftarrow l+1$</li>
+                            <li>If $|S|=1$ Then $\widehat G_{l}=S$</li>
+                            <li> If $|S|>1$ Then
+                                <ul>
+                                    <li> $(a_{l},b_{l})=\mathop{\mathrm{argmin}}_{a,b\in S,\ a\neq b} \widehat \d(a,b)$</li>
+                                    <li>If $\widehat \d(a_{l},b_{l})>\alpha$ Then $\widehat G_{l} = \ac{a_{l}}$</li>
+                                    <li>If $\widehat \d(a_{l},b_{l})\leq \alpha$ Then $\widehat G_{l} = \ac{s\in S:\widehat \d(a_{l},s)\wedge \widehat \d(b_{l},s)\leq \alpha}$ </li>
+                                </ul>
+                            </li>
+                            <li>$S \leftarrow S\setminus \widehat G_{l}$</li>
+                        </ul>
+                    </li>
+                    <li>Output: the partition $\widehat G=(\widehat G_{l})_{l=1,\ldots,k}$</li>
+                </ul>
+                <aside class="notes">Greedy type of algorithm</aside>
+            </section>
+-->
+
+            <section>
+                <h2>Theory: Condition</h2>
+                <div class="thm">Let $\eta \geq 0$ be given. Let ${ X}$ be a zero mean random vector with a Gaussian copula distribution with parameter $R$. $$ \begin{multline} \mathcal{R}(\eta) := \{R: \ \d(a,b) := \max_{c\neq a,b}|R_{ac}-R_{bc}|>\eta\quad \\ \textrm{for all}\ a\stackrel{G(X)}{\nsim}b.\} \end{multline} $$ <strong>Group separation condition:</strong> $R \in \mathcal{R}(\eta)$.</div>
+                <br>
+                <highlight>The signal strength $\eta$ need to be large.</highlight>
+            </section>
+
+            <section>
+                <h2>Theory: Consistency</h2>
+                <div class="thm"><strong>Theorem:</strong> Define $\tau=|\widehat R-R|_{\infty}$ and we consider two parameters $(\alpha,\eta)$ fulfilling $$\begin{equation} \alpha\geq 2\tau\quad\textrm{and}\quad \eta\geq2\tau+\alpha. \end{equation}$$ Then, applying our algorithm we have $\widehat G=G(X)$ whp.</div>
+                <br>
+                <highlight>Ours recovers exact clustering with high probability.</highlight>
+            </section>
+
+            <section>
+                <h2>Theory: Minimax</h2>
+                <div class="thm"><strong>Theorem:</strong> $P_{\Sigma}$ the likelihood based on $n$ independent observations of ${ X} \stackrel{d}{=} \mathcal{N}(0,\Sigma)$. For any \begin{equation}\label{etamin} 0\leq \eta \lt \eta^{*}:={\sqrt{\log(p(p-1)/2)}\over \sqrt{(2+e^{-1})n} +\sqrt{\log(p(p-1)/2)}}\,, \end{equation} we have $$\inf_{\widehat G}\sup_{R \in \mathcal{R}(\eta)} P_{\Sigma}(\widehat G\neq G^{\beta}(X))\geq {1\over 2e+1}\geq {1\over 7} \,,$$ where the infimum is taken over all possible estimators. </div>
+                <br>
+                <highlight>Our method is minimax optimal.</highlight>
+            </section>
+
+            <section>
+                <h2>Simulation: Exact Recovery</h2>
+
+                <div class='coverflow' style="bottom: 20px; display: block;">
+                    <figure>
+                        <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="">
+                        <figcaption>Block</figcaption>
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure>
+                        <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel28d.png" alt="" class="noborder">
+                        <figcaption>Sparse</figcaption>
+                        <div class='fragment'></div>
+                    </figure>
+                    <figure>
+                        <img src="Media/Clustering/perCorPerfvsNScaleTRUEModel29d.png" alt="" class="noborder">
+                        <figcaption>Negative</figcaption>
+                    </figure>
+                </div>
+                <!-- <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel19d.png" alt="" class="noborder">
+                    <figcaption>Block</figcaption>
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel28d.png" alt="" class="noborder">
+                    <figcaption>Sparse</figcaption>
+                </figure>
+                <figure class="threecol"><img src="Media/Clustering/perCorPerfvsNScaleTRUEModel29d.png" alt="" class="noborder">
+                    <figcaption>Negative</figcaption>
+                </figure> -->
+                <p>&nbsp;</p>
+                <p>Different models for $C$="$\cov(Z)$" and $\alpha = 2 n^{-1/2} \log^{1/2} p$ </p>
+                <p> Vertical lines: theoretical sample size based on our lower bound </p>
+                <p>HC and Kmeans fail even if inputting the true $K$.</p>
+            </section>
+
+
+
+            <!--  <section>
+                <h2>Data Matrix</h2>
+                <ul>
+                    <li>Matrix $X_{n \times p}$, all columns standardized
+                        <ul>
+                            <li>$n$ time points but temporal correlation removed, like iid</li>
+                            <li>$p$ voxels but with spatial corraltion</li>
+                        </ul>
+                        <center><img src="Media/fMRI/voxelGrouping.png" alt="" class="noborder inlinemiddle" align="middle">
+                            <span style="display:inline-block; width: 30px;"></span>
+                            <img src="Media/MRI/freeSurfer.png" alt="" class="noborder inlinemiddle" width="30%"></center>
+                    </li>
+                    <li>Interested in
+                        <emph>big</emph> spatial networks
+                        <ul>
+                            <li>Voxel level: $10^6 \times 10^6$ cov matrix but limited interpretability</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    mention genetics
+                </aside>
+            </section>-->
+
+
+
+
+            <section>
+                <h2>fMRI Data: Test Prediction/Reproducibilty</h2>
+                <ul>
+                    <li>Find partitions using the first session data</li>
+                    <li>Average each block cor to improve estimation</li>
+                    <li>Compare with the cor matrix from the second scan $$ \| Avg_{\hat{G}}(\hat{\Sigma}_1) - \hat{\Sigma}_2 \|$$
+                    where we used $\hat{G}$ to do block-averaging.
+                    </li>
+                    <li>Difference is
+                        <emph>smaller</emph> if clustering $\hat{G}$ is
+                        <emph>better</emph>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <!--<h2>Prediction Comparison</h2>-->
+                <figure><img src="Media/Clustering/ResFrobLossKendall.png" alt="" class="noborder">
+                </figure>
+                <p>Vertical lines: fixed (solid) and data-driven (dashed) thresholds</p>
+                <emph>Smaller replication difference for almost all $K$</emph>
+            </section>
+
+
+            <section>
+                <img src="Media/Clustering/CordFMRIClusters.png" width="80%" alt="">
+                <p>Clusters reasonble for our visual-motor task!</p>
+            </section>
+
+            <section>
+                <h2>Discussion</h2>
+                <ul>
+                    <li>Cov + clustering = Connectivity + ROI
+                        <ul>
+                            <li>Identifiability, accuracy, optimality</li>
+                        </ul>
+                    </li>
+                    <li>$G$-models: $G$-latent, $G$-block, $G$-exchangeable</li>
+                    <li>New metric, method, and theory
+                    </li>
+                    <li>Paper: google
+                        <emph>"cord clustering"</emph>(arXiv <a href="http://arxiv.org/abs/1410.7217">1508.01939</a>)</li>
+                    <li>R package:
+                        <emph>cord</emph> on CRAN</li>
+                </ul>
+            </section>
+
+
+
+<!-- mediation -->
+        <section>
+            <h1><emph>Large-scale Mediation Analysis</emph></h1>
+        </section>
+
+
+
+            <section>
+                <h3>Math Problem: <br> Infer Causality from Observational Data Only</h3>
+                <img src="Media/fMRI/MediationCausalBigPic.png" alt="">
+                <p>Many unmodeled factors: vascular, respiratory, mind wandering, ...</p>
+            </section>
+
+
+            <section data-state="fMRI">
+                <h2>Stop/Go Task fMRI</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Task fMRI: performs tasks under brain scanning</li>
+                        <li>
+                            <emph>Randomized</emph> stop/go task:
+                            <ul>
+                                <li> <strong>press</strong> button if "go"; </li>
+                                <li><strong>withhold</strong> pressing if "stop"</li>
+                            </ul>
+                        </li>
+                        <li>Not resting-state: "rest" in scanner</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Goal: causal mechanisms from stimuli to motor cortex
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section data-state="luoJNeuro09">
+                <h2>Raw Data: Motor Region</h2>
+                <img src="Media/fMRI/LuoJNeurosci09Model.jpg" alt="" class="topright" width="14%">
+                <br>
+                <div>
+                    <img src="Media/fMRI/stopGoBOLDStimuli.png" alt="" width="85%">
+                    <p>
+                        <medium>Time (seconds)</medium>
+                    </p>
+                </div>
+                <strong>Black</strong>: fMRI BOLD activity
+                <br>
+                <emph>Blue</emph>: stop onset times;
+                <highlight>Red</highlight>: go onset times
+                <style>
+                    .luoJNeuro09 credit:after {
+                        content: "Image sources: Duann, Ide, Luo, Li (2009): J Neuro; Luo, Small, Li, Rosenbaum (2012): JASA";
+                    }
+
+                </style>
+            </section>
+
+            <section>
+                <h2>Network Model with Stimulus</h2>
+                <img src="Media/Mediation/brainNetworkMedStopGo.png" alt="" class="noborder" width=80%>
+                <p><strong>Goal</strong>: quantify effects
+                    <span class="mypink">stimuli</span> &rarr;
+                    <span class="myblue">preSMA</span> &rarr; <span class="myorange">PMC</span> regions <cite>Duann, Ide, Luo, Li (2009). J of Neurosci</cite></p>
+            </section>
+
+
+            <section>
+                <h2>Model: Mediation Analysis and SEM</h2>
+                <img src="Media/Mediation/SingleMedBrainAnnotCoef2.png" alt="" class="noborder"> $$\begin{align*}M &= Z a + \overbrace{U + \epsilon_1}^{E_1}\\ R &= Z c + M b + \underbrace{U g + \epsilon_2}_{E_2}, \quad \epsilon_1 \bot \epsilon_2\end{align*}$$
+                <ul>
+                    <li>
+                        <emph>Indirect</emph> effect: $a \times b$; <span class="myorange"><strong>Direct</strong></span> effect: $c$</li>
+                    <li>Correlated errors: $\delta = \cor(E_1, E_2) \ne 0$ if $U\ne 0$</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Mediation Analysis in fMRI</h2>
+                <ul>
+                    <li>Mediation analysis (usually assuming $U=0$)<cite>Baron&Kenny, 86; Sobel, 82; Holland 88; Preacher&Hayes 08; Imai et al, 10; VanderWeele, 15;...</cite>
+
+                    </li>
+
+                    <li>Parametric <cite>Wager et al, 09</cite> and functional <cite>Lindquist, 12</cite> mediation, under (approx.) independent errors
+                        <ul>
+                            <li>Stimulus $\rightarrow$ brain $\rightarrow$ <highlight>user reported ratings</highlight>, one brain mediator</li>
+                            <li>Assuming $U=0$ between ratings and brain</li>
+                        </ul>
+                    </li>
+                    <li>Multiple mediator and multiple pathways
+                        <ul>
+                            <li>Dimension reduction by arXiv1511.09354<cite>Chen, Crainiceanu, Ogburn, Caffo, Wager, Lindquist, 15</cite></li>
+                            <li>Pathway Lasso penalization <cite>Zhao, Luo, 16</cite></li>
+                        </ul>
+                    </li>
+                    <li><strong>This talk</strong>: causal estimation under <emph>$U\ne 0$ (its effect size $\delta \ne 0$)</emph> when modeling <highlight>two brain regions</highlight></li>
+                </ul>
+            </section>
+
+   <section>
+                <h2>New Pathway Measure <br>=Activation+Connectivity</h2>
+                <ul>
+                    <li><strong>Activation</strong>: stimulus $\rightarrow$ brain region activity</li>
+                    <li><strong>Connectivity</strong>: one brain region $\rightarrow$ another region
+                        <ul>
+                            <li>Whether not two or more brain regions "correlate"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Pathway</strong>: stimulus $\rightarrow$ brain region A $\rightarrow$ region B
+                    </li>
+                    <li>Strong path: strong activation
+                        <highlight>and</highlight> strong conn</li>
+                    <li>Zero path: zero activation
+                        <highlight>or</highlight> zero conn, including
+                        <ul>
+                            <li>Zero activation + strong conn = zero</li>
+                            <li>Strong activation + zero conn = zero</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Stefano and colleagues next talk</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+            <section data-state="natureSciSpon">
+                <img src="Media/Mediation/natureScienceSpontaneous.png" alt="" width="80%">
+                <br>
+                <p>Scientific motivations for $\delta \ne 0$ or unmeasured confounding</p>
+                <style>
+                    .natureSciSpon credit:after {
+                        content: "Credit: Fox et al (2006), Nature; Mason et al (2007), Science";
+                    }
+
+                </style>
+            </section>
+
+
+            <section>
+                <h2>Existing Approaches for $\delta \ne 0$</h2>
+                <ul>
+                    <li>Assuming $\delta=0$
+                        <ul>
+                            <li>Assumption "too strong" for most cases <cite>Imai et al, 10</cite></li>
+                        </ul>
+                    </li>
+                    <li>Sensitivity plot: "guessing" $\delta$</li>
+                    <li>Simplify models: e.g. $c=0$ via instrumental variable</li>
+                    <li>Adjust (e.g. motion) if possible <cite>Sobel, Lindquist, 14</cite></li>
+                    <li>Use Bayesian prior or regularization</li>
+                    <li>We will introduce a data-driven framework to estimate $\delta$</li>
+                </ul>
+            </section>
+
+
+
+            <section>
+               <h2>Method: Multilevel Likelihood</h2>
+                <ul>
+                    <li>Recall <strong>3</strong>-level data: subjects, sessions, trials</li>
+                    <li>
+                        <highlight>Correlated</highlight> mediation model for trials, mixed model for mediation effects among higher levels
+                    </li>
+                    <li>We will optimize the multilevel likelihood $$ \underbrace{\sum_{\mbox{Sub }i} \sum_{\mbox{Sess }k}\ell(\mbox{brain activities in trials} | A_{ik}, B_{ik}, C_{ik}, \Theta_{ik})}_{\mbox{first level likelihood}} \\ + \underbrace{\sum_i \ell(A_{i1},\dotsc,A_{iK}, B_{i1},\dotsc | A, B, C, \Theta)}_{\mbox{second and third level likelihood}}$$
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Challenges</h2>
+                <ul>
+                    <li>Unmeasured confounding and causal inference
+                        <ul>
+                            <li>Usually impossible in many other statistical models</li>
+                        </ul>
+                    </li>
+                    <li>Prove our model is identifiable or our multilevel likelihood has a unique maximum
+                        <ul>
+                            <li>Usually the likelihood is mutlimodal in many other cases</li>
+                        </ul>
+                    </li>
+                    <li>Prove our MLE is unbiased and consistent under minimal assumptions</li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Causal Interpretation</h2>
+                <ul>
+                    <li>We prove causal using potential outcomes <cite>Neyman, 23; Rubin, 74</cite></li>
+                    <li>Causal inference intuition $$Z \rightarrow \begin{pmatrix} M \\ R \end{pmatrix}$$
+                    </li>
+                    <li>
+                        <strong>Others</strong> assume (e.g. randomized brain stimulation) $$r_{i}\left(z_{i}^{\prime},m_{i}\right)\bot m_{i}\left(z_{i}\right)|Z_{i}=z_{i}$$
+                    </li>
+                    <li>We do
+                        <highlight>not</highlight> need this assumption when we can estimate $\delta$</li>
+                </ul>
+            </section>
+
+
+            <!--
+            <section>
+                <h1>Maximum Likelihood: “Tragedy may lurk around a corner”</h1>
+                <small>[Stigler 2007]</small>
+            </section>
+-->
+
+
+            <section>
+                <h2>Some Details about Our Model</h2>
+                <ul>
+                    <li>Level-1 model for each sub and each sess
+                        <medium>
+                            $$\begin{pmatrix}{M}_{ik} & {R}_{ik}\end{pmatrix}=\begin{pmatrix}{Z}_{ik} & {M}_{ik}\end{pmatrix}\begin{pmatrix}{a}_{ik} & {b}_{ik}\\ 0 & {c}_{ik} \end{pmatrix}+\begin{pmatrix}{E}_{1_{ik}} & {E}_{2_{ik}}\end{pmatrix}$$
+                        </medium>
+                    </li>
+                    <li>Limited variability in $\delta$ across sub/sess</li>
+                    <li>Random effect model <cite>cf AFNI, FSL, SPM, and etc</cite> $$\begin{pmatrix}{A}_{ik}\\ {B}_{ik}\\ {C}_{ik} \end{pmatrix}=\begin{pmatrix}{A}\\ {B}\\ {C} \end{pmatrix}+\begin{pmatrix}\alpha_{i}\\ \beta_{i}\\ \gamma_{i} \end{pmatrix}+\begin{pmatrix}\epsilon_{ik}^{{A}}\\ \epsilon_{ik}^{{B}}\\ \epsilon_{ik}^{{C}} \end{pmatrix}=b+u_{i}+\eta_{ik}$$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Algorithm 1: Two-stage Fitting</h2>
+                <ul>
+                    <li><strong>Stage 1</strong>: fit $(\hat{A}_{ik}(\delta), \hat{B}_{ik}(\delta), \hat{C}_{ik}(\delta))$ for each $i$ and $k$ for varying $\delta$ using our step 1 <strong>single-level</strong> model</li>
+                    <li><strong>Stage 2</strong>: Find $\hat{\delta}$ that $(\hat{A}_{ik}(\hat{\delta}), \hat{B}_{ik}(\hat{\delta}), \hat{C}_{ik}(\hat{\delta}))$ yields maximum likelihood for random effects model</li>
+                    <li>Small-scale computing</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Theory for SEM and Confounding</h2>
+                <div class="thm">
+                    <strong>Theorem</strong>: Under certain regularity conditions, asymptotically, the joint
+                    <highlight>multilevel likelihood</highlight> has a unique maximum and the maximizer is consistent for $\delta$.
+                </div>
+                <p>Contributions: data-driven estimation of confounding and consistency proof for SEM</p>
+            </section>
+
+
+            <section>
+                <h2>Alternative Likelihood under Our Framework</h2>
+                <ul>
+                    <li>Optimize all parameters in joint likelihood $$\begin{align*} &\sum_{i=1}^{N}\sum_{k=1}^{K}\log\Pr\left(R_{ik},M_{ik}|Z_{ik},\delta,b_{ik},\sigma_{1_{ik}},\sigma_{2_{ik}}\right)\quad \mbox{Data}\\ & + \sum_{i=1}^{N}\sum_{k=1}^{K}\log\Pr\left(b_{ik}|u_{i},b,\boldsymbol{\Lambda}\right)\quad \mbox{Subject variation}\\ & +\sum_{i=1}^{N}\log\Pr\left(u_{i}|\boldsymbol{{\Psi}}\right) \quad \mbox{Prior}\end{align*}$$</li>
+                    <li><strong>Large computation</strong>: $5NK + 3N + 11 > 2000$ paras</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Algorithm 2</h2>
+                <div class="thm">
+                    <strong>Theorem</strong>: The joint likelihood is conditional convex for groups of parameters.
+                </div>
+                <div class="thm">
+                    <strong>Algorithm</strong>: block coordinate descent with projections.
+                </div>
+                <p>Leverage conditional convexity to reduce computation</p>
+                <cite>details in our paper</cite>
+            </section>
+
+
+            <section>
+               <h2>Simulations</h2>
+                <div class="twocol inlinemiddle"><img src="Media/Mediation/singleMedBiasDelta.png" alt="">
+                    <p>Low bias for $\delta$</p>
+                </div>
+                <div class="twocol inlinemiddle"><img src="Media/Mediation/singleMedBiasAB.png" alt="">
+                    <p>Low bias for effects</p>
+                </div>
+                <br>
+                <p>Our large-scale multilevel model
+                    <highlight>(CMA)</highlight> performs best;
+                    <br> Bias can be large (100%) without estimating $\delta$</p>
+            </section>
+
+
+            <section>
+                <h2>Real Data: Identifiability and Bias</h2>
+                <div class="twocol inlinemiddle"><img src="Media/Mediation/singleMedfMRIMixedMLCheck.png" alt="">
+                    <p>Unique $\delta$ for ML</p>
+                </div>
+                <div class="twocol inlinemiddle"><img src="Media/Mediation/singleMedfMRICMACoef.png" alt="">
+                    <p>Estimates doubled</p>
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Discussion</h2>
+                <ul>
+                    <li>Leverage complex data for causal fMRI modeling</li>
+                    <li>Approach:
+                        <ul>
+                            <li>
+                                <highlight>large-scale causal SEM</highlight>
+                            </li>
+                            <li><span class="mypurple"><strong>big multilevel data</strong></span></li>
+                            <li>
+                                <emph>machine learning/optimization</emph>
+                            </li>
+                        </ul>
+
+                        <li>Theory: identifiability, convergence, and computation
+                        </li>
+                        <li>Result: reduced bias and causal interpretation</li>
+                        <li>Extensions: functional, time series, multiple paths</li>
+                        <li>CRAN pkgs:
+                        <highlight>macc</highlight>, <highlight>gma</highlight>, <highlight>cfma</highlight>, references within</li>
+                </ul>
+            </section>
+
+<!-- dynamics -->
+
+           <section>
+               <h1><emph>Causal Dynamic Network Modeling</emph></h1>
+           </section>
+
+
+           <section>
+               <h2>ODE Modeling for fMRI</h2>
+               <ul>
+                   <li>Hidden neuronal states:  multivariate $Z_t$ across time $t$, following a <emph>network</emph> ODE model</li>
+                   <li>Observed fMRI data: $Y_t  = g(Z_t, Z_{t-1}, \dotsc)$
+                       <ul>
+                           <li>Common choice of $g$ is a convolution with a known kernel $h(t)$</li>
+                       </ul>
+                   </li>
+                   <li>Neuroscientists  want to know neuronal <emph>activations</emph> due to stimuli and  <emph>connections</emph> between areas</li>
+                   <li>Existing approach: Dynamic Causal Modeling <cite>Friston et al, 2003</cite> (> 3000 citations)</li>
+               </ul>
+           </section>
+
+
+
+             <section data-state="dcm">
+             <img src="Media/fMRI/FristonDCMNeuroImageCover.png" alt="" class="noborder topleft" width="30%">
+              <div width="100%">
+                  <img src="Media/fMRI/FristonDCMModel.jpg" alt=""  width="50%">
+              </div>
+                <style>
+                    .dcm credit:after {
+                        content: "Image source: Frston et al,  NeuroImage, 2003";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Other projects</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+           <section>
+               <h2>Challenges for DCM <cite>Friston et al, 03</cite></h2>
+               <ul>
+                   <li>Computationally expensive</li>
+                   <li>Bayesian model comparision over exponentially many network models</li>
+                   <li>Only feasible for small networks (~5 nodes) or for comparing a few hypotheses</li>
+               </ul>
+           </section>
+
+
+
+           <section>
+               <h2>Functional/Dynamic Data Analysis</h2>
+               <ul>
+                   <li>Usually, observed data
+                   $$ y(t) = z(t)  + \epsilon(t) $$
+                   and latent $z(t)$ follows a ODE model of interest
+                   </li>
+                   <li>Various approaches for estiating the ODE parameters: nonlinear least squares <cite>Xue, Miao, Wu, 10</cite>, two-stage smoothing <cite>Varah, 82</cite>, principal differential analysis <cite>Ramsey, 96</cite>, Bayesian <cite>Girolami, 08</cite></li>
+                   <li>For example,  two-stage smoothing approaches not directly applicable to convoluted fMRI data
+                   $$  y(t) = \int z(t-u)h(u) du + \epsilon(t) $$
+                   </li>
+               </ul>
+           </section>
+
+
+<!--
+           <section>
+               <h2>Neural Activities and fMRI</h2>
+               <div class="twocol  inlinemiddle">
+                                     <p>HRF</p>
+                   <img src="Media/fMRI/HRF2.png" class="noborder" width="80%">
+               </div>
+               <div class="twocol inlinemiddle">
+                    <p>Example fMRI Signal</p>
+                   <img src="Media/fMRI/ExampleHRFResponseToStimuli.png" class="noborder">
+               </div>
+               <br>
+               <p><highlight>Red</highlight> and <emph>blue</emph> vertical lines represent go and stop stimulus onsets respectively</p>
+               <p>fMRI responses last much longer even if the blue stimuli end</p>
+           </section>
+-->
+
+         <section>
+             <h2>Hemodynamic Response Function (HRF)</h2>
+     <img src="Media/CausalODE/StimulusExample.png" alt="" class="threecol inlinemiddle">
+     <img src="Media/CausalODE/CanonicalHRF.png" alt="" class="threecol inlinemiddle">
+     <img src="Media/CausalODE/StimHConv.png" alt="" class="threecol inlinemiddle">
+       <br>
+        <p>fMRI responses last long (~30 seconds) after neural activities</p>
+         </section>
+
+
+
+           <section>
+               <h2>Model and Method</h2>
+               <ul>
+                   <li>Neural signal model:
+                   $$   \frac{d\bm{x}(t)}{dt}=\bm{A}\bm{x}(t)+\sum_{j}u_j(t)\bm{B_j}\bm{x}(t)+\bm{C}\bm{u}(t)   $$
+                   </li>
+                   <li>fMRI hemodynammic responses:
+                   $$  \bm{y}(t_i)  =\int h(s)\bm{x}(t_i-s) ds + \bm{\epsilon} (t_i)   $$
+                   </li>
+                   <li>Minimize the following
+                   \[\begin{multline*} \scriptstyle
+l(\bm{x},\bm{\theta})=\sum_{t_i}    \| \bm{y}(t_i)-h \star \bm{x}(t_i)) \|^2        \\
+ \scriptstyle +\lambda\int   \left \|    \frac{d \bm{x} (t) }  {dt}     -  (A \bm{x}(t)+\sum_{j} u_j(t) \bm{B_j} \bm{x}(t)+
+\bm{C}\bm{u}(t))   \right\|^2 dt + {pen}(A,B,C)\\
+\end{multline*} \]
+                   </li>
+               </ul>
+           </section>
+
+           <section>
+               <h1>Algorithm</h1>
+               <ul>
+                   <li>We prove conditional convexity</li>
+                   <li>Iterative block coordinate descent algorithm</li>
+                   <li>We prove explicit update formulas (no numerical optimization algorithms needed)</li>
+               </ul>
+           </section>
+
+           <section>
+               <h1>Simulation: vs GCA/VAR</h1>
+               <img src="Media/CausalODE/CDNvsGCAAUC.png" alt="">
+               <p>Our <highlight>CDN</highlight> yields higher network recovery accuracy than Granger Causality Analysis (GCA, aka vector autoregressive models)</p>
+           </section>
+
+
+            <section>
+               <h1>Simulation: vs DCM</h1>
+               <img src="Media/CausalODE/CDNvsDCMAUC.png" alt="">
+               <p>Our <highlight>CDN</highlight> yields higher accuracy using only a fraction of the computation time of DCM</p>
+           </section>
+
+
+           <section>
+               <h2>Real Data: 6 Brain Regions</h2>
+               <img src="Media/CausalODE/GoStopAPlotAnnot6ROI.png" alt="" width="60%">
+               <p>Provide better understanding of the brain mechanisms</p>
+           </section>
+
+           <section>
+               <h2>Real Data: 264 Brain Regions</h2>
+               <img src="Media/CausalODE/GoStopAPlotAnnot264ROI.png" alt="" width="70%">
+               <p>Sparse CDN uncovers a <highlight>large-scale</highlight> brain network</p>
+           </section>
+
+            <section>
+                <h2>Discussion</h2>
+                <ul>
+                    <li>Joint optimization method for infer ODE networks</li>
+                    <li>Flexible models for observations from ODEs</li>
+                    <li>Computationally efficient for large-scale modeling</li>
+                    <li>Python pacakge: <highlight>CDN</highlight> from github.com/rluo</li>
+                </ul>
+            </section>
+
+
+<!--           new directions  -->
+          <section>
+              <h2>Samples of Other Projects</h2>
+              <ul>
+                 <li>CVD/T2D risk prediction using genetic, environmental, and life style factors</li>
+                  <li>Predicting real-time risky behavior using smart phone</li>
+                  <li>Regression with covariance outcomes
+                  <ul>
+                      <li>how gene/brain covriances explained by covaraites</li>
+                  </ul>
+                  </li>
+                  <li>Mediation for imaging-genetics data
+                  <ul>
+                      <li>Cognitive outcomes: nature vs nurture?</li>
+                  </ul>
+                  </li>
+                  <li>Deep learning: health risk prediction</li>
+              </ul>
+          </section>
+
+            <section data-background="Media/Scene/uthealthBrain.jpg" data-state="opaqueBackImg">
+                <h1>Thank you!</h1>
+                <br>
+                <h2>Comments? Questions?</h2>
+                <br>
+<!--              <h2>Slides at:-->
+                    <!--
+                    <emph>bit.ly/XLICSA16</emph>
+                </h2>
+                <img src="./Media/QR/XLICSA16.png" alt="" width="30%">
+                <h2>
+                    OR:
+-->
+                <!--     <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
+                    <br>
+                    <br> or
+                     <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span>
+               -->     <!--
+
+                    <emph>Brain</emph><highlight>
+    Data</highlight><span class="mypurple" style="font-weight: bold;">Science</span><strong>.com</strong>
+<br>
+<br> or
+<emph>Big</emph>
+<highlight>Complex</highlight>
+<span class="mypurple" style="font-weight: bold;">Data</span><strong>.com</strong>
+-->
+<!--                </h2>-->
+                <style>
+                    .opaqueBackImg credit:after {
+                        content: "Image source: ad by Mischer Neuroscience Institute, McGovern Medical School, UTHealth";
+                    }
+
+                </style>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="./reveal.js.3.5/lib/js/head.min.js"></script>
+    <script src="./reveal.js.3.5/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js.3.5#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                //mathjax: './MathJax/MathJax.js',
+                mathjax: 'bower_components/MathJax/MathJax.js',
+                //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+
+            //anything to load other libraries
+            anything: [{
+                className: "coverflow",
+                initialize: (function(container, options) {
+                    if (typeof container.coverflow === 'function') {
+                        container.coverflow()
+                    }
+                })
+            }],
+
+            // Optional reveal.js.3.5 plugins
+            dependencies: [{
+                src: './reveal.js.3.5/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/math/math.js',
+                async: true
+            }, {
+                src: 'JSLibrary/jquery-3.2.1.js'
+            }, {
+                src: 'JSLibrary/coverflowjs/coverflow.min.js'
+            }, {
+                src: './reveal.js.3.5/plugin/anything/anything.js'
+            }, {
+                src: 'bower_components/reveal.js-menu/menu.js'
+            }]
+        });
+        //{
+        //                src: './reveal.js.3.5/plugin/anything/anything.js'
+        //            },
+        //        ,  {
+        //                src: 'bower_components/reveal.js-menu/menu.js'
+        //            }
+
+    </script>
+
+    <!-- Coverflow event listeners -->
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <script>
+        Reveal.addEventListener('fragmentshown', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('next');
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('prev');
+        });
+        Reveal.addEventListener('slidechanged', function(event) {
+            jQuery(event.currentSlide).find('.coverflow').coverflow();
+            jQuery(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            jQuery(event.currentSlide).find('.coverflow').find('.fragment')
+                .removeClass('visible').removeClass('currentSlide');
+        });
+        // $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()  });
+        //        setTimeout(function() {
+        //            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()
+        //        }, 15000);
+        //        Reveal.addEventListener('ready', function(event) {
+        //           let elements =  document.getElementsByClassName('coverflow')
+        //           for (let j=0; j<elements.length; j++) {
+        //               elements[j].coverflow();
+        //           }
+        //        });
+
+    </script>
+
+
+</body>
+
+</html>
