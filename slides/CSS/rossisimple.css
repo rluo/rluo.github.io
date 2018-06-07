@@ -151,9 +151,11 @@ html {
 .reveal ol {
     list-style-type: decimal;
 }
-.reveal ul {
-    font-size: 1em;
+.reveal ul{
     list-style-type: disc;
+}
+.reveal ul, .reveal ol{
+    font-size: 1em;
 }
 .reveal ul ul {
     font-size: 0.75em;
@@ -512,7 +514,7 @@ html {
 .reveal li {
     margin-bottom: 0.4em;
 }
-.reveal ul ul>li:first-child {
+.reveal ul ul>li:first-child, .reveal ol ul>li:first-child {
     margin-top: 0em;
 }
 .reveal div.fbox {
