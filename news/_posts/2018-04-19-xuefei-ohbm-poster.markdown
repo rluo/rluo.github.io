@@ -8,4 +8,4 @@ externallink:  https://bigcomplexdata.com
 
 ---
 
-PhD student Xuefei Cao's [poster](http://rluo.github.io/poster/Luo_LargeScalePython.pdf) is selected to present at OHBM 2018.
+PhD student Xuefei Cao's [poster](http://rluo.github.io/posters/Luo_LargeScalePython.pdf) is selected to present at OHBM 2018.
