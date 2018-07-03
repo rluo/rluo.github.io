@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Granger Mediation</title>
+    <meta name="description" content="Analytics for Big and Complex Data Group">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./reveal.js.3.5/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js.3.5/lib/css/zenburn.css">
+
+    <!--
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+-->
+    <!--    Cover Flow   -->
+    <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
+
+    <script src="JSLibrary/jquery-3.2.1.js"></script>
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <!-- Coverflow styles -->
+    <style>
+        .ui-coverflow {
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 5px;
+        }
+
+        .ui-coverflow>img,
+        .ui-coverflow>figure {
+            height: 440px !important;
+            width: auto;
+            min-width: 440px !important;
+        }
+
+    </style>
+
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js.3.5/css/print/pdf.css' : './reveal.js.3.5/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+
+    <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+</head>
+
+<body>
+    <div class="reveal">
+<!--      place holder for credits -->
+       <credit></credit>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \( \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \DeclareMathOperator{\Ex}{\mathbb{E}} \DeclareMathOperator{\diag}{diag}  \newcommand{\bm}[1]{\boldsymbol{#1}} \)
+
+            <section>
+                <h2><strong>Granger Mediation Analysis for Multiple Time Series
+                     </strong></h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width:43%; vertical-align: middle;">
+                        <medium><strong>Brown University</strong>
+                            <br> Department of Biostatistics
+                            <br> Center for Statistical Sciences
+                            <br> Computation in Brain and Mind
+                            <br> Brown Institute for Brain Science
+                            <br> Brown Data Science Initiative
+                            <br> ABCD Research Group</medium>
+                    </p> <img class="noborder inlinemiddle" style="display: inline-block;
+                          vertical-align: middle;" src="Media/ABCDgroup/abcdLogo2_BannerBigComplexDataCom.png" height="210px">
+                </div>
+                <br>
+                <p>
+                    <medium><strong>ICSA, Qingdao China</strong>
+                        <br>July 4, 2018</medium>
+                </p>
+                <p>
+                    <small> Funding: NIH R01EB022911, P20GM103645, P01AA019072, P30AI042853; NSF/DMS (BD2K) 1557467</small>
+                </p>
+            </section>
+
+            <section>
+                <h1>Slides viewable on web: <br>
+<emph>bit.ly/utbiosds</emph>
+                </h1>
+            </section>
+
+<!-- Over view -->
+
+
+
+            <section data-state="fMRI">
+                <h2>fMRI Experiments</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Task fMRI: performs tasks under brain scanning</li>
+                        <li>
+                            <emph>Randomized</emph> stop/go task:
+                            <ul>
+                                <li> <strong>press</strong> button if "go"; </li>
+                                <li><strong>withhold</strong> pressing if "stop"</li>
+                            </ul>
+                        </li>
+                        <li>Not resting-state: "do nothing" during scanning</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Goal: infer brain activation and connectivity
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section data-background-iframe="Media/fMRI/ThreeJSBrainMaskColor.html">
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
+                <!--                <h2>fMRI Data</h2>-->
+                <!--                <iframe id="brainCube" src="Media/fMRI/ThreeJSBrainMaskColor.html" frameborder="0" width="800" height="600" name="brainCube"></iframe>-->
+                <p style="margin-bottom: 650px;"></p>
+                <p><strong>fMRI data</strong>: blood-oxygen-level dependent (BOLD) signals from each
+                    <highlight>cube</highlight>/voxel (~millimeters),
+                    <emph>$10^5$ ~ $10^6$</emph> voxels in total. </p>
+                <aside class="notes">
+                    <ul><li>visualization is big challenge, too</li>
+                        <li>Lego brain of real brain</li>
+                        <li>red cube is a voxel</li>
+                        <li>track activity from each cube at each time vector</li>
+                        <li>dimension: address temporal separately</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+
+
+            <section>
+                <h2>Multilevel fMRI Studies</h2>
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub 1, Sess 1 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>Time 1</p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>2</p>
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                    <p>~200</p>
+                </div>
+                <br>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block; width=200; text-align:left;"> Sub i, Sess j </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+
+                <p> &#8942; </p>
+
+                <div class="inlinemiddle" style="border: 0px solid black; width: 350px; max-width: 350px; ">
+                    <p style="display:inline-block;  text-align:left; "> Sub ~100, Sess ~4 </p>
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <p style="display:inline-block; width=160"> &#8230; </p>
+                <div class="inlinemiddle">
+                    <img src="Media/fMRI/BrainCubesColorStaticCut.png" width="140" alt="" class="noborder">
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>Large, multilevel</emph> (subject, session, voxel) data
+                    <br>e.g. $1000 \times 4 \times 300 \times 10^6 \approx 1 $ trillion data points </p>
+                <aside class="notes">
+                    <ul>
+                        <li>track one voxel time</li>
+                        <li>deal large first</li>
+                        <li>multilevel later</li>
+                        <li>track all voxels get a matrix</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+
+<!-- mediation -->
+
+
+            <section data-state="luoJNeuro09">
+                <h2>Raw Data: Motor Region</h2>
+                <img src="Media/fMRI/LuoJNeurosci09Model.jpg" alt="" class="topright" width="14%">
+                <br>
+                <div>
+                    <img src="Media/fMRI/stopGoBOLDStimuli.png" alt="" width="85%">
+                    <p>
+                        <medium>Time (seconds)</medium>
+                    </p>
+                </div>
+                <strong>Black</strong>: fMRI BOLD activity
+                <br>
+                <emph>Blue</emph>: stop onset times;
+                <highlight>Red</highlight>: go onset times
+                <style>
+                    .luoJNeuro09 credit:after {
+                        content: "Image sources: Duann, Ide, Luo, Li (2009): J Neuro; Luo, Small, Li, Rosenbaum (2012): JASA";
+                    }
+
+                </style>
+            </section>
+
+                <section>
+                    <img src="Media/Mediation/GrangerMedfMRIData.png" alt="" width="50%">
+                    <p>$Z_t$: Stimulus onsets convoluted with Canonical HRF</p>
+                    <p>$M_t$, $R_t$: fMRI time series from two brain regions</p>
+                </section>
+
+                <section>
+                    <img src="Media/Mediation/GrangerCausalityGoogleScholar.png" alt="" width="100%">
+                </section>
+
+                <section>
+                <h2>Review: Granger Causality/VAR</h2>
+                <ul>
+                    <li>Given two (or more) time series $x_t$ and $y_t$
+                    $$\begin{align*} x_t &= \sum_{j=1}^p \psi_{1j} x_{t-j} + \sum_{j=1}^p \phi_{1j} y_{t-j} + \epsilon_{1t} \\
+                    y_t &= \sum_{j=1}^p \psi_{2j} y_{t-j} + \sum_{j=1}^p \phi_{2j} x_{t-j} + \epsilon_{2t}     \end{align*}$$
+                    </li>
+                    <li>$y$ Granger causes $x$ if $\phi_{1j} \ne 0$ <cite>Granger, 69</cite></li>
+                    <li>Models <emph>pair-wise</emph> connections not <emph>pathways</emph></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Granger Causality/VAR</h2>
+                <ul>
+                    <li>Granger Causality (VAR) popular for fMRI
+                    <ul>
+                        <li>About <emph>8000</emph> google scholar results on "granger causality neuroimaging"</li>
+                    </ul>
+                    </li>
+                    <li>Models  multiple <emph>stationary</emph> time series</li>
+                    <li>AR($p$) (small $p$) fits fMRI well  <cite>Lingdquist, 08</cite></li>
+                    <li><highlight>Not</highlight> for <emph>non-stationary</emph>/task fMRI</li>
+                    <li><highlight>Cannot</highlight> model stimulus effects</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Conceptual Model with Stimulus</h2>
+                <img src="Media/Mediation/brainNetworkMedStopGo.png" alt="" class="noborder" width=80%>
+                <p><strong>Goal</strong>: quantify effects
+                    <span class="mypink">stimuli</span> &rarr;
+                    <span class="myblue">preSMA</span> &rarr; <span class="myorange">PMC</span> regions <cite>Duann, Ide, Luo, Li (2009). J of Neurosci</cite></p>
+            </section>
+
+
+
+            <section>
+                <h2>Model: Mediation Analysis and SEM</h2>
+                <img src="Media/Mediation/SingleMedBrainAnnotCoef2.png" alt="" class="noborder"> $$\begin{align*}M &= Z a + \overbrace{U + \epsilon_1}^{E_1}\\ R &= Z c + M b + \underbrace{U g + \epsilon_2}_{E_2}, \quad \epsilon_1 \bot \epsilon_2\end{align*}$$
+                <ul>
+                    <li>
+                        <emph>Indirect</emph> effect: $a \times b$; <span class="myorange"><strong>Direct</strong></span> effect: $c$</li>
+                    <li>Correlated errors: $\delta = \cor(E_1, E_2) \ne 0$ if $U\ne 0$</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Mediation Analysis in fMRI</h2>
+                <ul>
+                    <li>Mediation analysis (usually assuming $U=0$)<cite>Baron&anp;Kenny, 86; Sobel, 82; Holland 88; Preacher&amp;Hayes 08; Imai et al, 10; VanderWeele, 15;...</cite>
+
+                    </li>
+
+                    <li>Parametric <cite>Wager et al, 09</cite> and functional <cite>Lindquist, 12</cite> mediation, under (approx.) independent errors
+                        <ul>
+                            <li>Stimulus $\rightarrow$ brain $\rightarrow$ <highlight>user reported ratings</highlight>, one brain mediator</li>
+                            <li>Assuming $U=0$ between ratings and brain</li>
+                        </ul>
+                    </li>
+                    <li>Multiple mediator and multiple pathways
+                        <ul>
+                            <li>Dimension reduction by arXiv1511.09354<cite>Chen, Crainiceanu, Ogburn, Caffo, Wager, Lindquist, 15</cite></li>
+                            <li>Pathway Lasso penalization <cite>Zhao, Luo, 16</cite></li>
+                        </ul>
+                    </li>
+                    <li><strong>This talk</strong>:  integrating Granger causality and mediation analysis</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h1>Model &amp; Method</h1>
+            </section>
+
+            <section>
+                <h2>Our Mediation Model</h2>
+$$\begin{align*}M_{t} = Z_{t} a +  E_{1t},\quad R_t = Z_t c + M_t b + E_{2t}\end{align*}$$
+                <ul>
+               <li><emph>Temporal</emph> VAR errors
+               $$\begin{align*}   E_{1t}&=& \sum_{j=1}^{p}\left(\omega_{11_{j}}E_{1,t-j}+\omega_{21_{j}}E_{2,t-j}\right)+\epsilon_{1t}  \\
+  E_{2t}&=&\sum_{j=1}^{p}\left(\omega_{12_{j}}E_{1,t-j}+\omega_{22_{j}}E_{2,t-j}\right)+\epsilon_{2t}  \end{align*}$$
+               </li>
+               <li><emph>Spatial</emph> errors: $\epsilon_{1t},
+  \epsilon_{2t}$
+               $$ \begin{pmatrix}
+  \epsilon_{1t} \\
+  \epsilon_{2t}
+ \end{pmatrix}\sim\mathcal{N}\left(\boldsymbol{\mathrm{0}},\boldsymbol{\Sigma}\right), \quad \boldsymbol{\Sigma}=\begin{pmatrix}
+  \sigma_{1}^{2} & \delta\sigma_{1}\sigma_{2} \\
+  \delta\sigma_{1}\sigma_{2} & \sigma_{2}^{2}
+ \end{pmatrix}  $$
+               </li>
+                 </ul>
+            </section>
+
+            <section>
+                <h2>Equivalent Form</h2> $$\begin{align*} \scriptsize M_{t}& \scriptsize =Z_{t}A+\sum_{j=1}^{p}\left(\phi_{1j}Z_{t-j}+\psi_{11_{j}}M_{t-j}+\psi_{21_{j}}R_{t-j}\right)+\epsilon_{1t} \\ \scriptsize R_{t}& \scriptsize =Z_{t}C+M_{t}B+\sum_{j=1}^{p}\left(\phi_{2j}Z_{t-j}+\psi_{12_{j}}M_{t-j}+\psi_{22_{j}}R_{t-j}\right)+\epsilon_{2t} \end{align*} $$
+                <ul>
+                    <li>Nonzero $\phi$'s and $\psi$'s denote the temporal influence from stimulus to mediator/outcome and etc</li>
+                    <li>$A$, $B$, $C$ are causal following a similar proof in <cite>Sobel, Lindquist, 04</cite></li>
+                </ul>
+            </section>
+
+           <section>
+               <h2>Estimation: Conditional Likelihood</h2>
+                <ul>
+                    <li>The full likelihood for our model is too complex</li>
+                    <li>Given the initial $p$ time points, the conditional likelihood is
+                    $$ \begin{align*}   & \tiny \ell\left(\boldsymbol{\Theta},\delta~|~\mathbf{Z},\mathcal{I}_{p}\right) = \sum_{t=p+1}^{T}\log f\left((M_{t},R_{t})~|~\mathbf{X}_{t}\right)  \\
+    & \tiny = -\frac{T-p}{2}\log\sigma_{1}^{2}\sigma_{2}^{2}(1-\delta^{2})-\frac{1}{2\sigma_{1}^{2}}\|\mathbf{M}-\mathbf{X}\boldsymbol{\theta}_{1}\|_{2}^{2}  \\
+     & \tiny  -\frac{1}{2\sigma_{2}^{2}(1-\delta^{2})}\|(\mathbf{R}-\mathbf{M}B-\mathbf{X}\boldsymbol{\theta}_{2})-\kappa(\mathbf{M}-\mathbf{X}\boldsymbol{\theta}_{1})\|_{2}^{2}  \end{align*} $$
+                    </li>
+                </ul>
+           </section>
+
+            <section>
+                <h2>Multilevel Data: Two-level Likelihood</h2>
+                <ul>
+                    <li>Second level model, for each subject $i$
+                    $$(A_i,B_i,C_i) = (A,B,C) + (\eta^A_i, \eta^B_i, \eta^C_i)$$
+                    where error $\eta$ is normally distributed</li>
+                    <li>The two level likelihood is conditional convex</li>
+                    <li>Two-stage fitting: plug-in estimates from the first level</li>
+                    <li>Block coordinate fitting:  optimize first level likelihood + second level likelihood</li>
+                </ul>
+            </section>
+
+
+
+
+           <section>
+               <h2>Theory</h2>
+             <ul>
+                 <li>Under regularity conditions, $N$ subs, $T$ time points</li>
+                 <li>Our $\hat \delta$ is $\sqrt{NT}$ consistent
+                 <ul>
+                     <li>This relaxes the unmeasured confounding assumption in mediation analysis</li>
+                 </ul>
+                 </li>
+                 <li>Our $(\hat{A},\hat{B}, \hat{C})$ is also consistent</li>
+             </ul>
+           </section>
+
+           <section>
+               <h1>Simulations &amp; Real Data</h1>
+           </section>
+
+            <section>
+                <h2>Comparison</h2>
+                <ul>
+                    <li>Our methods: <highlight>GMA-h</highlight> and <highlight>GMA-ts</highlight></li>
+                    <li>Previous methods: BK <cite>Baron &amp; Kenny</cite>, MACC <cite>Zhao and Luo</cite>, KKB <cite>Kenny et al</cite></li>
+                    <li>Other methods do not model the temporal correlations like ours</li>
+                </ul>
+            </section>
+
+
+
+
+
+            <section>
+               <h2>Simulations</h2>
+                <div class="twocol inlinemiddle"><img src="Media/Mediation/GrangerMedSimuBias.png" alt="">
+                    <p>Low bias for $AB$</p>
+                </div>
+                <div class="twocol inlinemiddle"><img src="Media/Mediation/GrangerMedSimuTransitionMat.png" alt="">
+                    <p>Low bias for temporal cor</p>
+                </div>
+                <p>Grey dash lines are the truth</p>
+                 <p><highlight>GMA</highlight> performs the best, and recovers the temporal correlations</p>
+            </section>
+
+
+
+
+            <section>
+                <h2>Real Data Experiment</h2>
+                <ul>
+                    <li>Public data: OpenFMRI ds30</li>
+                    <li>Stop-go experiment: withhold (STOP) from pressing buttons</li>
+                    <li>Expect "STOP" stimuli to deactivate brain region M1</li>
+                    <li>Goal: quantify the role of region preSMA</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Results</h2>
+                <img src="Media/Mediation/GrangerMedRealdataEst.png" alt="" width="100%">
+<ul>
+    <li>STOP deactivates M1 directly and indirectly</li>
+    <li>preSMA mediates a good portion of the total effect
+    <ul>
+        <li>Help resolve the debates among neuroscientists</li>
+    </ul>
+    </li>
+    <li>Other methods under-estiamte  the effects</li>
+    <li>GMA also detects feedback effects in temporal correlations (not shown)</li>
+</ul>
+            </section>
+
+
+            <section>
+                <h2>Discussion</h2>
+                <ul>
+                    <li>Mediation analysis for multiple time series</li>
+                    <li>Method: Granger causality + mediation</li>
+                    <li>Theory: identifiability, consistency</li>
+                    <li>Result: reduced bias and improve accuracy</li>
+                    <li>Extension: functional mediation (Yi Zhao's talk)</li>
+                    <li>CRAN pkgs: <highlight>gma</highlight> and references within</li>
+                </ul>
+            </section>
+
+
+
+            <section data-background="Media/Scene/qingdao.jpg" data-state="opaqueBackImg">
+                <h1>Thank you!</h1>
+                <br>
+                <h2>Comments? Questions?</h2>
+                <br>
+                <br><br>
+
+<!--              <h2>Slides at:-->
+                    <!--
+                    <emph>bit.ly/XLICSA16</emph>
+                </h2>
+                <img src="./Media/QR/XLICSA16.png" alt="" width="30%">
+                <h2>
+                    OR:
+-->
+                     <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
+                    <br>
+                    <br> or
+                     <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span>
+
+
+
+<!--                </h2>-->
+
+            </section>
+
+        </div>
+    </div>
+
+    <script src="./reveal.js.3.5/lib/js/head.min.js"></script>
+    <script src="./reveal.js.3.5/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js.3.5#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                //mathjax: './MathJax/MathJax.js',
+                mathjax: 'bower_components/MathJax/MathJax.js',
+                //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+
+            //anything to load other libraries
+            anything: [{
+                className: "coverflow",
+                initialize: (function(container, options) {
+                    if (typeof container.coverflow === 'function') {
+                        container.coverflow()
+                    }
+                })
+            }],
+
+            // Optional reveal.js.3.5 plugins
+            dependencies: [{
+                src: './reveal.js.3.5/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/math/math.js',
+                async: true
+            }, {
+                src: 'JSLibrary/jquery-3.2.1.js'
+            }, {
+                src: 'JSLibrary/coverflowjs/coverflow.min.js'
+            }, {
+                src: './reveal.js.3.5/plugin/anything/anything.js'
+            }, {
+                src: 'bower_components/reveal.js-menu/menu.js'
+            }]
+        });
+        //{
+        //                src: './reveal.js.3.5/plugin/anything/anything.js'
+        //            },
+        //        ,  {
+        //                src: 'bower_components/reveal.js-menu/menu.js'
+        //            }
+
+    </script>
+
+    <!-- Coverflow event listeners -->
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <script>
+        Reveal.addEventListener('fragmentshown', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('next');
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('prev');
+        });
+        Reveal.addEventListener('slidechanged', function(event) {
+            jQuery(event.currentSlide).find('.coverflow').coverflow();
+            jQuery(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            jQuery(event.currentSlide).find('.coverflow').find('.fragment')
+                .removeClass('visible').removeClass('currentSlide');
+        });
+        // $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()  });
+        //        setTimeout(function() {
+        //            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()
+        //        }, 15000);
+        //        Reveal.addEventListener('ready', function(event) {
+        //           let elements =  document.getElementsByClassName('coverflow')
+        //           for (let j=0; j<elements.length; j++) {
+        //               elements[j].coverflow();
+        //           }
+        //        });
+
+    </script>
+
+
+</body>
+
+</html>
