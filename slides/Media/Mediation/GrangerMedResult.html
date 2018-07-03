@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+
+    <div id="myDiv" style="width: 720px; height: 540px;">
+        <!-- Plotly chart will be drawn inside this DIV -->
+    </div>
+    <script>
+        var gmah = {
+            x: ['delta', 'C', 'AB'],
+            y: [-0.370, -1.729, -0.623],
+            name: 'GMA-h',
+            error_y: {
+                type: 'data',
+                array: [0.16, 0.716, 0.616],
+                visible: true
+            },
+            type: 'bar'
+        };
+        var gmats = {
+            x: ['delta', 'C', 'AB'],
+            y: [-0.343, -1.722, -0.604],
+            name: 'GMA-ts',
+            error_y: {
+                type: 'data',
+                array: [0.158, 0.739, 0.63],
+                visible: true
+            },
+            type: 'bar'
+        };
+        var macc = {
+            x: ['delta', 'C', 'AB'],
+            y: [-0.762,  -2.310, -0.391],
+            name: 'MACC-h',
+            error_y: {
+                type: 'data',
+                array: [0.037, 0.648, 0.88],
+                visible: true
+            },
+            type: 'bar'
+        };
+        var kkb = {
+            x: ['delta', 'C', 'AB'],
+            y: [ 0,  -2.513, -0.140],
+            name: 'KKB',
+            error_y: {
+                type: 'data',
+                array: [0, 0.409, 0.327],
+                visible: true
+            },
+            type: 'bar'
+        };
+        var bk = {
+            x: ['delta', 'C', 'AB'],
+            y: [ 0,  -2.583, -0.146],
+            name: 'BK',
+            error_y: {
+                type: 'data',
+                array: [0, 0.44, 0.321],
+                visible: true
+            },
+            type: 'bar'
+        };
+        var data = [gmah, gmats, macc, kkb, bk];
+        var layout = {
+            barmode: 'group'
+        };
+        Plotly.newPlot('myDiv', data, layout);
+    </script>
+</body>
