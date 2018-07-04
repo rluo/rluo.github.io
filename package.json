@@ -5,12 +5,13 @@
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+    "run": "gulp screenshot"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leb2/rluo.github.io.git"
   },
-  "author": "",
+  "author": "Brendan Le, Xi Luo",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/leb2/rluo.github.io/issues"
