@@ -1,6 +1,6 @@
 ---
 layout: talks
-title: ICSA Canada
+title: ICSA China
 author: Xi Luo
 previewimage: NetfMRIcord_ICSACanada_2017.html#/16
 externallink: NetfMRIcord_ICSACanada_2017.html
