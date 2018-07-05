@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Pathway Lasso</title>
+    <meta name="description" content="Analytics for Big and Complex Data Group">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./reveal.js.3.5/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js.3.5/lib/css/zenburn.css">
+
+    <!--
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+-->
+    <!--    Cover Flow   -->
+    <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
+
+    <script src="JSLibrary/jquery-3.2.1.js"></script>
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <!-- Coverflow styles -->
+    <style>
+        .ui-coverflow {
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 5px;
+        }
+
+        .ui-coverflow>img,
+        .ui-coverflow>figure {
+            height: 440px !important;
+            width: auto;
+            min-width: 440px !important;
+        }
+
+    </style>
+
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js.3.5/css/print/pdf.css' : './reveal.js.3.5/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+
+    <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+</head>
+
+<body>
+    <div class="reveal">
+<!--      place holder for credits -->
+       <credit></credit>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \(\def\loading{......LOADING......Please Wait} \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \DeclareMathOperator{\Ex}{\mathbb{E}} \DeclareMathOperator{\diag}{diag}  \newcommand{\bm}[1]{\boldsymbol{#1}} \def\wait{......LOADING......Please Wait}\)
+
+
+                <section>
+                <h2><strong><highlight>Pathway Lasso</highlight>: Estimate and Select Multiple Mediation Pathways</strong></h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width:43%; vertical-align: middle;">
+                        <medium><strong>Brown University</strong>
+                            <br> Department of Biostatistics
+                            <br> Center for Statistical Sciences
+                            <br> Computation in Brain and Mind
+                            <br> Brown Institute for Brain Science
+                            <br> Brown Data Science Initiative
+                            <br> ABCD Research Group</medium>
+                    </p> <img class="noborder inlinemiddle" style="display: inline-block;
+                          vertical-align: middle;" src="Media/ABCDgroup/abcdLogo2_BannerBigComplexDataCom.png" height="210px">
+                </div>
+                <br>
+                <p>
+                    <medium><strong>IBC, Barcelona Spain</strong>
+                        <br>July 10, 2018</medium>
+                </p>
+                <p>
+                    <small> Funding: NIH R01EB022911, P20GM103645, P01AA019072, P30AI042853; NSF/DMS (BD2K) 1557467</small>
+                </p>
+            </section>
+
+
+
+            <section>
+                <h2>Co-Author</h2>
+
+                <div class="fbox"> <img src="./Media/Personnel/YiZhao12.jpg" alt="Yi Zhao" width="350" height="350">
+                    <p class="fbox"> Yi Zhao
+                        <br>
+                        <small>Currently postdoc at Johns Hopkins Biostat</small>
+                    </p>
+                </div>
+            </section>
+
+            <!--            <div class="source">NSF</div>-->
+
+
+            <section data-state="fMRI">
+                <h2>Motivating Example: Task fMRI</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <!--                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">-->
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Task fMRI: performs tasks under brain scanning</li>
+                        <li>Story vs Math task:
+                            <emph>listen</emph> to story (treatment stimulus) or math questions (control), eye closed</li>
+                        <li>Not resting-state: "rest" in scanner</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Goal: how brain processes story/math differently?
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section data-background-iframe="Media/fMRI/ThreeJSBrainMaskColor.html">
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
+                <!--                <h2>fMRI Data</h2>-->
+                <!--                <iframe id="brainCube" src="Media/fMRI/ThreeJSBrainMaskColor.html" frameborder="0" width="800" height="600" name="brainCube"></iframe>-->
+                <p style="margin-bottom: 650px;"></p>
+                <p><strong>fMRI data</strong>: blood-oxygen-level dependent (BOLD) signals from each
+                    <highlight>cube</highlight>/voxel (~millimeters),
+                    <emph>$10^5$ ~ $10^6$</emph> voxels in total. </p>
+                <aside class="notes">
+                    <ul>
+                        <li>Lego brain of real brain</li>
+                        <li>red cube is a voxel</li>
+                        <li>track activity from each cube at each time vector</li>
+                        <li>dimension: address temporal separately</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+
+            <section>
+                <h2>Conceptual Model with Stimulus</h2>
+                <img src="Media/Mediation/MediationModelStoryMath.png" alt="" class="noborder" width=80%>
+                <p><strong>Sci Goal</strong>: quantify
+                    <highlight>red</highlight>,
+                    <emph>blue</emph>, and <strong>other</strong> pathways
+                    <br> from <span class="mypink"><strong>stimulus</strong></span> to <span class="myorange"><strong>orange outcome</strong></span> region activity<cite>Heim et al, 09</cite></p>
+            </section>
+
+<!--
+            <section>
+                <h2>Pathway=Activation+Connectivity</h2>
+                <ul>
+                    <li><strong>Activation</strong>: stimulus $\rightarrow$ brain region activity</li>
+                    <li><strong>Connectivity</strong>: one brain region $\rightarrow$ another region
+                        <ul>
+                            <li>Whether not two or more brain regions "correlate"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Pathway</strong>: stimulus $\rightarrow$ brain region A $\rightarrow$ region B
+                    </li>
+                    <li>Strong path: strong activation
+                        <highlight>and</highlight> strong conn</li>
+                    <li>Zero path: zero activation
+                        <highlight>or</highlight> zero conn, including
+                        <ul>
+                            <li>Zero activation + strong conn = zero</li>
+                            <li>Strong activation + zero conn = zero</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Stefano and colleagues next talk</li>
+                    </ul>
+                </aside>
+            </section>
+-->
+
+
+
+
+            <section>
+                <h1>Model</h1>
+            </section>
+
+            <section>
+                <h2>Mediation Analysis and SEM</h2>
+                <img src="Media/Mediation/SimpleMediationDiag.png" alt="" class="noborder"> $$\begin{align*}M = Z a + {  \epsilon_1}, \qquad R = Z c + M b + {  \epsilon_2}\end{align*}$$
+                <ul>
+                    <li><span class="myblue">Indirect</span> effect: $a \times b$; <span class="myorange">direct</span>: $c$</li>
+                    <li>Mediation analysis
+                        <ul>
+                            <li><cite>Baron&Kenny, 86; Sobel, 82; Holland 88; Preacher&Hayes 08; Imai et al, 10; VanderWeele, 15;...</cite></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Multiple (Full) Pathway Model <cite>Daniel et al, 14</cite></h2>
+                <img src="Media/Mediation/FullModel.png" alt="" class="noborder" width="60%">
+                <ul>
+                    <li>Stimulus $Z$, $K$ mediating brain regions $M_1, \dotsc, M_K$, Outcome region $R$</li>
+                    <li>Strength of activation ($a_k$) and connectivity ($b_k$, $d_{ij}$)</li>
+                    <li>Potential outcomes too complex, e.g. $K = 2$ <cite>Daniel et al, 14</cite>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Practical Considerations</h2>
+                <ul>
+                    <li>The previous model requires specifying  the order of mediators, which is usually unknown in many experiments
+                    <ul>
+                        <li>We don't know yet  the order of brain regions</li>
+                        <li>fMRI: not enough temporal resolution to determine the order</li>
+                    </ul>
+                    </li>
+                    <li>Theoretically and computationally challenging for a large number of mediators
+                    <ul>
+                        <li>High dimensional (large $p$, small $n$) setting: $K>n$</li>
+                    </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Mediation Analysis in fMRI</h2>
+                <ul>
+                    <li>Parametric <cite>Wager et al, 09</cite> and functional <cite>Lindquist, 12</cite> mediation, under (approx.) independent errors
+                        <ul>
+                            <li>Stimulus $\rightarrow$ brain $\rightarrow$ user reported ratings, one mediator</li>
+                            <li>Usual assumption: $U=0$ and $\epsilon_1 \bot \epsilon_2$</li>
+                        </ul>
+                    </li>
+                    <li>Parametric and multilevel mediation <cite>Yi and Luo, 15</cite>, with correlated errors for two brain regions
+                        <ul>
+                            <li>Stimulus $\rightarrow$ brain region A $\rightarrow$ brain region B, one mediator</li>
+                            <li>Correlations between $\epsilon_1$ and $\epsilon_2$</li>
+                        </ul>
+                    </li>
+                    <li>This talk: multiple mediator and multiple pathways
+                        <ul>
+                            <li>High dimensional: more mediators than sample size </li>
+                            <li>Alt: dimension reduction by arXiv1511.09354 <cite>Chen, Crainiceanu, Ogburn, Caffo, Wager, Lindquist, 15</cite></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Our Reduced Pathway Model</h2>
+                <img src="Media/Mediation/ReducedModel.png" alt="" class="noborder" width="60%"> $$\scriptsize \begin{align}M_k & = Z A_k + E_{1k},\, k=1,\dotsc, K\\ \scriptsize R & = Z C + \sum_{k=1}^{K} M_k B_k + E_2 \end{align}$$
+                <ul>
+                    <li>$A_k$: "total" effect of $Z$&rarr;$M_k$; $B_k$: "total" $M_k$&rarr;R
+                    </li>
+                    <li>Pathway effect: $A_k \times B_k$; Direct: $C$</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>regression model</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <h2>Relation to Full Model</h2>
+                <ul>
+                    <li><strong>Proposition</strong>: Our "total" parameters has explicit forms of "individual" flow parameters in the full model
+                    <ul><li>$C$ and $B_k$, $k=1,\dotsc, K$, are the same in both models</li>
+                    <li>$A_k$ in two models are linearly related</li>
+                    <li>$A_k \times B_k$ interpreted as the "total" effect when $M_k$ is the last  mediator <cite>Imai &amp; Yamamoto, 13</cite> </li>
+                    </ul>
+                    </li>
+                    <li><strong>Proposition</strong>: Our $E_k$'s are correlated, but won't affect point estimation consistency (affect variance)
+                    <ul>
+                        <li>The price of ignoring the order</li>
+                    </ul>
+                    </li>
+                    <li>Reduced model: a <emph>first</emph> step to select strong mediators
+                        <ul>
+                            <li>Strong overall inflow/outflow of a mediator</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Causal Assumptions</h2>
+                <ul>
+                    <li>We impose standard causal mediation assumptions:
+                    <ul>
+                        <li>SUTVA</li>
+                        <li>Model correctly specified</li>
+                        <li>Observed is one reliazation of the potential outcome</li>
+                        <li>Randomized $Z$</li>
+                        <li>No unmeasured confounding</li>
+                    </ul></li>
+                    <li>Similar assumptions discussed in <cite>Imai &amp; Yamamoto, 13; Daniel et al, 14; VanderWeele, 15</cite></li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Method</h1>
+            </section>
+
+            <section>
+                <h2>Regularized Regression</h2>
+                <ul>
+                    <li>Minimize the penalized least squares criterion
+                        <center>
+                            <medium>
+                                $$\scriptsize \sum_{k=1}^K \| M_k - Z A_k \|_2^2 + \| R - Z C - \sum_k M_k B_k \|_2^2 + \mbox{Pen}(A, B)$$
+                            </medium>
+                        </center>
+                        The choice of penalty $\mbox{Pen}(\cdot)$ to be discussed
+                        <ul>
+                            <li>All data are normalized (mean=0, sd=1)</li>
+                        </ul>
+                    </li>
+                    <li>Want to select sparse
+                        <emph>pathways</emph> for high-dim $K$</li>
+                    <li>Alternative approach: two-stage LASSO <cite>Tibshirani, 96</cite> to select sparse
+                        <emph>$A_k$</emph> and
+                        <emph>$B_k$</emph> separately: $$ \scriptsize \sum_{k=1}^K \| M_k - Z A_k \|_2^2 + \lambda \sum_k | A_k | \\ \scriptsize \| R - Z C - \sum_k M_k B_k \|_2^2 + \lambda \sum_k |B_k| $$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Penalty: Pathway LASSO</h2>
+                <ul>
+                    <li>Select strong pathways effects: $A_k \times B_k$
+                        <ul>
+                            <li>TS-LASSO: shrink to zero when $A$&$B$ moderate but $A\times B$ large</li>
+                        </ul>
+                    </li>
+                    <li>Penalty (prototype) $$ \scriptsize \lambda \sum_{k=1}^K |A_k B_k| $$
+                        <ul>
+                            <li>Non-convex in $A_k$ and $B_k$</li>
+                            <li>Computationally heavy and non-unique solutions</li>
+                            <li>Hard to prove theory</li>
+                        </ul>
+                    </li>
+                    <li>We propose the following general class of penalties$$ \scriptsize  \lambda \sum_{k=1}^K ( |A_k B_k| + \phi A_k^2 + \phi B_k^2) $$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <div class="thm">
+                    <strong>Theorem</strong> $$v(a,b) = |a b| + \phi (a^2 + b^2)$$ is convex
+                    <highlight>if and only if</highlight> $\phi\ge 1/2$. Strictly convex if $\phi > 1/2$.
+                </div>
+                <br>
+                <p><strong>Contour Plot of Different Penalties</strong></p>
+                <img src="Media/Mediation/PathLassoContour.png" alt="" class="twocol inlinemiddle" style="width: 35%;">
+                <div class="twocol inlinemiddle" style="width: 60%;">
+                    <ul>
+                        <li>
+                            <emph>Non-differentiable</emph> at points when $a\times b = 0$</li>
+                        <li>Shrink $a\times b$ to zero</li>
+                        <li>Special cases: $\ell_1$ or $\ell_2$</li>
+                        <li>TS-LASSO: different $|ab|$ effects though $|a|+|b|$ same</li>
+                    </ul>
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Algorithm: ADMM + AL</h2>
+                <ul>
+                    <li>SEM/regression loss: $u$; Non-differnetiable penalty: $v$ </li>
+                    <li>ADMM to address differentiability $$ \begin{aligned} \text{minimize} \quad & u(\Theta,D)+v(\alpha,\beta) \\ \text{subject to} \quad & \Theta=\alpha, \\ & D=\beta, \\ & \Theta e_{1}=1, \end{aligned}$$
+                    </li>
+                    <li>Augmented Lagrangian for multiple constraints</li>
+                    <li>Iteratively update the parameters</li>
+                    <li>We derive theorem on explicit (not simple) updates</li>
+                </ul>
+            </section>
+
+
+           <section>
+               <h2>Asymptotic Theory</h2>
+                <div class="thm"><strong>Theorem:</strong> Under regularity conditions, <br>
+                $$ \Ex (Z \sum_k \hat{A}_k\hat{B}_k  - Z  \sum_k {A}^*_k {B}^*_k )^2 \le O(s  \kappa     \sigma  n ^{-1/2} (\log K)^{1/2}), $$
+                where $s = \#\{j: B_j^* \ne 0\}$ and $\kappa =\max_j |B_j| $.
+                With high probability,<br>
+                $$ \| \hat{A} \hat{B} - A^* B^* \| \le   O(s  \kappa     \sigma  n ^{-1/2} (\log K)^{1/2})$$
+                </div>
+           </section>
+
+            <section>
+                <h2>Complications</h2>
+                <ul>
+                    <li><strong>Mixed norm</strong> penalty $$\mbox{PathLasso} + \omega \sum_k (|A_k| + |B_k|)$$
+                    </li>
+                    <li><strong>Tuning parameter</strong> selection by cross validation
+                        <ul>
+                            <li>Reduce false positives via thresholding <cite>Johnston and Lu, 09</cite></li>
+                        </ul>
+                    </li>
+                    <li><strong>Inference/CI</strong>: bootstrap after refitting
+                        <ul>
+                            <li>Remove false positives with CIs covering zero <cite>Bunea et al, 10</cite></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Simulations</h1>
+            </section>
+
+            <section>
+                <h2>Simulations</h2>
+                <ul>
+                    <li>Our PathLasso compares with TSLasso</li>
+                    <li>Simulate with varying error correlations</li>
+                    <li>Tuning-free comparison: performance vs tuning parameter (estimated effect size)
+                        <ul>
+                            <li>PathLasso outperforms under CV</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Pathway Recovery</h2>
+                <br>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/Mediation/PathSimuRoc.png" alt="">
+                    <p>ROC</p>
+                </div>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/Mediation/PathSimuF1.png" alt="">
+                    <p>F1 Score</p>
+                </div>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/Mediation/PathSimuMSE.png" alt="">
+                    <p>MSE</p>
+                </div>
+                <br>
+                <p>Our PathLasso (<span class="myred">red</span>) outperforms two-stage Lasso (<span class="myblue">blue</span>)</p>
+                <p><cite>Other curves: variants of PathLasso and correlation settings</cite></p>
+            </section>
+
+            <section>
+                <h1>Real Data: HCP</h1>
+            </section>
+
+            <section>
+                <h2>Data: Human Connectome Project</h2>
+                <ul>
+                    <li>Two sessions (LR/RL), story/math task <cite>Binder et al, 11</cite></li>
+                    <li>gICA reduces voxel dimensions to 76 brain maps
+                        <ul>
+                            <li>ROIs/clusters after thresholding</li>
+                        </ul>
+                    </li>
+                    <li>Apply to two sess separately, compare replicability
+                        <ul>
+                            <li>Jaccard: whether selected pathways in two runs overlap</li>
+                            <li>$\ell_2$ diff: difference between estimated path effects</li>
+                        </ul>
+                    </li>
+                    <li>Tuning-free comparisons</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <div class="twocol inlinemiddle">
+                    <img src="Media/Mediation/HCPMathStoryJaccard.png" alt="">
+                    <p>Jaccard</p>
+                </div>
+                <div class="twocol inlinemiddle">
+                    <img src="Media/Mediation/HCPMathStoryL2.png" alt="">
+                    <p>$\ell_2$ Diff</p>
+                </div>
+                <br>
+                <p>Regardless of tuning, our PathLasso (<span class="myred">red</span>) has smaller replication diff (selection and estimation) than TSLasso (<span class="myblue">blue</span>)</p>
+            </section>
+
+            <section>
+                <img src="Media/Mediation/HCPTwoMedMap.png" alt="" class="topright">
+                <img src="Media/Mediation/HCPmediationNodes2Anotated2.png" alt="" width="70%">
+                <p>Stim-M25-R and Stim-M65-R significant <cite>shown largest weight areas</cite></p>
+                <medium>
+                    <ul>
+                        <li>M65 responsible for language processing, larger flow under story</li>
+                        <li>M25 responsible for uncertainty, larger flow under math</li>
+                    </ul>
+                </medium>
+            </section>
+
+
+            <section>
+                <h2>Summary</h2>
+                <ul>
+                    <li>High dimensional pathway model </li>
+                    <li>Penalized SEM for pathway selection and estimation </li>
+                    <li>Convex optimization for non-convex products
+                        <ul>
+                            <li>Sufficient and necessary condition</li>
+                            <li>Algorithmic development for complex optimization</li>
+                        </ul>
+                    </li>
+                    <li>Improved estimation and selection accuracy</li>
+                    <li>Higher replicability using HCP data</li>
+                    <li>Manuscript:
+                        <emph>Pathway Lasso</emph> (arXiv <a href="http://arxiv.org/abs/1603.07749">1603.07749</a>)</li>
+                </ul>
+            </section>
+
+
+            <section>
+<!--               data-background="Media/Scene/qingdao.jpg" data-state="opaqueBackImg"-->
+                <h1>Thank you!</h1>
+                <br>
+                <h2>Comments? Questions?</h2>
+                <br>
+                <br><br>
+
+<!--              <h2>Slides at:-->
+                    <!--
+                    <emph>bit.ly/XLICSA16</emph>
+                </h2>
+                <img src="./Media/QR/XLICSA16.png" alt="" width="30%">
+                <h2>
+                    OR:
+-->
+                     <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
+                    <br>
+                    <br> or
+                     <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span>
+
+
+
+<!--                </h2>-->
+
+            </section>
+
+        </div>
+    </div>
+
+    <script src="./reveal.js.3.5/lib/js/head.min.js"></script>
+    <script src="./reveal.js.3.5/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js.3.5#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                //mathjax: './MathJax/MathJax.js',
+                mathjax: 'bower_components/MathJax/MathJax.js',
+                //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+
+            //anything to load other libraries
+            anything: [{
+                className: "coverflow",
+                initialize: (function(container, options) {
+                    if (typeof container.coverflow === 'function') {
+                        container.coverflow()
+                    }
+                })
+            }],
+
+            // Optional reveal.js.3.5 plugins
+            dependencies: [{
+                src: './reveal.js.3.5/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/math/math.js',
+                async: true
+            }, {
+                src: 'JSLibrary/jquery-3.2.1.js'
+            }, {
+                src: 'JSLibrary/coverflowjs/coverflow.min.js'
+            }, {
+                src: './reveal.js.3.5/plugin/anything/anything.js'
+            }, {
+                src: 'bower_components/reveal.js-menu/menu.js'
+            }]
+        });
+        //{
+        //                src: './reveal.js.3.5/plugin/anything/anything.js'
+        //            },
+        //        ,  {
+        //                src: 'bower_components/reveal.js-menu/menu.js'
+        //            }
+
+    </script>
+
+    <!-- Coverflow event listeners -->
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <script>
+        Reveal.addEventListener('fragmentshown', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('next');
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('prev');
+        });
+        Reveal.addEventListener('slidechanged', function(event) {
+            jQuery(event.currentSlide).find('.coverflow').coverflow();
+            jQuery(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            jQuery(event.currentSlide).find('.coverflow').find('.fragment')
+                .removeClass('visible').removeClass('currentSlide');
+        });
+        // $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()  });
+        //        setTimeout(function() {
+        //            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()
+        //        }, 15000);
+        //        Reveal.addEventListener('ready', function(event) {
+        //           let elements =  document.getElementsByClassName('coverflow')
+        //           for (let j=0; j<elements.length; j++) {
+        //               elements[j].coverflow();
+        //           }
+        //        });
+
+    </script>
+
+
+</body>
+
+</html>
