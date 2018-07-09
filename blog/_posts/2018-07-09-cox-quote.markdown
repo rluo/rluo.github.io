@@ -1,0 +1,13 @@
+---
+
+layout: news
+title: Quotes by Gertrude M Cox 
+author: Xi Luo
+link: https://books.google.com/books?id=PSbUBwAAQBAJ&pg=PR25&lpg=PR25&dq=gertrude+m+cox+with+our+scientific+backgrounds+we+should+spend+most+of+time&source=bl&ots=P_ci58g8dW&sig=ngkexBGpwyQPixMQBxpAdf8Zjxs&hl=en&sa=X&ved=0ahUKEwjpgLLw45LcAhWmg1QKHWj5ArwQ6AEITDAK#v=onepage&q=conservative&f=false
+previewimage: 900x300
+
+---
+
+"I going to ask you to look forward as we try to discern, as best we can, what the future holds for statisticians. If ten years ago we had predicted some of the things we are doing today, we would have been ridiculed. Now, my concern is that we may become too conservative in our thinking."  
+
+"It is one of the challenges of the statistical universe that, as new regions are discovered and developed, the horizon moves further away. We cannot visit all the frontiers for they are too numerous. I believe that we should try to visualize the challenges of the future by looking at typical types of unsolved problems. I hope you will find the trip so interesting that you will revisit some of these statistical frontiers not as tourists but as explorer."
