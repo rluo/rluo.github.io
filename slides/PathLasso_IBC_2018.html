@@ -297,7 +297,7 @@
                 <h2>Our Reduced Pathway Model</h2>
                 <img src="Media/Mediation/ReducedModel.png" alt="" class="noborder" width="60%"> $$\scriptsize \begin{align}M_k & = Z A_k + E_{1k},\, k=1,\dotsc, K\\ \scriptsize R & = Z C + \sum_{k=1}^{K} M_k B_k + E_2 \end{align}$$
                 <ul>
-                    <li>$A_k$: "total" effect of $Z$&rarr;$M_k$; $B_k$: "total" $M_k$&rarr;R
+                    <li>$A_k$: "total" effect of $Z$&rarr;$M_k$; $B_k$: $M_k$&rarr;R
                     </li>
                     <li>Pathway effect: $A_k \times B_k$; Direct: $C$</li>
                 </ul>
@@ -308,21 +308,36 @@
                 </aside>
             </section>
 
-            <section>
-                <h2>Relation to Full Model</h2>
-                <ul>
-                    <li><strong>Proposition</strong>: Our "total" parameters has explicit forms of "individual" flow parameters in the full model
-                    <ul><li>$C$ and $B_k$, $k=1,\dotsc, K$, are the same in both models</li>
-                    <li>$A_k$ in two models are linearly related</li>
+
+<section>
+    <h2>Two Models</h2>
+    <div class="twocol inlinemiddle">
+             <img src="Media/Mediation/FullModel.png" alt="" class="noborder" width="100%">
+             <p>Full Model</p>
+    </div>
+        <div class="twocol inlinemiddle">
+             <img src="Media/Mediation/ReducedModel.png" alt="" class="noborder" width="100%">
+             <p>Reduced Model</p>
+    </div>
+    <ul>   <li><strong>Proposition</strong>: Our "total-effect" parameters are linearly related or equivalent to the "individual-effect" parameters in the full model
+                    <ul><li>$C=c$ and $B_k=b_k$, $k=1,\dotsc, K$, are the same in both models</li>
+                    <li>$A_k$ and $a_k$ in two models are linearly related</li>
                     <li>$A_k \times B_k$ interpreted as the "total" effect when $M_k$ is the last  mediator <cite>Imai &amp; Yamamoto, 13</cite> </li>
                     </ul>
-                    </li>
+                    </li></ul>
+</section>
+
+
+            <section>
+                <h2>Additional Relation to Full Model</h2>
+                <ul>
                     <li><strong>Proposition</strong>: Our $E_k$'s are correlated, but won't affect point estimation consistency (affect variance)
                     <ul>
                         <li>The price of ignoring the order</li>
                     </ul>
                     </li>
-                    <li>Reduced model: a <emph>first</emph> step to select strong mediators
+                    <li>Related to causally independent mediators if assuming indepdent $E_k$</li>
+                    <li>Reduced model: a <emph>first</emph> step to select   mediators
                         <ul>
                             <li>Strong overall inflow/outflow of a mediator</li>
                         </ul>
@@ -339,7 +354,7 @@
                         <li>Model correctly specified</li>
                         <li>Observed is one reliazation of the potential outcomes</li>
                         <li>Randomized $Z$</li>
-                        <li>No unmeasured confounding</li>
+                        <li>No unmeasured confounding/sequential ignorability</li>
                     </ul></li>
                     <li>Similar assumptions discussed in <cite>Imai &amp; Yamamoto, 13; Daniel et al, 14; VanderWeele, 15</cite></li>
                     <li>Could be too strong or sensitivity analysis <cite>Imai &amp; Yamamoto, 13</cite></li>
@@ -411,6 +426,28 @@
                     </ul>
                 </div>
             </section>
+
+
+<section>
+    <div class="threecol inlinemiddle">
+        <img src="Media/Mediation/productLasso.png" alt="">
+        <p>$|ab|$</p>
+        <p>Non-convex</p>
+    </div>
+        <div class="threecol inlinemiddle">
+        <img src="Media/Mediation/pathLasso.png" alt="">
+        <p>$|ab|+\phi (a^2 + b^2)$</p>
+        <p>Pathway Lasso</p>
+    </div>
+        <div class="threecol inlinemiddle">
+        <img src="Media/Mediation/tsLasso.png" alt="">
+        <p>$|a| + |b|$</p>
+        <p>Two-stage Lasso</p>
+    </div>
+    <br>
+    <p>Pathway Lasso is a family of (convex) penalties for products</p>
+</section>
+
 
 
             <section>
@@ -552,16 +589,19 @@
                             <li>Algorithmic development for complex optimization</li>
                         </ul>
                     </li>
-                    <li>Improved estimation and selection accuracy</li>
-                    <li>Higher replicability using HCP data</li>
+                    <li>Improved estimation and selection accuracy
+                    <ul>
+                        <li>Higher replicability using HCP data</li>
+                    </ul></li>
                     <li>Manuscript:
                         <emph>Pathway Lasso</emph> (arXiv <a href="http://arxiv.org/abs/1603.07749">1603.07749</a>)</li>
+                    <li>Limitations: causal assumptions, covaraites, interactions, error correlations <cite>Rpkg: <highlight>macc</highlight></cite>, time series <cite><highlight>gma</highlight></cite>, functional <cite><highlight>cfma</highlight></cite></li>
                 </ul>
             </section>
 
 
-            <section>
-<!--               data-background="Media/Scene/qingdao.jpg" data-state="opaqueBackImg"-->
+            <section data-background="Media/Scene/barcelona.jpg" data-state="opaqueBackImg">
+<!--               data-background="Media/Scene/barcelona.jpg" data-state="opaqueBackImg"-->
                 <h1>Thank you!</h1>
                 <br>
                 <h2>Comments? Questions?</h2>
