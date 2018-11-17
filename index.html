@@ -79,11 +79,10 @@ script: |
     {% assign news_post = site.categories.talks[i] %}
 
     <div class="col-md-4 col-sm-6">
-        <a href="{{  portfolioitem.externallink }}">
-            <img class="img-responsive img-portfolio img-hover" src="{{ news_post.previewimage }}" alt="{{ news_post.excerpt }}">
+        <a href="{{  news_post.externallink }}" target="_blank">
+            <img class="img-responsive img-portfolio img-hover" src="/img/talkScreenshots/{{post.externallink}}.png" alt="{{ news_post.excerpt }}">
         </a>
     </div>
-
     {% endfor %}
 </div>
 <!-- /.row -->
