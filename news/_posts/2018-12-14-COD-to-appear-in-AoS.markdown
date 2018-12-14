@@ -8,4 +8,4 @@ externallink:  https://bigcomplexdata.com
 
 ---
 
-Our paper on variable clustering to appear in The Annals of Statistics. Here are the [preprnt](https://arxiv.org/abs/1508.01939) and [software](https://cran.r-project.org/package=cord).
+Our paper on variable clustering to appear in The Annals of Statistics. Here are the [preprint](https://arxiv.org/abs/1508.01939) and [software](https://cran.r-project.org/package=cord).
