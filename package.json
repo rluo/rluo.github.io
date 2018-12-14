@@ -4,7 +4,7 @@
   "description": "Website for Analytics for Big and Complex Data Group. Copyright 2016-2017 Xi Luo.",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
     "run": "gulp screenshot"
   },
   "repository": {
@@ -29,5 +29,8 @@
     "through2": "^2.0.3",
     "transform": "^1.1.2",
     "url-to-screenshot": "^0.6.2"
+  },
+  "dependencies": {
+    "phantomjs": "^2.1.7"
   }
 }
