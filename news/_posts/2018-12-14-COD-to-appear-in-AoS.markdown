@@ -2,7 +2,7 @@
 layout: news
 title: COD Paper to Appear in AoS
 author: Xi Luo
-previewimage:  cordERperformance.png
+previewimage:  cordERperformanceCut.png
 tags: news
 externallink:  https://bigcomplexdata.com
 
