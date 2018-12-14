@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Causal Dynamic Networks</title>
+    <meta name="description" content="Analytics for Big and Complex Data Group">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./reveal.js.3.5/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js.3.5/lib/css/zenburn.css">
+
+    <!--
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+-->
+    <!--    Cover Flow   -->
+    <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
+
+    <script src="JSLibrary/jquery-3.2.1.js"></script>
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <!-- Coverflow styles -->
+    <style>
+        .ui-coverflow {
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 5px;
+        }
+
+        .ui-coverflow>img,
+        .ui-coverflow>figure {
+            height: 440px !important;
+            width: auto;
+            min-width: 440px !important;
+        }
+
+    </style>
+
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js.3.5/css/print/pdf.css' : './reveal.js.3.5/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+
+    <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+</head>
+
+<body>
+    <div class="reveal">
+<!--      place holder for credits -->
+       <credit></credit>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \(\def\loading{......LOADING......Please Wait} \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \DeclareMathOperator{\Ex}{\mathbb{E}} \DeclareMathOperator{\diag}{diag}  \newcommand{\bm}[1]{\boldsymbol{#1}} \def\wait{......LOADING......Please Wait}\)
+
+
+                <section>
+                <h2><strong><highlight>Causal Dynamic Networks</highlight>: ODE Network Modeling of fMRI</strong></h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width:43%; vertical-align: middle;">
+                        <medium><strong>Brown University</strong>
+                            <br> Department of Biostatistics
+                            <br> Center for Statistical Sciences
+                            <br> Computation in Brain and Mind
+                            <br> Brown Institute for Brain Science
+                            <br> Brown Data Science Initiative
+                            <br> ABCD Research Group</medium>
+                    </p> <img class="noborder inlinemiddle" style="display: inline-block;
+                          vertical-align: middle;" src="Media/ABCDgroup/abcdLogo2_BannerBigComplexDataCom.png" height="210px">
+                </div>
+                <br>
+                <p>
+                    <medium><strong>CMStatistics, Pisa Italy</strong>
+                        <br>December 16, 2018</medium>
+                </p>
+                <p>
+                    <small> Funding: NIH R01EB022911, P20GM103645, P01AA019072, P30AI042853; NSF/DMS (BD2K) 1557467</small>
+                </p>
+            </section>
+
+
+
+            <section>
+                <h2>Co-Authors</h2>
+
+                 <div class="fbox"> <img src="./Media/Personnel/XuefeiCao.jpg" alt="Xuefei Cao" width="350" height="350">
+                    <p class="fbox">Xuefei  Cao
+                        <br>
+                        <small>Brown University</small></p>
+                </div>
+                <span style="display:inline-block; width: 50px;"></span>
+                <div class="fbox"> <img src="./Media/Personnel/sandstede.jpg" alt="B Sandstede" width="350" height="350">
+                    <p class="fbox">Bjorn Sandstede
+                        <br>
+                        <small>Brown University</small> </p>
+                </div>
+            </section>
+
+            <section>
+                <h1>Slides viewable on web: <br>
+<emph>bit.ly</emph>/<highlight>ibc1807</highlight>
+                </h1>
+            </section>
+
+            <!--            <div class="source">NSF</div>-->
+
+
+            <section data-state="fMRI">
+                <h2>fMRI Experiments</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/stopGofmriInstruction.png" alt="" class="noborder">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Task fMRI: performs tasks under brain scanning</li>
+                        <li>
+                            <emph>Randomized</emph> stop/go task:
+                            <ul>
+                                <li> <strong>press</strong> button if "go"; </li>
+                                <li><strong>withhold</strong> pressing if "stop"</li>
+                            </ul>
+                        </li>
+                        <li>Resting-state: "do nothing" during scanning</li>
+                    </ul>
+                </div>
+                <br>
+                <br>
+                <p>
+                    <emph>
+                        Goal: infer task-related brain activation and connectivity
+                    </emph>
+                </p>
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Like this talk: want to know your brain processed</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section data-background-iframe="Media/fMRI/ThreeJSBrainMaskColor.html">
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
+                <!--                <h2>fMRI Data</h2>-->
+                <!--                <iframe id="brainCube" src="Media/fMRI/ThreeJSBrainMaskColor.html" frameborder="0" width="800" height="600" name="brainCube"></iframe>-->
+                <p style="margin-bottom: 650px;"></p>
+                <p><strong>fMRI data</strong>: blood-oxygen-level dependent (BOLD) signals from each
+                    <highlight>cube</highlight>/voxel (~millimeters),
+                    <emph>$10^5$ ~ $10^6$</emph> voxels in total. </p>
+                <aside class="notes">
+                    <ul>
+                        <li>Lego brain of real brain</li>
+                        <li>red cube is a voxel</li>
+                        <li>track activity from each cube at each time vector</li>
+                        <li>dimension: address temporal separately</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+
+            <section>
+                <h2>Conceptual Model with Stimulus</h2>
+                <img src="Media/CausalODE/StopGoBrainModel.png" alt="" class="noborder" width=80%>
+                <p><strong>Sci Goal</strong>: infer <strong>intrinsic</strong> connections,
+                    <highlight>"Go"</highlight>-task related connections,
+                    <emph>"Stop"</emph> connections</p>
+            </section>
+
+
+            <section>
+                <h2>Some Existing Methods and Limitions</h2>
+                <ul>
+                    <li>Functional (nondirectional) connectivity:
+                    <ul>
+                        <li>Correlations</li>
+                        <li>PCA, independent component analysis (ICA) <cite>Calhoun, Guo, and colleagues</cite></li>
+                        <li>Graphical models (inverse covariance)</li>
+                    </ul>
+                    </li>
+                    <li>Effective (directional) connectivity:
+                        <ul>
+                            <li>Granger causality, autoregressive models<cite>Ding, Hu, Ombao, and colleagues</cite></li>
+                            <li>Bayesian networks</li>
+                        </ul>
+                    </li>
+                    <li>Limitations:biophysical interpretability $\propto$ scalability${}^{-1}$
+                        <ul>
+                            <li>Fail to model task-depend connections/activations</li>
+                            <li>Connections unlikely to be causal/neuronal</li>
+                            <li>Some are hard to scale</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Dynamic Causal Modeling (DCM)</h2>
+                <ul>
+                    <li>Proposed by Friston et al, 2003 (> 3000 citations)</li>
+                    <li>System approach to address previous limitations:
+                        <ul>
+                            <li>Latent neuronal states:  a <emph>network</emph> <highlight>ODE</highlight> model</li>
+                            <li>From neuronal states to observed BOLD signals: another ODE</li>
+                            <li>(Bayesian) priors for model parameters</li>
+                            <li>Bayes factor for comparing <emph>a few candidate</emph> models</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+             <section data-state="dcm">
+             <img src="Media/fMRI/FristonDCMNeuroImageCover.png" alt="" class="noborder topleft" width="30%">
+              <div width="100%">
+                  <img src="Media/fMRI/FristonDCMModel.jpg" alt=""  width="50%">
+              </div>
+                <style>
+                    .dcm credit:after {
+                        content: "Image source: Frston et al,  NeuroImage, 2003";
+                    }
+
+                </style>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Other projects</li>
+                    </ul>
+                </aside>
+            </section>
+
+
+
+
+
+
+
+
+           <section>
+               <h2>DCM: Advantages and Limitations</h2>
+               <ul>
+                    <li>Advantages:
+                       <ul>
+                           <li><emph>Task</emph>-dependent, <emph>directional</emph> connections</li>
+                           <li><emph>Neuronal/causal</emph> connections</li>
+                           <li>Model brain activations (and non-stationary time series)</li>
+                       </ul>
+                    </li>
+                    <li>Limitations:
+                        <ul>
+                            <li>Computationally expensive</li>
+                            <li>Bayesian model comparison over exponentially many network models</li>
+                            <li>Model fitting depends on priors</li>
+                            <li>Hard to scale (for ~10 nodes), some successes for simplified models</li>
+                            <li>Mostly for hypothesis validation, not <emph>data driven</emph></li>
+                        </ul>
+                    </li>
+               </ul>
+           </section>
+
+
+           <section>
+               <h1>Our CDN Model and Method</h1>
+           </section>
+
+           <section>
+               <h2>Causal Dynamic Networks</h2>
+               <ul>
+                   <li>A two-level model</li>
+                   <li>1. DCM neuronal state model  (latent $\bm{x}$, stimulus $\bm{u}$):
+                   $$\frac{d\bm{x}(t)}{dt}=\bm{A}\bm{x}(t)+\sum_{j}u_j(t)\bm{B_j}\bm{x}(t)+\bm{C}\bm{u}(t)$$
+                   </li>
+                   <li>2. BOLD data model (data $\bm{y}$, noise $\bm{\epsilon}$):
+                   $$  \bm{y}(t_i)  =\int h(s)\bm{x}(t_i-s) ds + \bm{\epsilon} (t_i)   $$
+                   </li>
+                   <li>$\bm{A}$ intrinsic connection matrix, $\bm{B}$ task-dependent connection tensor, $\bm{C}$ stimulus activation matrix</li>
+               </ul>
+           </section>
+
+
+           <section>
+               <h2>Functional/Dynamic Data Analysis</h2>
+               <ul>
+                   <li>Usually, observed data
+                   $$ y(t) = x(t)  + \epsilon(t) $$
+                   and latent $x(t)$ follows an ODE model of interest
+                   </li>
+                   <li>Various approaches for estimating the ODE parameters: nonlinear least squares <cite>Xue, Miao, Wu, 10</cite>, two-stage smoothing <cite>Varah, 82</cite>, principal differential analysis <cite>Ramsey, 96</cite>, Bayesian <cite>Girolami, 08</cite></li>
+                   <li>For example,  two-stage smoothing approaches not directly applicable to BOLD <emph>convolutions</emph>:
+                   $$  y(t) = \int x(t-u)h(u) du + \epsilon(t) $$
+                   </li>
+               </ul>
+           </section>
+
+
+<!--
+           <section>
+               <h2>Neural Activities and fMRI</h2>
+               <div class="twocol  inlinemiddle">
+                                     <p>HRF</p>
+                   <img src="Media/fMRI/HRF2.png" class="noborder" width="80%">
+               </div>
+               <div class="twocol inlinemiddle">
+                    <p>Example fMRI Signal</p>
+                   <img src="Media/fMRI/ExampleHRFResponseToStimuli.png" class="noborder">
+               </div>
+               <br>
+               <p><highlight>Red</highlight> and <emph>blue</emph> vertical lines represent go and stop stimulus onsets respectively</p>
+               <p>fMRI responses last much longer even if the blue stimuli end</p>
+           </section>
+-->
+
+         <section>
+             <h2>Hemodynamic Response Function (HRF)</h2>
+     <img src="Media/CausalODE/StimulusExample.png" alt="" class="threecol inlinemiddle">
+     <img src="Media/CausalODE/CanonicalHRF.png" alt="" class="threecol inlinemiddle">
+     <img src="Media/CausalODE/StimHConv.png" alt="" class="threecol inlinemiddle">
+       <br>
+        <p>fMRI responses last long (~30 seconds) after neural activities</p>
+        <p>"Smooth" BOLD far from neuronal activity</p>
+         </section>
+
+
+
+           <section>
+               <h2>Method</h2>
+               <ul>
+                   <li>An optimization-based approach</li>
+                   <li>Minimize the following
+                   \[\begin{multline*} \scriptstyle
+l(\bm{x},\bm{\theta})=\sum_{t_i}    \| \bm{y}(t_i)-h \star \bm{x}(t_i)) \|^2        \\
+ \scriptstyle +\lambda\int   \left \|    \frac{d \bm{x} (t) }  {dt}     -  (A \bm{x}(t)+\sum_{j} u_j(t) \bm{B_j} \bm{x}(t)+
+\bm{C}\bm{u}(t))   \right\|^2 dt
+\end{multline*} \]
+                   </li>
+                    <li>Balancing data fitting errors and ODE fitting errors
+                   </li>
+                   <li>Plug in basis-expansion of $\bm{x}(t) = \bm{\Gamma} \bm{\Phi}(t)$</li>
+                   <li>Allows convolution (vs two-stage smooth approach)</li>
+               </ul>
+           </section>
+
+
+           <section>
+               <h2>Algorithm</h2>
+               <ul>
+                   <li>Prove conditional convexity of $O(J d^2)$   parameters</li>
+                   <li>Iterative block coordinate descent algorithm</li>
+                   <li>Prove explicit update formulas (no numerical optimization algorithms needed)</li>
+               </ul>
+           </section>
+
+
+           <section>
+               <h2>Special Case: Resting-state fMRI</h2>
+               <ul>
+                   <li>Set our parameter $\bm{B}$ and $\bm{C}$ to zero</li>
+                   <li>Only fit intrinsic connection $\bm{A}$</li>
+                   <li>Can fit much larger networks</li>
+               </ul>
+           </section>
+
+
+           <section>
+               <h1>Simulations</h1>
+           </section>
+
+
+           <section>
+               <h2>Simulation: vs GCA/VAR</h2>
+               <img src="Media/CausalODE/CDNvsGCAAUC.png" alt="">
+               <p>Our <highlight>CDN</highlight> yields higher network recovery accuracy than Granger Causality Analysis (GCA, aka vector autoregressive models)</p>
+           </section>
+
+
+            <section>
+               <h2>Simulation: vs DCM</h2>
+               <img src="Media/CausalODE/CDNvsDCMAUC.png" alt="">
+               <p>Our <highlight>CDN</highlight> yields higher accuracy using only a fraction of the computation time of DCM</p>
+           </section>
+
+           <section>
+               <h2>Undering Neuronal States</h2>
+                <img src="Media/CausalODE/CDNfitDCMSimu.png" alt="" width="60%">
+               <p>Decent recovery of (latent) neuronal states</p>
+           </section>
+
+
+          <section>
+              <h1>Task fMRI and Resting-state fMRI</h1>
+
+          </section>
+
+
+           <section>
+               <h2>Stop/Go fMRI</h2>
+               <img src="Media/CausalODE/GoStopAPlotAnnot6ROI.png" alt="" width="60%">
+               <p>Brain activations and instrinsic connections between regions</p>
+           </section>
+
+
+           <section>
+               <h2>Task Specific Connections</h2>
+               <div class="twocol inlinemiddle">
+                   <img src="Media/CausalODE/brain6ROIGoConnections.png" alt="" width="94.5%">
+                   <p>"Go" connections</p>
+               </div>
+               <div class="twocol inlinemiddle">
+                   <img src="Media/CausalODE/brain6ROIStopConnections.png" alt="">
+                   <br>
+                   <br>
+                   <p>"Stop" connections</p>
+               </div>
+               <br>
+               <p>Better understanding of brain mechanisms</p>
+           </section>
+
+           <section>
+               <h2>Resting-state Connections</h2>
+                <img src="Media/CausalODE/cdn_f_razi_annot.png" alt="">
+                <p>Ours (A) close to DCM (C), different from correaltions (B)</p>
+           </section>
+
+           <section>
+               <h2>Real Data: 264 Brain Regions</h2>
+               <img src="Media/CausalODE/GoStopAPlotAnnot264ROI.png" alt="" width="70%">
+               <p>CDN uncovers a <highlight>large-scale</highlight> brain network</p>
+           </section>
+
+            <section>
+                <h2>Discussion</h2>
+                <ul>
+                    <li>Joint optimization method for infer ODE networks</li>
+                    <li>Flexible models for observations from causal ODEs</li>
+                    <li>Computationally efficient for large-scale modeling</li>
+                    <li>PyPI pacakge: <highlight>cdn-fmri</highlight></li>
+                </ul>
+            </section>
+
+
+
+
+            <section data-background="Media/Scene/barcelona.jpg" data-state="opaqueBackImg">
+<!--               data-background="Media/Scene/barcelona.jpg" data-state="opaqueBackImg"-->
+                <h1>Thank you!</h1>
+                <br>
+                <h2>Comments? Questions?</h2>
+                <br>
+                <br><br>
+
+<!--              <h2>Slides at:-->
+                    <!--
+                    <emph>bit.ly/XLICSA16</emph>
+                </h2>
+                <img src="./Media/QR/XLICSA16.png" alt="" width="30%">
+                <h2>
+                    OR:
+-->
+                     <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
+                    <br>
+                    <br> or
+                     <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span>
+
+
+
+<!--                </h2>-->
+
+            </section>
+
+        </div>
+    </div>
+
+    <script src="./reveal.js.3.5/lib/js/head.min.js"></script>
+    <script src="./reveal.js.3.5/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js.3.5#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                //mathjax: './MathJax/MathJax.js',
+                mathjax: 'bower_components/MathJax/MathJax.js',
+                //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+
+            //anything to load other libraries
+            anything: [{
+                className: "coverflow",
+                initialize: (function(container, options) {
+                    if (typeof container.coverflow === 'function') {
+                        container.coverflow()
+                    }
+                })
+            }],
+
+            // Optional reveal.js.3.5 plugins
+            dependencies: [{
+                src: './reveal.js.3.5/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/math/math.js',
+                async: true
+            }, {
+                src: 'JSLibrary/jquery-3.2.1.js'
+            }, {
+                src: 'JSLibrary/coverflowjs/coverflow.min.js'
+            }, {
+                src: './reveal.js.3.5/plugin/anything/anything.js'
+            }, {
+                src: 'bower_components/reveal.js-menu/menu.js'
+            }]
+        });
+        //{
+        //                src: './reveal.js.3.5/plugin/anything/anything.js'
+        //            },
+        //        ,  {
+        //                src: 'bower_components/reveal.js-menu/menu.js'
+        //            }
+
+    </script>
+
+    <!-- Coverflow event listeners -->
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <script>
+        Reveal.addEventListener('fragmentshown', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('next');
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('prev');
+        });
+        Reveal.addEventListener('slidechanged', function(event) {
+            jQuery(event.currentSlide).find('.coverflow').coverflow();
+            jQuery(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            jQuery(event.currentSlide).find('.coverflow').find('.fragment')
+                .removeClass('visible').removeClass('currentSlide');
+        });
+        // $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()  });
+        //        setTimeout(function() {
+        //            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()
+        //        }, 15000);
+        //        Reveal.addEventListener('ready', function(event) {
+        //           let elements =  document.getElementsByClassName('coverflow')
+        //           for (let j=0; j<elements.length; j++) {
+        //               elements[j].coverflow();
+        //           }
+        //        });
+
+    </script>
+
+
+</body>
+
+</html>
