@@ -115,7 +115,7 @@
                 </div>
                 <span style="display:inline-block; width: 50px;"></span>
                 <div class="fbox"> <img src="./Media/Personnel/sandstede.jpg" style="border-radius: 50%" alt="B Sandstede" width="350" height="350">
-                    <p class="fbox">Bjorn Sandstede
+                    <p class="fbox">Björn Sandstede
                         <br>
                         <small>Brown Applied Math</small> </p>
                 </div>
@@ -207,12 +207,14 @@
                         <li>Correlations</li>
                         <li>PCA, independent component analysis (ICA) <cite>Calhoun, Guo, and colleagues</cite></li>
                         <li>Graphical models (inverse covariance)</li>
+                        <li>Bayesian methods <cite>Bownman, Guindani, Vannucci, Zhang, and colleagues</cite></li>
+
                     </ul>
                     </li>
                     <li>Effective (directional) connectivity:
                         <ul>
                             <li>Granger causality, autoregressive models<cite>Ding, Hu, Ombao, and colleagues</cite></li>
-                            <li>Bayesian networks</li>
+                            <li>Structural equation models</li>
                         </ul>
                     </li>
                     <li>Limitations:biophysical interpretability $\propto$ scalability${}^{-1}$
@@ -238,6 +240,7 @@
                             <li>Bayes factors for comparing <emph>a few candidate</emph> models</li>
                         </ul>
                     </li>
+                    <li>DCM essentially unchanged for the past 15 yrs <cite>Friston et al, 17</cite></li>
                 </ul>
             </section>
 
@@ -281,9 +284,9 @@
                     <li>Limitations:
                         <ul>
                             <li>Computationally expensive</li>
-                            <li>Bayesian model comparison over exponentially many network models</li>
+                            <li>Bayesian model comparison over exponentially many  models</li>
                             <li>Model fitting depends on priors</li>
-                            <li>Hard to scale (for ~10 nodes), some successes for simplified models</li>
+                            <li>Hard to scale (~10 nodes), some successes for simplified models</li>
                             <li>Mostly for hypothesis validation, not <emph>data driven</emph></li>
                         </ul>
                     </li>
@@ -302,9 +305,10 @@
                    <li>1. DCM neuronal state model  (latent $\bm{x}$, stimulus $\bm{u}$):
                    $$\frac{d\bm{x}(t)}{dt}=\bm{A}\bm{x}(t)+\sum_{j}u_j(t)\bm{B_j}\bm{x}(t)+\bm{C}\bm{u}(t)$$
                    </li>
-                   <li>2. BOLD data model (data $\bm{y}$, noise $\bm{\epsilon}$):
+                   <li>2. BOLD data model (data $\bm{y}$, noise $\bm{\epsilon}$) at discrete $t_i$:
                    $$  \bm{y}(t_i)  =\int h(s)\bm{x}(t_i-s) ds + \bm{\epsilon} (t_i)   $$
                    </li>
+                   <li>$h$ hemodynamic response function</li>
                    <li>$\bm{A}$ intrinsic connection matrix, $\bm{B}$ task-dependent connection tensor, $\bm{C}$ stimulus activation matrix</li>
                </ul>
            </section>
@@ -313,11 +317,12 @@
            <section>
                <h2>Functional/Dynamic Data Analysis</h2>
                <ul>
-                   <li>Usually, observed data
+                   <li>Usually, observed data model
                    $$ y(t) = x(t)  + \epsilon(t) $$
                    and latent $x(t)$ follows an ODE model of interest
                    </li>
-                   <li>Various approaches for estimating the ODE parameters: nonlinear least squares <cite>Xue, Miao, Wu, 10</cite>, two-stage smoothing <cite>Varah, 82</cite>, principal differential analysis <cite>Ramsey, 96</cite>, Bayesian <cite>Girolami, 08</cite></li>
+                   <li>Various approaches for estimating the ODE parameters: nonlinear least squares <cite>Xue, Miao, Wu, 10</cite>, two-stage smoothing <cite>Varah, 82</cite>, principal differential analysis <cite>Ramsey, 96</cite>, Bayesian <cite>Girolami, 08</cite>, EcoG <cite>Zhang et al, 15</cite></li>
+                   <li>The observed data model not applicable to fMRI</li>
                    <li>For example,  two-stage smoothing approaches not directly applicable to BOLD <emph>convolutions</emph>:
                    $$  y(t) = \int x(t-u)h(u) du + \epsilon(t) $$
                    </li>
@@ -412,7 +417,7 @@ l(\bm{x},\bm{\theta})=\sum_{t_i}    \| \bm{y}(t_i)-h \star \bm{x}(t_i)) \|^2    
            </section>
 
            <section>
-               <h2>Undering Neuronal States</h2>
+               <h2>Uncovering Neuronal States</h2>
                 <img src="Media/CausalODE/CDNfitDCMSimu.png" alt="" width="60%">
                <p>Decent recovery of (latent) neuronal states</p>
            </section>
