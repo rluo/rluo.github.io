@@ -243,8 +243,8 @@
                 <h2>Massive Edgewise Regressions</h2>
                 <ul>
                     <li>Intuitive method by mostly neuroscientists</li>
-                    <li>Try $g(\Sigma_i) = \Sigma_{i}[j,k] = x_i \beta$</li>
-                    <li>Repeat for all   $(j,k) \in {1,\dotsc, p}^2$  pairs</li>
+                    <li>Try $g_{j,k}(\Sigma_i) = \Sigma_{i}[j,k] = x_i \beta$</li>
+                    <li>Repeat for all   $(j,k) \in \{1,\dotsc, p\}^2$  pairs</li>
                     <li>Essentially $O(p^2)$ regressions for each connection</li>
                     <li>Limitations: multiple testing $O(p^2)$, failure to accout for dependencies between regressions</li>
                 </ul>
@@ -263,11 +263,24 @@
 $$ \log({\gamma}^\top\Sigma_{i}{\gamma})=\beta_{0}+x_{i}^\top{\beta}_{1} $$
                     </li>
                 </ul>
-                <img src="Media/CAP/cap2dcontour.png" style="width: 45%" alt="">
+                <img src="Media/CAP/cap2dcontour.png" style="width: 40%" alt="">
                 <p>Example (p=2): PD1 largest variation but not related to $x$</p>
+                <p>PCA  selects PD1, Ours selects <highlight>PD2</highlight></p>
             </section>
 
-
+            <section>
+                <h2>Advantages</h2>
+                <ul>
+                    <li>Scalability: potentially for $p \sim 10^6$ or larger</li>
+                    <li>Interpretation: covariate assisted PCA
+                        <ul>
+                            <li>Extend PCA into a supervised setting</li>
+                        </ul>
+                    </li>
+                    <li>Sensitivity: target those covariate-related variations</li>
+                    <li>Applicability: other big data problems besides fMRI</li>
+                </ul>
+            </section>
 
             <section>
                 <h2>Method</h2>
