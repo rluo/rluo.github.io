@@ -1,0 +1,9 @@
+---
+layout: talks
+title: ICSA Xishuangbanna
+author: Xi Luo
+previewimage: CAP_ICSAWorkshop_2019.html#/21
+externallink: CAP_ICSAWorkshop_2019.html
+
+---
+Covariate Assisted Principal (CAP) Regression
