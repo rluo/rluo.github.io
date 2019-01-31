@@ -28,7 +28,7 @@ Applicants must have: A Ph.D. in computer science, bioinformatics, biomedical in
 
 *Phone Number*: 713.500.9589
 
-
+*Fax Number*: 713.500.9525
 
 
 *UTHealth is committed to providing equal opportunity in all employment-related activities without regard to race, color, religion,
