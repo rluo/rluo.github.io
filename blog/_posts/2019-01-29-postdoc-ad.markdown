@@ -3,7 +3,7 @@
 layout: news
 title: Postdoc Position in ML&DS
 author: Xi Luo
-link: http://BigComplexData.com
+link: https://www.uth.tmc.edu/postdocs/Assets/SPH%20Machine%20Learning%20and%20Data%20Science%201.30.2019.pdf
 previewimage: 900x300
 
 ---
@@ -28,4 +28,11 @@ Applicants must have: A Ph.D. in computer science, bioinformatics, biomedical in
 
 *Phone Number*: 713.500.9589
 
-*Fax Number*: 713.500.9525
+
+
+
+*UTHealth is committed to providing equal opportunity in all employment-related activities without regard to race, color, religion,
+sex, sexual orientation, national origin, age, disability, genetic information, gender identity or expression, veteran status or any other
+basis prohibited by law or university policy. Reasonable accommodation, based on disability or religious observances, will be
+considered in accordance with applicable law and UTHealth policy. The University maintains affirmative action programs with
+respect to women, minorities, individuals with disabilities, and eligible veterans in accordance with applicable law.*
