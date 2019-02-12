@@ -2,7 +2,7 @@
 layout: talks
 title: HAC ASA
 author: Xi Luo
-previewimage: CodCap_ASAHouston_2019.html#/21
+previewimage: CodCap_ASAHouston_2019.html#/1
 externallink: CodCap_ASAHouston_2019.html
 
 ---
