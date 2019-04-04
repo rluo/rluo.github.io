@@ -4,7 +4,7 @@ title: Xuefei Cao's JSM Award
 author: Xi Luo
 previewimage:  abcd700x400.jpg
 tags: award
-externallink:  https://bigcomplexdata.com
+externallink:  http://bigcomplexdata.com
 
 ---
 
