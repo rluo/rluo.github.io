@@ -1,8 +1,8 @@
 ---
 
 layout: news
-title: Quotes by Gertrude M Cox 
-author: Xi Luo
+title: Quotes by Gertrude Cox 
+author: XL
 link: https://books.google.com/books?id=PSbUBwAAQBAJ&pg=PR25&lpg=PR25&dq=gertrude+m+cox+with+our+scientific+backgrounds+we+should+spend+most+of+time&source=bl&ots=P_ci58g8dW&sig=ngkexBGpwyQPixMQBxpAdf8Zjxs&hl=en&sa=X&ved=0ahUKEwjpgLLw45LcAhWmg1QKHWj5ArwQ6AEITDAK#v=onepage&q=conservative&f=false
 previewimage: 900x300
 

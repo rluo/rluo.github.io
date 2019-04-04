@@ -2,7 +2,7 @@
 
 layout: news
 title: Congratulations to Dr. Yi Zhao!
-author: Xi Luo
+author: XL
 link: https://arxiv.org/abs/1410.7217
 previewimage: 900x300
 

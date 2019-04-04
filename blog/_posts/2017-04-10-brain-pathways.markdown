@@ -1,7 +1,7 @@
 ---
 layout: news
 title: Brain Pathways
-author: Start Bootstrap
+author: XL
 link: https://arxiv.org/abs/1603.07749
 previewimage: 900x300
 

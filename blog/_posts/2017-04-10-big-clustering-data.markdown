@@ -1,7 +1,7 @@
 ---
 layout: news
 title: Big Clustering Data
-author: Start Bootstrap
+author: XL
 link: https://arxiv.org/abs/1508.01939
 previewimage: 900x300
 

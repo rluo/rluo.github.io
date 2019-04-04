@@ -2,7 +2,7 @@
 
 layout: news
 title: Samsi Casual Inference Talk
-author: Xi Luo
+author: XL
 link: https://arxiv.org/abs/1410.7217
 previewimage: 900x300
 

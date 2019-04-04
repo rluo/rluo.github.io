@@ -2,7 +2,7 @@
 
 layout: news
 title: Postdoc Position in ML&DS
-author: Xi Luo
+author: XL
 link: https://www.uth.tmc.edu/postdocs/Assets/SPH%20Machine%20Learning%20and%20Data%20Science%201.30.2019.pdf
 previewimage: 900x300
 
@@ -16,7 +16,7 @@ A post-doctoral research fellow position is available in the Department of Biost
 
 Applicants must have: A Ph.D. in computer science, bioinformatics, biomedical informatics, information science, computational engineering, applied mathematics, (bio)statistics or a related field, with relevant research experience. Computational and programming skills are essential. Strong writing and communication skills evidenced by prior publications are also expected. The position is available immediately.
 
-**Salary**: [NIH post-doc salary scale](http://grants.nih.gov/grants/guide/notice files/NOT-OD-12-033.html)
+**Salary**: [NIH post-doc salary scale](https://www.niaid.nih.gov/grants-contracts/salary-cap-stipends)
 
 **Required submission materials**: CV, letter of interest, three references and date of availability
 

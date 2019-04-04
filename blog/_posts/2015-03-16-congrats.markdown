@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Congratulations to Yi Zhao for winning an ENAR Distinguished Student Paper Award!
-author: Xi Luo
+author: XL
 previewimage: /MyImages/congrats.jpg
 excerpt: >
   Congratulations to Yi Zhao, a second year PhD student at Brown Biostatistics, who won an ENAR Distinguished Student Paper Award!  This award is given by the 2015 ENAR meeting. Yi presented our joint work on mediation analysis under unmeasured confounding (arXiv).  Hope you enjoyed her talk and all the wonderful talks this year!
