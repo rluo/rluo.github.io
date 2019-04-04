@@ -35,7 +35,14 @@ layout: default
                 by <a href="{{url_base}}/about.html">{{ post.author }}</a>
             </p>
             <p style="display: inline-block; vertical-align: middle; text-vertical-align: middle;"><i class="fa fa-clock-o"></i> Posted on {{ post.date | date: "%B %-d, %Y" }}      </p>
-         <div class="fb-like" data-href="{{url_base}}/{{ post.url }}" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true" style="vertical-align: middle; display: inline-block; float: right"></div>
+            <div style="vertical-align: middle;   float: right">
+                <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+                    <a class="a2a_button_facebook"></a>
+                    <a class="a2a_button_wechat"></a>
+                    <a class="a2a_button_twitter"></a>
+                    <a class="a2a_button_linkedin"></a>
+                </div>
+            </div>
             <hr>
             <a href="blog-post.html">
                 <img class="img-responsive img-hover" src="{{ post.previewimage }}" alt="">
@@ -44,9 +51,7 @@ layout: default
             <p>{{ post.excerpt }}</p>
             <a class="btn btn-primary" href="{{url_base}}/{{ post.url }}">Read More <i class="fa fa-angle-right"></i></a>
 
-            <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
 
-            <hr>
         {% endfor %}
 
         <!-- Pager -->
