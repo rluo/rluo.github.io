@@ -2,7 +2,7 @@
 layout: news
 title: CDN Paper to Appear in Frontiers
 author: Xi Luo
-previewimage:  CDNFrontiers.png
+previewimage:  CDNFrontiersCut.png
 tags: news
 externallink:  https://bigcomplexdata.com
 
