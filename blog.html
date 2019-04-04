@@ -44,10 +44,12 @@ layout: default
                 </div>
             </div>
             <hr>
-            <a href="blog-post.html">
+            {% if post.previewimage %} 
+            <a href="{{url_base}}/{{ post.url }}">
                 <img class="img-responsive img-hover" src="{{ post.previewimage }}" alt="">
             </a>
             <hr>
+            {% endif %}
             <p>{{ post.excerpt }}</p>
             <a class="btn btn-primary" href="{{url_base}}/{{ post.url }}">Read More <i class="fa fa-angle-right"></i></a>
 
