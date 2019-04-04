@@ -31,13 +31,12 @@ layout: default
 
         <!-- Date/Time -->
         <p><i class="fa fa-clock-o"></i> Posted on {{ page.date | date: "%B %-d, %Y" }}</p>
-
-        <hr> {% if page.previewimage %}
+        
+        {% if page.previewimage %}
         <!-- Preview Image -->
-        <img class="img-responsive" src="{{ site.placeholderimagesbaseurl }}{{ page.previewimage }}" alt=""> {% endif %}
-
-        <hr>
-
+        <img class="img-responsive" src="{{ site.url }}{{ page.previewimage }}" alt=""> 
+        {% endif %}
+        
         <!-- Post Content -->
         <!--
         {% if page.excerpt %}
