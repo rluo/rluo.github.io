@@ -195,6 +195,48 @@ layout: default
 </div>
 <!-- /.row -->
 
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">Our Team</h2>
+    </div>
+    
+    {% for item in site.data.myteam %}
+    <div class="col-md-4 text-center">
+        <div class="thumbnail">
+            <img class="img-responsive circleclipimg" src="MyImages/People/{{ item.img }}" alt="">
+            <div class="caption">
+                <h3>{{ item.name }}<br>
+                    <small>{{ item.title }}</small>
+                </h3>
+                <p>{{ item.position }}</p>
+                <ul class="list-inline">
+                    {% if item.linkedin  %}
+                    <li><a href={{ item.linkedin }}><i class="fa fa-2x fa-linkedin-square"></i></a>
+                    </li>                    
+                    {% endif %}
+                    {% if item.facebook  %}
+                    <li><a href={{ item.facebook }}><i class="fa fa-2x fa-facebook-square"></i></a>
+                    </li>                    
+                    {% endif %}
+                    {% if item.github  %}
+                    <li><a href={{ item.github }}><i class="fa fa-2x fa-github-square"></i></a>
+                    </li>                    
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<!-- /.row -->
+
+
+
+
+
+
 <!-- Our Customers -->
 <div class="row">
     <div class="col-lg-12">
