@@ -224,6 +224,10 @@ layout: default
                     <li><a href={{ item.github }}><i class="fa fa-2x fa-github-square"></i></a>
                     </li>                    
                     {% endif %}
+                    {% if item.web  %}
+                    <li><a href={{ item.web }}><i class="fa fa-2x fa-external-link-square"></i></a>
+                    </li>                    
+                    {% endif %}
                 </ul>
             </div>
         </div>
