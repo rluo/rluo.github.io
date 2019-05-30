@@ -10,11 +10,11 @@ var filename = shotfolder + args[2];
 console.log("In screenshot");
 
 var page = require('webpage').create();
-page.settings.resourceTimeout = 50000;
+page.settings.resourceTimeout = 100000;
 page.open( baseurl + args[1], function() {
 	setTimeout(function() {
 		page.render(shotfolder + args[2]);
 		console.log("Done screenshot: " + args[2]);
 		phantom.exit();
-	}, 60000);
+	}, 120000);
 });
