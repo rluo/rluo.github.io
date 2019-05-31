@@ -19,17 +19,17 @@ fileExists = function() {
           callback(null, file);
       } else {
           log("Image already exists for " + file.frontmatter.previewimage);
-          file.command = '';
+          file.command = 'echo haha';
           callback(null, file);
       }
   });
 };
 
-gulp.task('screenshot', function() {
+gulp.task('screenshot', async function() {
     gulp.src('./talks/_posts/*.markdown')
         .pipe(frontMatter({property: 'frontmatter'}))
         .pipe(fileExists())
-        .pipe(exec("<%= file.command %>"))
+        .pipe(exec('<%= file.command %>'))
         .on('data', function(data) {
             if (data.command !== '') {
                 log("Finished screenshot for " + data.frontmatter.previewimage);
