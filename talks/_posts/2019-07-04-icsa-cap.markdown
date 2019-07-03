@@ -1,0 +1,9 @@
+---
+layout: talks
+title: ICSA Nankai
+author: Xi Luo
+previewimage: CAP_ICSAChina_2019.html#/7
+externallink: CAP_ICSAChina_2019.html
+
+---
+Covariate Assisted Principal (CAP) Regression
