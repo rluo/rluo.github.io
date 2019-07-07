@@ -610,3 +610,11 @@ html {
 html.opaqueBackImg .slide-background {
     opacity: 0.5 !important;
 }
+
+
+#venn {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 25px;
+    fill: #000;
+    font-weight: 900;
+}
