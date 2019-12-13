@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>CAP Regression</title>
+    <meta name="description" content="Analytics for Big and Complex Data Group">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./reveal.js.3.5/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js.3.5/lib/css/zenburn.css">
+
+    <!--
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+-->
+    <!--    Cover Flow   -->
+    <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
+
+    <script src="JSLibrary/jquery-3.2.1.js"></script>
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <!-- Coverflow styles -->
+    <style>
+        .ui-coverflow {
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 5px;
+        }
+
+        .ui-coverflow>img,
+        .ui-coverflow>figure {
+            height: 440px !important;
+            width: auto;
+            min-width: 440px !important;
+        }
+
+    </style>
+
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js.3.5/css/print/pdf.css' : './reveal.js.3.5/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+
+    <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+</head>
+
+<body>
+    <div class="reveal">
+<!--      place holder for credits -->
+       <credit></credit>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \(\def\loading{......LOADING......Please Wait......} \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \DeclareMathOperator{\Ex}{\mathbb{E}} \DeclareMathOperator{\diag}{diag}  \newcommand{\bm}[1]{\boldsymbol{#1}} \def\wait{......LOADING......Please Wait......}\)
+
+
+              
+            <section>
+                <h2><strong>Covariate Assisted Principal (<highlight>CAP</highlight>) Regression for   Matrix Outcomes</strong></h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width:43%; vertical-align: middle;">
+                        <medium><strong>The University of Texas</strong>
+                            <br>Health Science Center
+                            <br>School of Public Health
+                            <br>Dept of Biostatistics
+                            <br>and Data Science
+                            <br>ABCD Research Group&nbsp;</medium>
+                    </p> 
+                    <img class="noborder inlinemiddle" style="display: inline-block;
+                          vertical-align: middle;" src="Media/ABCDgroup/ABCDLogo4Color5.png" height="195px">
+                </div>
+                <br>
+                <p>
+                    <medium><strong>CMStat, London, UK</strong>
+                        <br>December 14, 2019</medium>
+                </p>
+                <p>
+                    <small> Funding: NIH R01EB022911;   NSF/DMS (BD2K) 1557467</small>
+                </p>
+            </section>
+         
+
+            <section>
+                <h2>Co-Authors</h2>
+
+                <div style="display:block;">
+                     <div class="fbox"> <img src="./Media/Personnel/YiZhao17.jpg" style="border-radius: 50%" alt="Xuefei Cao" width="200" height="200">
+                        <p class="fbox">Yi Zhao
+                            <br>
+                            <small>Johns Hopkins Biostat</small></p>
+                    </div>
+                    <span style="display:inline-block; width: 50px;"></span>
+                    <div class="fbox"> <img src="./Media/Personnel/BingkaiWang.jpg" style="border-radius: 50%" alt="B Sandstede" width="200" height="200">
+                        <p class="fbox">Bingkai Wang
+                            <br>
+                            <small>Johns Hopkins Biostat</small> </p>
+                    </div>
+                 </div>
+                 <p></p>
+                <p></p>
+                <div style="display:block;">
+                    <div class="fbox"> <img src="./Media/Personnel/stewartmostofsky.jpg" style="border-radius: 50%" alt="B Sandstede" width="200" height="200">
+                        <p class="fbox"><medium>Stewart Mostofsky</medium>
+                            <br>
+                            <small>Johns Hopkins Medicine</small> </p>
+                    </div>
+                    <span style="display:inline-block; width: 50px;"></span>
+                    <div class="fbox"> <img src="./Media/Personnel/briancaffo.jpg" style="border-radius: 50%" alt="B Sandstede" width="200" height="200">
+                        <p class="fbox">Brian Caffo
+                            <br>
+                            <small>Johns Hopkins Biostat</small> </p>
+                    </div>
+                </div>
+
+            </section>
+
+            <section>
+                <h1>Slides viewable on web: <br>
+<emph>bit.ly</emph>/<highlight>icsa2019</highlight>
+                </h1>
+            </section>
+
+            <!--            <div class="source">NSF</div>-->
+
+            <section>
+                <h2>Statistics/Data Science Focuses</h2>
+                <div id="venn"></div>
+                <script src="bower_components/d3/d3.v4.min.js"></script>
+                <script src="bower_components/venn.js/venn.js"></script>
+                <script>
+                // define sets and set set intersections
+                var sets = [ {sets: ['This Talk'], "label": "This Talk", "size": 200},
+                             {sets: ['Theory'], "label": "Theory", "size": 100},
+                             {sets: ['Method'], "label": "Method", "size": 100},
+                             {sets: ['Model'], "label": "Model", "size": 100},
+                             {sets: ['Application'], "label": "Application", "size": 100},
+                             {sets: ['Science'], "label": "Science", "size": 100},
+                             {sets: ['This Talk','Theory'], "size": 5},
+                             {sets: ['This Talk','Method'], "size": 20},
+                             {sets: ['This Talk','Model'], "size": 50},
+                             {sets: ['This Talk','Application'], "size": 20},
+                             {sets: ['This Talk','Science'], "size": 5}];
+
+                var chart = venn.VennDiagram()
+                                    .width(1000).height(600);
+                var customOrdering = {"This Talk" : 1, "Theory": 2, "Mehtod" : 3, "Model": 4, "Application": 5, "Science": 6}
+                chart.orientationOrder(function (a, b) { return customOrdering[a.setid] - customOrdering[b.setid]})
+
+                d3.select("#venn").datum(sets).call(chart);
+                d3.select("#venn .venn-circle path").style("fill-opacity", 0.7)
+                d3.selectAll("#venn text").style("stroke-width", 0.5).style("stroke", "#000");
+                </script>
+            </section>
+
+
+
+           <section data-state="flaticon">
+               <h2>Motivating Example</h2>
+               <img src="Media/Network/brainNetworkbyAge.png" alt="">
+                <p></p>
+                <p>Brain network connections vary by covariates (e.g. age/sex)</p>
+                <br>
+                <p><emph>Goal</emph>:  model  how covariates change  network connections</p>
+                <style>
+                    .flaticon credit:after {
+                        content: "Image source: flaticon.com";
+                    }
+                </style>
+           </section>
+
+
+            <section>
+                $$\textrm{function}(\textbf{graph}) = \textbf{age}\times \beta_1 +  \textbf{sex}\times \beta_2 + \cdots $$
+            </section>
+
+
+
+            <section data-state="fMRI">
+                <h2>Resting-state fMRI Networks</h2>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/fMRIScannerNSFLivescienceCut.png" alt="" class="noborder">
+                </div>
+                <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>fMRI measures brain activities over time</li>
+                        <li>Resting-state: "do nothing" during scanning</li>
+
+                    </ul>
+                </div>
+                <br>
+                <br>
+                 <div class="twocol inlinemiddle" style="width: 60%">
+                    <ul>
+                        <li>Brain networks constructed using <emph>cov/cor</emph> matrices of time series</li>
+                    </ul>
+                </div>
+                <div class="twocol inlinemiddle" style="width: 35%">
+                    <img src="Media/fMRI/brainFunctionConnTimeSeries.png" alt="" class="noborder">
+                </div>
+
+                <style>
+                    .fMRI credit:after {
+                        content: "Image source: NSF";
+                    }
+
+                </style>
+            </section>
+
+
+            <section>
+                <h2>Mathematical Problem</h2>
+                <ul>
+                    <li>Given $n$ (semi-)positive matrix outcomes, $\Sigma_i\in \real^{p\times p}$</li>
+                    <li>Given $n$  corresponding vector covariates, $x_i \in \real^{q}$</li>
+                    <li>Find function $g(\Sigma_i) = x_i \beta$, $i=1,\dotsc, n$</li>
+                    <li>In essense, <emph>regress positive matrices on vectors</emph></li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Some Related Problems</h2>
+                <ul>
+                    <li>Heterogeneous regression or weighted LS:
+                    <ul>
+                        <li>Usually for scalar variance $\sigma_i$, find $g(\sigma_i) = f(x_i)$</li>
+                        <li>Goal: to improve efficiency, not to interpret $x_i \beta$</li>
+                    </ul>
+                    </li>
+                    <li>Covariance models <cite>Anderson, 73; Pourahmadi, 99; Hoff, Niu, 12; Fox, Dunson, 15; Zou, 17</cite>
+                    <ul>
+                        <li>Model $\Sigma_i = g(x_i)$, sometimes $n=i=1$</li>
+                        <li>Goal: better models for $\Sigma_i$</li>
+                    </ul>
+                    </li>
+                    <li>Multi-group PCA <cite>Flury, 84, 88; Boik 02; Hoff 09; Franks, Hoff, 16</cite>
+                    <ul>
+                        <li>No regression model, cannot handle vector $x_i$</li>
+                        <li>Goal: find common/uncommon parts of multiple $\Sigma_i$</li>
+                    </ul>
+                    </li>
+                    <li>Tensor-on-scalar regression <cite>Li, Zhang, 17; Sun, Li, 17</cite>
+                    <ul>
+                        <li>No guarantees for positive matrix outcomes</li>
+                    </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Massive Edgewise Regressions</h2>
+                <ul>
+                    <li>Intuitive method by mostly neuroscientists</li>
+                    <li>Try $g_{j,k}(\Sigma_i) = \Sigma_{i}[j,k] = x_i \beta$</li>
+                    <li>Repeat for all   $(j,k) \in \{1,\dotsc, p\}^2$  pairs</li>
+                    <li>Essentially $O(p^2)$ regressions for each connection</li>
+                    <li>Limitations: multiple testing $O(p^2)$, failure to accout for dependencies between regressions</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Our CAP in a Nutshell</h2>
+                <br>
+                <h2>
+                    <strong>$\mbox{PCA}(\Sigma_i) = x_i \beta$</strong>
+                </h2>
+                <ul>
+                    
+                    <li>Essentially, we aim to turn unsupervised PCA to a supervised PCA</li>
+                    <li>Ours differs from existing PCA methods:
+                        <ul>
+                            <li>Supervised PCA <cite>Bair et al, 06</cite> models <emph>scalar-on-vector</emph></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Model and Method</h1>
+            </section>
+
+
+            <section>
+                <h2>Model</h2>
+                <ul>
+                    <li>Find principal direction (PD) $\gamma \in \real^p$, such that:
+$$ \log({\gamma}^\top\Sigma_{i}{\gamma})=\beta_{0}+x_{i}^\top{\beta}_{1}, \quad i =1,\dotsc, n$$
+                    </li>
+                </ul>
+                <img src="Media/CAP/cap2dcontour.png" style="width: 40%" alt="">
+                <p>Example (p=2): PD1 largest variation but not related to $x$</p>
+                <p>PCA  selects PD1, Ours selects <highlight>PD2</highlight></p>
+            </section>
+
+            <section>
+                <h2>Advantages</h2>
+                <ul>
+                    <li>Scalability: potentially for $p \sim 10^6$ or larger</li>
+                    <li>Interpretation: covariate assisted PCA
+                        <ul>
+                            <li>Turn <highlight>unsupervised</highlight> PCA into <highlight>supervised</highlight></li>
+                        </ul>
+                    </li>
+                    <li>Sensitivity: target those covariate-related variations
+                    <ul>
+                        <li><highlight>Covariate assisted</highlight> SVD?</li>
+                    </ul>
+                    </li>
+                    <li>Applicability: other big data problems besides fMRI</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Method</h2>
+
+                <ul>
+                    <li>MLE with constraints:
+                      $$\scriptsize \begin{eqnarray}\label{eq:obj_func}
+                             \underset{\boldsymbol{\beta},\boldsymbol{\gamma}}{\text{minimize}} &&  \ell(\boldsymbol{\beta},\boldsymbol{\gamma}) :=  \frac{1}{2}\sum_{i=1}^{n}(x_{i}^\top\boldsymbol{\beta}) \cdot T_{i}  +\frac{1}{2}\sum_{i=1}^{n}\boldsymbol{\gamma}^\top \Sigma_{i}\boldsymbol{\gamma} \cdot \exp(-x_{i}^\top\boldsymbol{\beta}) , \nonumber \\
+                             \text{such that} && \boldsymbol{\gamma}^\top H \boldsymbol{\gamma}=1
+                         \end{eqnarray}$$
+                    </li>
+            <li>Two obvious constriants:
+               <ul>
+                   <li>C1: $H = I$</li>
+                   <li>C2: $H = n^{-1}  (\Sigma_1 + \cdots + \Sigma_n) $</li>
+               </ul>
+               </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Choice of $H$</h2>
+                <div class="thm"><strong>Proposition:</strong>  When (C1) $H=\boldsymbol{\mathrm{I}}$ in  the  optimization problem, for any  fixed $\boldsymbol{\beta}$, the solution of $\boldsymbol{\gamma}$ is the eigenvector corresponding to the minimum eigenvalue of matrix
+$$        \sum_{i=1}^{n}\frac{\Sigma_{i}}{\exp(x_{i}^\top\boldsymbol{\beta})} $$
+                </div>
+                <br>
+                <p>Will focus on the constraint (C2)</p>
+            </section>
+
+            <section>
+                <h2>Algoirthm</h2>
+                <ul>
+                    <li>Iteratively update $\beta$ and then $\gamma$ </li>
+                    <li>Prove explicit updates</li>
+                    <li>Extension to multiple $\gamma$:
+                    <ul>
+                        <li>After finding $\gamma^{(1)}$, we will update $\Sigma_i$ by removing its effect</li>
+                        <li>Search for the next PD $\gamma^{(k)}$, $k=2, \dotsc$</li>
+                        <li>Impose the orthogonal constraints such that $\gamma^{k}$ is orthogonal to all $\gamma^{(t)}$ for $t\lt k$</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+           <section>
+               <h2>Theory for $\beta$</h2>
+               <div class="thm"><strong>Theorem:</strong>
+Assume $\sum_{i=1}^{n}x_{i}x_{i}^\top/n\rightarrow Q$ as $n\rightarrow\infty$. Let $T=\min_{i}T_{i}$, $M_{n}=\sum_{i=1}^{n}T_{i}$, under the true $\boldsymbol{\gamma}$, we have
+    \begin{equation}
+        \sqrt{M_{n}}\left(\hat{\boldsymbol{\beta}}-\boldsymbol{\beta}\right)\overset{\mathcal{D}}{\longrightarrow}\mathcal{N}\left(\boldsymbol{\mathrm{0}},2 Q^{-1}\right),\quad \text{as } n,T\rightarrow\infty,
+    \end{equation}
+    where $\hat{\boldsymbol{\beta}}$ is the maximum likelihood estimator when the true $\boldsymbol{\gamma}$ is known.
+               </div>
+           </section>
+
+ <section>
+               <h2>Theory for $\gamma$</h2>
+               <div class="thm"><strong>Theorem:</strong>
+Assume $\Sigma_{i}=\Gamma\Lambda_{i}\Gamma^\top$, where $\Gamma=(\boldsymbol{\gamma}_{1},\dots,\boldsymbol{\gamma}_{p})$ is an orthogonal matrix and $\Lambda_{i}=\mathrm{diag}\{\lambda_{i1},\dots,\lambda_{ip}\}$ with $\lambda_{ik}\neq\lambda_{il}$ ($k\neq l$), for at least one $i\in\{1,\dots,n\}$. There exists $k\in\{1,\dots,p\}$ such that for $\forall~i\in\{1,\dots,n\}$, $\boldsymbol{\gamma}_{k}^\top\Sigma_{i}\boldsymbol{\gamma}_{k}=\exp(x_{i}^\top\boldsymbol{\beta})$. Let $\hat{\boldsymbol{\gamma}}$ be the maximum likelihood estimator of $\boldsymbol{\gamma}_{k}$ in Flury, 84. Then assuming that the assumptions  are satisfied,   $\hat{ \boldsymbol{\beta}}$  from our algorithm   is $\sqrt{M_{n}}$-consistent estimator of $\boldsymbol{\beta}$.
+               </div>
+           </section>
+
+
+           <section>
+               <h1>Simulations</h1>
+           </section>
+
+
+           <section>
+           <img src="Media/CAP/simuCompareTable.png" alt="">
+            <br>
+            <p>PCA and common PCA do not find the first principal direction, because they don't model covariates</p>
+           </section>
+
+
+          <section>
+              <h1>Resting-state fMRI</h1>
+          </section>
+
+          <section>
+              <h2>Regression Coefficients</h2>
+               <br>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/CAP/hcpRestCoef_Page_1.png" alt="">
+                    <p>Age</p>
+                </div>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/CAP/hcpRestCoef_Page_2.png" alt="">
+                    <p>Sex</p>
+                </div>
+                <div class="threecol inlinemiddle">
+                    <img src="Media/CAP/hcpRestCoef_Page_3.png" alt="">
+                    <p>Age*Sex</p>
+                </div>
+                <br>
+                <br>
+                <p>No statistical significant changes were found by massive edgewise regression</p>
+          </section>
+
+
+           <section>
+               <h2>Brain Map of $\gamma$</h2>
+               <img src="Media/CAP/loadingMap.png" style="width: 100%" alt="">
+            </section>
+
+
+            <section  data-state="flaticon2">
+                <h2>Discussion</h2>
+                <ul>
+                    <li>Regress matrices on vectors</li>
+                    <li>Method to identify covariate-related directions</li>
+                    <li>Theorectical justification</li>
+                    <li>Paper: Biostatistics (to appear, preprint at <a href="https://doi.org/10.1101/425033">DOI: 10.1101/425033</a>)</li>
+                    <li>R pkg: <highlight>cap</highlight> <img src="Media/Flaticon/baseball-cap.png" style="width: 5%" alt=""></li>
+                </ul>
+                <style>
+                    .flaticon2 credit:after {
+                        content: "Image source: flaticon.com";
+                    }
+                </style>
+            </section>
+
+
+
+
+            <section>
+<!--               data-background="Media/Scene/barcelona.jpg" data-state="opaqueBackImg"-->
+                <h1>Thank you!</h1>
+                <br>
+                <h2>Comments? Questions?</h2>
+                <br>
+                <br><br>
+
+<!--              <h2>Slides at:-->
+                    <!--
+                    <emph>bit.ly/XLICSA16</emph>
+                </h2>
+                <img src="./Media/QR/XLICSA16.png" alt="" width="30%">
+                <h2>
+                    OR:
+-->
+                     <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
+                    <br>
+                    <br> or
+                     <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span>
+
+
+
+<!--                </h2>-->
+
+            </section>
+
+        </div>
+    </div>
+
+    <script src="./reveal.js.3.5/lib/js/head.min.js"></script>
+    <script src="./reveal.js.3.5/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js.3.5#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                //mathjax: './MathJax/MathJax.js',
+                mathjax: 'bower_components/MathJax/MathJax.js',
+                //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+
+            //anything to load other libraries
+            anything: [{
+                className: "coverflow",
+                initialize: (function(container, options) {
+                    if (typeof container.coverflow === 'function') {
+                        container.coverflow()
+                    }
+                })
+            }],
+
+            // Optional reveal.js.3.5 plugins
+            dependencies: [{
+                src: './reveal.js.3.5/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/math/math.js',
+                async: true
+            }, {
+                src: 'JSLibrary/jquery-3.2.1.js'
+            }, {
+                src: 'JSLibrary/coverflowjs/coverflow.min.js'
+            }, {
+                src: './reveal.js.3.5/plugin/anything/anything.js'
+            }, {
+                src: 'bower_components/reveal.js-menu/menu.js'
+            }]
+        });
+        //{
+        //                src: './reveal.js.3.5/plugin/anything/anything.js'
+        //            },
+        //        ,  {
+        //                src: 'bower_components/reveal.js-menu/menu.js'
+        //            }
+
+    </script>
+
+    <!-- Coverflow event listeners -->
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <script>
+        Reveal.addEventListener('fragmentshown', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('next');
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('prev');
+        });
+        Reveal.addEventListener('slidechanged', function(event) {
+            jQuery(event.currentSlide).find('.coverflow').coverflow();
+            jQuery(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            jQuery(event.currentSlide).find('.coverflow').find('.fragment')
+                .removeClass('visible').removeClass('currentSlide');
+        });
+        // $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()  });
+        //        setTimeout(function() {
+        //            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()
+        //        }, 15000);
+        //        Reveal.addEventListener('ready', function(event) {
+        //           let elements =  document.getElementsByClassName('coverflow')
+        //           for (let j=0; j<elements.length; j++) {
+        //               elements[j].coverflow();
+        //           }
+        //        });
+
+    </script>
+
+
+</body>
+
+</html>
