@@ -1,6 +1,6 @@
 ---
 layout: news
-title: CAP Paper to Appear in Biometrics
+title: CAP Paper to Appear in Biostatistics
 author: Xi Luo
 previewimage:  CAPexample.png
 tags: news
