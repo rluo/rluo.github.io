@@ -21,7 +21,7 @@
             };
             var dimension = "proj_death_incr_rate_perc";
             $.ajax({
-                url: "data/death_latest.json",
+                url: "http://bigcomplexdata.com/projects/covid19/data/death_latest.json",
                 dataType: "JSON"
             }).done(function(data) {
                 var statesArray = [
