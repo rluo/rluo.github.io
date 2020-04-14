@@ -9,4 +9,4 @@ previewimage: /MyImages/covid19_death_app.png
 ---
 # COVID19 Machine Learning and AI App using Multiple Data Sources
 
-App for predicting new death counts for US: http://bigcomplexdata.com/projects/covid19/
+App for predicting future new death counts in US: [http://bigcomplexdata.com/projects/covid19/](http://bigcomplexdata.com/projects/covid19/)
