@@ -1,0 +1,12 @@
+---
+
+layout: news
+title: COVID19 App
+author: XL
+link: http://bigcomplexdata.com/projects/covid19/
+previewimage: /MyImages/covid19_death_app.png
+
+---
+# COVID19 Machine Learning and AI App using Multiple Data Sources
+
+App for predicting new death counts for US: http://bigcomplexdata.com/projects/covid19/
