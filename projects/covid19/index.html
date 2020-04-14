@@ -2,10 +2,12 @@
 <html>
 <head>
     <title>COVID-19 Deaths Projection</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+<!--    <link rel="stylesheet" type="text/css" href="styles.css">-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
 
@@ -48,12 +50,19 @@
             'packages': ['geochart']
         });
         google.setOnLoadCallback(drawStatesMap);
+        $(window).resize(drawStatesMap)
     </script>
 
 </head>
 
 <body>
+    
+    <div class="jumbotron text-center">
+      <h1>COVID-19 Death Projection on</h1>
+       <h1 class="name" id="proj_date"></h1>
+    </div>
 
+<!--
     <div class="container">
         <div class="hero">
             <h1 class="name"><strong>COVID-19</strong> Death Projection on</h1>
@@ -64,30 +73,49 @@
                 </center>
         </div>
     </div>
+-->
     
 
-    <center>
-            <div id='death_map' style="width: 900px; height: 500px;"></div>
-    </center>
+  <div class="container">
+<div id='death_map' style="width: 100%; height: 55%;"></div>
+    </div>
+            
+ 
 
 <br>
+   
+   <div class="container">
+          <center>
+        <h2>Shown as <strong>percentage changes</strong> relative to actual deaths on data date:</h2>
+     
+            <h2 id="data_date"></h2>
+       
+        <h2>(smaller death numbers less than 10  are rounded up for illustration purposes.)</h2>
+</center>
+   </div>
+<!--
     <center>
         <h1>Shown as <strong>percentage changes</strong> relative to actual deaths on data date:</h1><h1 id="data_date"></h1>
         <h1>(smaller death numbers less than 10  are rounded up for illustration purposes.)</h1>
     </center>
+-->
 
    <br><br><br>
-    
+
+   <div class="container">
    <center>
        <h2>Data: integrated from multiple sources including <a href="https://covidtracking.com">USA</a>, <a href="http://arcg.is/C1unv">Italy</a>, and <a href="https://www.wikipedia.org/">Wikipedia</a></h2>
        <br>
        <h2>Model: machine learning and artificial intelligence predictive modeling</h2>
    </center>
+   </div>
+   
+   
     <br><br>
 
 <center>
         <footer class="container">
-        <span style="font-size: 16px; margin-top: ">Developed by <a href="https://github.com/rluo/">Xi Luo</a> Powered by  <a href="https://www.google.com">Google</a> Web template modified from <a href="https://dribbble.com/shots/4342703-Minimal-resume-freebie-for-junior-self-taught-people">Nicolas Meuzard</a></span>
+            <span style="font-size: 16px; margin-top: ">Developed by <a href="https://github.com/rluo/">Xi Luo</a> Powered by  <a href="https://www.google.com">Google</a>  Built with <a href="https://getbootstrap.com/">Bootstrap</a></span>
     </footer>
 </center>
 
