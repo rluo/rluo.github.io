@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>COVID-19 Deaths Projection</title>
+    <title>COVID-19 Death Trend Projection</title>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-27280908-1"></script>
     <script>
@@ -46,9 +46,10 @@
                 ];
                 var proj_date = data[0].proj_date;
                 $("#proj_date").text(proj_date);
+                $("#proj_date_span").text(proj_date);
                 var data_date = data[0].data_date;
                 $("#data_date").text(data_date);
-
+                $("#data_date_span").text(data_date);
 
                 $.each(data, function() {
                     var stateitem = [this.state, this[dimension]];
@@ -74,7 +75,7 @@
 <body>
 
     <div class="jumbotron text-center">
-        <h1>COVID-19 Death Projection on</h1>
+        <h1>COVID-19 Death Trend Projection on</h1>
         <h1 class="name" id="proj_date"></h1>
     </div>
 
@@ -91,11 +92,10 @@
 
     <div class="container">
         <center>
-            <h3><strong>Hover or Click</strong> states to see <strong>percentage changes</strong> relative to actual deaths on data date:</h3>
-
+            <h3><strong>Hover or Click</strong> states to see <strong><u>percentage changes</u></strong> relative to actual deaths on data date:</h3>
             <h2 id="data_date"></h2>
-
-            <h3>(smaller death numbers less than 10 are rounded up for illustration purposes.)</h3>
+            <p>(smaller death numbers less than 10 are rounded up for illustration purposes.)</p>
+            <h4><u>percentage change</u> = 100 &times; (projected new deaths on <span id="proj_date_span"></span> &divide; new deaths on <span id="data_date_span"></span>   )% - 100 % </h4>
         </center>
     </div>
 
