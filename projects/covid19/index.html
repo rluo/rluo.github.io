@@ -1,13 +1,25 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>COVID-19 Deaths Projection</title>
-<!--    <link rel="stylesheet" type="text/css" href="styles.css">-->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-27280908-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-27280908-1');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
 
@@ -19,12 +31,14 @@
             var options = {
                 region: 'US',
                 resolution: 'provinces',
-                colorAxis: {colors: ['#4285F4', '#DB4437']}
+                colorAxis: {
+                    colors: ['#4285F4', '#DB4437']
+                }
             };
             var dimension = "proj_death_incr_rate_perc";
             $.ajax({
                 url: "http://bigcomplexdata.com/projects/covid19/data/death_latest.json",
-//                url:'data/death_latest.json',
+                //                url:'data/death_latest.json',
                 dataType: "JSON"
             }).done(function(data) {
                 var statesArray = [
@@ -34,17 +48,17 @@
                 $("#proj_date").text(proj_date);
                 var data_date = data[0].data_date;
                 $("#data_date").text(data_date);
-                
-                
+
+
                 $.each(data, function() {
                     var stateitem = [this.state, this[dimension]];
                     statesArray.push(stateitem);
                 });
-                
+
                 var statesData = google.visualization.arrayToDataTable(statesArray);
                 var chart = new google.visualization.GeoChart(document.getElementById('death_map'));
                 chart.draw(statesData, options);
-//                $("h3").append(" Sorted by  " + dimension);
+                //                $("h3").append(" Sorted by  " + dimension);
             });
         }
         google.load('visualization', '1', {
@@ -52,75 +66,62 @@
         });
         google.setOnLoadCallback(drawStatesMap);
         $(window).resize(drawStatesMap)
+
     </script>
 
 </head>
 
 <body>
-    
+
     <div class="jumbotron text-center">
-      <h1>COVID-19 Death Projection on</h1>
-       <h1 class="name" id="proj_date"></h1>
+        <h1>COVID-19 Death Projection on</h1>
+        <h1 class="name" id="proj_date"></h1>
     </div>
 
-<!--
+
+
+
     <div class="container">
-        <div class="hero">
-            <h1 class="name"><strong>COVID-19</strong> Death Projection on</h1>
-            <br>
-            <br>
-                <center>
-                    <h1 class="name" id="proj_date"></h1>
-                </center>
-        </div>
+        <div id='death_map' style="width: 100%; height: 55%;"></div>
     </div>
--->
-    
 
-  <div class="container">
-<div id='death_map' style="width: 100%; height: 55%;"></div>
-    </div>
-            
- 
 
-<br>
-   
-   <div class="container">
-          <center>
-        <h3><strong>Hover or Click</strong> states to see <strong>percentage changes</strong> relative to actual deaths on data date:</h3>
-     
+
+    <br>
+
+    <div class="container">
+        <center>
+            <h3><strong>Hover or Click</strong> states to see <strong>percentage changes</strong> relative to actual deaths on data date:</h3>
+
             <h2 id="data_date"></h2>
-         
-        <h3>(smaller death numbers less than 10  are rounded up for illustration purposes.)</h3>
-</center>
-   </div>
-<!--
-    <center>
-        <h1>Shown as <strong>percentage changes</strong> relative to actual deaths on data date:</h1><h1 id="data_date"></h1>
-        <h1>(smaller death numbers less than 10  are rounded up for illustration purposes.)</h1>
-    </center>
--->
 
-   <br><br><br>
+            <h3>(smaller death numbers less than 10 are rounded up for illustration purposes.)</h3>
+        </center>
+    </div>
 
-   <div class="container">
-   <center>
-       <h2>Data: integrated from multiple sources including <a href="https://covidtracking.com">USA</a>, <a href="http://arcg.is/C1unv">Italy</a>, and <a href="https://www.wikipedia.org/">Wikipedia</a></h2>
-       <br>
-       <h2>Model: machine learning and artificial intelligence predictive modeling</h2>
-   </center>
-   </div>
-   
-   
+
+    <br><br><br>
+
+    <div class="container">
+        <center>
+            <h2>Data: integrated from multiple sources including <a href="https://covidtracking.com">USA</a>, <a href="http://arcg.is/C1unv">Italy</a>, and <a href="https://www.wikipedia.org/">Wikipedia</a></h2>
+            <br>
+            <h2>Model: machine learning and artificial intelligence predictive modeling</h2>
+        </center>
+    </div>
+
+
     <br><br>
 
-<center>
+    <center>
         <footer class="container">
-            <span style="font-size: 16px; margin-top: ">Developed by <a href="https://github.com/rluo/">Xi Luo</a> Powered by  <a href="https://www.google.com">Google</a>  Built with <a href="https://getbootstrap.com/">Bootstrap</a></span>
-    </footer>
-</center>
+            <span style="font-size: 16px; margin-top: ">Developed with <span style="color: #e25555; font-size: 24px">&hearts;</span>   by <a href="https://github.com/rluo/">Xi Luo</a> &#124; Powered by <a href="https://www.google.com">Google</a>  &#124; Built with <a href="https://getbootstrap.com/">Bootstrap</a></span>
+        </footer>
+    </center>
 
 
+    <br><br>
 
+</body>
 
-</body></html>
+</html>
