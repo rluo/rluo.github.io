@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Granger Mediation</title>
+    <meta name="description" content="Analytics for Big and Complex Data Group">
+    <meta name="author" content="Xi (Rossi) LUO">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./reveal.js.3.5/css/reveal.css">
+    <link rel="stylesheet" href="CSS/rossisimple.css" id="theme">
+    <link rel="stylesheet" href="CSS/brightRoom.css" id="theme">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="./reveal.js.3.5/lib/css/zenburn.css">
+
+    <!--
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+-->
+    <!--    Cover Flow   -->
+    <link rel="stylesheet" type="text/css" href="JSLibrary/coverflowjs/coverflow.css" />
+
+    <script src="JSLibrary/jquery-3.2.1.js"></script>
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <!-- Coverflow styles -->
+    <style>
+        .ui-coverflow {
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 5px;
+        }
+
+        .ui-coverflow>img,
+        .ui-coverflow>figure {
+            height: 440px !important;
+            width: auto;
+            min-width: 440px !important;
+        }
+
+    </style>
+
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? './reveal.js.3.5/css/print/pdf.css' : './reveal.js.3.5/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+    </script>
+
+    <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+
+    <!-- <script src="./js-cover-flow/coverflow.js"></script> -->
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+</head>
+
+<body>
+     
+
+    
+    
+        <div class="reveal">
+<!--      place holder for credits -->
+       <credit></credit>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            \(\def\loading{......LOADING......Please Wait} \def\RR{\bf R} \def\real{\mathbb{R}} \def\bold#1{\bf #1} \def\d{\mbox{Cord}} \def\hd{\widehat \mbox{Cord}} \DeclareMathOperator{\cov}{cov} \DeclareMathOperator{\var}{var} \DeclareMathOperator{\cor}{cor} \newcommand{\ac}[1]{\left\{#1\right\}} \DeclareMathOperator{\Ex}{\mathbb{E}} \DeclareMathOperator{\diag}{diag}  \newcommand{\bm}[1]{\boldsymbol{#1}} \def\wait{......LOADING......Please Wait}\)
+
+            <section>
+                <h2><strong>Binary Autoregressive Network Modeling of Comorbidity Networks from Electronic Health Records </strong></h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <div width="100%">
+                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width:43%; vertical-align: middle;">
+                        <medium><strong>The University of Texas</strong>
+                            <br>Health Science Center
+                            <br>School of Public Health
+                            <br>Dept of Biostatistics
+                            <br>and Data Science
+                           </medium>
+<!--                            <br>ABCD Research Group&nbsp;-->
+                    </p> 
+                    <img class="noborder inlinemiddle" style="display: inline-block;
+                          vertical-align: middle;" src="Media/ABCDgroup/ABCDLogo4Color5.png" height="195px">
+                </div>
+                <br>
+                <p>
+                    <medium><strong>ICSA, Houston</strong>
+                        <br>December 15, 2020</medium>
+                </p>
+                <p>
+                    <small> Funding: NIH R01EB022911 and UT Health Start-up Fund</small>
+                </p>
+            </section>
+
+ 
+
+           <section>
+               <h1>Slides viewable on web: <br>
+                   <emph>bit.ly</emph>/<highlight>mediationjsm20</highlight>
+                   <br>
+                   <br>
+                   or
+                   <br>
+                   <br>
+               </h1>
+               <h2>
+                   <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
+               </h2>
+           </section>
+
+            
+ 
+
+<!-- Over view -->
+            <section>
+                <h2>Co-Authors</h2>
+                
+                <div style="display:block;">
+                     <div class="fbox"> <img src="./Media/Personnel/GenZhu.jpeg" style="border-radius: 50%" alt="Xuefei Cao" width="300" height="300">
+                        <p class="fbox">Gen Zhu
+                            <br>
+                            <small>UT Health, BADS</small></p>
+                    </div>
+                    <span style="display:inline-block; width: 50px;"></span>
+                    <div class="fbox"> <img src="./Media/Personnel/HulinWu2.jpg" style="border-radius: 50%" alt="B Sandstede" width="300" height="300">
+                        <p class="fbox">Hulin Wu
+                            <br>
+                            <small>UT Health, BADS</small> </p>
+                    </div>
+                 </div>                
+            </section>
+
+
+           
+            <section data-state="luoJNeuro09">
+                <h2>EHR Data: Medical Encounter/Diagnosis</h2>
+                <br>
+                <div>
+                    <img src="Media/EHR/ehr_data_enc.png" alt="" width="85%">
+                    <p>
+                        <medium>Time</medium>
+                    </p>
+                </div>
+                
+                <emph>Goal:</emph> infer disease sequences and cormorbidities from event data
+                <style>
+                    .luoJNeuro09 credit:after {
+                        content: "Image sources: flaticon.com: Freepik, srip";
+                    }
+
+                </style>
+            </section>
+            
+            
+            <section>
+                <h2>Challenges</h2>
+                <ul>
+                    <li>Many many unique diagnosis codes (~100K)</li>
+                    <li>Large but heterogeneous samples (~10K to ~10M)</li>
+                    <li>In a nutshell, time series of events from a huge number of types</li>
+                    <li>Many other associated data types (lab, prescription)</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h1>Method</h1>
+            </section>
+           
+           <section>
+               <h2>Existing Methods for Inferring Comorbidity Networks</h2>
+               <ul><li>Most existing methods are pair-wise <cite>Fotouhi et al. 2018</cite></li>
+               <li>Let $w_{ij}$ be freq of disease $i$ happens prior to disease $j$</li>
+               <li>Define link weights:
+               $$s_x^{o} = \sum_y w_{xy}, \quad s_x^{o} = \sum_y w_{xy}, \quad, s = \sum_{xy} w_{xy}, $$
+               </li>
+               <li>$\phi$-correlation and OER:
+               $$ \phi_{ij}  = \frac{w_{ij} s - s_i^{o} s_j^{i}}{\sqrt{s_i^{o} s_j^{i} (s - s_i^{o}) (s - s_i^{i})  }}, \quad OER_{ij} = \frac{w_{ij}s}{s_j^{i} s_i^{o}} $$
+               </li>
+               <li>Univariate logistic regression <cite>Aguado et al. 2020</cite></li>
+               </ul>
+           </section>
+           
+           <section>
+               <h2>Limitations</h2>
+               <ul>
+                   <li>Pair-wise associations fail to adjust other intermediate diseases developed in-between</li>
+                   <li>Multiple testing issues due to a large number of diseases $O(p^2)$</li>
+                   <li>Partially account for the temporal order
+                   <ul>
+                       <li>Disease A, B, C may happen in a specific temporal order</li>
+                   </ul>
+                   </li>
+               </ul>
+           </section>
+           
+           <section>
+               <h2>Model</h2>
+               <ul>
+                   <li>We use  ICD-9 codes for diagnoses</li>
+                   <li>$y_{ijk} = 1$ if patient $i$ has diagnosis code $k$ at encounter $j$, vector $Y_{ij}$ for all diagnosis codes 
+                   <ul>
+                       <li>Also known as one-hot encoding</li>
+                   </ul>
+                   </li>
+                   <li>Binary autoregressive model</li>
+                   $$ P(y_{ijk} = 1 | Y_{i,j-1}) =  (1 + \exp(-Y_{i,j-1}^T \beta_k ) )^{-1} $$
+                   <li>Inspired by Granger/vector autoregressive models for continuous variables</li>
+                   <li>$\beta_k$ denotes how each past diesase predicts future diagnosis $k$</li>
+               </ul>
+           </section>
+           
+           
+           
+           
+           <section>
+               <h2>Conditional Likelihood</h2>
+               <ul>
+                    <li>Full likelihood is challenging to compute</li>
+                    <li>Propose to optmize the penalized log-likelihood:
+                    $$\min_{\beta_k} \sum_{ij}   \ell(y_{ijk}  | \beta_k ) + \lambda \| \beta_k \|_1 $$
+                    </li>
+                    <li>Similar to Ising graphical models for binary data <emph>without</emph> temporal ordering <cite>Ravikumar et al, 10; van de Geer et al, 14</cite></li>
+                    <li>Implementation: LASSO penalized logistic regression</li>
+               </ul>
+           </section>
+                      
+            
+            <section>
+                <h1>Real Data</h1>
+            </section>           
+           
+           
+           <section>
+               <h2>Cerner's EHR</h2>
+               <ul>
+                   <li>Purchased EHR data from UT Health, Center for Big Data in health Sciences, Director Dr. Hulin Wu</li>
+                   <li>Huge dataset: >60M paitients, ~1 billion diagnoses</li>
+                   <li>Sub dataset of patients with drug overdose diagnosis</li>
+                       <ul>
+                           <li>640 diseases, 11481 patients</li>
+                       </ul>
+                    <li>Goal: find network of diseases prior or after drug overdose</li>
+               </ul>
+           </section>
+           
+           
+           <section>
+<!--               <h2>Estimated Disease Network</h2>-->
+                <div>
+                    <img src="Media/EHR/drug_network.png" alt="" width="60%">
+                    <p>
+                        <medium>787 (symptoms involving digestive system),  719 (other and unspecified disorder of joint), and 729 (other disorders of soft tissues)</medium>
+                    </p>
+                </div>
+                Consistent with the literature <cite>Dimitrijević et al. 2008; Olfson et al. 2018</cite>,  chronic pain >> drug overdose  >> digestive system damages
+          </section>
+           
+           
+           <section>
+                <h1>Simulations</h1>
+           </section>
+           
+           <section>
+               <h2>Comparision with Other Methods</h2>
+               <div>
+                    <img src="Media/EHR/diseasenet_simu_comp.png" alt="" width="80%">
+                </div>
+                Our method, <emph>BAN</emph>, improves over other competing methods by sensitivity and specificity of recovering nonzero/zero connections
+           </section>
+            
+
+            <section>
+                <h2>Discussion</h2>
+                <ul>
+                    <li>Model inspired by real-world EHR data</li>
+                    <li>Recovered directional disease networks</li>
+                    <li>Method: Granger causality + Ising models + ML
+                        <ul>
+                            <li>high dimensionality, sparsity and temporality</li>
+                        </ul>
+                    </li>
+                    <li>Many future directions:
+                    <ul>
+                        <li>Bottle neck: managing and extracting data</li>
+                        <li>Lots of opportunities for theory and method</li>
+                    </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+
+            <section>
+<!--               data-background="Media/Scene/qingdao.jpg" data-state="opaqueBackImg"-->
+                <h1>Thank you!</h1>
+                <br>
+                <h2>Comments? Questions?</h2>
+                <br>
+                <br><br>
+
+<!--              <h2>Slides at:-->
+                    <!--
+                    <emph>bit.ly/XLICSA16</emph>
+                </h2>
+                <img src="./Media/QR/XLICSA16.png" alt="" width="30%">
+                <h2>
+                    OR:
+-->
+                     <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
+                    <br>
+<!--
+                    <br> or
+                     <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span>
+
+
+-->
+
+<!--                </h2>-->
+
+            </section>
+
+        </div>
+    </div>
+    <script src="./reveal.js.3.5/lib/js/head.min.js"></script>
+    <script src="./reveal.js.3.5/js/reveal.js"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ "HTML-CSS": { preferredFont: "TeX" } });
+    </script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js.3.5#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            // Display the page number of the current slide
+            slideNumber: 'c/t',
+
+            math: {
+                //mathjax: './MathJax/MathJax.js',
+                mathjax: 'bower_components/MathJax/MathJax.js',
+                //mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    //                config: 'TeX-AMS-MML_SVG-full'
+            },
+
+
+            //anything to load other libraries
+            anything: [{
+                className: "coverflow",
+                initialize: (function(container, options) {
+                    if (typeof container.coverflow === 'function') {
+                        container.coverflow()
+                    }
+                })
+            }],
+
+            // Optional reveal.js.3.5 plugins
+            dependencies: [{
+                src: './reveal.js.3.5/lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: './reveal.js.3.5/plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/notes/notes.js',
+                async: true
+            }, {
+                src: './reveal.js.3.5/plugin/math/math.js',
+                async: true
+            }, {
+                src: 'JSLibrary/jquery-3.2.1.js'
+            }, {
+                src: 'JSLibrary/coverflowjs/coverflow.min.js'
+            }, {
+                src: './reveal.js.3.5/plugin/anything/anything.js'
+            }, {
+                src: 'bower_components/reveal.js-menu/menu.js'
+            }]
+        });
+        //{
+        //                src: './reveal.js.3.5/plugin/anything/anything.js'
+        //            },
+        //        ,  {
+        //                src: 'bower_components/reveal.js-menu/menu.js'
+        //            }
+
+    </script>
+
+    <!-- Coverflow event listeners -->
+    <script src="JSLibrary/coverflowjs/coverflow.min.js"></script>
+
+    <script>
+        Reveal.addEventListener('fragmentshown', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('next');
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            jQuery(event.fragment).closest('.ui-coverflow').coverflow('prev');
+        });
+        Reveal.addEventListener('slidechanged', function(event) {
+            jQuery(event.currentSlide).find('.coverflow').coverflow();
+            jQuery(event.currentSlide).find('.coverflow').coverflow('select', 0);
+            jQuery(event.currentSlide).find('.coverflow').find('.fragment')
+                .removeClass('visible').removeClass('currentSlide');
+        });
+        // $(function(){ $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()  });
+        //        setTimeout(function() {
+        //            $(Reveal.getCurrentSlide()).find('.coverflow').coverflow()
+        //        }, 15000);
+        //        Reveal.addEventListener('ready', function(event) {
+        //           let elements =  document.getElementsByClassName('coverflow')
+        //           for (let j=0; j<elements.length; j++) {
+        //               elements[j].coverflow();
+        //           }
+        //        });
+
+    </script>
+
+
+</body>
+
+</html>
