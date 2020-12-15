@@ -111,7 +111,7 @@
 
            <section>
                <h1>Slides viewable on web: <br>
-                   <emph>bit.ly</emph>/<highlight>mediationjsm20</highlight>
+                   <emph>bit.ly</emph>/<highlight>ehrnet20</highlight>
                    <br>
                    <br>
                    or
@@ -184,12 +184,12 @@
            <section>
                <h2>Existing Methods for Inferring Comorbidity Networks</h2>
                <ul><li>Most existing methods are pair-wise <cite>Fotouhi et al. 2018</cite></li>
-               <li>Let $w_{ij}$ be freq of disease $i$ happens prior to disease $j$</li>
+               <li>$w_{ij}$ be freq of disease $i$ happens prior to disease $j$</li>
                <li>Define link weights:
                $$s_x^{o} = \sum_y w_{xy}, \quad s_x^{o} = \sum_y w_{xy}, \quad, s = \sum_{xy} w_{xy}, $$
                </li>
                <li>$\phi$-correlation and OER:
-               $$ \phi_{ij}  = \frac{w_{ij} s - s_i^{o} s_j^{i}}{\sqrt{s_i^{o} s_j^{i} (s - s_i^{o}) (s - s_i^{i})  }}, \quad OER_{ij} = \frac{w_{ij}s}{s_j^{i} s_i^{o}} $$
+               <small>$$ \phi_{ij}  = \frac{w_{ij} s - s_i^{o} s_j^{i}}{\sqrt{s_i^{o} s_j^{i} (s - s_i^{o}) (s - s_i^{i})  }}, \quad OER_{ij} = \frac{w_{ij}s}{s_j^{i} s_i^{o}} $$</small>
                </li>
                <li>Univariate logistic regression <cite>Aguado et al. 2020</cite></li>
                <li>First talk in this session by <emph>Dr Maroufy and colleagues</emph></li>
@@ -249,9 +249,9 @@
            <section>
                <h2>Cerner's EHR</h2>
                <ul>
-                   <li>Purchased EHR data from UT Health, Center for Big Data in health Sciences, Director Dr. Hulin Wu</li>
+                   <li>Purchased EHR data by UT Health, Center for Big Data in Health Sciences, Director Dr. Hulin Wu</li>
                    <li>Huge dataset: >60M paitients, ~1 billion diagnoses</li>
-                   <li>Sub dataset of patients with drug overdose diagnosis</li>
+                   <li><emph>Small</emph> dataset of patients with drug overdose diagnosis</li>
                        <ul>
                            <li>640 diseases, 11481 patients</li>
                        </ul>
