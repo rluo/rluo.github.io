@@ -6,3 +6,10 @@ Code Copyright 2013-2015 Iron Summit Media Strategies, LLC. Code released under 
 
 ## Gulp
 Gulp on mac is enabled by Docker image rossiluo/web
+
+## Talk slides:
+ 
+
+ + add slides
+ + add talk under talks/posts
+ + add thumbtail using https://browshot.com/ using dimention 400x300  under  img/talkScreenshots
