@@ -1,0 +1,9 @@
+---
+layout: talks
+title: ENAR 2021
+author: Xi Luo
+previewimage: CAP_ENAR_2021.html#/15
+externallink: CAP_ENAR_2021.html
+
+---
+Covariate Assisted Principal CAP Regression for Matrix Outcomes
