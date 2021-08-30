@@ -317,10 +317,37 @@
             </section>
 
             <section>
+                <h2>Class</h2>
+                <p>R is also <emph>Object Oriented</emph>, or S3 system
+                </p>
+                <pre><code data-trim data-noescape class="language-r">
+                    > print(hist(c(1:10)))
+                    $breaks
+                    [1]  0  2  4  6  8 10
+                    
+                    $counts
+                    [1] 2 2 2 2 2
+                    
+                    $equidist
+                    [1] TRUE
+                    
+                    attr(,"class")
+                    [1] "histogram"
+                </code></pre>
+                <p>Attributes helps decide which func within object to call</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    > re <- summary( lm(c(1:20) ~ c(21:40)) )
+                    > re <- summary.lm( lm(c(1:20) ~ c(21:40)) )
+                </code></pre>
+                <p>Newer S4 system will be skipped</p>
+            </section>
+
+            <section>
                 <h2>Reference</h2>
                 <ul>
                     <li>AoRP: ch 1</li>
                     <li>AR: ch 1</li>
+                    <li>Check out the help tips!</li>
                 </ul>
                 <br>
                 <br>
