@@ -558,6 +558,12 @@ html {
     font-weight: bold;
     color: #0072bd;
 }
+
+.reveal emphcode {
+    font-family: monospace;
+    color: #d95319;
+}
+
 .reveal .myblue {
     color: #0072bd;
 }
