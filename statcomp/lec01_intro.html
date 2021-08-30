@@ -89,7 +89,7 @@
                     <li>Applied stat (e.g. Bayesian, categorical)</li>
                     <li>Willing to learn a bit beyond R (e.g. C++)</li>
                     <li>Plus: other scripting languages (e.g. Python)</li>
-                    <li>This is not a intro R course</li>
+                    <li>This is not an intro R course</li>
                 </ul>
             </Section>
 
@@ -130,7 +130,7 @@
                     <li>Stat community and packages</li>
                     <li>Ecosystem: RMarkdown, Shiny, Rstudio</li>
                     <li>Functional programming</li>
-                    <li>high performance: C++, parallel</li>
+                    <li>High performance: C++, parallel</li>
                 </ul>
             </section>
 
@@ -269,6 +269,20 @@
                 </code></pre>
                 <p>Note matrix multiply <emphcode>%*%</emphcode>
                 </p>
+                <p>Review: <emphcode>rbind/cbind</emphcode>, <emphcode>m[1,]</emphcode>, <emphcode>m[,2]
+                    </emphcode>
+                </p>
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    > cbind( matrix(1:2, 2), matrix(c("a", "b"), 2) )
+                        [,1] [,2]
+                    [1,] "1"  "a" 
+                    [2,] "2"  "b" 
+                </code></pre>
+                <p>Like vector, matrix contains elements of the same type</p>
             </section>
 
             <section>
