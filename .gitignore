@@ -1,5 +1,5 @@
 _site/
-node_modules/
+node_modules*/
 slides/MathJax/
 .DS_Store
 slides/JSLibrary/animo.js/
@@ -52,4 +52,4 @@ slides/MyTemplateReveal35.html
 slides/output.pdf
 slides/rsyncHtmlFolder.sh
 tetsiframe.html
-
+delete_node_modules/
