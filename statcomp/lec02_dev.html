@@ -60,6 +60,7 @@
                     <li>Docker</li>
                     <li>Unix/Linux</li>
                     <li>Git</li>
+                    <li>R Markdown</li>
                 </ul>
             </section>
 
@@ -416,6 +417,80 @@
                 </style>
             </section>
 
+
+            <section>
+                <h1>R Markdown</h1>
+            </section>
+
+            <section>
+                <h2>Markdown and YAML</h2>
+                <ul>
+                    <li>Markdown: lightweight marked language started in 2004</li>
+                    <li>MD can be translated into other formats, such as PDF, HTML, DOCX, by e.g. pandoc</li>
+                    <li>YAML: human readable data in text started in 2001, vs json, xml</li>
+                    <li>R Markdown includes ingredients of both, and adds a few mor features</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>R Markdown</h2>
+                <p>YAML header</p>
+                <pre><code data-trim data-noescape class="language-yaml">
+                    ---
+                    title: "Diamond sizes"
+                    date: 2016-08-25
+                    output: html_document
+                    ---
+                </code></pre>
+                <p>R code chunk</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    ```{r setup, include = FALSE}
+                    library(ggplot2)
+                    library(dplyr)
+                    
+                    smaller <- diamonds %>% 
+                      filter(carat <= 2.5)
+                    ```
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>R Markdown II</h2>
+                <p>Markdown and R</p>
+                <pre><code data-trim data-noescape class="language-markdown">
+                    We have data about `r nrow(diamonds)` diamonds. Only 
+                    `r nrow(diamonds) - nrow(smaller)` are larger than
+                    2.5 carats. The distribution of the remainder is shown
+                    below:
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Two-step Process</h2>
+                <ul>
+                    <li>R markdown (.Rmd) converted to pure markdown (.md, inlcuding R computation and output as texts)
+                        by R
+                        packages like knitr.</li>
+                    <li>Markdown (.md) then converted to any formats that it supports </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>How to Learn</h2>
+                <ul>
+                    <li>Learn markdown syntax</li>
+                    <li>Learn YAML syntax</li>
+                    <li>Learn inline code, chunk and options</li>
+                    <li>(Optional) learn pretty-formatted table by <emphcode>kable</emphcode>
+                    </li>
+                    <li>Learn other advanced RMarkdown options (caching) for improved performance and customized
+                        behavior</li>
+                    <li>Other advanced use (e.g. interactive)</li>
+                    <li>Reading: R for Data Science, ch 21, 23, 24</li>
+                </ul>
+            </section>
+
             <section>
                 <h2>References</h2>
                 <ul>
@@ -439,6 +514,8 @@
                     <li>Git workflow: <small
                             style="vertical-align: text-bottom;">https://www.atlassian.com/git/tutorials/comparing-workflows</small>
                     </li>
+                    <li>R Markdown: <small
+                            style="vertical-align: text-bottom;">https://r4ds.had.co.nz/r-markdown.html</small></li>
                 </ul>
                 </p>
             </section>
