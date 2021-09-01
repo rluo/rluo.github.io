@@ -224,300 +224,194 @@
 
             <section>
                 <h1>Unix/Linux</h1>
+                <ul>
+                    <li>UNIX was originally developed at Bell Laboratories</li>
+                    <li>Linux is a clone of the operating system Unix, written from
+                        scratch by Linus Torvalds with community efforts</li>
+                    <li>Modern Linux distributions: Ubuntu, CentOS, Suse, Redhat, Mint, ...</li>
+                </ul>
             </section>
 
             <section>
-                <h2>Linux</h2>
+                <h2>Linux Features</h2>
+                <ul>
+                    <li>Multitasking</li>
+                    <li>Multiuser</li>
+                    <li>Portability</li>
+                    <li>Modular Structure</li>
+                    <li>Library of application software (usually free)</li>
+                    <li>Work environment “of unusual simplicity, power, and elegance"</li>
+                </ul>
+            </section>
 
+
+
+
+            <section>
+                <h2>Linux Organization</h2>
+                <ul>
+                    <li>kernel: controls the hardware, turns part of the system on and
+                        off at the programmer’s command, schedules tasks, and
+                        manages storage;</li>
+                    <li>shell: connects and interprets users’ commands, calls
+                        programs from memory, and executes them;</li>
+                    <li>tools and applications: offer additional functionality to the
+                        operating system.</li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Essential Concepts</h2>
+                <ul>
+                    <li>A process: everything that “runs” under linux is a process,
+                        e.g. commands, codes, spreadsheets, terminal windows, etc.</li>
+                    <li>The hierarchical file system: directories (folders), data files,
+                        applications. Files are not processes!</li>
+                    <li>A shell: A shell is a process that accepts command lines and
+                        feeds them to the linux kernel. Ex. Bash, Zsh</li>
+                    <li>Standard input/output. All processes have a standard input
+                        and a standard output.</li>
+                </ul>
             </section>
 
 
             <section>
-                <h2>Running Linux on Docker</h2>
+                <h2>Command</h2>
+                <ul>
+                    <li>Syntax: command [option] parameter</li>
+                    <li>Command: <emphcode>ls, wc, man, rm, cd</emphcode>
+                    </li>
+                    <li>Options telling Linux to perform a command in
+                        a particular way, e.g. -f</li>
+                    <li>Parameter: e.g. file names</li>
+                    <li>Wildcards: <emphcode>?</emphcode> matches any single character, <emphcode>*</emphcode> matches
+                        any number of ?</li>
+                    <li>Review linux commands on Ubuntu web</li>
+                </ul>
+            </section>
 
+            <section data-state="linuxfile">
+                <h2>File System as Tree</h2>
+                <img src="img/Standard-unix-filesystem-hierarchy.svg" width="100%" alt="">
+                <style>
+                    .linuxfile credit:after {
+                        content: "https://en.wikipedia.org/wiki/Unix_filesystem#/media/File:Standard-unix-filesystem-hierarchy.svg";
+                    }
+                </style>
+            </section>
+
+            <section>
+                <h2>Pipe</h2>
+                <ul>
+                    <li>
+                        <emphcode>command < file</emphcode> feed file as input to command
+                    </li>
+                    <li>
+                        <emphcode>command > file</emphcode> save command output to file (overwritten)
+                    </li>
+                    <li>
+                        <emphcode>command >> file</emphcode> save command output to file amd append to file if it exists
+                    </li>
+                    <li>
+                        <emphcode>command1 | command2</emphcode> use output of command1 as input to command2
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Linux using Docker</h2>
                 <pre><code data-trim data-noescape class="language-bash">
-                    % docker run -ti --rm r-base bash
-                    root@7f6528ede0b5:/# ls
+                    ╰─$ docker run -ti --rm r-base bash
+                    root@5ba24a4f8aec:/# ls
                     bin   dev  home  lib64	mnt  proc  run	 srv  tmp  var
                     boot  etc  lib	 media	opt  root  sbin  sys  usr
-                    root@7f6528ede0b5:/# cd root
-                    root@7f6528ede0b5:~# vim.tiny test
-                    root@7f6528ede0b5:~# exit
+                    root@5ba24a4f8aec:/# ls -l  lib/*  | wc -l 
+                    127
+                    root@5ba24a4f8aec:/# exit
                     exit
                 </code></pre>
             </section>
 
-            <Section>
-                <h2>Prerequisites</h2>
+            <section>
+                <h1>Git</h1>
+            </section>
+
+            <section>
+                <h2>Version Control</h2>
+                <br>
+                <img src="img/version_control.png" width="100%" alt="">
+                <br>
+                <p>Key idea: no need to store multiple copies of the file from different versions, only need to store
+                    the differences between versions and the revision history.</p>
+            </section>
+
+            <section>
+                <h2>Git Model</h2>
+                <img src="img/git_model.png" width="75%" alt="">
+            </section>
+
+            <section>
+                <h2>Git</h2>
                 <ul>
-                    <li>R experience (1+ yr)</li>
-                    <li>Grad-level theory (stat inference)</li>
-                    <li>Applied stat (e.g. Bayesian, categorical)</li>
-                    <li>Willing to learn a bit beyond R (e.g. C++)</li>
-                    <li>Plus: other scripting languages (e.g. Python)</li>
-                    <li>This is not an intro R course</li>
-                </ul>
-            </Section>
-
-            <section>
-                <iframe data-src="https://pollev-embeds.com/rossiluo765" frameborder="0" width="800px"
-                    height="600px"></iframe>
-                <p>Respond at <emph>PollEv.com/rossiluo765</emph>
-                </p>
-                <p>Or text <emph>ROSSILUO765</emph> to <emph>37607</emph> once to join, then <strong>A</strong>,
-                    <strong>B</strong>...
-                </p>
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    f <- function() {
-                        i <- 0
-                        function() {
-                            i <<- i + 1
-                            i
-                        }
-                    }
-                    g1 <- f(); g2 <- f(); g1(); g2(); g1(); g2()
-                    </code></pre>
-                <p>What is the last printout value? </p>
-                <p>Respond at <emph>PollEv.com/rossiluo765</emph>
-                </p>
-            </section>
-
-            <section>
-                <h1>Quick Review</h1>
-            </section>
-
-            <section>
-                <h2>Why R?</h2>
-                <ul>
-                    <li>Free and available everywhere</li>
-                    <li>Stat community and packages</li>
-                    <li>Ecosystem: RMarkdown, Shiny, Rstudio</li>
-                    <li>Functional programming</li>
-                    <li>High performance: C++, parallel</li>
+                    <li>Created by Linus Torvalds in 2005</li>
+                    <li>Github, Bitbucket provide servers to host code repo</li>
+                    <Li>Each collaborator stores a full-fledged copy of the project</Li>
+                    <li>Resolve differences before pushing updates to the server</li>
                 </ul>
             </section>
 
             <section>
-                <h2>R limitations</h2>
+                <h2>Almost Auto-Merging</h2>
                 <ul>
-                    <li>Most wild codes not fast or elegant</li>
-                    <li>Scripts without good design</li>
-                    <li>Inconsistent, pkgs</li>
-                    <li>Not efficient by design</li>
-                    <li>Evolving very fast</li>
-                </ul>
-            </section>
-
-
-            <section>
-                <h2>Function</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    oddcount <- function(x)  {
-                       k <- 0  # assign 0 to k
-                       for (n in x)  {
-                          if (n %% 2 == 1) k <- k+1  # %% is the modulo operator
-                       }
-                       return(k)
-                    }
-                </code></pre>
-                <p>FP: variable <emphcode>oddcount</emphcode> assigned to <emphcode>function() {}</emphcode>
-                </p>
-                <p>Not much differnt from assigning <emphcode>oddcount = c(3,4) </emphcode>
-                </p>
-                <p>One may omit <emphcode>return</emphcode> as R returns the last value</p>
-            </section>
-
-
-            <section>
-                <h2>Variable scope</h2>
-                <ul>
-                    <li>
-                        <emphcode>k</emphcode> and <emphcode>n</emphcode> are <emph>local</emph> variables, not visible
-                        outside the
-                        function or <emphcode>{}</emphcode>
+                    <li>Each collaborator can make edits concurrently
                     </li>
-                    <li>R uses <emph>Lexical Scoping</emph>
-                        <ul>
-                            <li>values searched where variables defined and then upwards</li>
-                        </ul>
-                    </li>
-                    <li>Variable arguments are copied when calling func</li>
-                    <li>Variables defined outside func are <emph>global</emph>
-                    </li>
+                    <li>At the end, Git will usually resolve the conflicts in edits and make a merged copy with all
+                        edits</li>
                 </ul>
             </section>
 
             <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    f <- function() {
-                        i <- 0
-                        function() {
-                            i <<- i + 1
-                            i
-                        }
-                    }                     
-                </code></pre>
+                <h2>Git Workflow: Central</h2>
                 <ul>
-                    <li>
-                        <emphcode>i</emphcode> is local
+                    <li>Simplest for a couple of collaborators
                     </li>
-                    <li>
-                        <emphcode>f</emphcode> returns a function
+                    <li>One evolving version only
                     </li>
-                    <li>
-                        This function accesses/modifies <emphcode>i</emphcode> defined in <emphcode>f</emphcode>
-                    </li>
-                </ul>
-            </section>
-
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    > i <- 100
-                    > g <- f()
-                    > g()
-                    [1] 1                
-                    > g()
-                    [1] 2
-                    > g2 <- f()
-                    > g2()
-                    [1] 1
-                </code></pre>
-                <p>How many variables are named <emphcode>i</emphcode>?
-                </p>
-
-            </section>
-
-
-            <section>
-                <h2>Vector</h2>
-                <p>vectors are collections of elements of the same <emphcode>mode</emphcode>
-                </p>
-                <pre><code data-trim data-noescape class="language-r">
-                    > x <- c(20,21,22)
-                    > length(x)
-                    [1] 3
-                    > mode(x)
-                    [1] "numeric"
-                </code></pre>
-            </section>
-
-            <section>
-                <h2>String</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    > u <- paste("uth", "bads")
-                    > mode(u)
-                    [1] "character"
-                    > u
-                    [1] "uth bads"
-                    > strsplit(u, " ")
-                    [[1]]
-                    [1] "uth"  "bads"
-                </code></pre>
-                <p>More on string manipulations later</p>
-            </section>
-
-            <section>
-                <h2>Matrix</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    > m <- matrix(1:4, 2)
-                    > m
-                         [,1] [,2]
-                    [1,]    1    3
-                    [2,]    2    4
-                    > m %*% c(1, 1)
-                         [,1]
-                    [1,]    4
-                    [2,]    6
-                </code></pre>
-                <p>Note matrix multiply <emphcode>%*%</emphcode>
-                </p>
-                <p>Review: <emphcode>rbind/cbind</emphcode>, <emphcode>m[1,]</emphcode>, <emphcode>m[,2]
-                    </emphcode>
-                </p>
-            </section>
-
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    > cbind( matrix(1:2, 2), matrix(c("a", "b"), 2) )
-                        [,1] [,2]
-                    [1,] "1"  "a" 
-                    [2,] "2"  "b" 
-                </code></pre>
-                <p>Like vector, matrix contains elements of the same type</p>
-            </section>
-
-            <section>
-                <h2>List</h2>
-                <p>Like vector, but can contain different types and even nested</p>
-
-                <pre><code data-trim data-noescape class="language-r">
-                    > l <- list(a=list(a1=list(10)), b="uth")
-                    > l
-                    $a
-                    $a$a1
-                    $a$a1[[1]]
-                    [1] 10
-                    
-                    $b
-                    [1] "uth"
-                    > l$a$a1
-                    [[1]]
-                    [1] 10
-                </code></pre>
-
-            </section>
-
-            <section>
-                <h2>Data Frame</h2>
-                <ul>
-                    <li>Probably the most important data type</li>
-                    <li>They are actually <emphcode>list</emphcode>
-                    </li>
-                    <li>Will discuss manipulation and performance issues</li>
+                    <li>Suitable for small projects</li>
                 </ul>
             </section>
 
             <section>
-                <h2>Class</h2>
-                <p>R is also <emph>Object Oriented</emph>, or S3 system
-                </p>
-                <pre><code data-trim data-noescape class="language-r">
-                    > print(hist(c(1:10)))
-                    $breaks
-                    [1]  0  2  4  6  8 10
-                    
-                    $counts
-                    [1] 2 2 2 2 2
-                    
-                    $equidist
-                    [1] TRUE
-                    
-                    attr(,"class")
-                    [1] "histogram"
-                </code></pre>
-                <p>Attributes help decide which func within object to call</p>
-                <pre><code data-trim data-noescape class="language-r">
-                    > re <- summary( lm(c(1:20) ~ c(21:40)) )
-                    > re <- summary.lm( lm(c(1:20) ~ c(21:40)) )
-                </code></pre>
-                <p>Newer S4 system will be skipped</p>
+                <h1>Example Workflow</h1>
+            </section>
+
+            <section><img src="img/git_workflow1.png" width="100%" alt=""></section>
+            <section><img src="img/git_workflow2.png" width="100%" alt=""></section>
+            <section><img src="img/git_workflow3.png" width="100%" alt=""></section>
+            <section><img src="img/git_workflow4.png" width="100%" alt=""></section>
+            <section><img src="img/git_workflow5.png" width="100%" alt=""></section>
+
+            <section>
+                <h2>Git and R</h2>
+                <ul>
+                    <li>Git command line already installed on linux/mac</li>
+                    <li>Graphic user interfaces of Git available</li>
+                    <li>Rstudio has Git integration</li>
+                </ul>
             </section>
 
             <section>
                 <h2>Reference</h2>
                 <ul>
-                    <li>AoRP: ch 1</li>
-                    <li>AR: ch 1</li>
-                    <li>Check out the help tips!</li>
+                    <li>Linux commands at https://ubuntu.com/tutorials/command-line-for-beginners#1-overview</li>
+                    <li>Rstudio Git:
+                        https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN</li>
+                    <li>Github: https://guides.github.com/activities/hello-world/</li>
+                    <li>Docker: https://docs.docker.com/get-started/</li>
+                    <li>Git workflow: https://www.atlassian.com/git/tutorials/comparing-workflows</li>
                 </ul>
-                <br>
-                <br>
-                <p>Save to pdf: append <emph>?print-pdf</emph> to the URL and then press <emph>CTRL/CMD + P</emph>
                 </p>
             </section>
 
