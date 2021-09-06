@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>Lec04 List</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+
+
+            <section>
+                <h1>List</h1>
+            </section>
+
+
+
+            <section>
+                <h2>List</h2>
+                <ul>
+                    <li>Recursive vectors, instead of atomic </li>
+                    <li>Foundations for data frame, objective-oirented programming</li>
+                    <li>Indexed by number or name (tag)</li>
+                    <li>Access elements by <emphcode>$</emphcode> and <emphcode>[[]]</emphcode>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Indexing</h2>
+                <p>Single element</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    lst$c                                                                     
+                    lst[["c"]]
+                    lst[[1]]
+                </code></pre>
+                <p>Sublist</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    lst["c"]
+                    lst[1]
+                </code></pre>
+                <p>Note <emphcode>lst[1:2]</emphcode> is ok but <emphcode>lst[[1:2]]</emphcode> is not</p>
+            </section>
+
+
+            <section>
+                <h2>Adding and Deleting </h2>
+                <p>Adding one or multiple elements</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    z$c <- "sailing"
+                    z[[3]] <-  "sailing"
+                    z[4:5] <- c(TRUE, FALSE) # multiple elements
+                </code></pre>
+                <p>Deleting one element (note later indices -1 in new list</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    z[[2]] <- NULL
+                </code></pre>
+                <p>Concatenating lists</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    > c(list(1), list(TRUE))
+                    [[1]]
+                    [1] 1
+                    
+                    [[2]]
+                    [1] TRUE             
+                </code></pre>
+            </section>
+
+            <section>
+                <h2></h2>
+            </section>
+
+
+
+            <section>
+                <h2>References</h2>
+                <ul>
+                    <li>AoRP: ch 2, 3</li>
+                    <li>AR: ch 2</li>
+                </ul>
+            </section>
+
+        </div>
+
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
