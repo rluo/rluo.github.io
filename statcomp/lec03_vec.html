@@ -356,9 +356,133 @@
                 </ul>
             </section>
 
+            <section>
+                <h2>Fltering</h2>
+                <ul>
+                    <li>Use logical vectors</li>
+                    <li>Use vector operations, e.g. <emphcode>&</emphcode>
+                    </li>
+                    <li>Use index vectors</li>
+                    <li>Dimension reduction</li>
+                </ul>
+                <pre><code data-trim data-noescape class="language-r">
+                    > m <- matrix(1:4, 2)
+                    > m[,2]
+                    [1] 3 4
+                    > m[,2, drop=FALSE]
+                         [,1]
+                    [1,]    3
+                    [2,]    4                                        
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Example 3.2.5</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    makecov <- function(rho,n) {
+                        m <- matrix(nrow=n,ncol=n)
+                        m <- ifelse(row(m) == col(m),1,rho)  
+                        return(m)
+                     }                                                  
+                </code></pre>
+                <p>Operating matrices like vectors</p>
+            </section>
+
+            <section>
+                <h2>Matrix Function</h2>
+                <ul>
+                    <li>
+                        <emphcode>apply</emphcode>
+                    </li>
+                    <li>Note: typically results are stored column-wise, and you may need to transpose</li>
+                    <li>apply does not speed up computation, compared with for-loop, but functional programming may be
+                        easier to scale up (e.g. parallel)</li>
+                </ul>
+            </section>
 
 
+            <section>
+                <h2>Example 3.4.2</h2>
+                <p>Find the location, value of the minimum in a row <emphcode>x</emphcode>
+                </p>
+                <pre><code data-trim data-noescape class="language-r">
+                    imin <- function(x) {  
+                       lx <- length(x)
+                       i <- x[lx]  # original row number
+                       j <- which.min(x[(i+1):(lx-1)])   
+                       k <- i+j   
+                       return(c(k,x[k]))
+                    }                                                
+                </code></pre>
+                <p> return the minimum of <emphcode>d[i,j], i != j</emphcode>, for square symmetric <emphcode>d
+                    </emphcode>
+                </p>
+                <pre><code data-trim data-noescape class="language-r">
+                    mind <- function(d) {
+                        n <- nrow(d)
+                        # add a column to identify row number for apply()
+                        dd <- cbind(d,1:n)   
+                        wmins <- apply(dd[-n,],1,imin)  
+                        # wmins will be 2xn, 1st row being indices and 2nd being values
+                        i <- which.min(wmins[2,])  
+                        j <- wmins[1,i]  
+                        return(c(d[i,j],i,j))   
+                     }                                              
+                </code></pre>
+            </section>
 
+
+            <section>
+                <h2>Alternative</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    minda <- function(d) {
+                        smallest <- min(d)
+                        ij <- which(d == smallest,arr.ind=TRUE)
+                        return(c(smallest,ij))
+                     }                                                                 
+                </code></pre>
+                <p>Though simple, it has drawbacks</p>
+                <ul>
+                    <li>multiple minima</li>
+                    <li>performance</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Implementation</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > m <- matrix(1:4,  2)
+                    > class(m)
+                    [1] "matrix" "array" 
+                    > attributes(m)
+                    $dim
+                    [1] 2 2                                                                              
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Array</h2>
+                <p>Multi-dimenational data similar to matrix implementation</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    > a <- array(1:6, dim=c(1, 2, 3))
+                    > a
+                    , , 1
+                    
+                         [,1] [,2]
+                    [1,]    1    2                    
+                    ...                         
+                    , , 3
+                    
+                         [,1] [,2]
+                    [1,]    5    6
+                    
+                    > attributes(a)
+                    $dim
+                    [1] 1 2 3                                                                       
+                </code></pre>
+                <p>Again, data fill the first dim, then second, ...</p>
+            </section>
             <!-- OLD -->
 
 
@@ -366,30 +490,9 @@
             <section>
                 <h2>References</h2>
                 <ul>
-                    <li>Linux commands at
-                        <small
-                            style="vertical-align: text-bottom;">https://ubuntu.com/tutorials/command-line-for-beginners#1-overview</small>
-                    </li>
-                    <li>Rstudio Git:
-                        <ul>
-                            <li>https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN
-                            </li>
-                            <li>https://cfss.uchicago.edu/setup/git-with-rstudio/</li>
-                            <li>https://happygitwithr.com/rstudio-git-github.html</li>
-                        </ul>
-                    </li>
-                    <li>Github: <small
-                            style="vertical-align: text-bottom;">https://guides.github.com/activities/hello-world/</small>
-                    </li>
-                    <li>Docker: <small style="vertical-align: text-bottom;">https://docs.docker.com/get-started/</small>
-                    </li>
-                    <li>Git workflow: <small
-                            style="vertical-align: text-bottom;">https://www.atlassian.com/git/tutorials/comparing-workflows</small>
-                    </li>
-                    <li>R Markdown: <small
-                            style="vertical-align: text-bottom;">https://r4ds.had.co.nz/r-markdown.html</small></li>
+                    <li>AoRP: ch 2, 3</li>
+                    <li>AR: ch 2</li>
                 </ul>
-                </p>
             </section>
 
         </div>
