@@ -113,7 +113,74 @@
             </section>
 
             <section>
-                <h2></h2>
+                <h2>Memory</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    l1 <- list(1, 2, 3)
+                    l2 <- l1
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/52bc0e3da3382cba957a9d83397b6c9200906ce2/c72aa/diagrams/name-value/l-modify-1.png"
+                    width="50%">
+                <p>List is like a vector of pointers</p>
+            </section>
+
+
+            <section>
+                <h2>Shallow Copy</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    l2[[3]] <- 4
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/b844bb5a3443e1344299627f5760e2ae3a9885b5/e1c76/diagrams/name-value/l-modify-2.png"
+                    width="50%">
+                <p>Pointer addresses were modified partially while values were not duplicated. VS: vector copy-on-modify
+                    is
+                    <emph>deep copy</emph>.
+                </p>
+            </section>
+
+
+
+            <section>
+                <h2>Example 4.2.4</h2>
+                <p>Count word appearing locations in paragraph</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    findwords <- function(tf) {
+                        # read in the words from the file, into a vector of mode character
+                        txt <- scan(tf,"")   
+                        wl <- list()  
+                        for (i in 1:length(txt)) {
+                           wrd <- txt[i]  # i-th word in input file
+                           wl[[wrd]] <- c(wl[[wrd]],i)   
+                        }   
+                        return(wl)
+                     }                     
+                </code></pre>
+                <p>List will return <emphcode>NULL</emphcode> if index not exist. Less storage, and adding new word
+                    quickly.</p>
+            </section>
+
+
+            <section>
+                <h2>List Function</h2>
+                <ul>
+                    <li>
+                        <emphcode>names</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>unlist</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>unname</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>lapply</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>sapply</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>c(..., recursive = TRUE)</emphcode>
+                    </li>
+                </ul>
             </section>
 
 
