@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>Lec05 Factor</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+
+
+            <section>
+                <h1>List</h1>
+            </section>
+
+
+
+            <section>
+                <h2>List</h2>
+                <ul>
+                    <li>Recursive vectors, instead of atomic </li>
+                    <li>Foundations for data frame, objective-oirented programming</li>
+                    <li>Indexed by number or name (tag)</li>
+                    <li>Access elements by <emphcode>$</emphcode> and <emphcode>[[]]</emphcode>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Indexing</h2>
+                <p>Single element</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    lst$c                                                                     
+                    lst[["c"]]
+                    lst[[1]]
+                </code></pre>
+                <p>Sublist</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    lst["c"]
+                    lst[1]
+                </code></pre>
+                <p>Note <emphcode>lst[1:2]</emphcode> is ok but <emphcode>lst[[1:2]]</emphcode> is not</p>
+            </section>
+
+
+            <section>
+                <h2>Adding and Deleting </h2>
+                <p>Adding one or multiple elements</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    z$c <- "sailing"
+                    z[[3]] <-  "sailing"
+                    z[4:5] <- c(TRUE, FALSE) # multiple elements
+                </code></pre>
+                <p>Deleting one element (note later indices -1 in new list</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    z[[2]] <- NULL
+                </code></pre>
+                <p>Concatenating lists</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    > c(list(1), list(TRUE))
+                    [[1]]
+                    [1] 1
+                    
+                    [[2]]
+                    [1] TRUE             
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Memory</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    l1 <- list(1, 2, 3)
+                    l2 <- l1
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/52bc0e3da3382cba957a9d83397b6c9200906ce2/c72aa/diagrams/name-value/l-modify-1.png"
+                    width="50%">
+                <p>List is like a vector of pointers</p>
+            </section>
+
+
+            <section>
+                <h2>Shallow Copy</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    l2[[3]] <- 4
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/b844bb5a3443e1344299627f5760e2ae3a9885b5/e1c76/diagrams/name-value/l-modify-2.png"
+                    width="50%">
+                <p>Pointer addresses were modified partially while values were not duplicated. VS: vector copy-on-modify
+                    is
+                    <emph>deep copy</emph>.
+                </p>
+            </section>
+
+
+
+            <section>
+                <h2>Example 4.2.4</h2>
+                <p>Count word appearing locations in paragraph</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    findwords <- function(tf) {
+                        # read in the words from the file, into a vector of mode character
+                        txt <- scan(tf,"")   
+                        wl <- list()  
+                        for (i in 1:length(txt)) {
+                           wrd <- txt[i]  # i-th word in input file
+                           wl[[wrd]] <- c(wl[[wrd]],i)   
+                        }   
+                        return(wl)
+                     }                     
+                </code></pre>
+                <p>List will return <emphcode>NULL</emphcode> if index not exist. Less storage, and adding new word
+                    quickly.</p>
+            </section>
+
+
+
+
+            <section>
+                <h2>List Function</h2>
+                <ul>
+                    <li>
+                        <emphcode>names</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>unlist</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>unname</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>lapply</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>sapply</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>c(..., recursive = TRUE)</emphcode>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Special Case: Character Vector</h2>
+                <p>R uses <emph>global string pool</emph> to hold all unique strings, and character vector is list of
+                    pointers</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                        x <- c("a", "a", "abc", "d")       
+                    </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/5dca035e5a0fb5f3ccb1b76f73b9bb06ef106a36/57025/diagrams/name-value/character-2.png"
+                    width="60%">
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    > x <- c("a", "ab", "abc")
+                    > y <- c("a", "ab", "abc")
+                    > ref(x)
+                    [1:0x7fc1591a9668] <chr> 
+                    > ref(x, character = TRUE)
+                    █ [1:0x7fc1591a9668] &lt;chr&gt; 
+                    ├─[2:0x7fc198850a80] &lt;string: "a"&gt; 
+                    ├─[3:0x7fc1b880c9a0] &lt;string: "ab"&gt; 
+                    └─[4:0x7fc1b880ca10] &lt;string: "abc"&gt; 
+                    &gt; ref(y, character = TRUE)
+                    █ [1:0x7fc1591a95c8] &lt;chr&gt; 
+                    ├─[2:0x7fc198850a80] &lt;string: "a"&gt; 
+                    ├─[3:0x7fc1b880c9a0] &lt;string: "ab"&gt; 
+                    └─[4:0x7fc1b880ca10] &lt;string: "abc"&gt;                      
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Size Reduction</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    x <- runif(1e6)
+                    obj_size(x)
+                    #> 8,000,048 B
+                    
+                    y <- list(x, x, x)
+                    obj_size(y)
+                    #> 8,000,128 B
+                </code></pre>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    banana <- "bananas bananas bananas"
+                    obj_size(banana)
+                    #> 136 B
+                    obj_size(rep(banana, 100))
+                    #> 928 B
+                </code></pre>
+            </section>
+
+            <section>
+                <h1>Data Frame</h1>
+            </section>
+
+            <section>
+                <h2>Data Frame</h2>
+                <ul>
+                    <li>Appears like a matrix but can store different types of data columns</li>
+                    <li>Technically data stored as <emphcode>list</emphcode>
+                    </li>
+                    <li>Accessing via
+                        <emphcode>d[[1]], d[,1, drop = FALSE], d$kids</emphcode>, and <emphcode>d$kids</emphcode> is
+                        recommended for clarity
+                    </li>
+                    <li>Other matrix functions may be used as well (e.g. <emphcode>cbind, apply</emphcode>)</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    d3 <- d1
+                    d3[1, ] <- d3[1, ] * 3                 
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/36df61f54d1ac62e066fb814cb7ba38ea6047a74/facf8/diagrams/name-value/d-modify-r.png"
+                    width="60%">
+            </section>
+
+            <section>
+                <h1>Environment</h1>
+            </section>
+
+            <section>
+                <h2>Environment</h2>
+                <ul>
+                    <li>Structure for holding variables, functions</li>
+                    <li>Works like list</li>
+                    <li>Bind variable names to values</li>
+                    <li>Different from list, <emph>modify-in-place</emph>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Modify in Place</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    e1 <- rlang::env(a = 1, b = 2, c = 3)
+                    e2 <- e1
+                    e1$c <- 4
+                    e2$c
+                    #> [1] 4           
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/2727265afc4c2b7132c225b659b8cca57dfc0098/e9d1e/diagrams/name-value/e-modify-2.png"
+                    width="40%">
+            </section>
+
+            <section>
+                <h2>Comparison</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    &gt; l1 &lt;- list(a = 1, b = 2, c = 3)
+                    &gt; l2 &lt;- l1
+                    &gt; l1$c &lt;- 4
+                    &gt; ref(l1)
+                    █ [1:0x7fc1593a1e58] &lt;named list&gt; 
+                    ├─a = [2:0x7fc1b8e15308] &lt;dbl&gt; 
+                    ├─b = [3:0x7fc1b8e15298] &lt;dbl&gt; 
+                    └─c = [4:0x7fc1b8e15110] &lt;dbl&gt; 
+                    &gt; ref(l2)
+                    █ [1:0x7fc1593a1f98] &lt;named list&gt; 
+                    ├─a = [2:0x7fc1b8e15308] &lt;dbl&gt; 
+                    ├─b = [3:0x7fc1b8e15298] &lt;dbl&gt; 
+                    └─c = [4:0x7fc1b8e15228] &lt;dbl&gt;        
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>References</h2>
+                <ul>
+                    <li>AoRP: ch 6</li>
+                </ul>
+            </section>
+
+        </div>
+
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
