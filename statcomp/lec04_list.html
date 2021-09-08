@@ -159,6 +159,8 @@
             </section>
 
 
+
+
             <section>
                 <h2>List Function</h2>
                 <ul>
@@ -184,11 +186,138 @@
             </section>
 
 
+            <section>
+                <h2>Special Case: Character Vector</h2>
+                <p>R uses <emph>global string pool</emph> to hold all unique strings, and character vector is list of
+                    pointers</p>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                        x <- c("a", "a", "abc", "d")       
+                    </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/5dca035e5a0fb5f3ccb1b76f73b9bb06ef106a36/57025/diagrams/name-value/character-2.png"
+                    width="60%">
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    > x <- c("a", "ab", "abc")
+                    > y <- c("a", "ab", "abc")
+                    > ref(x)
+                    [1:0x7fc1591a9668] <chr> 
+                    > ref(x, character = TRUE)
+                    █ [1:0x7fc1591a9668] &lt;chr&gt; 
+                    ├─[2:0x7fc198850a80] &lt;string: "a"&gt; 
+                    ├─[3:0x7fc1b880c9a0] &lt;string: "ab"&gt; 
+                    └─[4:0x7fc1b880ca10] &lt;string: "abc"&gt; 
+                    &gt; ref(y, character = TRUE)
+                    █ [1:0x7fc1591a95c8] &lt;chr&gt; 
+                    ├─[2:0x7fc198850a80] &lt;string: "a"&gt; 
+                    ├─[3:0x7fc1b880c9a0] &lt;string: "ab"&gt; 
+                    └─[4:0x7fc1b880ca10] &lt;string: "abc"&gt;                      
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Size Reduction</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    x <- runif(1e6)
+                    obj_size(x)
+                    #> 8,000,048 B
+                    
+                    y <- list(x, x, x)
+                    obj_size(y)
+                    #> 8,000,128 B
+                </code></pre>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    banana <- "bananas bananas bananas"
+                    obj_size(banana)
+                    #> 136 B
+                    obj_size(rep(banana, 100))
+                    #> 928 B
+                </code></pre>
+            </section>
+
+            <section>
+                <h1>Data Frame</h1>
+            </section>
+
+            <section>
+                <h2>Data Frame</h2>
+                <ul>
+                    <li>Appears like a matrix but can store different types of data columns</li>
+                    <li>Technically data stored as <emphcode>list</emphcode>
+                    </li>
+                    <li>Accessing via
+                        <emphcode>d[[1]], d[,1, drop = FALSE], d$kids</emphcode>, and <emphcode>d$kids</emphcode> is
+                        recommended for clarity
+                    </li>
+                    <li>Other matrix functions may be used as well (e.g. <emphcode>cbind, apply</emphcode>)</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    d3 <- d1
+                    d3[1, ] <- d3[1, ] * 3                 
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/36df61f54d1ac62e066fb814cb7ba38ea6047a74/facf8/diagrams/name-value/d-modify-r.png"
+                    width="60%">
+            </section>
+
+            <section>
+                <h1>Environment</h1>
+            </section>
+
+            <section>
+                <h2>Environment</h2>
+                <ul>
+                    <li>Structure for holding variables, functions</li>
+                    <li>Works like list</li>
+                    <li>Bind variable names to values</li>
+                    <li>Different from list, <emph>modify-in-place</emph>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Modify in Place</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    e1 <- rlang::env(a = 1, b = 2, c = 3)
+                    e2 <- e1
+                    e1$c <- 4
+                    e2$c
+                    #> [1] 4           
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/2727265afc4c2b7132c225b659b8cca57dfc0098/e9d1e/diagrams/name-value/e-modify-2.png"
+                    width="40%">
+            </section>
+
+            <section>
+                <h2>Comparison</h2>
+                <pre><code data-trim data-noescape class="language-r">                                                            
+                    &gt; l1 &lt;- list(a = 1, b = 2, c = 3)
+                    &gt; l2 &lt;- l1
+                    &gt; l1$c &lt;- 4
+                    &gt; ref(l1)
+                    █ [1:0x7fc1593a1e58] &lt;named list&gt; 
+                    ├─a = [2:0x7fc1b8e15308] &lt;dbl&gt; 
+                    ├─b = [3:0x7fc1b8e15298] &lt;dbl&gt; 
+                    └─c = [4:0x7fc1b8e15110] &lt;dbl&gt; 
+                    &gt; ref(l2)
+                    █ [1:0x7fc1593a1f98] &lt;named list&gt; 
+                    ├─a = [2:0x7fc1b8e15308] &lt;dbl&gt; 
+                    ├─b = [3:0x7fc1b8e15298] &lt;dbl&gt; 
+                    └─c = [4:0x7fc1b8e15228] &lt;dbl&gt;        
+                </code></pre>
+            </section>
 
             <section>
                 <h2>References</h2>
                 <ul>
-                    <li>AoRP: ch 2, 3</li>
+                    <li>AoRP: ch 4, 5</li>
                     <li>AR: ch 2</li>
                 </ul>
             </section>
