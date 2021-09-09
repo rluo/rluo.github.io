@@ -98,19 +98,18 @@
 
 
             <section>
-                <h2>Indexing</h2>
-                <p>Single element</p>
-                <pre><code data-trim data-noescape class="language-r">
-                    lst$c                                                                     
-                    lst[["c"]]
-                    lst[[1]]
-                </code></pre>
-                <p>Sublist</p>
-                <pre><code data-trim data-noescape class="language-r">                                                            
-                    lst["c"]
-                    lst[1]
-                </code></pre>
-                <p>Note <emphcode>lst[1:2]</emphcode> is ok but <emphcode>lst[[1:2]]</emphcode> is not</p>
+                <h2>Factor Functions</h2>
+                <ul>
+                    <li>
+                        <emphcode>tapply</emphcode> split vector into segments by factor levels and then apply function
+                    </li>
+                    <li>
+                        <emphcode>split</emphcode> only does the splitting as in above
+                    </li>
+                    <li>
+                        <emphcode>by</emphcode> apply to objects beyond vectors
+                    </li>
+                </ul>
             </section>
 
 
