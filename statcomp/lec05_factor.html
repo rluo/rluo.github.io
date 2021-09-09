@@ -56,7 +56,7 @@
 
 
             <section>
-                <h1>List</h1>
+                <h1>Factor</h1>
             </section>
 
 
@@ -64,13 +64,38 @@
             <section>
                 <h2>List</h2>
                 <ul>
-                    <li>Recursive vectors, instead of atomic </li>
-                    <li>Foundations for data frame, objective-oirented programming</li>
-                    <li>Indexed by number or name (tag)</li>
-                    <li>Access elements by <emphcode>$</emphcode> and <emphcode>[[]]</emphcode>
-                    </li>
+                    <li>Used for nominal, categorical vars </li>
+                    <li>Like vectors but usually with small set of dinstinct values, aka levels</li>
+                    <li>Built on integer vector with predefined levels</li>
+                    <li>May appear like character vector but technically different</li>
                 </ul>
             </section>
+
+            <section>
+                <h2>Type</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    x <- factor(c("a", "b", "b", "a"))
+                    x
+                    #> [1] a b b a
+                    #> Levels: a b                  
+                    typeof(x)
+                    #> [1] "integer"
+                    attributes(x)
+                    #> $levels
+                    #> [1] "a" "b"
+                    #> 
+                    #> $class
+                    #> [1] "factor"
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Storage</h2>
+                <img src="https://d33wubrfki0l68.cloudfront.net/1c19eabc59d445cab78fc605053c7393ec630e15/5843b/diagrams/vectors/factor.png"
+                    width="60%">
+                <p>Saves lots of memory, especially when level names are long</p>
+            </section>
+
 
             <section>
                 <h2>Indexing</h2>
@@ -318,6 +343,7 @@
                 <h2>References</h2>
                 <ul>
                     <li>AoRP: ch 6</li>
+                    <li>AR: ch 3</li>
                 </ul>
             </section>
 
