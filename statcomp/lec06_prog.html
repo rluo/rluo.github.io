@@ -70,13 +70,13 @@
                 </p>
             </section>
 
-            <secion>
+            <section>
                 <h2>Return Complex Objects</h2>
                 <ul>
                     <li>R can return functions from functions (more later)</li>
                     <li>Typically multiple objects grouped together by returning a list</li>
                 </ul>
-            </secion>
+            </section>
 
 
             <section>
@@ -85,117 +85,72 @@
 
             <section>
                 <h2>Functions as Objects</h2>
-
+                <ul>
+                    <li>Can assign function to other names like objects</li>
+                    <li>Loop through <emphcode>list</emphcode> of functions</li>
+                    <li>Return functions</li>
+                    <li>Modify functions by <emphcode>formals, body</emphcode>
+                    </li>
+                </ul>
             </section>
+
+            <section>
+                <h2>Function and Environment</h2>
+            </section>
+
+            <section>
+                <h2>Closure</h2>
+                <ul>
+                    <li>Three components: arguments, body, and environment, except <emphcode>primitive</emphcode>
+                        functions written in other languages</li>
+                    <li>Env contains objects when function created</li>
+                    <li>Command prompt is the top level, aka <emphcode>.GlobalEnv</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>ls</emphcode> or <emphcode>ls.str</emphcode> lists the objects in env
+                    </li>
+                    <li>
+                        <emph>local</emph>: lower level/within; <emph>global</emph>: higher level/outside
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example 7.6.1</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    w <- 12
+                    f <- function(y) {
+                        d <- 8
+                        h <- function() {
+                           return(d*(w+y))
+                        }
+                        print(environment(h))
+                        return(h())
+                     }                    
+                </code></pre>
+                <ul>
+                    <li>
+                        <emphcode>d, h, y</emphcode> local to <emphcode>f</emphcode>, not visible outside
+                    </li>
+                    <li>
+                        <emphcode>d</emphcode> is global to <emphcode>h</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>w</emphcode> is global to <emphcode>h, f</emphcode>
+                    </li>
+                </ul>
+            </section>
+
 
             <!-- OLD -->
-            <section>
-                <h2>Factor</h2>
-                <ul>
-                    <li>Used for nominal, categorical vars </li>
-                    <li>Like vectors but usually with small set of dinstinct values, aka levels</li>
-                    <li>Built on integer vector with predefined levels</li>
-                    <li>May appear like character vector but technically different</li>
-                </ul>
-            </section>
 
-            <section>
-                <h2>Type</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    x <- factor(c("a", "b", "b", "a"))
-                    x
-                    #> [1] a b b a
-                    #> Levels: a b                  
-                    typeof(x)
-                    #> [1] "integer"
-                    attributes(x)
-                    #> $levels
-                    #> [1] "a" "b"
-                    #> 
-                    #> $class
-                    #> [1] "factor"
-                </code></pre>
-            </section>
-
-            <section>
-                <h2>Storage</h2>
-                <img src="https://d33wubrfki0l68.cloudfront.net/1c19eabc59d445cab78fc605053c7393ec630e15/5843b/diagrams/vectors/factor.png"
-                    width="60%">
-                <p>Saves lots of memory, especially when level names are long</p>
-            </section>
-
-
-            <section>
-                <h2>Factor Functions</h2>
-                <ul>
-                    <li>
-                        <emphcode>tapply</emphcode> split vector into segments by factor levels and then apply function
-                    </li>
-                    <li>
-                        <emphcode>split</emphcode> only does the splitting as in above
-                    </li>
-                    <li>
-                        <emphcode>by</emphcode> apply to objects beyond vectors
-                    </li>
-                </ul>
-            </section>
-
-            <section>
-                <h1>Table</h1>
-            </section>
-
-            <section>
-                <h2>Table</h2>
-                <ul>
-                    <li>Like data frame, buth with class <emphcode>table</emphcode>
-                    </li>
-                    <li>Some technical differences in the next example</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Example 6.3.2</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    subtable <- function(tbl,subnames) {
-                        # get array of cell counts in tbl
-                        tblarray <- unclass(tbl)   
-                        # calling do.call() on the "[" function; we need to build up a list
-                        dcargs <- list(tblarray)   
-                        ndims <- length(subnames)  # number of dimensions 
-                        for (i in 1:ndims) {
-                           dcargs[[i+1]] <- subnames[[i]]
-                        }   
-                        subarray <- do.call("[",dcargs)   
-                        dims <- lapply(subnames,length)  
-                        subtbl <- array(subarray,dims,dimnames=subnames)
-                        class(subtbl) <- "table"
-                        return(subtbl)
-                     }
-                </code></pre>
-            </section>
-
-
-            <section>
-                <h2>Table Functions</h2>
-                <ul>
-                    <li>
-                        <emphcode>addmargins</emphcode> add margin counts
-                    </li>
-                    <li>
-                        <emphcode>aggregate</emphcode>
-                    </li>
-                    <li>
-                        <emphcode>cut</emphcode>
-                    </li>
-                </ul>
-            </section>
 
 
             <section>
                 <h2>References</h2>
                 <ul>
-                    <li>AoRP: ch 6</li>
-                    <li>AR: ch 3</li>
+                    <li>AoRP: ch 7</li>
+                    <li>AR: ch 6</li>
                 </ul>
             </section>
 
