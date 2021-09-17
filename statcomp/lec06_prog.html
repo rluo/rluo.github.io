@@ -142,9 +142,229 @@
             </section>
 
 
-            <!-- OLD -->
+            <section>
+                <h2>Environment</h2>
+                <ul>
+                    <li>
+                        <emphcode>h</emphcode> env contains <emphcode>d, y</emphcode> plus
+                        <emphcode>f</emphcode> env
+                    </li>
+                    <li>Nested functions have larger env</li>
+                    <li>R locates variables by starting from local variables (lower level, where functions were defined)
+                        to global (higher level),
+                        until they are found</li>
+                    <li>Local variable assignment does not impact global variables, exception superassignment</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example 7.6.1</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    w <- 12
+                    f <- function(y) {
+                        d <- 8
+                        return(h(d, y))
+                    }
+                    h <- function(dee, yyy) {
+                        print(ls())
+                        print(ls(envir=parent.frame(n=1)))
+                        return(dee*(w+yyy))
+                    }
+                </code></pre>
+                <ul>
+                    <li>
+                        <emphcode>ls</emphcode> list objects in current env (default)
+                    </li>
+                    <li>
+                        <emphcode>parent.frame</emphcode> changes to higher level env
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Lexical Scoping</h2>
+                <ul>
+                    <li>Looks up where functions are <emph>defined</emph> not where they are <emph>called</emph>
+                    </li>
+                    <li>Four primary rules: name masking, functions like variables, fresh start, and dynamic lookup</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Name Masking</h2>
+                <ul>
+                    <li>Names defined inside (lower level) mask names defined outside (higher level) </li>
+                    <li>Use local variable values if can be found</li>
+                    <li>R search one level up at a time, util found or reaching .GlobalEnv</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    x <- 1
+                    g04 <- function() {
+                      y <- 2
+                      i <- function() {
+                        z <- 3
+                        c(x, y, z)
+                      }
+                      i()
+                    }
+                    g04()
+                </code></pre>
+                <p class="fragment fade-up">Output: 1,2,3</p>
+            </section>
+
+            <section>
+                <h2>Fresh Start</h2>
+                <ul>
+                    <li>New env created every time a function is called</li>
+                    <li>New local variable values created in new env and destroyed when function returns</li>
+                    <li>No way to remember what happened the last time it was run</li>
+                    <li>Independent invocation and same behavior, good for parallel</li>
+                    <li>Key for functional programming</li>
+                    <li>Assignment within function is local (copy on modify)</li>
+                    <li>Exceptions can occur if using functional closure</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    g11 <- function() {
+                        if (!exists("a")) {
+                          a <- 1
+                        } else {
+                          a <- a + 1
+                        }
+                        a
+                      }
+                      g11()
+                      g11()
+                </code></pre>
+                <p class="fragment fade-up">Output: 1⏎ 1</p>
+            </section>
+
+            <section>
+                <h2>Exception</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    f <- function() {
+                        i <- 0
+                        function() {
+                            i <<- i + 1
+                            i
+                        }
+                    }                     
+                </code></pre>
+                <pre><code data-trim data-noescape class="language-r">
+                    > g <- f()
+                    > g()
+                    [1] 1                
+                    > g()
+                    [1] 2
+                </code></pre>
+                <p>g remembers how many times it was called</p>
+            </section>
+
+            <section>
+                <h2>Dynamic Lookup</h2>
+                <ul>
+                    <li>R looks up values when function is run, not when it is created</li>
+                    <li>Name masking tells where to look but be aware of dependency on global variables</li>
+                    <li>No errors for wrong variable names if not needed in running</li>
+                    <li>R also infers the type (e.g. function vs object) when looking up</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    g12 <- function() x + 1
+                    x <- 15
+                    g12()
+                    #> [1] 16
+                    
+                    x <- 20
+                    g12()
+                    #> [1] 21
+                </code></pre>
+                <p>This may cause issues. One may set x as an input argument. Detect this issue using
+                    codetools::findGlobals()</p>
+                <pre><code data-trim data-noescape class="language-r">
+                        codetools::findGlobals(g12)
+                        #> [1] "+" "x"
+                    </code></pre>
+            </section>
 
 
+            <section>
+                <h2>Example 7.6.5</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    showframe <- function(upn) {
+                        # determine the proper environment
+                        if (upn < 0) {
+                           env <- .GlobalEnv
+                        } else {
+                           env <- parent.frame(n=upn+1)
+                        }
+                        # get the list of variable names
+                        vars <- ls(envir=env)
+                        # for each variable name, print its value
+                        for (vr in vars) {
+                           print(env)
+                           vrg <- get(vr,envir=env)
+                           if (!is.function(vrg)) {
+                              cat(vr,":\n",sep="")
+                              print(vrg)
+                           }
+                        }
+                     }                     
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Example 7.6.5</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    g <- function(aa) {
+                        b <- 2
+                        showframe(0)
+                        showframe(1)
+                        aab <- h(aa+b)
+                        return(aab)
+                     }
+                     f <- function() {
+                        a <- 1
+                        return(g(a) + a)
+                     }
+                     h<- function(aaa) {
+                        c <- 3
+                        return(aaa + c)
+                     }
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Example 7.6.5: Output</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; f()
+                    &lt;environment: 0x7fc15d1c6598&gt;
+                    aa:
+                    [1] 1
+                    &lt;environment: 0x7fc15d1c6598&gt;
+                    b:
+                    [1] 2
+                    &lt;environment: 0x7fc15d1c66b0&gt;
+                    a:
+                    [1] 1
+                    [1] 7
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>No Pointers</h2>
+
+            </section>
 
             <section>
                 <h2>References</h2>
