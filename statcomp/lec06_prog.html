@@ -363,8 +363,114 @@
 
             <section>
                 <h2>No Pointers</h2>
-
+                <ul>
+                    <li>R does not change values of argument variables</li>
+                    <li>Unlike C or Python, multiple arguments can be modified inside function</li>
+                    <li>If returning multiple outputs, use list</li>
+                    <li>Exception: use superassignment or global variables with caution</li>
+                </ul>
             </section>
+
+            <section>
+                <h2>Superassignment</h2>
+                <ul>
+                    <li>
+                        <emphcode>
+                            &lt;&lt;-</emphcode> assigns values to current or upper-level variables
+                    </li>
+                    <li>Starts from current level, and one level up at a time, until a variable is found</li>
+                    <li>If not found, variable is created in global env</li>
+                    <li>Alternative: <emphcode>assign</emphcode> can specify the level explicitly</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    x <- 0
+                    f <- function() {
+                      x <<- 1
+                    }
+                    f()
+                    x
+                    #> [1] 1     
+                    # or
+                    assign("x", 1, pos=.GlobalEnv)               
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Global Variables</h2>
+                <ul>
+                    <li>Using global variables is controversial</li>
+                    <li>Functions may return different values due to changes in global variables</li>
+                    <li>Hard to debug if many functions changes values around the same time</li>
+                    <li>However, using global can be very convenient, especially for communicating between threads and
+                        GPUs in parallel computing</li>
+                    <li>It can greatly simplify codes</li>
+                    <li>Generally not recommended</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Prog Pattern: Closure</h2>
+                <ul>
+                    <li>A function contains local variables that can be assessed by another function defined within</li>
+                    <li>Good practice to memorize states without pollute .GlobalEnv</li>
+                    <li>Widely used in many other languages, including one called <emph>closure</emph>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Old Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    f <- function() {
+                        i <- 0
+                        function() {
+                            i <<- i + 1
+                            i
+                        }
+                    }                     
+                </code></pre>
+                <pre><code data-trim data-noescape class="language-r">
+                    > g <- f()
+                    > g()
+                    [1] 1                
+                    > g()
+                    [1] 2
+                </code></pre>
+                <p>g remembers how many times it was called</p>
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > moment <- function(p) {
+                    + function(x) mean(x^p)
+                    + }
+                    > m1 <- moment(1)
+                    > m1(-10:10)
+                    [1] 0
+                    > m2 <- moment(2)
+                    > m2(-10:10)
+                    [1] 36.66667
+                    > m3 <- moment(3)
+                    > m3(-10:10)
+                    [1] 0         
+                </code></pre>
+                <p>Simplifies writing multiple functions for 1st, 2ndm, 3rd and etc moments</p>
+            </section>
+
+            <section>
+                <h1>Recursion</h1>
+            </section>
+
+
+
 
             <section>
                 <h2>References</h2>
