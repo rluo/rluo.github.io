@@ -224,6 +224,22 @@
                 </ul>
             </section>
 
+            <section>
+                <h2>...</h2>
+                <p>Pass arguments (not matched) to another function inside</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    i01 <- function(y, z) {
+                        list(y = y, z = z)
+                    }                      
+                    i02 <- function(x, ...) {
+                    i01(...)
+                    }                      
+                    str(i02(x = 1, y = 2, z = 3))
+                    #> List of 2
+                    #>  $ y: num 2
+                    #>  $ z: num 3        
+                </code></pre>
+            </section>
 
             <section>
                 <h2>Function and Environment</h2>
