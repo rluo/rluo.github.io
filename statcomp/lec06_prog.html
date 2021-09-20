@@ -43,7 +43,7 @@
                         <emph>Computing</emph>
                     </strong></h1>
                 <br>
-                <h2>Lec06 Prog Structure</h2>
+                <h2>Lec06 Prog/Function</h2>
                 <br>
 
                 <h3>Xi (Rossi) <strong>LUO</strong></h3>
@@ -91,6 +91,46 @@
                     <li>Return functions</li>
                     <li>Modify functions by <emphcode>formals, body</emphcode>
                     </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Function Composition</h2>
+                <ul>
+                    <li>Function composition improves clarity and performance sometimes</li>
+                    <li>Linux-like pipe operator by <emphcode>magrittr</emphcode>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    library(magrittr)
+                    x %>%
+                      deviation() %>%
+                      square() %>%
+                      mean() %>%
+                      sqrt()
+                </code></pre>
+                <p>VS</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    sqrt(mean(square(deviation(x))))
+                    out <- deviation(x)
+                    out <- square(out)
+                    out <- mean(out)
+                    out <- sqrt(out)
+                    out
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Pipe</h2>
+                <ul>
+                    <li>Focus on operations rather than object modification</li>
+                    <li>x %>% f(y) is equivalent to f(x, y)</li>
+                    <li>Only possible for single object sequence</li>
+                    <li>Nesting, f(g(x)), suited for short sequences but hard to read/write for long ones</li>
+                    <li>Intermediate objects, y &lt;- f(x) also hard to read</li>
                 </ul>
             </section>
 
@@ -469,8 +509,45 @@
                 <h1>Recursion</h1>
             </section>
 
+            <section>
+                <h2>Recursion</h2>
+                <ul>
+                    <li>Recursive function calls itself</li>
+                    <li>Prog technique to solve complex problems that can be solved in iterative steps</li>
+                    <li>Break large problems into smaller ones</li>
+                    <li>Within f(), call f() itself on each of the smaller problems</li>
+                    <li>Simple to program</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Quick Sort Ex 7.9.1</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    TODO
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Issues</h2>
+                <ul>
+                    <li>Computation time may be long due to repeated calls</li>
+                    <li>Memory issues with a large number of recursive calls</li>
+                    <li>More on partially address these issues later</li>
+                </ul>
+            </section>
 
 
+            <section>
+                <h2>Function Tools</h2>
+                <ul>
+                    <li>
+                        <emphcode>source</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>edit</emphcode>
+                    </li>
+                </ul>
+            </section>
 
             <section>
                 <h2>References</h2>
