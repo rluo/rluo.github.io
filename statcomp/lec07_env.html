@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>Lec07 Env</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+            <section>
+                <h2>Env</h2>
+                <ul>
+                    <li>Every name must be unique</li>
+                    <li>The names are not ordered</li>
+                    <li>Has a parent</li>
+                    <li>Not copy on modify</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    e1 <- env(
+                        a = FALSE,
+                        b = "a",
+                        c = 2.3,
+                        d = 1:3,
+                      )
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/f5dbd02f5235283e78decdd4f18692b40f1ddf42/c5683/diagrams/environments/bindings.png"
+                    alt="80%">
+            </section>
+
+
+            <section>
+                <h2>Parent</h2>
+                <ul>
+                    <li>Every env has a parent env, except empty</li>
+                    <li>Command line env is .GlobalEnv</li>
+                    <li>Search name from child env to parent env</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <img src="https://d33wubrfki0l68.cloudfront.net/038b2da4f5db1d2a8acaf4ee1e7d08d04ab36ebc/ac22a/diagrams/environments/search-path.png"
+                    alt="70%">
+                <p>More on this later</p>
+            </section>
+
+            <section>
+                <h2>Getting and Setting</h2>
+                <ul>
+                    <li>Get and set using $ and [[ with name</li>
+                    <li>Cannot use [[ or [ with indices</li>
+                    <li>Return NULL if doesn't exist</li>
+                    <li>env_get can also retrieve value but return error if doesn't exist</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>env_has/env_unbind</h2>
+                <p>Determine if a name binding exists; Remove a name binding</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    e3$a <- NULL
+                    env_has(e3, "a")
+                    #>    a 
+                    #> TRUE
+                    
+                    env_unbind(e3, "a")
+                    env_has(e3, "a")
+                    #>     a 
+                    #> FALSE
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    where <- function(name, env = caller_env()) {
+                        if (identical(env, empty_env())) {
+                          # Base case
+                          stop("Can't find ", name, call. = FALSE)
+                        } else if (env_has(env, name)) {
+                          # Success case
+                          env
+                        } else {
+                          # Recursive case
+                          where(name, env_parent(env))
+                        }
+                      }
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    where("yyy")
+                    #> Error: Can't find yyy
+                    
+                    x <- 5
+                    where("x")
+                    #&gt; &lt;environment: R_GlobalEnv&gt;
+                    
+                    where("mean")
+                    #&gt; &lt;environment: base&gt;
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Package</h2>
+                <ul>
+                    <li>
+                        <emphcode>library</emphcode> attach pkg to the parent of current env
+                    </li>
+                    <li>Immediate parent of the global is the last pkg attached, the grand parent is the second to last
+                        pkg
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Default Env</h2>
+                <img src="https://d33wubrfki0l68.cloudfront.net/038b2da4f5db1d2a8acaf4ee1e7d08d04ab36ebc/ac22a/diagrams/environments/search-path.png"
+                    alt="70%">
+                <pre><code data-trim data-noescape class="language-r">
+                    search()
+                    #>  [1] ".GlobalEnv"        "package:rlang"     "package:stats"    
+                    #>  [4] "package:graphics"  "package:grDevices" "package:utils"    
+                    #>  [7] "package:datasets"  "package:methods"   "Autoloads"        
+                    #> [10] "package:base"
+                    search_envs()
+                    #&gt;  [[1]] $ &lt;env: global&gt;
+                    #&gt;  [[2]] $ &lt;env: package:rlang&gt;
+                    #&gt;  [[3]] $ &lt;env: package:stats&gt;
+                    #&gt;  [[4]] $ &lt;env: package:graphics&gt;
+                    #&gt;  [[5]] $ &lt;env: package:grDevices&gt;
+                    #&gt;  [[6]] $ &lt;env: package:utils&gt;
+                    #&gt;  [[7]] $ &lt;env: package:datasets&gt;
+                    #&gt;  [[8]] $ &lt;env: package:methods&gt;
+                    #&gt;  [[9]] $ &lt;env: Autoloads&gt;
+                    #&gt; [[10]] $ &lt;env: package:base&gt;
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Function Env</h2>
+                <p>Function binds to the current env when created</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    y <- 1
+                    f <- function(x) x + y
+                    fn_env(f)
+                    #> &lt;environment: R_GlobalEnv&gt;
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/cd8208b418ecbaf6ace1b6453b93fdf628173e01/68d59/diagrams/environments/binding.png"
+                    width="65%">
+            </section>
+
+            <section>
+                <h2>Namespace</h2>
+                <ul>
+                    <li>Introduced to ensure the order of loading library doesn't change function runs</li>
+                    <li>Pakcage provides namespace and functions typically call functions within</li>
+                    <li>Call function from specific namespace using <emphcode>::</emphcode>
+                    </li>
+                    <li>Namespace also hides certin internal functions within pkg to be called from outside</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    sd
+                    #> function (x, na.rm = FALSE) 
+                    #> sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), 
+                    #>     na.rm = na.rm))
+                    #> &lt;bytecode: 0x7fe6c495c900&gt;
+                    #> &lt;environment: namespace:stats&gt;
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/d4fc3ef4f21f2cb0cd065933cba3005cc4b0ea3c/4c4b3/diagrams/environments/namespace-bind.png"
+                    width="70%">
+            </section>
+
+            <section>
+                <h2>Execution Env</h2>
+                <ul>
+                    <li>Function call creates a new execution env</li>
+                    <li>Env destroyed after function call ends (exception)</li>
+                    <li>Thus fresh-start for functions</li>
+                    <li>Usually ephemeral, exception when some part still being used</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    h <- function(x) {
+                        # 1.
+                        a <- 2 # 2.
+                        x + a
+                      }
+                      y <- h(1) # 3.
+                </code></pre>
+            </section>
+
+            <section>
+                <img src="https://d33wubrfki0l68.cloudfront.net/862b3606a4a218cc98739b224521b649eeac6082/5d3e9/diagrams/environments/execution.png"
+                    width="40%">
+            </section>
+
+            <section>
+                <h2>Exception</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    plus <- function(x) {
+                        function(y) x + y
+                    }                      
+                    plus_one <- plus(1)
+                    plus_one
+                    #> function(y) x + y
+                    #> &lt;environment: 0x7fe6c6cd3ad8&gt;
+                    plus_one(2)
+                    #> [1] 3
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Exception</h2>
+                <img src="https://d33wubrfki0l68.cloudfront.net/66676485e6a22c807c19b0c54c8fda6bd1292531/3526e/diagrams/environments/closure-call.png"
+                    width="40%">
+            </section>
+
+            <section>
+                <h2>Call Stack</h2>
+                <ul>
+                    <li>Calling function recursively as a tree</li>
+                    <li>Each element is a frame that contains expr, env</li>
+                    <li>parent.frame() is equivalent to caller_env()</li>
+                    <li>Lazy evaluation: run function only when actual values are needed for recursive evaluation</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    a <- function(x) b(x)
+                    b <- function(x) c(x)
+                    c <- function(x) x
+                    
+                    a(f())
+                    #> █
+                    #> ├─a(f())
+                    #> │ └─b(x)
+                    #> │   └─c(x)
+                    #> └─f()
+                    #>   └─g(x = 2)
+                    #>     └─h(x = 3)
+                    #>       └─lobstr::cst()
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Env as Data Structure</h2>
+                <ul>
+                    <li>Avoid copies of large data</li>
+                    <li>Managing state within a package</li>
+                    <li>As a hashmap</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Hash Map</h2>
+                <ul>
+                    <li>Data structure to find value by name in time O(1)</li>
+                    <li>Super effecient for looking up values</li>
+                    <li>Names are unique</li>
+                    <li>Insert and delete quickly</li>
+                    <li>Env provides these features</li>
+                    <li>Python provides dictionary</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Comparison</h2>
+                <pre><code data-trim data-noescape class="language-r">
+
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>References</h2>
+                <ul>
+                    <li>AR: ch 7</li>
+                </ul>
+            </section>
+
+        </div>
+
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
