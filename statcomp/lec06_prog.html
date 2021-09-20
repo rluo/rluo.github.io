@@ -91,6 +91,7 @@
                     <li>Return functions</li>
                     <li>Modify functions by <emphcode>formals, body</emphcode>
                     </li>
+                    <li>Primitive function calls C/Fortran/..., NULL formal and body</li>
                 </ul>
             </section>
 
@@ -133,6 +134,96 @@
                     <li>Intermediate objects, y &lt;- f(x) also hard to read</li>
                 </ul>
             </section>
+
+            <section>
+                <h2>Function Form</h2>
+                <ul>
+                    <li>Prefix: <emphcode>f(x, y, z)</emphcode>
+                    </li>
+                    <li>Infix: <emphcode>x + y</emphcode>, <emphcode>+</emphcode> is a function</li>
+                    <li>Replacement: <emphcode>names(df) <- c("a")</emphcode>
+                    </li>
+                    <li>Special: <emphcode>[[</emphcode>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    x + y
+                    `+`(x, y)
+                    
+                    names(df) <- c("x", "y", "z")
+                    `names<-`(df, c("x", "y", "z"))
+                    
+                    for(i in 1:10) print(i)
+                    `for`(i, 1:10, print(i))             
+                </code></pre>
+                <pre><code data-trim data-noescape class="language-r">
+                    > `names<-`
+                    function (x, value)  .Primitive("names<-")
+                    > `+`
+                    function (e1, e2)  .Primitive("+")
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Replacement Function</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    names(x) &lt;- c("a", "b", "c")
+                </code></pre>
+                <p>is actually calling a function <emphcode>`names&lt;-`</emphcode>
+                </p>
+                <pre><code data-trim data-noescape class="language-r">
+                    x &lt;- `names(x)&lt;-`(x, value = c("a", "b", "c") )
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Replacement Function</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    x[2:3] &lt;- 99:100
+                </code></pre>
+                <p>is actually calling a function <emphcode>`[&lt;-`</emphcode>
+                </p>
+                <pre><code data-trim data-noescape class="language-r">
+                    x &lt;- `[&lt;-`(x, 2:3, value = 99:100 )
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    # function to read
+                    "[.bookvec" <- function(bv,subs) {
+                       return(bv$vec[subs])
+                    }                    
+                    # function to write
+                    "[<-.bookvec" <- function(bv,subs,value) {
+                       bv$wrts[subs] <- bv$wrts[subs] + 1  # note the recycling
+                       bv$vec[subs] <- value
+                       return(bv)
+                    }                    
+                </code></pre>
+            </section>
+
+            <section>
+                <h1>Argument</h1>
+            </section>
+
+            <section>
+                <h2>Argument</h2>
+                <ul>
+                    <li>Matched by exact name, then unique prefixes, and finally by position</li>
+                    <li>Try to use positional matching for the first one or two arguments</li>
+                    <li>Avoid partial matching by prefixes</li>
+                    <li>Set (default) argument by <emphcode>=</emphcode> not <emphcode>&lt;-</emphcode>
+                    </li>
+                </ul>
+            </section>
+
 
             <section>
                 <h2>Function and Environment</h2>
@@ -523,7 +614,16 @@
             <section>
                 <h2>Quick Sort Ex 7.9.1</h2>
                 <pre><code data-trim data-noescape class="language-r">
-                    TODO
+                    qs <- function(x) {
+                        if (length(x) <= 1) return(x)
+                        pivot <- x[1]
+                        therest <- x[-1]
+                        sv1 <- therest[therest < pivot]
+                        sv2 <- therest[therest >= pivot]
+                        sv1 <- qs(sv1)
+                        sv2 <- qs(sv2)
+                        return(c(sv1,pivot,sv2))
+                     }                    
                 </code></pre>
             </section>
 
