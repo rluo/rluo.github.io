@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Simple venn.js example</title>
+<style>
+#venn {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 25px;
+    fill: #000;
+}
+</style>
+</head>
+
+<body>
+    <div id="venn"></div>
+</body>
+
+<script src="bower_components/d3/d3.v4.min.js"></script>
+<script src="bower_components/venn.js/venn.js"></script>
+<script>
+// define sets and set set intersections
+var sets = [ {sets: ['This Talk'], "label": "This Talk", "size": 200},
+             {sets: ['Theory'], "label": "Theory", "size": 100},
+             {sets: ['Method'], "label": "Method", "size": 100},
+             {sets: ['Model'], "label": "Model", "size": 100},
+             {sets: ['App'], "label": "App", "size": 100},
+             {sets: ['Science'], "label": "Science", "size": 100},
+             {sets: ['This Talk','Theory'], "size": 5},
+             {sets: ['This Talk','Method'], "size": 20},
+             {sets: ['This Talk','Model'], "size": 50},
+             {sets: ['This Talk','App'], "size": 20},
+             {sets: ['This Talk','Science'], "size": 5}];
+    
+var chart = venn.VennDiagram()
+                    .width(800).height(500);
+var customOrdering = {"This Talk" : 1, "Theory": 2, "Mehtod" : 3, "Model": 4, "App": 5, "Science": 6}
+chart.orientationOrder(function (a, b) { return customOrdering[a.setid] - customOrdering[b.setid]})
+
+d3.select("#venn").datum(sets).call(chart);
+d3.select("#venn .venn-circle path").style("fill-opacity", 0.7)
+d3.selectAll("#venn text").style("stroke-width", 0.5).style("stroke", "#000");
+
+</script>
+</html>

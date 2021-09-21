@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Data Science Spectrum</title>
+  <meta name="description" content="Data Science Spectrum">
+  <meta name="author" content="Xi Luo">
+<!--  <link rel="stylesheet" href="css/styles.css?v=1.0">-->
+</head>
+
+<body>
+<!--  <script src="js/scripts.js"></script>-->
+
+
+<svg width="800" height="520">
+   <style>
+    .heavy { font: bold 30px sans-serif; }
+    .small { font: bold 10px sans-serif; } 
+    .myblue {  fill: #0072bd; }
+    .myorange { fill: #d95319; }
+    .myyellow {  fill: #edb120; }
+    .mypurple {  fill: #7e2f8e; }
+    .mygreen {  fill: #77ac30; }
+    .mysky {  fill: #4dbeee; }
+    .myred {  fill: #a3142e; }
+    .mypink {  fill: #D78FB6;}
+   </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#808080" />
+    </marker>
+  </defs>
+  <defs>
+    <marker id="bigarrow" markerWidth="20" markerHeight="20" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#000" />
+    </marker>
+  </defs>
+    <line x1="400" y1="50" x2="400" y2="120" stroke="#000" fill-opacity="0.8" stroke-width="10" marker-end="url(#bigarrow)" />
+    <text x="400" y="20" text-anchor="middle"   class="heavy" alignment-baseline="middle" fill="#000">This Talk</text>
+      
+   <line x1="400" y1="420" x2="100" y2="420" stroke="#808080" fill-opacity="0.8" stroke-width="5" marker-end="url(#arrow)" />
+  <line x1="400" y1="420" x2="700" y2="420" stroke="#808080" fill-opacity="0.8" stroke-width="5" marker-end="url(#arrow)" />
+  <circle cx="400" cy="300" r="80" class="mypurple" fill-opacity="0.5" />
+  <text x="400" y="300" text-anchor="middle" stroke="#ffffff" class="heavy" alignment-baseline="middle">Model</text>
+ <circle cx="260" cy="300" r="80" class="myyellow" fill-opacity="0.5" />
+  <text x="260" y="300" text-anchor="middle" stroke="#ffffff" class="heavy" alignment-baseline="middle">Method</text>
+  <circle cx="120" cy="300" r="80" class="myblue" fill-opacity="0.5" />
+  <text x="120" y="300" text-anchor="middle" stroke="#ffffff" class="heavy" alignment-baseline="middle">Theory</text>
+  <circle cx="540" cy="300" r="80" class="myorange" fill-opacity="0.5" />
+  <text x="540" y="300" text-anchor="middle" stroke="#ffffff" class="heavy" alignment-baseline="middle">App</text>
+  <circle cx="680" cy="300" r="80" class="myred" fill-opacity="0.5" />
+  <text x="680" y="300" text-anchor="middle" stroke="#ffffff" class="heavy" alignment-baseline="middle">Science</text>
+  <text x="630" y="460" text-anchor="middle"   class="heavy" alignment-baseline="middle" fill="#808080">Data Science</text>
+   <text x="145" y="460" text-anchor="middle"   class="heavy" alignment-baseline="middle" fill="#808080">Statistics</text>
+    <text x="400" y="500" text-anchor="middle"   class="small" alignment-baseline="middle" fill="#000">Not a truthful represenation of concepts</text>
+</svg>
+
+</body>
+</html>
