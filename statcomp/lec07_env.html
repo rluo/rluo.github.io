@@ -322,14 +322,12 @@
 
 
             <section>
-                <h2>Comparison</h2>
+                <h2>Implementation 1</h2>
                 <pre><code data-trim data-noescape class="language-r">
                     > roman_trans <-function(x) {
                     + roman_num <- data.frame(symbol = c("I", "V", "X", "L", "C", "D", "M"),value = c(1,5,10,50,100,500,1000))
-                    + return( roman_num[roman_num$symbol == x, 2] )
+                    +       return( roman_num[roman_num$symbol == x, 2] )
                     + }
-                    > 
-                    > 
                     > roman_trans <- Vectorize(roman_trans)
                     > microbenchmark( roman_trans( rep("M", 1e4) ) )
                     Error in data.frame(symbol = c("I", "V", "X", "L", "C", "D", "M"), value = c(1,  : 
@@ -337,6 +335,40 @@
                 </code></pre>
             </section>
 
+            <section>
+                <h2>Implementation 2</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > roman_trans <-function(x) {# create dictionary for translate roman numeral 
+                    + dict <-list('I'= 1,'V'= 5,'X'= 10,'L'= 50,'C'= 100,'D'= 500,'M'= 1000)
+                    +     return(dict[[x]])
+                    + }
+                    > roman_trans <- Vectorize(roman_trans)
+                    > microbenchmark( roman_trans( rep("M", 1e4) ) )
+                    Unit: milliseconds
+                                                expr      min       lq     mean   median       uq
+                        roman_trans(rep("M", 10000)) 18.77151 21.06245 23.26955 22.04784 24.29753
+                            max neval
+                        47.96366   100               
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Implementation 3</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > e1 <- rlang::env('I'= 1,'V'= 5,'X'= 10,'L'= 50,'C'= 100,'D'= 500,'M'= 1000)
+                    > roman_trans <- function(x) {
+                    + return(e1[[x]])
+                    + }
+                    > roman_trans <- Vectorize(roman_trans)
+                    > microbenchmark( roman_trans( rep("M", 1e4) ) )
+                    Unit: milliseconds
+                                             expr     min       lq     mean   median       uq
+                     roman_trans(rep("M", 10000)) 10.8645 11.82487 13.13792 12.18596 12.85325
+                         max neval
+                     32.2018   100                                     
+                </code></pre>
+            </section>
 
             <section>
                 <h2>References</h2>
