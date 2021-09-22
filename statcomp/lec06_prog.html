@@ -343,7 +343,7 @@
                 <ul>
                     <li>Names defined inside (lower level) mask names defined outside (higher level) </li>
                     <li>Use local variable values if can be found</li>
-                    <li>R search one level up at a time, util found or reaching .GlobalEnv</li>
+                    <li>R search one level up at a time, until found or reaching .GlobalEnv</li>
                 </ul>
             </section>
 
@@ -557,6 +557,7 @@
                     <li>However, using global can be very convenient, especially for communicating between threads and
                         GPUs in parallel computing</li>
                     <li>It can greatly simplify codes</li>
+                    <li>Specify env when loading variables (e.g. <emphcode>source, assign</emphcode>)</li>
                     <li>Generally not recommended</li>
                 </ul>
             </section>
@@ -566,7 +567,7 @@
                 <h2>Prog Pattern: Closure</h2>
                 <ul>
                     <li>A function contains local variables that can be assessed by another function defined within</li>
-                    <li>Good practice to memorize states without pollute .GlobalEnv</li>
+                    <li>Good practice to memorize states without polluting .GlobalEnv</li>
                     <li>Widely used in many other languages, including one called <emph>closure</emph>
                     </li>
                 </ul>
