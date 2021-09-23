@@ -95,106 +95,185 @@
 
             <section>
                 <h2>Example</h2>
-            </section>
-
-
-            <section>
-                <h2>Calculus</h2>
                 <pre><code data-trim data-noescape class="language-r">
-                    D(expression(exp(x^2)), "x")
-                    exp(x^2) * (2 * x)
-
-                    integrate(function(x) x^2, 0, 1)
-                    0.3333333 with absolute error &lt; 3.7e-15
+                    > x <- runif(100)
+                    > y <- runif(100)
+                    > lmout <- lm(y~x)
+                    > class(lmout)
+                    [1] "lm"
+                    > lmout
+                    
+                    Call:
+                    lm(formula = y ~ x)
+                    
+                    Coefficients:
+                    (Intercept)            x  
+                        0.54207     -0.09403  
                 </code></pre>
-                <p>Other packages for solving ODE (odesolve) and symbolic calculation (ryacas)</p>
             </section>
 
 
             <section>
-                <h2>Distribution</h2>
-                <ul>
-                    <li>Standard distributions are implemented</li>
-                    <li>Get PDF by (d*), CDF by (p*), quantiles by (q*), and random realiazations by (r*)</li>
-                    <li>Additional packages for other less common distributions</li>
-                    <li>More complex distributions to be discussed later</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Sorting</h2>
-                <ul>
-                    <li>
-                        <emphcode>sort</emphcode>
-                    </li>
-                    <li>
-                        <emphcode>order</emphcode>
-                    </li>
-                    <li>
-                        <emphcode>rank</emphcode>
-                    </li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Linear Algebra</h2>
-                <ul>
-                    <li>
-                        <emphcode>crossprod</emphcode> actually computes inner prod or dot product
-                    </li>
-                    <li>
-                        <emphcode>sweep</emphcode> like <emphcode>apply</emphcode> for multi-dimensional arrays
-                    </li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Set Operations</h2>
-                <ul>
-                    <li>
-                        <emphcode>setdiff</emphcode>
-                    </li>
-                    <li>
-                        <emphcode>choose</emphcode>
-                    </li>
-                    <li>
-                        <emphcode>combn</emphcode>
-                    </li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Stationary Distribution</h2>
-                <ul>
-                    <li>Markov chain with stationary distribution $\pi$ and transition matrix $P$ on <emph>states</emph>
-                    </li>
-                    <li>Stationary distribution means that
-                        $$\pi = \pi P \;\; \mbox{or} \;\; (I - P^T)\pi = 0$$
-                        with the constraint $1^T \pi = 1$
-                    </li>
-                    <li>To calculate $\pi$, solve the linear equations above. Note one row in $I-P$ is redundant and
-                        needs to be removed</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Implementation</h2>
+                <h2>Example</h2>
                 <pre><code data-trim data-noescape class="language-r">
-                    findpi1 <- function(p) {
-                        n <- nrow(p)
-                        imp <- diag(n) - t(p)   
-                        imp[n,] <- rep(1,n)   
-                        rhs <- c(rep(0,n-1),1)  
-                        pivec <- solve(imp,rhs)  
-                        return(pivec)
-                     }                    
+                    > print
+                    function (x, ...) 
+                    UseMethod("print")
+                    &lt;bytecode: 0x7fc168f52f98&gt;
+                    &lt;environment: namespace:base&gt;
+                    > stats::print.lm
+                    Error: 'print.lm' is not an exported object from 'namespace:stats'
                 </code></pre>
+                <p>
+                    <emphcode>UseMethod</emphcode> is dispatch function, <emphcode>print</emphcode> is generic function
+                </p>
+            </section>
+
+
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > getAnywhere(print.lm)
+                    A single object matching ‘print.lm’ was found
+                    It was found in the following places
+                    registered S3 method for print from namespace stats
+                    namespace:stats
+                    with value
+                    function (x, digits = max(3L, getOption("digits") - 3L), ...)
+                    {
+                        ...
+                        invisible(x)
+                    }
+                    &lt;bytecode: 0x7fc0bcce5510&gt;
+                    &lt;environment: namespace:stats&gt;               
+                    </code></pre>
+                <p>Note function not in the default namespace</p>
+            </section>
+
+            <section>
+                <h2>Generic Function</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > methods(print)
+                    [1] print,ANY-method                                    
+                    [2] print,diagonalMatrix-method                         
+                    [3] print,sparseMatrix-method                           
+                    [4] print.aareg*                                        
+                    ...
+                    > methods(class="default")
+                    [1] add1            aggregate       AIC             all.equal      
+                    [5] ansari.test     anyDuplicated   aperm           ar.burg        
+                    [9] ar.yw           as.array        as.character    as.data.frame  
+                    [13] as.Date         as.dist         as.expression   as.function
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Writing S3</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    function (formula, data, subset, weights, na.action, method = "qr", 
+                        model = TRUE, x = FALSE, y = FALSE, qr = TRUE, singular.ok = TRUE, 
+                        contrasts = NULL, offset, ...) 
+                    {
+                        ...
+                        cl <- match.call()
+                        ...
+                            z <- list(coefficients = if (mlm) matrix(NA_real_, 0, 
+                                    ...
+                        ...
+                                lm.fit(x, y, offset = offset, singular.ok = singular.ok, 
+                                    ...)
+                        class(z) <- c(if (mlm) "mlm", "lm")
+                        z$na.action <- attr(mf, "na.action")
+                        ...
+                        z
+                    }
+                    &lt;bytecode: 0x7fc14e0df7d0&gt;
+                    &lt;environment: namespace:stats&gt;
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Writing S3</h2>
+                <ul>
+                    <li>Create a list object</li>
+                    <li>Set class attribute by <emphcode>attr</emphcode> or <emphcode>class</emphcode>
+                    </li>
+                    <li>Creat functions serving the object (e.g. <emphcode>print</emphcode>)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > j <- list(first="Joe", last="Doe")
+                    > class(j) <- "mys3"
+                    > attributes(j)
+                    $names
+                    [1] "first" "last" 
+                    $class
+                    [1] "mys3"
+                    > j
+                    $first
+                    [1] "Joe"
+                    $last
+                    [1] "Doe"
+                    attr(,"class")
+                    [1] "mys3"
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Cutomize Print</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > print.mys3 <- function(obj) {
+                    +    cat(obj$last, ", ", obj$first, " says hi!\n")
+                    + }
+                    > j
+                    Doe ,  Joe  says hi!
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Inheritance</h2>
+                <ul>
+                    <li>class can have multiple class names</li>
+                    <li>Specific/children (sub)class names first, general/parent class names last </li>
+                    <li>R searches <emph>classname</emph> in func.<emph>classname</emph> in that order until found </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > k <- list(first="Joe", last="Doe", salary=1e6)
+                    > class(k) <- c("mys3child", "mys3")
+                    > k
+                    Doe ,  Joe  says hi!
+                    > print.mys3child <- function(obj) {
+                    +   cat(obj$last, ", ", obj$first, " earns ", obj$salary, " a year.\n")
+                    + }
+                    > k
+                    Doe ,  Joe  earns  1e+06  a year.
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>S4</h2>
+                <ul>
+                    <li>Created later for safety</li>
+                    <li>Instead of manually setting class names and appending class names to functions, need to call
+                        <emphcode>setClass</emphcode> and <emphcode>setMethod</emphcode>
+                    </li>
+                    <li>The key steps to create class is similar to S3</li>
+                </ul>
             </section>
 
             <section>
                 <h2>References</h2>
                 <ul>
-                    <li>AoRP: ch 8</li>
+                    <li>AoRP: ch 9</li>
                 </ul>
             </section>
 
