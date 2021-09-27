@@ -68,7 +68,8 @@
             <section>
                 <h2>R Theme</h2>
                 <ul>
-                    <li>Object: everything is object</li>
+                    <li>Object: everything is object but not everything is OO</li>
+                    <li>Base obj (e.g. vector) vs OO obj (e.g. lm)</li>
                     <li>Encapsulation: package similar objects together in class</li>
                     <li>Polymorphic: same function name calls on different implementations depending on the data class
                     </li>
@@ -127,6 +128,11 @@
                 <p>
                     <emphcode>UseMethod</emphcode> is dispatch function, <emphcode>print</emphcode> is generic function
                 </p>
+                <pre><code data-trim data-noescape class="language-r">
+                    s3_dispatch(print(lmout))
+                    #> => print.factor
+                    #>  * print.default
+                </code></pre>
             </section>
 
 
@@ -150,6 +156,20 @@
                     </code></pre>
                 <p>Note function not in the default namespace</p>
             </section>
+
+            <section>
+                <h2>S3 Methods</h2>
+                <ul>
+                    <li>S3 methods with . to join words or classes</li>
+                    <li>Usually not exported, not available outside pkg, not available in GlobalEnv</li>
+                    <li>Alternative: <emphcode>sloop::s3_get_method</emphcode>
+                    </li>
+                    <li>Dispatch works by searching method names <emphcode>paste0("generic", ".", c(class(x),
+                            "default"))</emphcode>
+                    </li>
+                </ul>
+            </section>
+
 
             <section>
                 <h2>Generic Function</h2>
@@ -201,6 +221,7 @@
                     <li>Set class attribute by <emphcode>attr</emphcode> or <emphcode>class</emphcode>
                     </li>
                     <li>Creat functions serving the object (e.g. <emphcode>print</emphcode>)</li>
+                    <li>Try to avoid class names created by others</li>
                 </ul>
             </section>
 
