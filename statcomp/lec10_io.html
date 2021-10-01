@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>Lec10 IO</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+            <section>
+                <h2>IO</h2>
+                <ul>
+                    <li>R provides many IO capabilities
+                    </li>
+                    <li>Versatile function <emphcode>scan</emphcode> for text and internet, but it reads all at once
+                    </li>
+                    <li>
+                        <emphcode>readline</emphcode> read in a single line from keyboard or file
+                    </li>
+                    <li>
+                        <emphcode>cat</emphcode> slightly more customizable than <emphcode>print</emphcode>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Text vs Binary File</h2>
+                <ul>
+                    <li>Text file: ASCII characters or other coding, e.g. UTF-8</li>
+                    <li>Binary: 0/1 with specific formats (e.g. jpeg)</li>
+                    <li>We will focus on text files</li>
+                    <li>Reading binary files can be built on other C libraries</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Connection</h2>
+                <ul>
+                    <li>Reading files starts with opening connections <emphcode>file</emphcode>
+                    </li>
+                    <li>While open, <emphcode>readLines</emphcode> reading one line at a time and move to next line</li>
+                    <li>
+                        <emphcode>seek</emphcode> rewind to any position of the file
+                    </li>
+                    <li>Remember to <emphcode>close</emphcode> connections</li>
+                    <li>Writing files is similar, replacing <emphcode>readLines</emphcode> with <emphcode>writeLines
+                        </emphcode>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    > conn &lt;- file("z1", "r")
+                    > readLines(conn, n=2)
+                    [1] "line 1" "line 2"
+                    > seek(con=conn, where=0)
+                    > readLines(conn, n=1)
+                    [1] "line 1"
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>TCP/IP</h2>
+                <ul>
+                    <li></li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>References</h2>
+                <ul>
+                    <li>AoRP: ch 10</li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
