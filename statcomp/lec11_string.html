@@ -369,14 +369,144 @@
                 </code></pre>
             </section>
 
+            <section>
+                <h2>Strategy Summary</h2>
+                <ul>
+                    <li>Identify the goal of RE</li>
+                    <li>Choose right function</li>
+                    <li>Start with broad matches and refine
+                        <ul>
+                            <li>RE by default find longest substring matching patterns</li>
+                            <li>Refine match by editing punctuations</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
 
 
+            <section>
+                <h1>Web Scraping</h1>
+            </section>
+
+            <!-- <section>
+                <img src="img/aapl_yahoo_finance.png" alt="">
+                <p>https://finance.yahoo.com/quote/aapl?p=aapl</p>
+            </section>
+
+            <section>
+                <h2>HTTP(S) Request</h2>
+                <ul>
+                    <li>URL for AAPL: https://finance.yahoo.com/quote/aapl?p=aapl
+                    </li>
+                    <li>This represents HTTP request (GET)
+                    </li>
+                    <li>Can include parameters after the question mark
+                        <ul>
+                            <li>“p=”: stock=; “+”: to replace spaces in paras
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Ref: http://www.w3schools.com/tags/ref_httpmethods.asp</li>
+                </ul>
+            </section> -->
+
+            <section>
+                <iframe src="https://en.wikipedia.org/wiki/COVID-19" width="100%" height="600px"
+                    frameborder="0"></iframe>
+                <p>https://en.wikipedia.org/wiki/COVID-19</p>
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    install.packages("RCurl", repo = 'https://cloud.r-project.org')
+                    library(RCurl)
+                    a <- getURL(theurl)
+                    ## format a (e.g. adding line breaks) for better readability
+                    a <- readLines(tc <- textConnection(a)); close(tc)
+                    a[grep("IFR estimate per age group", a)]                  
+                </code></pre>
+                <p>Output</p>
+                <pre><code data-trim data-noescape class="language-r">
+                [1] "&lt;caption><span class=\"nowrap\">IFR estimate per age group&lt;br /&gt;(to December 2020)...
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>HTML</h2>
+                <ul>
+                    <li>HTML: HyperText Markup Language
+                    </li>
+                    <li>HTML processing is an important and time consuming task
+                    </li>
+                    <li>Many high level processing tools have been developed for extracting data from HTML
+                        <ul>
+                            <li>HTML has specific formats and markups
+                            </li>
+                            <li>XML (Extensible Markup Language) also contains markups</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>HTML as Tree</h2>
+                <pre><code data-trim data-noescape class="language-html">
+                    &lt;!DOCTYPE html&gt;&lt;html&gt;&lt;body&gt;&lt;p&gt;paragraph1.&lt;/p&gt;
+                        &lt;p&gt;paragraph 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                </code></pre>
+                <img src="img/html_tree.png" width="60%">
+            </section>
+
+            <section>
+                <h2>HTML Parser</h2>
+                <ul>
+                    <li>Build the tree by applying REs on html
+                    </li>
+                    <li>Data are contained in nodes
+                    </li>
+                    <li>another high level “RE” to extract the nodes
+                    </li>
+                    <li>Example: XPath [http://www.w3schools.com/xpath/]
+                    </li>
+                    <li>Limitations: HTML standards are changing very fast. Parsers may generate errors</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    install.packages("XML", repo = 'https://cloud.r-project.org')
+                    library(XML)
+                    tbl <- readHTMLTable(a)
+                    tbl[3]        
+                </code></pre>
+                <p>Output</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    $`IFR estimate per age group(to December 2020)[307]`
+                            V1     V2
+                    1 Age group    IFR
+                    2    0â€“34 0.004%
+                    3   35â€“44 0.068%
+                    4   45â€“54  0.23%
+                    5   55â€“64  0.75%
+                    6   65â€“74   2.5%    
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Overview of Tools</h2>
+                <img src="img/overview_r_html_tools.png" width="100%">
+            </section>
 
             <section>
                 <h2>References</h2>
                 <ul>
                     <li>AoRP: ch 11</li>
                     <li>http://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html</li>
+                    <li>http://www.w3schools.com/tags/ref_httpmethods.asp</li>
                 </ul>
             </section>
 
