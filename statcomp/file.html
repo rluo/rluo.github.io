@@ -131,6 +131,7 @@
                 </ul>
             </section>
 
+
             <section>
                 <h2>Unix Text Tools</h2>
                 <ul>
@@ -150,6 +151,52 @@
 
             <section>
                 <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-bash">
+                    # Concatenate files 
+                    cp ss13husa.csv ss13hus_all2.csv
+                    tail -n +2 ss13husb.csv >> ss13hus_all2.csv
+                    tail -n +2 ss13husc.csv >> ss13hus_all2.csv
+                    tail -n +2 ss13husd.csv >> ss13hus_all2.csv
+                </code></pre>
+                <p>Quick check of rows</p>
+                <pre><code data-trim data-noescape class="language-bash">
+                    % wc -l ss13hus_all.csv
+                    7219001 ss13hus_all.csv
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Example: Find Num of Bathrooms</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    d <-  read.csv(file="ss13hus_all.csv")
+                </code></pre>
+                <p>This does not work for most machines unless that you have really large mem</p>
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-bash">
+                    # Slice file horizontally
+                    # line 2010 - 2015
+                    head -n 2015 ss13hus_all.csv | tail -n +2010
+
+                    # Slice file vertically
+                    # Extract all the BATH counts and compute the averages
+                    # remove empty lines
+                    # cut -f 16 means the 16th column
+                    cat ss13hus_all.csv  | cut -d ',' -f16 | sed '/^$/d' > ss13hus_bath.csv
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Example: Find Num of Bathrooms</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    b <-  read.csv(file="ss13hus_bath.csv")
+                    mean(b$BATH)
+                    table(b$BATH)
+                </code></pre>
             </section>
 
             <section>
@@ -215,7 +262,7 @@
                     </li>
                     <li>For loops
                         <pre><code data-trim data-noescape class="language-bash">
-                            for x in rnage; do
+                            for x in range; do
                                 ...
                             done
                         </code></pre>
@@ -224,26 +271,55 @@
             </section>
 
             <section>
-                <h2>Example</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    a &lt;- scan("http://www2.census.gov/acs2013_3yr/pums/", "character")
-                    ## remove junks
-                    a &lt;- a[grep("csv", a)]                  
-                    ## extract the file names
-                    a &lt;-  substring(a, 7, 17)                    
-                    ## get the links to the zip files
-                    baseurl &lt;- "http://www2.census.gov/acs2013_3yr/pums/"
-                    aurl &lt;- paste(baseurl, a,sep="")                    
-                    ## Download the files automatically
-                    for (i in seq_along(a)) {
-                        print(paste0("Downloading ", a[i]))
-                        download.file(aurl[i], a[i])
-                        ## To avoid overwhelming the web traffic,
-                        ## Add pauses between downloads to mimic human clicking 
-                        Sys.sleep(10)
-                    }
+                <h2>BASH RE</h2>
+                <ul>
+                    <li>BASH implements some REs</li>
+                    <li>Some useful ones: ##, #, %%, %</li>
+                </ul>
+            </section>
+
+
+
+
+            <section>
+                <h2>Docker/BASH</h2>
+                <p>Run the following in terminal</p>
+                <pre><code data-trim data-noescape class="language-bash">
+                    docker run -ti --rm -v "$PWD":/home/docker -w /home/docker \
+                        -u docker r-base /bin/bash
+                </code></pre>
+                <p>Within docker, run the following</p>
+                <pre><code data-trim data-noescape class="language-bash">
+                    cd PUB3
+                    for f in *.zip; do 
+                        unzip ${f} -x *.pdf
+                    done
+                    for f in ss13*.csv; do
+                        echo "processing $f"
+                        # remove trailing .csv 
+                        echo ${f%%.csv}
+                        a=${f%%.csv}
+                        echo "$a"
+                        b=${a##ss13}
+                        c=${b:0:1}
+                        s=${b:1:2}
+                        ##mv $f ${s}_${c}.csv
+                        echo "mv $f ${s}_${c}.csv"
+                    done
                 </code></pre>
             </section>
+
+
+            <section>
+                <h2>Strategy Summary</h2>
+                <ul>
+                    <li>Select files by RE/wildcards</li>
+                    <li>Process and manipulate each file in loops (in parallel)</li>
+                    <li>Assign temporary variables for file name parts</li>
+                    <li>Change file names, using temporary variables and RE/wildcards</li>
+                </ul>
+            </section>
+
 
 
             <section>
