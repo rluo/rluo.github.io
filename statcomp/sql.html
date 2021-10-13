@@ -43,7 +43,7 @@
                         <emph>Computing</emph>
                     </strong></h1>
                 <br>
-                <h2>SQL</h2>
+                <h2>Database</h2>
                 <br>
 
                 <h3>Xi (Rossi) <strong>LUO</strong></h3>
@@ -514,6 +514,52 @@
                  </code></pre>
             </section>
 
+            <section>
+                <h2>Complex Example</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    TaxPayer table:
+                    +--------------+---------+
+                    | Column Name  | Type    |
+                    +--------------+---------+
+                    | Id           | int     |
+                    | Name         | varchar |
+                    | Tax          | int     |
+                    | StateId      | int     |
+                    +--------------+---------+
+                    Id is primary key for this table.
+                    StateId is a foreign key of the ID from the State table.
+                    Each row of this table indicates the ID, name, and tax of an person. It also contains the ID of their state.
+
+                    State table:
+                    +-------------+---------+
+                    | Column Name | Type    |
+                    +-------------+---------+
+                    | Id          | int     |
+                    | Name        | varchar |
+                    +-------------+---------+
+                    Id is the primary key column for this table.
+                    Each row of this table indicates the ID of a state and its name.
+                 </code></pre>
+                <p>Write an SQL query to find tax payers who have the highest tax in each of the states.
+                    Return the result in any order. </p>
+            </section>
+
+            <section>
+                <h2>SQL Solution</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    select State.Name as State,
+                           TaxPayer.Name as Name,
+                           Tax
+                    from TaxPayer inner join  State
+                    on   TaxPayer.StateId =  State.Id
+                    where  
+                         (TaxPayer.StateId, TaxPayer.Tax)
+                    in 
+                         (select StateId, max(Tax) from  TaxPayer group by StateId);
+                 </code></pre>
+                <p>Write an SQL query to find tax payers who have the highest tax in each of the states.
+                    Return the result in any order.</p>
+            </section>
 
             <section>
                 <h1>MySQL</h1>
@@ -592,10 +638,39 @@
                     ->   FIELDS TERMINATED BY ',' ENCLOSED BY '"'
                     ->   LINES TERMINATED BY '\n'
                     ->   IGNORE 1 LINES;
+
+                    Query OK, 7219000 rows affected, 65535 warnings (15 min 46.61 sec)
+                    Records: 7219000  Deleted: 0  Skipped: 0  Warnings: 178550734
                  </code></pre>
             </section>
 
+            <section>
+                <h2>MySQL Example</h2>
+                <pre><code data-trim data-noescape class="language-bash">
+                    mysql> select distinct BATH from hus5;
+                    +------+
+                    | BATH |
+                    +------+
+                    |    1 |
+                    |    0 |
+                    |    2 |
+                    +------+
+                    3 rows in set (46.37 sec)
+                 </code></pre>
+            </section>
 
+            <section>
+                <h2>MySQL Files</h2>
+                <pre><code data-trim data-noescape class="language-bash">
+                    % ls /Users/xluo/Downloads/file_data/PUB5/mysql_files
+                    #ib_16384_0.dblwr  binlog.000001      ca-key.pem         ib_buffer_pool     ibtmp1             private_key.pem    statcomp
+                    #ib_16384_1.dblwr  binlog.000002      ca.pem             ib_logfile0        mysql              public_key.pem     sys
+                    #innodb_temp       binlog.000003      client-cert.pem    ib_logfile1        mysql.ibd          server-cert.pem    undo_001
+                    auto.cnf           binlog.index       client-key.pem     ibdata1            performance_schema server-key.pem     undo_002
+                    % ls -ahl  /Users/xluo/Downloads/file_data/PUB5/mysql_files/statcomp
+                    -rw-r-----   1 xluo  staff   6.6G Oct 13 12:49 hus5.ibd          
+                 </code></pre>
+            </section>
 
             <section>
                 <h2>NoSQL (Not Only SQL)</h2>
@@ -610,6 +685,8 @@
                 <h2>References</h2>
                 <ul>
                     <li>R for DS: ch 10</li>
+                    <li>https://dev.mysql.com/doc/refman/8.0/en/</li>
+                    <li>https://www.sqlite.org/docs.html</li>
                     <li>https://link.springer.com/book/10.1007%2F978-1-4471-5601-7</li>
                 </ul>
             </section>
