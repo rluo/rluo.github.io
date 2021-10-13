@@ -441,17 +441,6 @@
                 <p>In Oracle, Equijoin and an Inner Join are equivalent</p>
             </section>
 
-            <section>
-                <h2>Left Outer Join</h2>
-                <pre><code data-trim data-noescape class="language-sql">
-                    SELECT customer_name, invoice_id, invoice_date
-                    FROM customer
-                    LEFT OUTER JOIN invoice
-                    ON customer.customer_id = invoice.customer_id;
-                 </code></pre>
-                <p>Return all rwos from the subquery on the left, merge with the right table where no matching vablues
-                    are inserted with NULL</p>
-            </section>
 
             <section>
                 <h2>Left Outer Join</h2>
@@ -461,7 +450,7 @@
                     LEFT OUTER JOIN invoice
                     ON customer.customer_id = invoice.customer_id;
                  </code></pre>
-                <p>Return all rwos from the subquery on the left, merge with the right table where no matching vablues
+                <p>Return all rows from the subquery on the left, merge with the right table where no matching vablues
                     are inserted with NULL</p>
                 <p>OUTER may be optional</p>
             </section>
@@ -474,9 +463,11 @@
                     RIGHT JOIN stock_item
                     ON line_item.code = stock_item.code;
                  </code></pre>
-                <p>Return all rwos from the right table, merge with the left table where no matching vablues
+                <p>Return all rows from the right table, merge with the left table where no matching vablues
                     are inserted with NULL</p>
-                <p>Full join: return records from both the left and right tables</p>
+                <p>
+                    <emph>Full</emph> join: return records from both the left and right tables
+                </p>
             </section>
 
 
