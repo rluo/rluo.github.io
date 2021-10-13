@@ -72,7 +72,7 @@
 
 
             <section>
-                <h2>Operations/Transactions in Databases</h2>
+                <h2>Operations/Transactions in Databases (CRUD)</h2>
                 <ul>
                     <li>Create</li>
                     <li>Read</li>
@@ -209,29 +209,392 @@
                 </ul>
             </section>
 
+
+
+
+
+
             <section>
                 <h1>SQL</h1>
             </section>
 
 
+            <section>
+                <h1>SQLite</h1>
+            </section>
+
+            <section>
+                <h2>SQLite</h2>
+                <ul>
+                    <li>SQLite is a file (serverless) DB
+                        <ul>
+                            <li>Unlike Oracle, you don’t need DB servers and IT teams to run SQLite
+                            </li>
+                            <li>The SQL program language is almost the same
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Probably the most popular file DB around the world</li>
+                    <li>You rely on SQLite almost every day
+                        <ul>
+                            <li>Firefox relies on SQLite for settings, history, ...
+                            </li>
+                        </ul>
+                    </li>
+                    <li>The management software is pre-installed on MAC for example</li>
+                </ul>
+            </section>
 
 
 
             <section>
-                <h2>Example</h2>
+                <h2>Create</h2>
+                <p>Run this in mac/linux terminal</p>
                 <pre><code data-trim data-noescape class="language-bash">
-                    # Concatenate files 
-                    cp ss13husa.csv ss13hus_all2.csv
-                    tail -n +2 ss13husb.csv >> ss13hus_all2.csv
-                    tail -n +2 ss13husc.csv >> ss13hus_all2.csv
-                    tail -n +2 ss13husd.csv >> ss13hus_all2.csv
+                    sqlite3 test.sqlite 
                 </code></pre>
-                <p>Quick check of rows</p>
-                <pre><code data-trim data-noescape class="language-bash">
-                    % wc -l ss13hus_all.csv
-                    7219001 ss13hus_all.csv
+                <pre><code data-trim data-noescape class="language-sql">
+                    CREATE TABLE "test" ("serialno" integer, "RT" text,  "BATH" integer);
+                </code></pre>
+                <p>This creates an empty table (or template)</p>
+            </section>
+
+
+
+            <section>
+                <h2>Populate the Table</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    INSERT INTO test values(12, 'haha', 2);
+                    INSERT INTO test values(55, 'hoho', 16);
+                </code></pre>
+                <p>Usually case-insensitive</p>
+            </section>
+
+            <section>
+                <h2>Retrieve</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> SELECT * from test;
+                    12|haha|2
+                    55|hoho|16
+
+                    sqlite> select BATH from test where serialno=55;
+                    16
                 </code></pre>
             </section>
+
+
+            <section>
+                <h2>Delete</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> delete  from test where serialno = 55;
+                    12|haha|2
+                    55|hoho|16
+
+                    sqlite> select * from test;
+                    12|haha|2
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Update</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> update  test set BATH = 60 where serialno=12;
+                    sqlite> select * from test;
+                    12|haha|60
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Example: HUS</h2>
+                <p>Run the following in terminal</p>
+                <pre><code data-trim data-noescape class="language-bash">
+                    sqlite3 hus5.sqlite 
+                </code></pre>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> .tables
+                    hus5
+                    sqlite> .schema hus5
+                    CREATE TABLE IF NOT EXISTS "hus5" ("serialno" integer,"insp" integer,"RT" text,"DIVISION"...         
+                    sqlite> select * from hus5 limit 1;
+                    2009000000015||H|6|2100|-9|3|1|1086032|1085467|25|0|1|3||1|3|1|2|0|||||||||||1|6|||1|9|1||1|||1|5||||7|||||||||||||1|||||||||||1|||||2|||0|0|||||0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|10|10|34|24|8|42|45|26|22|9|21|26|18|23|10|18|25|34|39|25|42|35|7|23|32|9|9|26|30|44|27|26|20|29|43|21|21|7|12|20|8|8|41|28|10|41|37|28|21|7|24|24|26|25|8|27|26|40|43|23|40|50|6|26|54|8|6|24|24|35|26|26|30|25|41|25|26|9|6|21      
+                    sqlite> .timer ON
+                    sqlite> select count(*)  from hus5;
+                    7219000
+                    Run Time: real 3.575 user 1.230715 sys 2.340997
+                 </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> select serialno, BATH from hus5 order by serialno limit 10;
+                    2009000000001|1
+                    2009000000002|1
+                    2009000000003|1
+                    2009000000004|1
+                    2009000000005|1
+                    2009000000006|1
+                    2009000000007|1
+                    2009000000008|1
+                    2009000000009|1
+                    2009000000010|1
+                    Run Time: real 4.132 user 1.734199 sys 2.394593
+                 </code></pre>
+                <p>Select two variables and show the smallest 10</p>
+            </section>
+
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> select distinct BDSP  from hus5;
+                    3
+
+                    2
+                    1
+                    4
+                    5
+                    0
+                    8
+                    7
+                    6
+                    9
+                    10
+                    14
+                    12
+                    18
+                    11
+                    19
+                    13
+                    Run Time: real 4.517 user 2.106608 sys 2.406503
+                 </code></pre>
+                <p>Find unique values</p>
+            </section>
+
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> select count(*) from hus5 where  BATH is '';
+                    625632
+                    Run Time: real 4.249 user 1.861443 sys 2.383460
+                    sqlite> select count(BATH) from hus5 where  BATH is '';
+                    625632
+                    Run Time: real 4.291 user 1.869714 sys 2.417507
+                 </code></pre>
+                <p>Count missing values</p>
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> select count(*) from hus5 where BATH is '' and serialno>=2013000000000 and serialno&lt;2014000000000; 
+                    148256
+                    Run Time: real 4.272 user 1.866299 sys 2.402188
+                 </code></pre>
+                <p>Count missing with conditions</p>
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> select count(*)
+                    ...> from ( select * from hus5 where BATH is '')
+                    ...> where serialno>=2013000000000 and serialno&lt;2014000000000;
+                    148256
+                    Run Time: real 4.265 user 1.856958 sys 2.403541
+                 </code></pre>
+                <p>Subquery: select to form a table</p>
+            </section>
+
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    sqlite> select BATH, count(BATH) as Freq
+                    ...> from hus5 group by BATH order by count(BATH);
+                    2|68958
+                    |625632
+                    1|6524410
+                    Run Time: real 8.110 user 5.058097 sys 2.875669
+                 </code></pre>
+                <p>List unique values and frequency</p>
+            </section>
+
+
+            <section>
+                <h1>Join Tables</h1>
+            </section>
+
+            <section>
+                <h2>Inner Join</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    SELECT customer_name, invoice_id, invoice_date
+                    FROM customer
+                    INNER JOIN invoice
+                    ON customer.customer_id = invoice.customer_id;
+                 </code></pre>
+                <p>Return rows satisfy the join condition for both tables. E.g. one id does not exist in the other table
+                    is dropped</p>
+                <p>In Oracle, Equijoin and an Inner Join are equivalent</p>
+            </section>
+
+            <section>
+                <h2>Left Outer Join</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    SELECT customer_name, invoice_id, invoice_date
+                    FROM customer
+                    LEFT OUTER JOIN invoice
+                    ON customer.customer_id = invoice.customer_id;
+                 </code></pre>
+                <p>Return all rwos from the subquery on the left, merge with the right table where no matching vablues
+                    are inserted with NULL</p>
+            </section>
+
+            <section>
+                <h2>Left Outer Join</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    SELECT customer_name, invoice_id, invoice_date
+                    FROM customer
+                    LEFT OUTER JOIN invoice
+                    ON customer.customer_id = invoice.customer_id;
+                 </code></pre>
+                <p>Return all rwos from the subquery on the left, merge with the right table where no matching vablues
+                    are inserted with NULL</p>
+                <p>OUTER may be optional</p>
+            </section>
+
+            <section>
+                <h2>Right Outer Join</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    SELECT invoice_id, stock_item.code, item
+                    FROM line_item
+                    RIGHT JOIN stock_item
+                    ON line_item.code = stock_item.code;
+                 </code></pre>
+                <p>Return all rwos from the right table, merge with the left table where no matching vablues
+                    are inserted with NULL</p>
+                <p>Full join: return records from both the left and right tables</p>
+            </section>
+
+
+            <section>
+                <p>Two tables: Person (PersonId: int, Firstname: varchar, LastName: varchar), and Phone (PhoneID: int,
+                    ID: int, Phone: varchar), PersonId is PK. Write SQL query to report FirstName, LastName and Phone.
+                    If Phone doest not exist, report Null.</p>
+                <pre><code data-trim data-noescape class="language-sql">
+                        Input:
+                        +----------+----------+-----------+
+                        | PersonId | LastName | FirstName |
+                        +----------+----------+-----------+
+                        | 1        | Wang     | Allen     |
+                        | 2        | Alice    | Bob       |
+                        +----------+----------+-----------+
+                        +-----------+----------+---------------+
+                        | PhoneID   | ID       | Phone         |
+                        +-----------+----------+---------------+
+                        | 1         | 2        | 713-900-9001  |
+                        | 2         | 3        | 713-900-9002  |
+                        +-----------+----------+---------------+
+                        Output: 
+                        +-----------+----------+---------------+
+                        | FirstName | LastName | Phone         |
+                        +-----------+----------+---------------+
+                        | Allen     | Wang     | Null          |
+                        | Bob       | Alice    | 713-900-9001  |
+                        +-----------+----------+---------------+
+                     </code></pre>
+            </section>
+
+
+            <section>
+                <h2>SQL</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    select Person.FirstName, Person.LastName, Phone.Phone from Person 
+                    left join Phone on Person.PersonId = Phone.ID;
+                 </code></pre>
+            </section>
+
+
+            <section>
+                <h1>MySQL</h1>
+            </section>
+
+            <section>
+                <h2>Docker Setup</h2>
+                <p>Run in terminal</p>
+                <pre><code data-trim data-noescape class="language-bash">
+                    docker pull mysql
+                    # start the server
+                    docker run --name mysql_server -v  /Users/xluo/Downloads/file_data/PUB5/mysql_files:/var/lib/mysql \
+                    -v /Users/xluo/Downloads/file_data/PUB5/csv:/mnt/data -e MYSQL_ROOT_PASSWORD=test -d mysql
+                 </code></pre>
+                <p>Check if running</p>
+                <pre><code data-trim data-noescape class="language-bash">
+                    % docker ps
+                    CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                 NAMES
+                    7705898a700f   mysql     "docker-entrypoint.s…"   9 seconds ago   Up 8 seconds   3306/tcp, 33060/tcp   mysql_server
+                 </code></pre>
+            </section>
+
+            <section>
+                <h2>Connect to Server</h2>
+                <pre><code data-trim data-noescape class="language-bash">
+                    % docker exec -it mysql_server bash
+                    root@4c80fefdbe9c:/# ls /mnt/data/
+                    ss13hus_all.csv
+                 </code></pre>
+            </section>
+
+            <section>
+                <h2>Run MySQL Client</h2>
+                <pre><code data-trim data-noescape class="language-bash">
+                    root@4c80fefdbe9c:/# mysql --local-infile  -uroot -ptest
+                    .... 
+                    Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+                    Oracle is a registered trademark of Oracle Corporation and/or its
+                    affiliates. Other names may be trademarks of their respective
+                    owners.
+
+                    Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+                    mysql> 
+                 </code></pre>
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-bash">
+                    mysql> create database statcomp;
+                    Query OK, 1 row affected (0.01 sec)
+                    
+                    mysql> use statcomp;
+                    Database changed
+                    
+                    CREATE TABLE hus5 (serialno bigint,insp integer,RT text, DIVISION integer,PUMA00 integer,PUMA10 integer,REGION integer,ST integer,ADJHSG integer,ADJINC integer,WGTP integer,NP integer,TYPE integer,ACR integer,AGS integer,BATH integer,BDSP integer,BLD integer,BUS integer,CONP integer,ELEP integer,FS integer,FULP integer,GASP integer,HFL integer,MHP integer,MRGI integer,MRGP integer,MRGT integer,MRGX integer,REFR integer,RMSP integer,RNTM integer,RNTP integer,RWAT integer,RWATPR integer,SINK integer,SMP integer,STOV integer,TEL integer,TEN integer,TOIL integer,VACS integer,VALP integer,VEH integer,WATP integer,YBL integer,FES integer,FINCP integer,FPARC integer,GRNTP integer,GRPIP integer,HHL integer,HHT integer,HINCP integer,HUGCL integer,HUPAC integer,HUPAOC integer,HUPARC integer,KIT integer,LNGI integer,MULTG integer,MV integer,NOC integer,NPF integer,NPP integer,NR integer,NRC integer,OCPIP integer,PARTNER integer,PLM integer,PSF integer,R18 integer,R60 integer,R65 integer,RESMODE integer,SMOCP integer,SMX integer,SRNT integer,SVAL integer,TAXP integer,WIF integer,WKEXREL integer,WORKSTAT integer,FACRP integer,FAGSP integer,FBATHP integer,FBDSP integer,FBLDP integer,FBUSP integer,FCONP integer,FELEP integer,FFSP integer,FFULP integer,FGASP integer,FHFLP integer,FINSP integer,FKITP integer,FMHP integer,FMRGIP integer,FMRGP integer,FMRGTP integer,FMRGXP integer,FMVP integer,FPLMP integer,FREFRP integer,FRMSP integer,FRNTMP integer,FRNTP integer,FRWATP integer,FRWATPRP integer,FSINKP integer,FSMP integer,FSMXHP integer,FSMXSP integer,FSTOVP integer,FTAXP integer,FTELP integer,FTENP integer,FTOILP integer,FVACSP integer,FVALP integer,FVEHP integer,FWATP integer,FYBLP integer,WGTP1 integer,WGTP2 integer,WGTP3 integer,WGTP4 integer,WGTP5 integer,WGTP6 integer,WGTP7 integer,WGTP8 integer,WGTP9 integer,WGTP10 integer,WGTP11 integer,WGTP12 integer,WGTP13 integer,WGTP14 integer,WGTP15 integer,WGTP16 integer,WGTP17 integer,WGTP18 integer,WGTP19 integer,WGTP20 integer,WGTP21 integer,WGTP22 integer,WGTP23 integer,WGTP24 integer,WGTP25 integer,WGTP26 integer,WGTP27 integer,WGTP28 integer,WGTP29 integer,WGTP30 integer,WGTP31 integer,WGTP32 integer,WGTP33 integer,WGTP34 integer,WGTP35 integer,WGTP36 integer,WGTP37 integer,WGTP38 integer,WGTP39 integer,WGTP40 integer,WGTP41 integer,WGTP42 integer,WGTP43 integer,WGTP44 integer,WGTP45 integer,WGTP46 integer,WGTP47 integer,WGTP48 integer,WGTP49 integer,WGTP50 integer,WGTP51 integer,WGTP52 integer,WGTP53 integer,WGTP54 integer,WGTP55 integer,WGTP56 integer,WGTP57 integer,WGTP58 integer,WGTP59 integer,WGTP60 integer,WGTP61 integer,WGTP62 integer,WGTP63 integer,WGTP64 integer,WGTP65 integer,WGTP66 integer,WGTP67 integer,WGTP68 integer,WGTP69 integer,WGTP70 integer,WGTP71 integer,WGTP72 integer,WGTP73 integer,WGTP74 integer,WGTP75 integer,WGTP76 integer,WGTP77 integer,WGTP78 integer,WGTP79 integer,WGTP80 integer);
+                    mysql> SHOW GLOBAL VARIABLES LIKE 'local_infile';
+                    +---------------+-------+
+                    | Variable_name | Value |
+                    +---------------+-------+
+                    | local_infile  | OFF   |
+                    +---------------+-------+
+                    1 row in set (0.01 sec)
+                    
+                    mysql> SET GLOBAL local_infile = 'ON';
+                    Query OK, 0 rows affected (0.00 sec)                   
+                 </code></pre>
+            </section>
+
+            <section>
+                <h2>Loading CSV Data</h2>
+                <pre><code data-trim data-noescape class="language-bash">
+                    mysql> LOAD DATA local INFILE '/mnt/data/ss13hus_all.csv' INTO TABLE hus5
+                    ->   FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+                    ->   LINES TERMINATED BY '\n'
+                    ->   IGNORE 1 LINES;
+                 </code></pre>
+            </section>
+
 
 
             <section>
