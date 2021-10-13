@@ -569,8 +569,10 @@
                 <pre><code data-trim data-noescape class="language-bash">
                     docker pull mysql
                     # start the server
-                    docker run --name mysql_server -v  /Users/xluo/Downloads/file_data/PUB5/mysql_files:/var/lib/mysql \
-                    -v /Users/xluo/Downloads/file_data/PUB5/csv:/mnt/data -e MYSQL_ROOT_PASSWORD=test -d mysql
+                    docker run --name mysql_server \
+                    -v  /Users/xluo/Downloads/file_data/PUB5/mysql_files:/var/lib/mysql \
+                    -v /Users/xluo/Downloads/file_data/PUB5/csv:/mnt/data \
+                    -e MYSQL_ROOT_PASSWORD=test -d mysql
                  </code></pre>
                 <p>Check if running</p>
                 <pre><code data-trim data-noescape class="language-bash">
