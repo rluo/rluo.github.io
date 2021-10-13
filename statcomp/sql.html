@@ -526,9 +526,7 @@
                     | Tax          | int     |
                     | StateId      | int     |
                     +--------------+---------+
-                    Id is primary key for this table.
-                    StateId is a foreign key of the ID from the State table.
-                    Each row of this table indicates the ID, name, and tax of an person. It also contains the ID of their state.
+                    Id is primary key.  StateId is a foreign key of the ID from the State table.
 
                     State table:
                     +-------------+---------+
@@ -537,8 +535,7 @@
                     | Id          | int     |
                     | Name        | varchar |
                     +-------------+---------+
-                    Id is the primary key column for this table.
-                    Each row of this table indicates the ID of a state and its name.
+                    Id is primary key.
                  </code></pre>
                 <p>Write an SQL query to find tax payers who have the highest tax in each of the states.
                     Return the result in any order. </p>
