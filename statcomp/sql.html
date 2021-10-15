@@ -552,6 +552,74 @@
                     Return the result in any order.</p>
             </section>
 
+
+
+
+            <section>
+                <h2>Select Template</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    SELECT DISTINCT column as c1, AGG_FUNC(column_or_expression) as c2, ...
+                    FROM mytable as t1
+                    JOIN another_table as t2 
+                        ON t1.column = t2.column
+                    WHERE constraint_expression
+                    GROUP BY column
+                    HAVING constraint_expression
+                    ORDER BY column ASC/DESC
+                    LIMIT count OFFSET COUNT;
+                </code></pre>
+                <p>May use <emphcode>as</emphcode> to create aliases for tables (optional) and variables (usually
+                    required) </p>
+            </section>
+
+
+
+            <section>
+                <h2>More Complex One</h2>
+                <p>
+                    Two tables: students (student_id: int, name: varchar) and submissions (submission_id, student_id,
+                    problem_id, score). A student can make multiple submissions on the same problem (problem_id).
+                    We want to calculate the total score for each student. If multiple attempts (submissions) were done
+                    for one problem, take the maximum score as the final score for that problem. The total score should
+                    be the sum of scores for all problems. E.g. student 1 total score = 150.
+                </p>
+                <pre><code data-trim data-noescape class="language-sql">
+                    +---------------+------------+------------+-------+
+                    | submission_id | student_id | problem_id | score |
+                    +---------------+------------+------------+-------+
+                    | 1             | 1          | 1          | 80    |
+                    +---------------+------------+------------+-------+
+                    | 2             | 1          | 1          | 90    |
+                    +---------------+------------+------------+-------+
+                    | 3             | 1          | 2          | 60    |
+                    +---------------+------------+------------+-------+
+                 </code></pre>
+            </section>
+
+
+            <section>
+                <h2>SQL Query</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    select h.student_id, h.name, b.score
+                    from students as h
+                    inner join
+                    (
+                        select a.student_id, sum(a.mscore) as score
+                        from 
+                        (
+                            select student_id, problem_id, max(score) as mscore
+                            from submissions as s
+                            group by student_id, problem_id 
+                        )  as a
+                        group by a.student_id
+                    ) as b
+                    on h.student_id = b.student_id
+                    where b.score &gt; 0
+                    order by
+                        b.score desc, h.student_id asc;
+                 </code></pre>
+            </section>
+
             <section>
                 <h1>MySQL</h1>
             </section>
