@@ -694,7 +694,7 @@
 
             <section>
                 <h2>Loading CSV Data</h2>
-                <pre><code data-trim data-noescape class="language-bash">
+                <pre><code data-trim data-noescape class="language-sql">
                     mysql> LOAD DATA local INFILE '/mnt/data/ss13hus_all.csv' INTO TABLE hus5
                     ->   FIELDS TERMINATED BY ',' ENCLOSED BY '"'
                     ->   LINES TERMINATED BY '\n'
@@ -707,7 +707,7 @@
 
             <section>
                 <h2>MySQL Example</h2>
-                <pre><code data-trim data-noescape class="language-bash">
+                <pre><code data-trim data-noescape class="language-sql">
                     mysql> select distinct BATH from hus5;
                     +------+
                     | BATH |
@@ -730,6 +730,124 @@
                     auto.cnf           binlog.index       client-key.pem     ibdata1            performance_schema server-key.pem     undo_002
                     % ls -ahl  /Users/xluo/Downloads/file_data/PUB5/mysql_files/statcomp
                     -rw-r-----   1 xluo  staff   6.6G Oct 13 12:49 hus5.ibd          
+                 </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Example: Student Score</h2>
+                <pre><code data-trim data-noescape class="language-sql">
+                    mysql> create database studentscore;
+                    Query OK, 1 row affected (0.01 sec)
+                    
+                    mysql> use studentscore;
+                    Database changed
+                 </code></pre>
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    mysql> insert into students values (1, 'Joe'), (2, 'Jane'), 
+                                (3, 'Alex'), (4, 'Alice');
+                    Query OK, 4 rows affected (0.01 sec)
+                    Records: 4  Duplicates: 0  Warnings: 0
+                    
+                    mysql> select * from students;
+                    +------------+-------+
+                    | student_id | name  |
+                    +------------+-------+
+                    |          1 | Joe   |
+                    |          2 | Jane  |
+                    |          3 | Alex  |
+                    |          4 | Alice |
+                    +------------+-------+
+                    4 rows in set (0.00 sec)                    
+                 </code></pre>
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    mysql> insert into students values (1, 'Joe'), (2, 'Jane'), 
+                                (3, 'Alex'), (4, 'Alice');
+                    Query OK, 4 rows affected (0.01 sec)
+                    Records: 4  Duplicates: 0  Warnings: 0
+                    
+                    mysql> select * from students;
+                    +------------+-------+
+                    | student_id | name  |
+                    +------------+-------+
+                    |          1 | Joe   |
+                    |          2 | Jane  |
+                    |          3 | Alex  |
+                    |          4 | Alice |
+                    +------------+-------+
+                    4 rows in set (0.00 sec)                    
+                 </code></pre>
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    mysql> create table students (student_id int PRIMARY KEY, 
+                                    name varchar(20));
+                    Query OK, 0 rows affected (0.03 sec)
+                    
+                    mysql> create table submissions (submission_id int, student_id int, 
+                                problem_id int,  score real, 
+                                PRIMARY KEY(submission_id), 
+                                FOREIGN KEY(student_id) REFERENCES students(student_id));
+                    Query OK, 0 rows affected (0.03 sec)
+                 </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    mysql> insert into submissions values (1, 1, 1, 80), (2, 1, 1, 90), 
+                                        (3, 1, 2, 60),  (4, 2, 1, 30);
+                    Query OK, 4 rows affected (0.00 sec)
+                    Records: 4  Duplicates: 0  Warnings: 0
+                    
+                    mysql> select * from submissions;
+                    +---------------+------------+------------+-------+
+                    | submission_id | student_id | problem_id | score |
+                    +---------------+------------+------------+-------+
+                    |             1 |          1 |          1 |    80 |
+                    |             2 |          1 |          1 |    90 |
+                    |             3 |          1 |          2 |    60 |
+                    |             4 |          2 |          1 |    30 |
+                    +---------------+------------+------------+-------+
+                    4 rows in set (0.00 sec)                    
+                 </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-sql">
+                    mysql> select h.student_id, h.name, b.score
+                    ->     from students as h
+                    ->     inner join
+                    ->     (
+                    ->         select a.student_id, sum(a.mscore) as score
+                    ->         from 
+                    ->         (
+                    ->             select student_id, problem_id, max(score) as mscore
+                    ->                             from submissions as s
+                    ->             group by student_id, problem_id 
+                    ->         )  as a
+                    ->         group by a.student_id
+                    ->     ) as b
+                    ->     on h.student_id = b.student_id
+                    ->     where b.score > 0
+                    ->     order by
+                    ->         b.score desc, h.student_id asc;
+                +------------+------+-------+
+                | student_id | name | score |
+                +------------+------+-------+
+                |          1 | Joe  |   150 |
+                |          2 | Jane |    30 |
+                +------------+------+-------+
+                2 rows in set (0.01 sec)
                  </code></pre>
             </section>
 
