@@ -824,23 +824,23 @@
 
             <section>
                 <pre><code data-trim data-noescape class="language-sql">
-                    mysql> select h.student_id, h.name, b.score
-                    ->     from students as h
-                    ->     inner join
-                    ->     (
-                    ->         select a.student_id, sum(a.mscore) as score
-                    ->         from 
-                    ->         (
-                    ->             select student_id, problem_id, max(score) as mscore
-                    ->                             from submissions as s
-                    ->             group by student_id, problem_id 
-                    ->         )  as a
-                    ->         group by a.student_id
-                    ->     ) as b
-                    ->     on h.student_id = b.student_id
-                    ->     where b.score > 0
-                    ->     order by
-                    ->         b.score desc, h.student_id asc;
+                mysql> select h.student_id, h.name, b.score
+                ->     from students as h
+                ->     inner join
+                ->     (
+                ->         select a.student_id, sum(a.mscore) as score
+                ->         from 
+                ->         (
+                ->             select student_id, problem_id, max(score) as mscore
+                ->                             from submissions as s
+                ->             group by student_id, problem_id 
+                ->         )  as a
+                ->         group by a.student_id
+                ->     ) as b
+                ->     on h.student_id = b.student_id
+                ->     where b.score > 0
+                ->     order by
+                ->         b.score desc, h.student_id asc;
                 +------------+------+-------+
                 | student_id | name | score |
                 +------------+------+-------+
