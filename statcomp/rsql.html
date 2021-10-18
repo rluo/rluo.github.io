@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <!-- <style>
+                .rds_db credit:after {
+                    content: "https://r4ds.had.co.nz/relational-data.html";
+                }
+            </style> -->
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>R SQL</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>R and SQL</h2>
+                <ul>
+                    <li>Open connection to DB
+                    </li>
+                    <li>Option 1: post SQL to DB and retrieve results</li>
+                    <li>Option 2: treat connections as objects where SQL conversions handled by pkgs, e.g. dbplyr</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Model</h2>
+                <img src="img/odbc_sql_model.png" width="85%" alt="">
+            </section>
+
+
+            <section>
+                <h2>JDBC/ODBC</h2>
+                <ul>
+                    <li>Think that it does the following:
+                        <ul>
+                            <li>run sqlite on a file or login into a server
+                            </li>
+                            <li>pass SQL statements like “select *” to DBMS
+                            </li>
+                            <li>return a table readable by your program (R)
+                            </li>
+                            <li>close the file or logout
+                            </li>
+                        </ul>
+                    </li>
+                    <li>When you change database vendors, you only need to change the driver not your R program</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Slight Differences</h2>
+                <ul>
+                    <li>Usually both drivers available developed by vendors
+                    </li>
+                    <li>ODBC usually written in C/C++, good for memory intensive tasks
+                    </li>
+                    <li>JDBC written in JAVA, good for large inquiries due to multithreading </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>DB Pkgs</h2>
+                <ul>
+                    <li>R has packages for both JDBC and ODBC for generic databases
+                        <ul>
+                            <li>Use these for almost any RDBMS, Oracle, MySQL, ...</li>
+                        </ul>
+                    </li>
+                    <li>R also has vendor-specific databases, e.g. RSQLite</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <p>Data SP100Stock.zip on Canvas</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    library(RSQLite)
+                    db &lt;- dbConnect(SQLite(), dbname="sp100.sqlite")
+                  </code></pre>
+                <p>Connect to database, you may use similar functions for other DBs</p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    dq <-  dbSendQuery(conn = db,
+                    "CREATE TABLE sp100 
+                        (ID INTEGER,
+                        Symbol TEXT,
+                        Name TEXT)")
+                    dbClearResult(dq)
+                 </code></pre>
+                <p>Create a table for company names</p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    load("sp100list.RData")
+                    head(sp)
+                    ID Symbol                              Name
+                    1  1   AAPL                        Apple Inc.
+                    2  2   ABBV                       AbbVie Inc.
+                    3  3    ABT               Abbott Laboratories
+                    4  4    ACN                     Accenture plc
+                    5  5    AIG American International Group Inc.
+                    6  6    ALL                    Allstate Corp.
+                 </code></pre>
+                <p>SP100 Names</p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    dbWriteTable(db, name="sp100", value=sp,row.names=F, append=T)
+                    dbReadTable(db, name="sp100")
+                         ID Symbol                              Name
+                    1     1   AAPL                        Apple Inc.
+                    2     2   ABBV                       AbbVie Inc.
+                    3     3    ABT               Abbott Laboratories
+                 </code></pre>
+                <p>Load data into DB and read data from DB</p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    dbSendQuery(conn = db,
+                    "CREATE TABLE price
+                    (ID INTEGER,
+                     Date TEXT,
+                     Open REAL,
+                     High REAL,
+                     Low REAL,
+                     Close REAL,
+                     Volume INTEGER,
+                     Adjclose REAL)")
+                    
+                </code></pre>
+                <p>Create table for histroical stock prices</p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    files <- dir(pattern="\\.csv$")
+                    for (f in files) {
+                        a <-  sub( "(.+)\\.csv$", "\\1", f)
+                    
+                        id <- sp$ID[sp$Symbol==a]
+                    
+                        d <-  read.csv(f)
+                        d <- cbind(ID=id, d)
+                        ## make sure column names match the create table command 
+                        names(d) <- c("ID", "Date", "Open", "High", "Low", "Close", "Volume", "Adjclose")
+                        dbWriteTable(db, name="price", value=d, row.names=F, append=T)
+                    }
+                </code></pre>
+                <p>Load CSV data into database</p>
+            </section>
+
+
+            <section>
+                <h2>Naive R Approach</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    files <- dir(pattern="\\.csv$")
+                    re <- NULL
+                    for (f in files) {
+                        
+                        a <-  sub( "(.+)\\.csv$", "\\1", f)
+                        id <- sp$ID[sp$Symbol==a]
+                    
+                        d <-  read.csv(f)
+                        d <- cbind(ID=id, d)
+                        re <- rbind(re, d) 
+                    }
+                    system.time(mm <- merge(re, sp, by="ID")) 
+                    user  system elapsed 
+                    1.147   0.077   1.217                    
+                </code></pre>
+            </section>
+
+
+
+            <section>
+                <h2>SQL Approach</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    system.time( dbSendQuery(conn = db, 
+                        'select * from price left join sp100 
+                               on price.ID=sp100.ID') ) 
+                    user  system elapsed 
+                    0.001   0.000   0.002 
+                </code></pre>
+                <p>SQL is ~1000 times faster</p>
+            </section>
+
+
+            <section>
+                <h2>Summary</h2>
+                <ul>
+                    <li>Choose depending on tasks
+                        <ul>
+                            <li>Small data fit in memory, R operations may be faster
+                            </li>
+                            <li>Large and need to search/match, SQL may be faster</li>
+                            <li>Too big for memory, R + SQL</li>
+                        </ul>
+                    </li>
+                    <li>Send SQL inquiries to RDBMS
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>References</h2>
+                <ul>
+                    <li>R for DS: ch 10</li>
+                    <li>https://dev.mysql.com/doc/refman/8.0/en/</li>
+                    <li>https://www.sqlite.org/docs.html</li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
