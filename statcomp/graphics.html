@@ -298,8 +298,154 @@
                 <h2>HSV</h2>
                 <ul>
                     <li>Hue: angular dimension, 0 degree red, 120 green, 240 blue, 360 red</li>
-                    <li>Saturation: </li>
+                    <li>Saturation: purity of color
+                    </li>
+                    <li>Value: lightness</li>
+                    <li>Mixing colors:
+                        <ul>
+                            <li>Tint: pure color + white</li>
+                            <li>Tone: pure color + gray</li>
+                            <li>Shade: pure color + black</li>
+                        </ul>
+                    </li>
                 </ul>
+            </section>
+
+
+            <section>
+                <h2>Saturation</h2>
+                <br>
+                <div>
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#ff0000;stroke-width:0;" />
+                    </svg>
+                    &nbsp;&nbsp;&nbsp;VS&nbsp;&nbsp;&nbsp;
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#D92121;stroke-width:0;" />
+                    </svg>
+                </div>
+                <br>
+                <div>
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#00ff00;stroke-width:0;" />
+                    </svg>
+                    &nbsp;&nbsp;&nbsp;VS&nbsp;&nbsp;&nbsp;
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#21D921;stroke-width:0;" />
+                    </svg>
+                </div>
+                <br>
+                <div>
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#0000ff;stroke-width:0;" />
+                    </svg>
+                    &nbsp;&nbsp;&nbsp;VS&nbsp;&nbsp;&nbsp;
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#2121D9;stroke-width:0;" />
+                    </svg>
+                </div>
+                <br>
+                <p>Default R colors (left) with full saturation may look too sharp</p>
+            </section>
+
+            <section>
+                <h2>Complementary Colors</h2>
+                <p>Opposite sides of the color wheel, to contrast different categories</p>
+                <img src="https://static-cse.canva.com/_next/static/assets/complementary-colors.1200x690.f6aff61a6d4a050896d92666ac184888.png"
+                    alt="" width="75%">
+                <br>
+                <svg width="100" height="40">
+                    <rect width="100" height="40" style="fill:#D92121;stroke-width:0;" />
+                </svg>
+                &nbsp;&nbsp;&nbsp;VS&nbsp;&nbsp;&nbsp;
+                <svg width="100" height="40">
+                    <rect width="100" height="40" style="fill:#21D9D9;stroke-width:0;" />
+                </svg>
+            </section>
+
+            <section>
+                <h2>Monochromatic Colors</h2>
+                <p>Different shades,tones,tints of one color, for ordinal variables or comparing too many categories</p>
+                <img src="https://static-cse.canva.com/_next/static/assets/monochromatic-colors.1200x690.c7f66f1fcd6a6993b518384ac67996cf.png"
+                    alt="" width="75%">
+            </section>
+
+            <section>
+                <h2>Analogous Colors</h2>
+                <p>Colors with close hue values, for ordinal variables or comparing too many categories</p>
+                <img src="https://static-cse.canva.com/_next/static/assets/analogous-colors.1200x690.09f7dce335bf3297b64fbe9ec4107942.png"
+                    alt="" width="75%">
+            </section>
+
+            <section>
+                <h2>Triadic Colors</h2>
+                <p>3 colors eevnly spread on angles (hues), enough contrast but less than complementary</p>
+                <img src="https://static-cse.canva.com/_next/static/assets/triadic-colors.1200x690.a4b8643c90eb65eeec9ee403474a8688.png"
+                    alt="" width="75%">
+            </section>
+
+            <section>
+                <h2>Tetradic Colors</h2>
+                <p>4 colors eevnly spread on angles (hues), enough contrast but less than complementary</p>
+                <img src="https://static-cse.canva.com/_next/static/assets/tetradic-colors.1200x690.fccadf1e4d2ef031edc49c508d2fe2d9.png"
+                    alt="" width="75%">
+            </section>
+
+            <section>
+                <h2>Grayscale</h2>
+                <br>
+                <div>
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#ff0000;stroke-width:0;" />
+                    </svg>
+                    &nbsp;&nbsp;&nbsp;&rarr;&nbsp;&nbsp;&nbsp;
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#4D4D4D;stroke-width:0;" />
+                    </svg>
+                </div>
+                <br>
+                <div>
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#00ff00;stroke-width:0;" />
+                    </svg>
+                    &nbsp;&nbsp;&nbsp;&rarr;&nbsp;&nbsp;&nbsp;
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#969696;stroke-width:0;" />
+                    </svg>
+                </div>
+                <br>
+                <div>
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#0000ff;stroke-width:0;" />
+                    </svg>
+                    &nbsp;&nbsp;&nbsp;&rarr;&nbsp;&nbsp;&nbsp;
+                    <svg width="100" height="40">
+                        <rect width="100" height="40" style="fill:#1C1C1C;stroke-width:0;" />
+                    </svg>
+                </div>
+                <br>
+                <p>Make sure colors converted to grayscale having enough contrast, for printing and colorblind friendly
+                </p>
+            </section>
+
+            <section>
+                <h2>R Color Pallets</h2>
+                <img src="https://www.r-graph-gallery.com/38-rcolorbrewers-palettes_files/figure-html/thecode-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; library(RColorBrewer)
+                    &gt; brewer.pal.info
+                             maxcolors category colorblind
+                    BrBG            11      div       TRUE
+                    PiYG            11      div       TRUE
+                    PRGn            11      div       TRUE
+                    PuOr            11      div       TRUE
+                    RdBu            11      div       TRUE
+                    RdGy            11      div      FALSE
+                </code></pre>
             </section>
 
             <section>
@@ -372,6 +518,7 @@
                 <ul>
                     <li>R for DS: ch 10</li>
                     <li>https://www.statmethods.net/advgraphs/layout.html</li>
+                    <li>https://www.canva.com/colors/color-wheel/</li>
                 </ul>
             </section>
 
