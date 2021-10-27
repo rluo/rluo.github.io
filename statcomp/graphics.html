@@ -153,7 +153,45 @@
             <section>
                 <h2>Customize Text</h2>
                 <ul>
-                    <li></li>
+                    <li>
+                        <emphcode>cex</emphcode> to specify font size, usually > 1 to make fonts larger
+                    </li>
+                    <li>
+                        <emphcode>family</emphcode> to specify font, usually sans or Arial for most journals
+                    </li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Range of Axes</h2>
+                <ul>
+                    <li>
+                        <emphcode>xlim,ylim</emphcode> to specify axis ranges for x and y
+                    </li>
+                    <li>
+                        The ranges determined by issing the first plot function, add-on plots (e.g. <emphcode>lines
+                        </emphcode>) may go out of ranges
+                    </li>
+                    <li>Also important to set limits when multiple plots are put side-by-side </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Other Functions</h2>
+                <ul>
+                    <li>
+                        <emphcode>polygon</emphcode> for adding (filled or unfilled) polygons
+                    </li>
+                    <li>
+                        <emphcode>lowess</emphcode> for adding smoothing lines, <emphcode>loess</emphcode> a newer
+                        alternative with different options
+                    </li>
+                    <li>
+                        <emphcode>curve</emphcode> for plotting curve functions using a formula, instead of x and y
+                        values, which is similar to <emphcode>plot.function</emphcode>
+                    </li>
                 </ul>
             </section>
 
@@ -177,194 +215,120 @@
             </section>
 
 
-
-
             <section>
-                <h2>Database Interface (DBI)</h2>
-                <ul>
-                    <li>Think that it does the following:
-                        <ul>
-                            <li>run sqlite on a file or login into a server
-                            </li>
-                            <li>pass SQL statements like “select *” to DBMS
-                            </li>
-                            <li>return a table readable by your program (R)
-                            </li>
-                            <li>close the file or logout
-                            </li>
-                        </ul>
-                    </li>
-                    <li>When you change database vendors, you only need to change the driver not your R program</li>
-                </ul>
-            </section>
-
-
-            <section>
-                <h2>Slight Differences</h2>
-                <ul>
-                    <li>Usually both drivers available developed by vendors
-                    </li>
-                    <li>ODBC usually written in C/C++, good for memory intensive tasks
-                    </li>
-                    <li>JDBC written in JAVA, good for large inquiries due to multithreading </li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>DB Pkgs</h2>
-                <ul>
-                    <li>R has packages for both JDBC and ODBC for generic databases
-                        <ul>
-                            <li>Use these for almost any RDBMS, Oracle, MySQL, ...</li>
-                        </ul>
-                    </li>
-                    <li>R also has vendor-specific databases, e.g. RSQLite</li>
-                </ul>
-            </section>
-
-
-            <section>
-                <h2>Example</h2>
-                <p>Data SP100Stock.zip on Canvas</p>
+                <h2>Multiple Plots</h2>
+                <p>Basic multi-plot layout (equal spaced) by</p>
                 <pre><code data-trim data-noescape class="language-r">
-                    library(RSQLite)
-                    db &lt;- dbConnect(SQLite(), dbname="sp100.sqlite")
-                  </code></pre>
-                <p>Connect to database, you may use similar functions for other DBs</p>
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    dq <-  dbSendQuery(conn = db,
-                    "CREATE TABLE sp100 
-                        (ID INTEGER,
-                        Symbol TEXT,
-                        Name TEXT)")
-                    dbClearResult(dq)
-                 </code></pre>
-                <p>Create a table for company names</p>
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    load("sp100list.RData")
-                    head(sp)
-                    ID Symbol                              Name
-                    1  1   AAPL                        Apple Inc.
-                    2  2   ABBV                       AbbVie Inc.
-                    3  3    ABT               Abbott Laboratories
-                    4  4    ACN                     Accenture plc
-                    5  5    AIG American International Group Inc.
-                    6  6    ALL                    Allstate Corp.
-                 </code></pre>
-                <p>SP100 Names</p>
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    dbWriteTable(db, name="sp100", value=sp,row.names=F, append=T)
-                    dbReadTable(db, name="sp100")
-                         ID Symbol                              Name
-                    1     1   AAPL                        Apple Inc.
-                    2     2   ABBV                       AbbVie Inc.
-                    3     3    ABT               Abbott Laboratories
-                 </code></pre>
-                <p>Load data into DB and read data from DB</p>
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    dbSendQuery(conn = db,
-                    "CREATE TABLE price
-                    (ID INTEGER,
-                     Date TEXT,
-                     Open REAL,
-                     High REAL,
-                     Low REAL,
-                     Close REAL,
-                     Volume INTEGER,
-                     Adjclose REAL)")
-                    
+                    par(mfrow = c(2, 3))
+                    plot(1:10, 1:10, main="1")
+                    ...
                 </code></pre>
-                <p>Create table for histroical stock prices</p>
+                <p>6 subfigures arranged by 2 rows and 3 columns. Each new plot object fills subfigures from left to
+                    right, top to bottom</p>
             </section>
 
             <section>
+                <h2>Multi-row/col Layout</h2>
                 <pre><code data-trim data-noescape class="language-r">
-                    files <- dir(pattern="\\.csv$")
-                    for (f in files) {
-                        a <-  sub( "(.+)\\.csv$", "\\1", f)
-                    
-                        id <- sp$ID[sp$Symbol==a]
-                    
-                        d <-  read.csv(f)
-                        d <- cbind(ID=id, d)
-                        ## make sure column names match the create table command 
-                        names(d) <- c("ID", "Date", "Open", "High", "Low", "Close", "Volume", "Adjclose")
-                        dbWriteTable(db, name="price", value=d, row.names=F, append=T)
-                    }
-                </code></pre>
-                <p>Load CSV data into database</p>
-            </section>
-
-
-            <section>
-                <h2>Naive R Approach</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    files <- dir(pattern="\\.csv$")
-                    re <- NULL
-                    for (f in files) {
-                        
-                        a <-  sub( "(.+)\\.csv$", "\\1", f)
-                        id <- sp$ID[sp$Symbol==a]
-                    
-                        d <-  read.csv(f)
-                        d <- cbind(ID=id, d)
-                        re <- rbind(re, d) 
-                    }
-                    system.time(mm <- merge(re, sp, by="ID")) 
-                    user  system elapsed 
-                    1.147   0.077   1.217                    
+                    attach(mtcars)
+                    layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE))
+                    hist(disp)
+                    hist(mpg)
+                    hist(wt)
                 </code></pre>
             </section>
 
-
-
             <section>
-                <h2>SQL Approach</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    system.time( dbSendQuery(conn = db, 
-                        'select * from price left join sp100 
-                               on price.ID=sp100.ID') ) 
-                    user  system elapsed 
-                    0.001   0.000   0.002 
-                </code></pre>
-                <p>SQL is ~1000 times faster</p>
+                <img src="img/graphics_layout.png" width="65%" alt="">
             </section>
 
+            <section>
+                <h2>Fine Control</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    par(fig=c(0,0.8,0,0.8), new=TRUE)
+                    plot(mtcars$wt, mtcars$mpg, xlab="Car Weight",
+                        ylab="Miles Per Gallon")
+                    par(fig=c(0,0.8,0.55,1), new=TRUE)
+                    boxplot(mtcars$wt, horizontal=TRUE, axes=FALSE)
+                    par(fig=c(0.65,1,0,0.8),new=TRUE)
+                    boxplot(mtcars$mpg, axes=FALSE)
+                </code></pre>
+            </section>
 
             <section>
-                <h2>Summary</h2>
+                <img src="img/graphics_fine.png" width="65%" alt="">
+            </section>
+
+            <section>
+                <h2>Graphic Devices</h2>
                 <ul>
-                    <li>Choose depending on tasks
-                        <ul>
-                            <li>Small data fit in memory, R operations may be faster
-                            </li>
-                            <li>Large and need to search/match, SQL may be faster</li>
-                            <li>Too big for memory, R + SQL</li>
-                        </ul>
+                    <li>R displays are organized as devices</li>
+                    <li>One plot can be shwon on different devices</li>
+                    <li>A device can be a file or screen (default)</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; pdf("test.pdf")
+                </code></pre>
+                <p>Open a device, creating a pdf file this case, as the currect device</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; dev.list()
+                    X11  pdf
+                      2    3
+                </code></pre>
+                <p>List devices, referred to by number</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; dev.cur()
+                    pdf
+                      3
+                </code></pre>
+                <p>Showing current device, plots go to the pdf file</p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; dev.set(2)
+                    X11
+                    2  
+                </code></pre>
+                <p>Set current device to screen</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; dev.copy(which=3)
+                    pdf
+                      3
+                </code></pre>
+                <p>Copy plot from current (2) to which (3) device</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; dev.set(3)
+                    pdf
+                      3
+                    &gt; dev.off()
+                    X11
+                      2
+                </code></pre>
+                <p>Close current device (3)</p>
+            </section>
+
+            <section>
+                <h2>3D Graphics</h2>
+                <ul>
+                    <li>
+                        <emphcode>lattice</emphcode>: basic pkg for 3D plots
                     </li>
-                    <li>Send SQL inquiries to RDBMS
+                    <li>
+                        <emphcode>rgl</emphcode>: interactive 3D plots
                     </li>
                 </ul>
             </section>
+
 
             <section>
                 <h2>References</h2>
                 <ul>
                     <li>R for DS: ch 10</li>
-                    <li>https://dev.mysql.com/doc/refman/8.0/en/</li>
-                    <li>https://www.sqlite.org/docs.html</li>
+                    <li>https://www.statmethods.net/advgraphs/layout.html</li>
                 </ul>
             </section>
 
