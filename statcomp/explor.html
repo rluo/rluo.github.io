@@ -248,13 +248,205 @@
 
             <section>
                 <h2>geoms</h2>
+                <ul>
+                    <li>40 geoms available, and more by extension packages</li>
+                    <li>Multiple geoms, together with ggplot, can be added together as a pipe line using <emphcode>+
+                        </emphcode>
+                    </li>
+                    <li>Multiple geoms can have separate aes or shared aes</li>
+                </ul>
+            </section>
 
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+                    geom_point(mapping = aes(color = class)) + 
+                    geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/737dd0bae0fa6100c991e2ca6c4f7dea77de7718/a3667/visualize_files/figure-html/unnamed-chunk-22-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = mpg) + 
+                    geom_point(mapping = aes(x = displ, y = hwy)) +
+                    geom_smooth(mapping = aes(x = displ, y = hwy))
+                    # Same as
+                    ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+                    geom_point() + 
+                    geom_smooth()
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/5f1620468f0bede8ea7efb83bd82f6409d0ee71e/5d90d/visualize_files/figure-html/unnamed-chunk-25-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <h2>stat</h2>
+                <ul>
+                    <li>Statistical transformations, known as stat, needed when plotting derived variables (e.g. counts)
+                        instead of raw data</li>
+                    <li>ggplot2 calculates derived variables using various stat functions</li>
+                    <li>Some geoms (e.g. bar charts) calls stat functions under the hood</li>
+                    <li>Every geom has a default stat; and every stat has a default geom</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = diamonds) + 
+                    geom_bar(mapping = aes(x = cut))
+                    # Same as
+                    ggplot(data = diamonds) + 
+                    stat_count(mapping = aes(x = cut))
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/7f4cb432b8891f01b8097e31f286cb54d7473ced/31892/visualize_files/figure-html/unnamed-chunk-31-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <h2>Overriding</h2>
+                <ul>
+                    <li>Change the default stat</li>
+                    <li>Change the aesthetics</li>
+                    <li>Diplay various transformations</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = diamonds) + 
+                    geom_bar(mapping = aes(x = cut, y = stat(prop), group = 1))
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/acddaca9974d1bc66d491397c9a2af7ec470e4ff/48062/visualize_files/figure-html/unnamed-chunk-33-1.png"
+                    alt="" width="60%">
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = diamonds) + 
+                    stat_summary(
+                      mapping = aes(x = cut, y = depth),
+                      fun.min = min,
+                      fun.max = max,
+                      fun = median
+                    )
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/4f7c8830283cb7009346ed85a8196b06959f5abd/78175/visualize_files/figure-html/unnamed-chunk-34-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <h2>Position Adjustment</h2>
+                <ul>
+                    <li>ggplot2 will automatically choose positions for geoms</li>
+                    <li>You may override by setting <emphcode>position</emphcode>
+                        <ul>
+                            <li>identity: ignoring other geoms</li>
+                            <li>fill: stacking</li>
+                            <li>dodge: side by side</li>
+                            <li>jitter: add small random noise to avoid overlapping</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = diamonds) + 
+                    geom_bar(mapping = aes(x = cut, fill = clarity))
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/8110840c1d10cedddc535053908825859595544a/f7d5e/visualize_files/figure-html/unnamed-chunk-37-1.png"
+                    alt="" width="60%">
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = diamonds, mapping = aes(x = cut, fill = clarity)) + 
+                    geom_bar(alpha = 1/5, position = "identity")
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/eeb585504858f548f4ed91a08a9ff159b7c6e86b/9ec57/visualize_files/figure-html/unnamed-chunk-38-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = diamonds) + 
+                    geom_bar(mapping = aes(x = cut, fill = clarity), position = "fill")
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/b714164c434b166e783ee626f26a0272e21d77c3/b0cb0/visualize_files/figure-html/unnamed-chunk-39-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = diamonds) + 
+                    geom_bar(mapping = aes(x = cut, fill = clarity), position = "dodge")
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/df1b0254da67bacb41a51381d310864d3a5a7dc7/10834/visualize_files/figure-html/unnamed-chunk-40-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = mpg) + 
+                    geom_point(mapping = aes(x = displ, y = hwy), position = "jitter")
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/74df0885fea263841788c5f4742ac79dde6e023c/8142b/visualize_files/figure-html/unnamed-chunk-42-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <h2>Coordinate Systems</h2>
+                <ul>
+                    <li>ggplot create Cartesian coordinate system by default occupying the full space</li>
+                    <li>Modify by:
+                        <ul>
+                            <li>coord_flip: swapping x and y</li>
+                            <li>coord_quickmap: aspect ratio for maps</li>
+                            <li>coord_polar: polar coordinates</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Layered Grammar</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = &lt;DATA&gt;) + 
+                        &lt;GEOM_FUNCTION&gt;(
+                           mapping = aes(&lt;MAPPINGS&gt;),
+                           stat = &lt;STAT&gt;, 
+                           position = &lt;POSITION&gt;
+                        ) +
+                        &lt;COORDINATE_FUNCTION&gt; +
+                        &lt;FACET_FUNCTION&gt;
+                 </code></pre>
+            </section>
+
+            <section>
+                <h2>VS Basic R</h2>
+                <ul>
+                    <li>Transform and calculate derived variables</li>
+                    <li>Choose visual objects for each variables</li>
+                    <li>Decide properties</li>
+                    <li>Choose coordinate system and add all objects</li>
+                    <li>Adjust positions</li>
+                    <li>Add legend</li>
+                    <li>Iterate for each subplot</li>
+                    <li>ggplot2 does these automatically, usually defaults are acceptable but can be improved</li>
+                </ul>
             </section>
 
             <section>
                 <h2>References</h2>
                 <ul>
-                    <li>R for DS: ch 2 - 8</li>
+                    <li>R for DS: ch 2 - 4</li>
+                    <li>https://r4ds.had.co.nz/</li>
+                    <li>https://exts.ggplot2.tidyverse.org/gallery/</li>
+                    <li>https://www.rstudio.com/resources/cheatsheets/</li>
                 </ul>
             </section>
 
