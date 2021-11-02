@@ -259,16 +259,6 @@
 
             <section>
                 <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
-                    geom_point(mapping = aes(color = class)) + 
-                    geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/737dd0bae0fa6100c991e2ca6c4f7dea77de7718/a3667/visualize_files/figure-html/unnamed-chunk-22-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
                     ggplot(data = mpg) + 
                     geom_point(mapping = aes(x = displ, y = hwy)) +
                     geom_smooth(mapping = aes(x = displ, y = hwy))
@@ -276,6 +266,17 @@
                     ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
                     geom_point() + 
                     geom_smooth()
+                 </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/737dd0bae0fa6100c991e2ca6c4f7dea77de7718/a3667/visualize_files/figure-html/unnamed-chunk-22-1.png"
+                    alt="" width="60%">
+
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+                    geom_point(mapping = aes(color = class)) + 
+                    geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
                  </code></pre>
                 <img src="https://d33wubrfki0l68.cloudfront.net/5f1620468f0bede8ea7efb83bd82f6409d0ee71e/5d90d/visualize_files/figure-html/unnamed-chunk-25-1.png"
                     alt="" width="60%">
