@@ -59,394 +59,473 @@
 
 
             <section>
-                <h2>Data Exploration</h2>
-                <img src="https://d33wubrfki0l68.cloudfront.net/795c039ba2520455d833b4034befc8cf360a70ba/558a5/diagrams/data-science-explore.png"
+                <h2>Data Wrangling</h2>
+                <img src="https://d33wubrfki0l68.cloudfront.net/e3f9e555d0035731c04642ceb58a03fb84b98a7d/4f070/diagrams/data-science-wrangle.png"
                     alt="" width="65%">
-                <p>First step to gain (preliminary) insight from data. Visualization is an important, not necessarily
-                    sufficient, component.</p>
             </section>
 
 
             <section>
-                <h2>ggplot2</h2>
+                <h2>tibble</h2>
                 <ul>
-                    <li>Grammar of graphics: layered system to plotting</li>
-                    <li>Basic R plotting uses a procedural approach to modify components in plots </li>
-                    <li>By default, ggplot will select </li>
+                    <li>Modern variant of R data.frame</li>
+                    <li>tidy data: consistent way for transformation, visualization, and modeling </li>
                 </ul>
             </section>
+
+
 
 
             <section>
                 <h2>First Example</h2>
                 <pre><code data-trim data-noescape class="language-r">
+                    library(nycflights13)
                     library(tidyverse)
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy))
+                    flights
+                    #&gt; # A tibble: 336,776 x 19
+                    #&gt;    year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+                    #&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
+                    #&gt; 1  2013     1     1      517            515         2      830            819
+                    ...
+                    #&gt; # … with 336,770 more rows, and 11 more variables: arr_delay &lt;dbl&gt;,
+                    #&gt; #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
+                    #&gt; #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;
                  </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/91aebc6de4de928abc810433b752274ba6a46d58/a78b1/visualize_files/figure-html/unnamed-chunk-3-1.png"
-                    alt="" width="60%">
             </section>
 
             <section>
-                <h2>ggplot()</h2>
+                <h2>Basics</h2>
                 <ul>
-                    <li>ggplot() creates a coordinate system, including the data</li>
-                    <li>Itself is an empty graph</li>
-                    <li>More layers, e.g. geom_point, needed to be added</li>
-                    <li>One can add more layers of geom functions, of different types</li>
-                    <li>Each geom function takes, <emphcode>mapping</emphcode> arguments, which defines how data are
-                        visualized
-                        <ul>
-                            <li>
-                                <emphcode>aes</emphcode> specifies which variables for x and y axes
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
-
-
-            <section>
-                <h2>Aesthetic Mapping</h2>
-                <ul>
-                    <li>Aesthetic is visual property of the objects (e.g. points, lines) in plots</li>
-                    <li>Examples: size, shape, color</li>
-                    <li>Distinct levels mapped to properties automatically by default</li>
-                </ul>
-            </section>
-
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy, color = class))
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/8b89c5554ed6108359d59909d441dbeb010e8802/9f366/visualize_files/figure-html/unnamed-chunk-7-1.png"
-                    alt="" width="60%">
-                <p>Also known as scaling in ggplot2, and legend was added</p>
-            </section>
-
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy, size = class))
-                    #> Warning: Using size for a discrete variable is not advised.
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/9c1b8b7c0700daf7d8d141f892036a0caf83e8d7/4c81a/visualize_files/figure-html/unnamed-chunk-8-1.png"
-                    alt="" width="60%">
-                <p>Size for ordinal variables usually, and color/shape for categorical</p>
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                      geom_point(mapping = aes(x = displ, y = hwy, alpha = class))
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/f9280bbd15f46cc9d67a8fa30085c147ccee89c4/402ac/visualize_files/figure-html/unnamed-chunk-9-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy, shape = class))
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/1ae399aecbf37c65219a1610aa1b9700a6355834/5d06b/visualize_files/figure-html/unnamed-chunk-9-2.png"
-                    alt="" width="60%">
-                <p>Maximum 6 shapes allowed, additional levels unplotted</p>
-            </section>
-
-
-
-            <section>
-                <h2>Automatic</h2>
-                <ul>
-                    <li>ggplot2 mapping selects shapes, colors, .. automatically accoding to theory</li>
-                    <li>Usually pretty good</li>
                     <li>
-                        <emphcode>mapping=aes()</emphcode> lets ggplot2 to select, but one can set manually by using the
-                        property names directly
+                        <emphcode>filter</emphcode>: pick rows
+                    </li>
+                    <li>
+                        <emphcode>arrange</emphcode>: reorder rows
+                    </li>
+                    <li>
+                        <emphcode>select</emphcode>: pick cols/vars
+                    </li>
+                    <li>
+                        <emphcode>mutate</emphcode>: add new columns (derived vars)
+                    </li>
+                    <li>
+                        <emphcode>summarize</emphcode>: reduce many values to scalar
                     </li>
                 </ul>
             </section>
 
             <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/c36c62d7f70e30e3307295d6408b8d3b61e3c56a/a6987/visualize_files/figure-html/unnamed-chunk-10-1.png"
-                    alt="" width="60%">
+                <h2>Workflow</h2>
+                <ul>
+                    <li>Start wtih data</li>
+                    <li>Each layer with basic functions produces a new data frame</li>
+                    <li>Multiple layers added together as pipeline</li>
+                    <li>Similar to ggplot2</li>
+                </ul>
             </section>
 
             <section>
-                <h2>Exercise</h2>
-                <p>What’s gone wrong with this code? Why are the points not blue?
+                <pre><code data-trim data-noescape class="language-r">
+                    (dec25 &lt;- filter(flights, month == 12, day == 25))
+                    #> # A tibble: 719 x 19
+                    #>    year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+                    #>   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
+                    #&gt; 1  2013    12    25      456            500        -4      649            651
+                    ...
+                    #&gt; # … with 713 more rows, and 11 more variables: arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;,
+                    #&gt; #   flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;,
+                    #&gt; #   distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;
+                 </code></pre>
+            </section>
+
+            <section>
+                <h2>Logical Operators</h2>
+                <ul>
+                    <li>
+                        <emphcode>&</emphcode>: and
+                    </li>
+                    <li>
+                        <emphcode>|</emphcode>: or
+                    </li>
+                    <li>
+                        <emphcode>!</emphcode>: not
+                    </li>
+                    <li>Not <emphcode>&&, ||</emphcode>, wich produces scalars
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Missing Values</h2>
+                <ul>
+                    <li>
+                        <emphcode>NA</emphcode>: missing values
+                    </li>
+                    <li>
+                        <emphcode>filter</emphcode>: excludes both FALSE and NA values
+                    </li>
+                </ul>
+                <pre><code data-trim data-noescape class="language-r">
+                    NA == NA
+                    #&gt; [1] NA
+                    filter(df, is.na(x) | x &gt; 1)
+                    #&gt; # A tibble: 2 x 1
+                    #&gt;       x
+                    #&gt;   &lt;dbl&gt;
+                    #&gt; 1    NA
+                    #&gt; 2     3
+                 </code></pre>
+            </section>
+
+            <section>
+                <h2>arrange</h2>
+                <ul>
+                    <li>Default is ascending order</li>
+                    <li>Missing values at the end</li>
+                    <li>Ordered by variable ordered passed in</li>
+                </ul>
+                <pre><code data-trim data-noescape class="language-r">
+                    arrange(flights, year, month, day)
+                    #&gt; # A tibble: 336,776 x 19
+                    ...
+                    arrange(flights, desc(dep_delay))
+                    #&gt; # A tibble: 336,776 x 19
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>select</h2>
+                <ul>
+                    <li>Pick columns/variables</li>
+                    <li>Powerful when name patterns are passed</li>
+                    <li>Built-in name pattern functions</li>
+                </ul>
+                <pre><code data-trim data-noescape class="language-r">
+                    # Select columns by name
+                    select(flights, year, month, day)
+                    # Select all columns between year and day (inclusive)
+                    select(flights, year:day)
+                    # Select all columns except those from year to day (inclusive)
+                    select(flights, -(year:day))
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Helper Functions</h2>
+                <ul>
+                    <li>
+                        <emphcode>starts_with('abc')</emphcode>: match var names begin with 'abc'
+                    </li>
+                    <li>
+                        <emphcode>ends_with('abc')</emphcode>: end with 'abc'
+                    </li>
+                    <li>
+                        <emphcode>contains('abc')</emphcode>: contain 'abc'
+                    </li>
+                    <li>
+                        <emphcode>matches('(.)\\1')</emphcode>: match regular expression
+                    </li>
+                    <li>
+                        <emphcode>num_range("x", 1:3)</emphcode>: x1, x2, and x3
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>rename</h2>
+                <p>rename changes variable names</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    rename(flights, tail_num = tailnum)
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>everything</h2>
+                <p>everything() refers to all (other) variable names</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    select(flights, time_hour, air_time, everything())
+                </code></pre>
+                <p>Moves two variables to the first two columns</p>
+            </section>
+
+            <section>
+                <h2>mutate</h2>
+                <ul>
+                    <li>Transformed variables added to the end of tibble</li>
+                    <li>Vector-type operations</li>
+                    <li>Refer variable names without quotes</li>
+                    <li>You can refer to columns that just created</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                flights_sml &lt;- select(flights, 
+                    year:day, 
+                    ends_with("delay"), 
+                    distance, 
+                    air_time
+                )
+                mutate(flights_sml,
+                    gain = dep_delay - arr_delay,
+                    speed = distance / air_time * 60
+                )
+                mutate(flights_sml,
+                    gain = dep_delay - arr_delay,
+                    hours = air_time / 60,
+                    gain_per_hour = gain / hours
+                )
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>transmute</h2>
+                <p>Unlike mutate, transmute only keeps the transformed variables</p>
+                <pre><code data-trim data-noescape class="language-r">
+                transmute(flights,
+                    gain = dep_delay - arr_delay,
+                    hours = air_time / 60,
+                    gain_per_hour = gain / hours
+                  )
+                  #&gt; # A tibble: 336,776 x 3
+                  #&gt;    gain hours gain_per_hour
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Operators in mutate/transmute</h2>
+                <ul>
+                    <li>Most operators should work</li>
+                    <li>Operations are vectorized</li>
+                    <li>Some specical ones</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    y &lt;- c(1, 2, 2, NA, 3, 4)
+                    min_rank(y)
+                    #&gt; [1]  1  2  2 NA  4  5
+                    min_rank(desc(y))
+                    #&gt; [1]  5  3  3 NA  2  1
+                    row_number(y)
+                    #&gt; [1]  1  2  3 NA  4  5
+                    dense_rank(y)
+                    #&gt; [1]  1  2  2 NA  3  4
+                    percent_rank(y)
+                    #&gt; [1] 0.00 0.25 0.25   NA 0.75 1.00
+                    cume_dist(y)
+                    #&gt; [1] 0.2 0.6 0.6  NA 0.8 1.0
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>summarise</h2>
+                <ul>
+                    <li>mutate produces same number of rows</li>
+                    <li>summarise reduces to a single row</li>
+                    <li>Usually combined with <emphcode>group_by</emphcode>, to produce summaries for each group
+                        <ul>
+                            <li>ungroup removes grouping</li>
+                        </ul>
+                    </li>
+                    <li>Only keeps the summarized variables, like transmute</li>
+                    <li>Most summary functions work and more (check text book)</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    by_day &lt;- group_by(flights, year, month, day)
+                    summarise(by_day, delay = mean(dep_delay, na.rm = TRUE))
+                    #&gt; `summarise()` regrouping output by 'year', 'month' (override with `.groups` argument)
+                    #&gt; # A tibble: 365 x 4
+                    #&gt; # Groups:   year, month [12]
+                    #&gt;    year month   day delay
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Pipe %&gt;%</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    delays &lt;- flights %&gt;% 
+                    group_by(dest) %&gt;% 
+                    summarise(
+                      count = n(),
+                      dist = mean(distance, na.rm = TRUE),
+                      delay = mean(arr_delay, na.rm = TRUE),
+                      n = n()
+                    ) %&gt;% 
+                    filter(count &gt; 20, dest != "HNL")
+                    #&gt; `summarise()` ungrouping output (override with `.groups` argument)
+                    ggplot(data = delays, mapping = aes(x = dist, y = delay)) +
+                    geom_point(aes(size = count), alpha = 1/3) +
+                    geom_smooth(se = FALSE)
+                </code></pre>
+                <p>Imperative layers added to achieve transformations and plotting</p>
+                <p>Count by <emphcode>n()</emphcode>
                 </p>
+            </section>
+
+            <section>
+                <img src="https://d33wubrfki0l68.cloudfront.net/29c6c007a9dd15c20a77736d60bc27e8aaa690c0/a40a3/transform_files/figure-html/unnamed-chunk-35-1.png"
+                    alt="" width="80%">
+            </section>
+
+            <section>
+                <h2>Pipe dplyr and ggplot2</h2>
                 <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/2c3f0abae562f351ef2a3b32066b69101d831900/c4e3b/visualize_files/figure-html/unnamed-chunk-11-1.png"
+                    delays %>% 
+                    filter(n > 25) %>% 
+                    ggplot(mapping = aes(x = n, y = delay)) + 
+                      geom_point(alpha = 1/10)
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/4d2332588c630118dc9827bc67506a8db02a75b0/50a17/transform_files/figure-html/unnamed-chunk-42-1.png"
                     alt="" width="60%">
             </section>
 
 
             <section>
-                <h2>Facets</h2>
+                <h2>tibble</h2>
                 <ul>
-                    <li>If too many cantegories, break up into facets, or suplots that display subset of data</li>
-                    <li>Single discrete variable, use <emphcode>facet_wrap</emphcode>
+                    <li>Much like data.frame but does less</li>
+                    <li>Never converts strings to factors</li>
+                    <li>Never changes var names</li>
+                    <li>never creates row names</li>
+                    <li>
+                        <emphcode>as_tibble, tibble</emphcode>
                     </li>
-                    <li>Combination of two variables, use <emphcode>facet_grid</emphcode>
+                    <li>Pretty much like data.frame and other packages, if not, convert back to data.frame</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>tribble</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    tribble(
+                        ~x, ~y, ~z,
+                        #--|--|----
+                        "a", 2, 3.6,
+                        "b", 1, 8.5
+                      )
+                      #&gt; # A tibble: 2 x 3
+                      #&gt;   x         y     z
+                      #&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+                      #&gt; 1 a         2   3.6
+                      #&gt; 2 b         1   8.5
+                </code></pre>
+                <p>More readble format (by-rows) for creating tibble</p>
+            </section>
+
+            <section>
+                <h2>From File: readr</h2>
+                <ul>
+                    <li>readr::read_csv for import csv files</li>
+                    <li>Typically ~10x faster than basic R read.csv</li>
+                    <li>Even faster: data.table::fread()</li>
+                    <li>Platform independent</li>
+                    <li>read_csv arguments like read.csv with some changes</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                read_csv("The first line of metadata
+                    The second line of metadata
+                    x,y,z
+                    1,2,3", skip = 2)                 
+                read_csv("# A comment I want to skip
+                    x,y,z
+                    1,2,3", comment = "#")
+                read_csv("1,2,3\n4,5,6", col_names = FALSE)
+                read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
+                read_csv("a,b,c\n1,2,.", na = ".")
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>parse_* Function</h2>
+                <ul>
+                    <li>
+                        <emphcode>parse_logical</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>parse_integer</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>parse_double</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>parse_character</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>parse_factor</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>parse_datetime, parse_date, parse_time</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>guess_encoding, guess_parser</emphcode>
                     </li>
                 </ul>
             </section>
 
             <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy)) + 
-                    facet_wrap(~ class, nrow = 2)
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/cfc07b44ca9549597084bb18593c6aa115725240/8843c/visualize_files/figure-html/unnamed-chunk-12-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy)) + 
-                    facet_grid(drv ~ cyl)
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/c58f7f0f141f26f854d732701592275422e04ec4/0ad69/visualize_files/figure-html/unnamed-chunk-13-1.png"
-                    alt="" width="60%">
-            </section>
-
-
-            <section>
-                <h2>geoms</h2>
+                <h2>Reading File</h2>
                 <ul>
-                    <li>Visual object in ggplot2</li>
-                    <li>Different geoms represent different data: bar, boxplot, line </li>
-                    <li>ggplot2 uses different functions for geoms</li>
-                    <li>All functions have similar interfaces, e.g. mapping=aes()</li>
-                    <li>Some options may not be available, e.g. lines don't have shpaes</li>
+                    <li>Usually type parsed correctly</li>
+                    <li>May override by specifying types manually</li>
                 </ul>
             </section>
 
             <section>
                 <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_smooth(mapping = aes(x = displ, y = hwy, linetype = drv))
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/f6d3025401c2bf94d85e1871ea67cddf48b52504/31750/visualize_files/figure-html/unnamed-chunk-19-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <h2>geoms</h2>
-                <ul>
-                    <li>40 geoms available, and more by extension packages</li>
-                    <li>Multiple geoms, together with ggplot, can be added together as a pipe line using <emphcode>+
-                        </emphcode>
-                    </li>
-                    <li>Multiple geoms can have separate aes or shared aes</li>
-                </ul>
-            </section>
-
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy)) +
-                    geom_smooth(mapping = aes(x = displ, y = hwy))
-                    # Same as
-                    ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
-                    geom_point() + 
-                    geom_smooth()
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/737dd0bae0fa6100c991e2ca6c4f7dea77de7718/a3667/visualize_files/figure-html/unnamed-chunk-22-1.png"
-                    alt="" width="60%">
-
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
-                    geom_point(mapping = aes(color = class)) + 
-                    geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/5f1620468f0bede8ea7efb83bd82f6409d0ee71e/5d90d/visualize_files/figure-html/unnamed-chunk-25-1.png"
-                    alt="" width="60%">
-            </section>
-
-
-            <section>
-                <h2>stat</h2>
-                <ul>
-                    <li>Statistical transformations, known as stat, needed when plotting derived variables (e.g. counts)
-                        instead of raw data</li>
-                    <li>ggplot2 calculates derived variables using various stat functions</li>
-                    <li>Some geoms (e.g. bar charts) calls stat functions under the hood</li>
-                    <li>Every geom has a default stat; and every stat has a default geom</li>
-                </ul>
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = diamonds) + 
-                    geom_bar(mapping = aes(x = cut))
-                    # Same as
-                    ggplot(data = diamonds) + 
-                    stat_count(mapping = aes(x = cut))
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/7f4cb432b8891f01b8097e31f286cb54d7473ced/31892/visualize_files/figure-html/unnamed-chunk-31-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <h2>Overriding</h2>
-                <ul>
-                    <li>Change the default stat</li>
-                    <li>Change the aesthetics</li>
-                    <li>Diplay various transformations</li>
-                </ul>
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = diamonds) + 
-                    geom_bar(mapping = aes(x = cut, y = stat(prop), group = 1))
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/acddaca9974d1bc66d491397c9a2af7ec470e4ff/48062/visualize_files/figure-html/unnamed-chunk-33-1.png"
-                    alt="" width="60%">
+                    challenge &lt;- read_csv(
+                        readr_example("challenge.csv"), 
+                        col_types = cols(
+                          x = col_double(),
+                          y = col_date()
+                        )
+                      )
+                      tail(challenge)
+                      #&gt; # A tibble: 6 x 2
+                      #&gt;       x y         
+                      #&gt;   &lt;dbl&gt; &lt;date&gt;    
+                      #&gt; 1 0.805 2019-11-21
+                      #&gt; 2 0.164 2018-03-29
+                      #&gt; 3 0.472 2014-08-04
+                      #&gt; 4 0.718 2015-08-16
+                      #&gt; 5 0.270 2020-02-04
+                      #&gt; 6 0.608 2019-01-06
+                </code></pre>
             </section>
 
 
             <section>
                 <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = diamonds) + 
-                    stat_summary(
-                      mapping = aes(x = cut, y = depth),
-                      fun.min = min,
-                      fun.max = max,
-                      fun = median
+                    challenge2 &lt;- read_csv(readr_example("challenge.csv"), guess_max = 1001)
+                    #&gt; 
+                    #&gt; ── Column specification ────────────────────────────────────────────────────────
+                    #&gt; cols(
+                    #&gt;   x = col_double(),
+                    #&gt;   y = col_date(format = "")
+                    #&gt; )
+                    
+                    # Or read in all rows as characters
+                    challenge2 <- read_csv(readr_example("challenge.csv"), 
+                        col_types = cols(.default = col_character())
                     )
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/4f7c8830283cb7009346ed85a8196b06959f5abd/78175/visualize_files/figure-html/unnamed-chunk-34-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <h2>Position Adjustment</h2>
-                <ul>
-                    <li>ggplot2 will automatically choose positions for geoms</li>
-                    <li>You may override by setting <emphcode>position</emphcode>
-                        <ul>
-                            <li>identity: ignoring other geoms</li>
-                            <li>fill: stacking</li>
-                            <li>dodge: side by side</li>
-                            <li>jitter: add small random noise to avoid overlapping</li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = diamonds) + 
-                    geom_bar(mapping = aes(x = cut, fill = clarity))
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/8110840c1d10cedddc535053908825859595544a/f7d5e/visualize_files/figure-html/unnamed-chunk-37-1.png"
-                    alt="" width="60%">
-            </section>
-
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = diamonds, mapping = aes(x = cut, fill = clarity)) + 
-                    geom_bar(alpha = 1/5, position = "identity")
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/eeb585504858f548f4ed91a08a9ff159b7c6e86b/9ec57/visualize_files/figure-html/unnamed-chunk-38-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = diamonds) + 
-                    geom_bar(mapping = aes(x = cut, fill = clarity), position = "fill")
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/b714164c434b166e783ee626f26a0272e21d77c3/b0cb0/visualize_files/figure-html/unnamed-chunk-39-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = diamonds) + 
-                    geom_bar(mapping = aes(x = cut, fill = clarity), position = "dodge")
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/df1b0254da67bacb41a51381d310864d3a5a7dc7/10834/visualize_files/figure-html/unnamed-chunk-40-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = mpg) + 
-                    geom_point(mapping = aes(x = displ, y = hwy), position = "jitter")
-                 </code></pre>
-                <img src="https://d33wubrfki0l68.cloudfront.net/74df0885fea263841788c5f4742ac79dde6e023c/8142b/visualize_files/figure-html/unnamed-chunk-42-1.png"
-                    alt="" width="60%">
-            </section>
-
-            <section>
-                <h2>Coordinate Systems</h2>
-                <ul>
-                    <li>ggplot create Cartesian coordinate system by default occupying the full space</li>
-                    <li>Modify by:
-                        <ul>
-                            <li>coord_flip: swapping x and y</li>
-                            <li>coord_quickmap: aspect ratio for maps</li>
-                            <li>coord_polar: polar coordinates</li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Layered Grammar</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    ggplot(data = &lt;DATA&gt;) + 
-                        &lt;GEOM_FUNCTION&gt;(
-                           mapping = aes(&lt;MAPPINGS&gt;),
-                           stat = &lt;STAT&gt;, 
-                           position = &lt;POSITION&gt;
-                        ) +
-                        &lt;COORDINATE_FUNCTION&gt; +
-                        &lt;FACET_FUNCTION&gt;
-                 </code></pre>
-            </section>
-
-            <section>
-                <h2>VS Basic R</h2>
-                <ul>
-                    <li>Transform and calculate derived variables</li>
-                    <li>Choose visual objects for each variables</li>
-                    <li>Decide properties</li>
-                    <li>Choose coordinate system and add all objects</li>
-                    <li>Adjust positions</li>
-                    <li>Add legend</li>
-                    <li>Iterate for each subplot</li>
-                    <li>ggplot2 does these automatically, usually defaults are acceptable but can be improved</li>
-                </ul>
+                    type_convert(challenge2)
+                </code></pre>
             </section>
 
             <section>
                 <h2>References</h2>
                 <ul>
-                    <li>R for DS: ch 2 - 4</li>
+                    <li>R for DS: ch 5 - 16</li>
                     <li>https://r4ds.had.co.nz/</li>
                     <li>https://exts.ggplot2.tidyverse.org/gallery/</li>
                     <li>https://www.rstudio.com/resources/cheatsheets/</li>
