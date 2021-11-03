@@ -566,6 +566,153 @@
             </section>
 
             <section>
+                <h2>Tidy Data</h2>
+                <ul>
+                    <li>Tidy data have obs as rows, var as cols</li>
+                    <li>Common problems:
+                        <ul>
+                            <li>One var spread across multiple cols</li>
+                            <li>One obs scattered across multiple rows</li>
+                        </ul>
+                    </li>
+                    <li>Typical in repeated measures/longitudinal studies</li>
+                    <li></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Longer</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    table4a
+                    #&gt; # A tibble: 3 x 3
+                    #&gt;   country     `1999` `2000`
+                    #&gt; * &lt;chr&gt;        &lt;int&gt;  &lt;int&gt;
+                    #&gt; 1 Afghanistan    745   2666
+
+                    table4a %&gt;% 
+                    pivot_longer(c(`1999`, `2000`), names_to = "year", values_to = "cases")
+                    #&gt; # A tibble: 6 x 3
+                    #&gt;   country     year   cases
+                    #&gt;   &lt;chr&gt;       &lt;chr&gt;  &lt;int&gt;
+                    #&gt; 1 Afghanistan 1999     745
+                </code></pre>
+                <p>
+                    <emphcode>`</emphcode> backtick used for non-syntactic var names starting with numbers, interpreted
+                    as
+                    strings,
+                    <emphcode>names_to</emphcode> is the new var name for cols, <emphcode>values_to</emphcode> is the
+                    var name for cell values, quotes because they don't exist yet
+                </p>
+            </section>
+
+
+            <section>
+                <img src="https://d33wubrfki0l68.cloudfront.net/3aea19108d39606bbe49981acda07696c0c7fcd8/2de65/images/tidy-9.png"
+                    alt="" width="80%">
+            </section>
+
+            <section>
+                <h2>Wider</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    table2
+                    #&gt; # A tibble: 12 x 4
+                    #&gt;   country      year type           count
+                    #&gt;   &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;          &lt;int&gt;
+                    #&gt; 1 Afghanistan  1999 cases            745
+                    
+                    table2 %&gt;%
+                    pivot_wider(names_from = type, values_from = count)
+                    #&gt; # A tibble: 6 x 4
+                    #&gt;   country      year  cases population
+                    #&gt;   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
+                    #&gt; 1 Afghanistan  1999    745   19987071
+                </code></pre>
+                <p>
+                    <emphcode>pivot_longer</emphcode> and <emphcode>pivot_wider</emphcode> complements each other
+                </p>
+            </section>
+
+            <section>
+                <img src="https://d33wubrfki0l68.cloudfront.net/8350f0dda414629b9d6c354f87acf5c5f722be43/bcb84/images/tidy-8.png"
+                    alt="" width="80%">
+            </section>
+
+            <section>
+                <h2>separate</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    table3
+                    #&gt; # A tibble: 6 x 3
+                    #&gt;   country      year rate             
+                    #&gt; * &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;            
+                    #&gt; 1 Afghanistan  1999 745/19987071   
+                       
+                    table3 %&gt;% 
+                    separate(rate, into = c("cases", "population"))
+                    #&gt; # A tibble: 6 x 4
+                    #&gt;   country      year cases  population
+                    #&gt;   &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;     
+                    #&gt; 1 Afghanistan  1999 745    19987071  
+                    # or specifying separator, sep accepts RE
+                    table3 %&gt;% 
+                    separate(rate, into = c("cases", "population"), sep = "/")
+                </code></pre>
+                <p>Split by non-alphanumeric characters, e.g. / here. by default, variables are splited like strings and
+                    saved as characters</p>
+            </section>
+
+            <section>
+                <img src="https://d33wubrfki0l68.cloudfront.net/f6fca537e77896868fedcd85d9d01031930d76c9/637d9/images/tidy-17.png"
+                    alt="" width="80%">
+            </section>
+
+            <section>
+                <h2>separate</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    table3 %&gt;% 
+                    separate(rate, into = c("cases", "population"), convert = TRUE)
+                    #&gt; # A tibble: 6 x 4
+                    #&gt;   country      year  cases population
+                    #&gt;   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
+                    #&gt; 1 Afghanistan  1999    745   19987071
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>unite</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    table5 %&gt;% 
+                    unite(new, century, year, sep = "")
+                    #&gt; # A tibble: 6 x 3
+                    #&gt;   country     new   rate             
+                    #&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;            
+                    #&gt; 1 Afghanistan 1999  745/19987071   
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Missing Values</h2>
+                <ul>
+                    <li>During transformation, NA or not present values will be flagged as NA</li>
+                </ul>
+                <pre><code data-trim data-noescape class="language-r">
+                    stocks &lt;- tibble(
+                        year   = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+                        qtr    = c(   1,    2,    3,    4,    2,    3,    4),
+                        return = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66)
+                    )
+                    stocks %&gt;% 
+                    pivot_wider(names_from = year, values_from = return)
+                    #&gt; # A tibble: 4 x 3
+                    #&gt;     qtr `2015` `2016`
+                    #&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+                    #&gt; 1     1   1.88  NA   
+                    #&gt; 2     2   0.59   0.92                    
+                </code></pre>
+            </section>
+
+
+            <section>
                 <h2>References</h2>
                 <ul>
                     <li>R for DS: ch 5 - 16</li>
