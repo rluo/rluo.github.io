@@ -711,6 +711,197 @@
                 </code></pre>
             </section>
 
+            <section>
+                <h2>Complete/Fill Missing</h2>
+                <ul>
+                    <li>
+                        <emphcode>complate</emphcode>: complate all level combinations, filled with NA
+                    </li>
+                    <li>
+                        <emphcode>fill</emphcode>: fill NA with last value carry-forward
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>SQL-like Operations</h2>
+                <ul>
+                    <li>Similar to SQL operations, you can join tribbles</li>
+                    <li>
+                        <emphcode>inner_join</emphcode>: inner join
+                    </li>
+                    <li>
+                        <emphcode>left_join</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>right_join</emphcode>
+                    </li>
+                    <li>
+                        <emphcode>full_join</emphcode>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                x %&gt;% 
+                inner_join(y, by = "key")
+                #&gt; # A tibble: 2 x 3
+                #&gt;     key val_x val_y
+                #&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+                #&gt; 1     1 x1    y1   
+                #&gt; 2     2 x2    y2              
+                </code></pre>
+            </section>
+
+            <section>
+                <h1>Strings</h1>
+            </section>
+
+            <section>
+                <h2>String Functions</h2>
+                <ul>
+                    <li>
+                        <emphcode>str_c</emphcode>: combining strings
+                    </li>
+                    <li>
+                        <emphcode>str_sub</emphcode>: subsetting strings
+                    </li>
+                    <li>
+                        <emphcode>str_to_upper/str_to_lower</emphcode>: convert to upper/lower cases
+                    </li>
+                    <li>
+                        <emphcode>str_sort</emphcode>: sort
+                    </li>
+                    <li>
+                        <emphcode>str_view/str_view_all</emphcode>: regular expressions for one or all matches
+                    </li>
+                    <li>
+                        <emphcode>str_extract</emphcode>: extract matches by REs
+                    </li>
+                    <li>
+                        <emphcode>str_split</emphcode>: split into pieces
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    colours &lt;- c("red", "orange", "yellow", "green", "blue", "purple")
+                    colour_match &lt;- str_c(colours, collapse = "|")
+                    colour_match
+                    #&gt; [1] "red|orange|yellow|green|blue|purple"                   
+                    str_extract(more, colour_match)
+                    #&gt; [1] "blue"   "green"  "orange"
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Factors</h2>
+                <ul>
+                    <li>Works with basic factors in R</li>
+                    <li>Easier to reorder levels using <emphcode>fct_reorder</emphcode>
+                    </li>
+                    <li>Change reference level by <emphcode>fct_relevel</emphcode>
+                    </li>
+                    <li>Modify levels by <emphcode>fct_recode</emphcode> for printing or graphing </li>
+                    <li>Lump small levels together by <emphcode>fct_lump</emphcode>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    relig_summary &lt;- gss_cat %&gt;%
+                    group_by(relig) %&gt;%
+                    summarise(
+                      age = mean(age, na.rm = TRUE),
+                      tvhours = mean(tvhours, na.rm = TRUE),
+                      n = n()
+                    )
+                  #&gt; `summarise()` ungrouping output (override with `.groups` argument)                  
+                  ggplot(relig_summary, aes(tvhours, relig)) + geom_point()
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/7301d577e0abab13ebbc52a28e9d1fd44896c3e4/193d1/factors_files/figure-html/unnamed-chunk-15-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    ggplot(relig_summary, aes(tvhours, fct_reorder(relig, tvhours))) +
+                    geom_point()
+                    ## OR
+                    relig_summary %&gt;%
+                    mutate(relig = fct_reorder(relig, tvhours)) %&gt;%
+                    ggplot(aes(tvhours, relig)) +
+                        geom_point()
+                </code></pre>
+                <img src="https://d33wubrfki0l68.cloudfront.net/ac01cb41695cb8c37e194e51c70fec9adcb22b27/69d3e/factors_files/figure-html/unnamed-chunk-16-1.png"
+                    alt="" width="60%">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    gss_cat %&gt;% count(partyid)
+                    #&gt; # A tibble: 10 x 2
+                    #&gt;   partyid                n
+                    #&gt;   &lt;fct&gt;              &lt;int&gt;
+                    #&gt; 1 No answer            154
+                    #&gt; 2 Don't know             1
+                    #&gt; 3 Other party          393
+                    #&gt; 4 Strong republican   2314
+                    #&gt; 5 Not str republican  3032
+                    #&gt; 6 Ind,near rep        1791
+                    #&gt; # … with 4 more rows
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    gss_cat %&gt;%
+                    mutate(partyid = fct_recode(partyid,
+                      "Republican, strong"    = "Strong republican",
+                      "Republican, weak"      = "Not str republican",
+                      "Independent, near rep" = "Ind,near rep",
+                      "Independent, near dem" = "Ind,near dem",
+                      "Democrat, weak"        = "Not str democrat",
+                      "Democrat, strong"      = "Strong democrat"
+                    )) %&gt;%
+                    count(partyid)
+                  #&gt; # A tibble: 10 x 2
+                  #&gt;   partyid                   n
+                  #&gt;   &lt;fct&gt;                 &lt;int&gt;
+                  #&gt; 1 No answer               154
+                  #&gt; 2 Don't know                1
+                  #&gt; 3 Other party             393
+                  #&gt; 4 Republican, strong     2314
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    gss_cat %&gt;%
+                    mutate(relig = fct_lump(relig, n = 10)) %&gt;%
+                    count(relig, sort = TRUE) %&gt;%
+                    print(n = Inf)
+                  #&gt; # A tibble: 10 x 2
+                  #&gt;    relig                       n
+                  #&gt;    &lt;fct&gt;                   &lt;int&gt;
+                  #&gt;  1 Protestant              10846
+                  #&gt;  2 Catholic                 5124
+                  #&gt;  3 None                     3523
+                  #&gt;  4 Christian                 689
+                  #&gt;  5 Other                     458
+                  #&gt;  6 Jewish                    388
+                  #&gt;  7 Buddhism                  147
+                  #&gt;  8 Inter-nondenominational   109
+                  #&gt;  9 Moslem/islam              104
+                  #&gt; 10 Orthodox-christian         95
+                </code></pre>
+            </section>
 
             <section>
                 <h2>References</h2>
