@@ -755,6 +755,41 @@
                 </code></pre>
             </section>
 
+
+            <section>
+                <h2>dplyr vs base</h2>
+                <table>
+                    <thead>
+                        <tr class="header">
+                            <th>dplyr</th>
+                            <th>merge</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="odd">
+                            <td><code>inner_join(x, y)</code></td>
+                            <td><code><a href="https://rdrr.io/r/base/merge.html">merge(x, y)</a></code></td>
+                        </tr>
+                        <tr class="even">
+                            <td><code>left_join(x, y)</code></td>
+                            <td><code><a href="https://rdrr.io/r/base/merge.html">merge(x, y, all.x = TRUE)</a></code>
+                            </td>
+                        </tr>
+                        <tr class="odd">
+                            <td><code>right_join(x, y)</code></td>
+                            <td>
+                                <code><a href="https://rdrr.io/r/base/merge.html">merge(x, y, all.y = TRUE)</a></code>,
+                            </td>
+                        </tr>
+                        <tr class="even">
+                            <td><code>full_join(x, y)</code></td>
+                            <td><code><a href="https://rdrr.io/r/base/merge.html">merge(x, y, all.x = TRUE, all.y = TRUE)</a></code>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
             <section>
                 <h1>Strings</h1>
             </section>
