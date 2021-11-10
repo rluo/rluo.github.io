@@ -197,11 +197,11 @@
                     <li>Techniques to solve it can be classified as:
                         <ul>
                             <li>Top-down: easy to program</li>
-                            <li>Bottom-up: may be hard to derive</li>
+                            <li>Bottom-up: formulas may be hard to derive</li>
                         </ul>
                     </li>
                     <li>Other computing tricks can be used, e.g. memorization</li>
-                    <li>These problems can be extended to more complex ones</li>
+                    <li>These problems can be extended to solve very complex problems efficiently</li>
                 </ul>
             </section>
 
@@ -213,6 +213,22 @@
                     no such can be found, return 0.
                 </div>
                 <p>Key idea: reduce finding i and j to one-dimensional recursion</p>
+            </section>
+
+            <section>
+                <h2>Brutal-Force</h2>
+                <ul>
+                    <li>Try all possible combinations of $i$ and $j$</li>
+                    <li>How many combinations?
+                        <ul>
+                            <li>i=1, j=1, ..., n, n total</li>
+                            <li>i=2, j=2, ..., n, n-1 total</li>
+                            <li>...</li>
+                            <li>i=n, j=n, 1 total</li>
+                        </ul>
+                    </li>
+                    <li>Total: O(n^2) searches or two nested loops</li>
+                </ul>
             </section>
 
             <section>
