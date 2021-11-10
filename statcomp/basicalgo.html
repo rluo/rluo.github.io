@@ -268,15 +268,114 @@
 
 
             <section>
-                <h1>Gradient</h1>
+                <h1>Derivative</h1>
             </section>
 
 
+            <section>
+                <h2>Numerical Differentiation</h2>
+                <ul>
+                    <li>Given a scalar function $f(x)$, compute the derivative $f^\prime(x)$ at $x_0$</li>
+                    <li>This is useful for many other algorithms that we will discuss</li>
+                    <li>Basic theory is using Taylor expansions</li>
+                </ul>
+            </section>
 
+            <section>
+                <h2>Forward Difference</h2>
+                $$
+                f^\prime_h(x_0) = \frac{f(x_0 + h) - f(x_0)}{h}
+                $$
+                <ul>
+                    <li>When $h \rightarrow 0$, this converges math definition $f^\prime (x_0) $</li>
+                    <li>Error analysis when using small $h$</li>
+                    $$
+                    f(x_0 + h) = f(x_0) + f^\prime(x_0) h + \frac{1}{2} f^{\prime\prime}(x_0) h^2 + ...
+                    $$
+                    <li>Therefore</li>
+                    $$
+                    f^\prime_h(x_0) = f^\prime(x_0) + O(h)
+                    $$
+                </ul>
+            </section>
 
+            <section>
+                <h2>Backward Difference</h2>
+                $$
+                f^\prime_h(x_0) = \frac{f(x_0 ) - f(x_0 -h)}{h}
+                $$
+                <ul>
+                    <li>Same as before</li>
+                    $$
+                    f^\prime_h(x_0) = f^\prime(x_0) + O(h)
+                    $$
+                </ul>
+            </section>
+
+            <section>
+                <h2>Central Difference</h2>
+                $$
+                f^\prime_h(x_0) = \frac{f(x_0 + h ) - f(x_0 -h)}{2 h}
+                $$
+                <ul>
+                    <li>Improved accuracy</li>
+                    $$
+                    f^\prime_h(x_0) = f^\prime(x_0) + O(h^2)
+                    $$
+                </ul>
+            </section>
+
+            <section>
+                <h2>4th Order/Five points</h2>
+                $$
+                f^\prime_h(x_0) = \frac{1}{ 12 h} [ f(x_0 - 2 h ) - 8 f(x_0 -h) + 8 f(x_0 + h) - f(x_0 + 2 h ) ]
+                $$
+                <ul>
+                    <li>4th order difference</li>
+                    $$
+                    f^\prime_h(x_0) = f^\prime(x_0) + O(h^4)
+                    $$
+                </ul>
+            </section>
 
 
             <section>
+                <h2>Second-order Derivative</h2>
+                $$
+                f^{\prime \prime}_h(x_0) = \frac{1}{ h^2 } [ f(x_0 + h ) - 2 f(x_0) + f(x_0 - h) ]
+                $$
+                <ul>
+                    <li>Accuracy</li>
+                    $$
+                    f^{\prime \prime}_h(x_0) = f^{\prime \prime}(x_0) + O(h^2)
+                    $$
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    grad_f &lt;- function(f, x, h=1e-3) {
+                        ( f(x + h) - f(x) )/(h)
+                    }      
+                    grad &lt;- function(f, x, h=1e-3) {
+                        ( f(x + h) - f(x - h) )/(2*h)
+                    }         
+                </code></pre>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; grad_f(f, 1)
+                    [1] 1.0005
+                    &gt; grad(f, 1)
+                    [1] 1
+                    &gt; grad_f(f, 1, h=0.1)
+                    [1] 1.05
+                    &gt; grad(f, 1, h=0.1)
+                    [1] 1
+                </code></pre>
+            </section>
+
+            <!-- <section>
                 <h2>References</h2>
                 <ul>
                     <li>R for DS: ch 5 - 16</li>
@@ -284,7 +383,7 @@
                     <li>https://exts.ggplot2.tidyverse.org/gallery/</li>
                     <li>https://www.rstudio.com/resources/cheatsheets/</li>
                 </ul>
-            </section>
+            </section> -->
 
         </div>
     </div>
