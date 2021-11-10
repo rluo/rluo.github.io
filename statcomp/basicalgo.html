@@ -109,7 +109,7 @@
                 <pre><code data-trim data-noescape class="language-r">
                     diag_dist_mat &lt;- function(p) {
                         A &lt;- matrix(rep(1:p, p), p)
-                        return( t(B) - A )
+                        return( t(A) - A )
                     }
                 </code></pre>
                 <p>
@@ -191,7 +191,7 @@
 
 
             <section>
-                <h2>Dynmaic Programming</h2>
+                <h2>Dynamic Programming</h2>
                 <ul>
                     <li>Generally these problems solved by recursion are called dynamic programming problems</li>
                     <li>Techniques to solve it can be classified as:
