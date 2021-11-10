@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <!-- <style>
+                .rds_db credit:after {
+                    content: "https://r4ds.had.co.nz/relational-data.html";
+                }
+            </style> -->
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>Basic Algorithm</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+
+            <section>
+                <h1>Brief Review</h1>
+            </section>
+
+            <section>
+                <h2>Matrix Computation</h2>
+                <div class="thm">
+                    Problem: A diagonal distance matrix $M$ is defined as $M(i,j) = j - i$ for row $1\le i \le p$ and
+                    column $1\le
+                    j \le p$.
+                </div>
+                <p>As the problem states, we need to compute $j - i $ but in a vectorized version</p>
+            </section>
+
+
+            <section>
+                <h2>Submission</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    diag_dist_mat &lt;- function(p){
+                        m &lt;- matrix(0, ncol = p, nrow = p)
+                        for(i in seq(p)){
+                          for(j in seq(p)){
+                            m[i, j] = j-i
+                          }
+                        }
+                        return(m)
+                      }
+                </code></pre>
+                <p>Element-wise operation, slow; pre-allocating matrix is good</p>
+            </section>
+
+            <section>
+                <h2>Submission</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    diag_dist_mat &lt;-  function(p){
+                        M&lt;-matrix(nrow=p,ncol=p)
+                        M&lt;-col(M)-row(M)
+                        return(M)
+                    }
+                </code></pre>
+                <p>
+                    <emphcode>col(M)[i,j] = j</emphcode> is vecorized, very fast
+                </p>
+            </section>
+
+            <section>
+                <h2>Submission</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    diag_dist_mat &lt;- function(p) {
+                        A &lt;- matrix(rep(1:p, p), p)
+                        return( t(B) - A )
+                    }
+                </code></pre>
+                <p>
+                    same idea, treating matrices as vectors
+                </p>
+            </section>
+
+
+            <section>
+                <h2>Recursion</h2>
+                <div class="thm">A kid is playing a game to climb a staircase. It takes n steps to reach the top. When
+                    both 1 and 2 step jumps are possible, this kid choose randomly to jump either 1 step with
+                    probability 0.8 and 2 steps with probability 0.2. If only 1 step left to reach the top, this kid
+                    choose 1 step with probability 1.</div>
+                <p>Similar to a homework problem on recursion</p>
+            </section>
+
+
+            <section>
+                <h2>Submission</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    exp_jumps &lt;- function(n) {
+                        if (n&lt;=1) return(1)
+                        return(exp_jumps(n-1) * 0.8  + exp_jumps(n-2) * 0.2  +  1)
+                      }                  
+                </code></pre>
+                <p>
+                    Simple solution, easy to program
+                </p>
+            </section>
+
+
+            <section>
+                <h2>Submission</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    exp_jumps &lt;- local({
+                        memorization &lt;- list()
+                        function(n) {
+                            memo_index &lt;- as.character(n)
+                            if (!is.null(memorization[[memo_index]])) {
+                                return(memorization[[memo_index]])
+                            }
+                            if (n == 1) return(1)
+                            if (n == 2) return(1.8)
+                            jumps &lt;- 1 + 0.8 * exp_jumps(n-1) + 0.2 * exp_jumps(n-2)
+                            memorization[n] &lt;&lt;- jumps
+                            return(jumps)
+                        }
+                    })                    
+                </code></pre>
+                <p>
+                    Memorization technique, remembering those values calculated before. Note that sometimes memorization
+                    can slow down
+                </p>
+            </section>
+
+            <section>
+                <h2>Submission</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    exp_jumps &lt;- function(p) {
+                        if (p == 1) return(1)
+                        if (p == 2) return(1.8)
+                        v1 &lt;- 1
+                        v2 &lt;- 1.8
+                        for (i in 1:(p-2)) {
+                            v &lt;-  v1 * 0.2 + v2 * 0.8  + 1
+                            v1 &lt;- v2
+                            v2 &lt;- v
+                        }
+                         return(v)
+                    }
+                </code></pre>
+                <p>
+                    Theoretically one could solve such problems using a bottom-up approach using <emph>iterative</emph>
+                    formulas, though these formulas might not always
+                    easy to figure out. if done, this should be fast with low mem requirements.
+                </p>
+            </section>
+
+
+            <section>
+                <h2>Dynmaic Programming</h2>
+                <ul>
+                    <li>Generally these problems solved by recursion are called dynamic programming problems</li>
+                    <li>Techniques to solve it can be classified as:
+                        <ul>
+                            <li>Top-down: easy to program</li>
+                            <li>Bottom-up: may be hard to derive</li>
+                        </ul>
+                    </li>
+                    <li>Other computing tricks can be used, e.g. memorization</li>
+                    <li>These problems can be extended to more complex ones</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Problem</h2>
+                <div class="thm">Given a one-dim vector <emphcode>a</emphcode> of length n, find <emphcode>i</emphcode>
+                    and <emphcode>j</emphcode> ($j\ge i $)such that <emphcode>sum(a[i:j])</emphcode> is the largest. If
+                    no such can be found, return 0.
+                </div>
+                <p>Key idea: reduce finding i and j to one-dimensional recursion</p>
+            </section>
+
+            <section>
+                <h2>Sketch of Math</h2>
+                $$
+                \begin{aligned}
+                \max_{i,j} \sum_{k=i}^j a_k &= \max_j [ \textrm{max subsequence sum ending at }j ] \\
+                &= \max_j [ \max_i \sum_{k=i}^j a_k ] \\
+                &= \max_j [ \max_i ( \sum_{k=i}^{j-1} a_k + a_j, a_j ) ]
+                \end{aligned}
+                $$
+            </section>
+
+
+            <section>
+                $$
+                \textrm{max subsequence sum ending at }j\\ :
+                \begin{cases}
+                \max_i \sum_{k=i}^{j-1} a_k + a_j, \quad \textrm{if including } a_{j-1} \\
+                a_j, \quad \textrm{if not including } a_{j-1}
+                \end{cases}
+                $$
+            </section>
+
+
+            <section>
+                <h2>Solution</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    subseq_sum &lt;- function(x) {
+                        # return the largest subseq sum, empty will be zero
+                        sum_by_ind &lt;- 0
+                        max_sum &lt;- 0
+                        for (i in seq(x)) {
+                            sum_by_ind &lt;- max(sum_by_ind + x[i], x[i])
+                            max_sum &lt;- max(max_sum, sum_by_ind)
+                        }
+                        return(max_sum)
+                    }
+                </code></pre>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; a &lt;- c(-3, 5, 4, 9, -10, 20)
+                    &gt; subseq_sum(a)
+                    [1] 28
+                    &gt; a &lt;- c(-3, 5, 4, 9, -10, 100)
+                    &gt; subseq_sum(a)
+                    [1] 108
+                    &gt; a &lt;- rep(-1, 10)
+                    &gt; subseq_sum(a)
+                    [1] 0
+                </code></pre>
+            </section>
+
+
+
+            <section>
+                <h1>Gradient</h1>
+            </section>
+
+
+
+
+
+
+            <section>
+                <h2>References</h2>
+                <ul>
+                    <li>R for DS: ch 5 - 16</li>
+                    <li>https://r4ds.had.co.nz/</li>
+                    <li>https://exts.ggplot2.tidyverse.org/gallery/</li>
+                    <li>https://www.rstudio.com/resources/cheatsheets/</li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
