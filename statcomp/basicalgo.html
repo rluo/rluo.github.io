@@ -391,6 +391,124 @@
                 </code></pre>
             </section>
 
+            <section>
+                <h2>Newton's Method</h2>
+                <ul>
+                    <li>Popular method for optimize</li>
+                    <li>Applications in finding maximum likelihood solutions</li>
+                    <li>Many variants and basic ideas influence even modern algorithms</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Intuitive Derivation</h2>
+                <ul>
+                    <li>Want to optimize a differentiable function $f(x)$</li>
+                    <li>Let the optimum achieved at $x^*$ and thus $f^\prime(x^*) = 0$</li>
+                    <li>By Taylor expansions
+                        $$
+                        f^\prime(x) = f^\prime(x^*) + f^{\prime \prime}(\eta) (x - x^*)
+                        $$
+                    </li>
+                    <li>Solve for $x^*$
+                        $$
+                        x^* = x - f^\prime(x) / f^{\prime \prime}(\eta)
+                        $$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Iterative Algorithm</h2>
+                <ul>
+                    <li>Since we don't know $\eta$ and want to find $x^*$, why not iterate based the formula
+                    </li>
+                    <li>Starting from $x_n$ at iteration $n$, compute
+                        $$
+                        x_{n+1} = x_n - f^\prime(x_n) / f^{\prime \prime}(x_n)
+                        $$
+                    </li>
+                    <li>Usually initialize with some starting point $x_0$</li>
+                    <li>This is known as Newton's algorithm</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Rate of Convergence</h2>
+                <div class="thm">Let $\{ x_n \}$ be a convergent sequence. Let $\epsilon_n = | x_n - x^* |$. Then we say
+                    $\{ x_n \}$ converges to $x^*$ in the pth order if
+                    $$
+                    \lim_{n\rightarrow \infty} \epsilon_n/\epsilon^p_{n-1} = \lambda
+                    $$
+                    where $\lambda \in (0, \infty)$
+                </div>
+                <p>$p=1$: linear convergence; $1\le p \le 2$: superlinear; $p=2$: quadratic. One can show Netwon's
+                    algorithm is quadratic under conditions. </p>
+            </section>
+
+            <section>
+                <h2>Note</h2>
+                <ul>
+                    <li>Fast if starting from the neighborhood of the $x^*$</li>
+                    <li>Multivariate extension: gradient and hessian</li>
+                    <li>Evaluation of second-order derivative</li>
+                    <li>Can be unstable</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Secant Method</h2>
+                <ul>
+                    <li>Replace
+                        $$
+                        f^{\prime \prime}(x_n) = \frac{ f^{\prime }(x_n) - f^{\prime }(x_{n-1})}{x_n - x_{n-1}}
+                        $$
+                    </li>
+                    <li>Easier to compute with possibly reduced convergence</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Stopping Rules</h2>
+                <ul>
+                    <li>Absolute error
+                        $$
+                        | x_n - x_{n-1} | \le \epsilon
+                        $$
+                    </li>
+                    <li>Relative error
+                        $$
+                        | x_n - x_{n-1} | / | x_n | \le \epsilon
+                        $$
+                    </li>
+                    <li>Function value
+                        $$
+                        | f(x_n) - f(x_{n-1} ) | \le \epsilon
+                        $$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Other Methods</h2>
+                <ul>
+                    <li>Fisher scoring: replace $f^{\prime \prime}(x_n)$ with expectated information matrix where
+                        $f$ is negative log-likelihood, superlinear convergence </li>
+                    <li>BFGS algorithm, very popular: one way to solve second-order using $A$ from
+                        $$
+                        f^{ \prime}(x_n) - f^{\prime }(x_{n-1}) = A (x_n - x_{n-1})
+                        $$
+                        superlinear convergence
+                    </li>
+                    <li>Steepest descent: for step size $\alpha_n$
+                        $$
+                        x_{n+1} = x_n - \alpha_n \times f^\prime(x_n)
+                        $$
+                        linear convergence
+                    </li>
+                </ul>
+            </section>
+
             <!-- <section>
                 <h2>References</h2>
                 <ul>
