@@ -182,6 +182,77 @@
                 </ul>
             </section>
 
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    set.seed(100)
+                    myP &lt;- 0.3
+                    myMu1 &lt;- 1; myMu2 &lt;- 4
+                    mySigmaSq &lt;- 0.5
+                    nsub &lt;- 5000
+                    Y &lt;- NULL
+                    for (i in 1:nsub) {
+                       if (rbinom(1, 1, myP) == 1) {
+                         Y &lt;- c(Y, rnorm(1, mean = myMu1, sd = sqrt(mySigmaSq)))
+                       } else {
+                         Y &lt;- c(Y, rnorm(1, mean = myMu2, sd = sqrt(mySigmaSq)))
+                       }
+                    }
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    plot(density(Y))
+                </code></pre>
+                <img src="img/mixture.png" alt="" width="80%">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    myEM &lt;- function(Y, tol=1e-6, maxit=1000){
+                        counter &lt;- 0
+                        myP &lt;- 0.5
+                        cat("iter = ", counter, "P = ", myP, "\n")
+                        while (counter &lt;= maxit) {
+                          counter &lt;- counter + 1
+                          denominator &lt;- (myP*dnorm(Y, mean=myMu1, sd=sqrt(mySigmaSq))
+                                          + (1-myP)*dnorm(Y, mean=myMu2, sd=sqrt(mySigmaSq)))
+                          myP.new &lt;- sum(myP*dnorm(Y, mean=myMu1, sd=sqrt(mySigmaSq))/denominator)/nsub
+                          cat("iter = ", counter, "P = ", myP.new, "\n")
+                          
+                          if (abs(myP.new-myP) &lt; tol){  # calculate the l1 norm
+                            cat("\nSuccessfully Converged\n")
+                            cat("iter = ", counter, "P = ", myP.new, "\n")
+                            return(list(P = myP))
+                          } else {
+                            myP &lt;- myP.new
+                          }
+                        }
+                        print("Convergence Failed")
+                        return(list(P = myP))
+                      }  
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Output</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                &gt; myEM(Y)
+                iter =  0 P =  0.5 
+                iter =  1 P =  0.3046136 
+                iter =  2 P =  0.2948544 
+                iter =  3 P =  0.294315 
+                iter =  4 P =  0.2942849 
+                iter =  5 P =  0.2942832 
+                iter =  6 P =  0.2942831 
+
+                Successfully Converged
+                iter =  6 P =  0.2942831 
+                $P
+                [1] 0.2942832
+                </code></pre>
+            </section>
 
             <section>
                 <h2>Summary</h2>
@@ -194,27 +265,7 @@
                 </ul>
             </section>
 
-            <section>
-                <h2>Example</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                    grad_f &lt;- function(f, x, h=1e-3) {
-                        ( f(x + h) - f(x) )/(h)
-                    }      
-                    grad &lt;- function(f, x, h=1e-3) {
-                        ( f(x + h) - f(x - h) )/(2*h)
-                    }         
-                </code></pre>
-                <pre><code data-trim data-noescape class="language-r">
-                    &gt; grad_f(f, 1)
-                    [1] 1.0005
-                    &gt; grad(f, 1)
-                    [1] 1
-                    &gt; grad_f(f, 1, h=0.1)
-                    [1] 1.05
-                    &gt; grad(f, 1, h=0.1)
-                    [1] 1
-                </code></pre>
-            </section>
+
 
             <!-- <section>
                 <h2>References</h2>
