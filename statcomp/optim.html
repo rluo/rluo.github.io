@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <!-- <style>
+                .rds_db credit:after {
+                    content: "https://r4ds.had.co.nz/relational-data.html";
+                }
+            </style> -->
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>Optimization</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+
+            <section>
+                <h2>Examples</h2>
+                <ul>
+                    <li>Suppose observed data $Y_o$ and unobserved information $Y_m$ together form complete data $Y_c =
+                        (Y_o, Y_m)$
+                    </li>
+                    <li>Let $f_o(Y_o | \theta)$ be the observed data likelihood, and $f_c(Y_o, Y_m | \theta)$ </li>
+                    <li>Want to find the MLE
+                        $$
+                        \mbox{arg max}_\theta f_o (y_o | \theta)
+                        $$
+                    </li>
+                    <li>Clearly
+                        $$
+                        f_o = \int f_c (y_o, y_m | \theta ) dy_m
+                        $$
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <ul>
+                    <li>Had we known $y_m$, it would be easier to work on $f_c$, e.g. easier to compute</li>
+                    <li>EM consists of two iterative steps:
+                        <ul>
+                            <li>Expectation of the complete data log-likelihood, using $\theta$ computed from the
+                                previous iteration
+                                $$
+                                Q(\theta | \theta^{prev} ) = E_{\theta^{prev} } [ \log f_c (Y_c | \theta ) | Y_o,
+                                \theta^{prev} ]
+                                $$
+                            </li>
+                            <li>Maximization: maximize $ Q(\theta | \theta^{prev} ) $ over $\theta$ </li>
+                        </ul>
+                    </li>
+                    <li>Sequence $ Q(\theta | \theta^{prev} ) $ is non-decreasing</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example: Mixture Distribution</h2>
+                <ul>
+                    <li>Suppose iid $Y_i \sim \sum_1^k \psi_j f_j (y)$. Each $f_j$ is PDF and $\sum \psi_j = 1$</li>
+                    <li>Suppose we had known which $f_j$ that $y_i$ came from $u_i$, then we have the complete data
+                    </li>
+                    <li>Distribution should be easy to compute</li>
+                    <li>Need to estimate $\psi$</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>EM: E step</h2>
+                <ul>
+                    <li>Let previous $\psi^0$</li>
+                    <li>E step:
+                        $$
+                        Q(\psi | \psi^0 ) = \sum_i \sum_j E_{\psi^0 } [ I(u_i = j) | y_i ] \log \psi_j + const
+                        $$
+                    </li>
+                    <li>Reduces to
+                        $$
+                        Q(\psi | \psi^0 ) = \sum_j \log \psi_j \sum_i P_{\psi^0} (u_i = j | y_i )
+                        $$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>EM: M step</h2>
+                <ul>
+                    <li>M step: max $Q$ simply by
+                        $$
+                        \psi^1_j =(1/n) \sum_i P_{\psi^0} (u_i = j | y_i )
+                        $$
+                    </li>
+                    <li>And easy to compute
+                        $$
+                        P_{\psi^0} (u_i = j | y_i ) = [ P_{\psi^0} (y_i | u_i = j) P_{\psi^0} (u_i = j) ] / P_{\psi^0}
+                        (y_i)
+                        $$
+                    </li>
+                    <li>Easy to see $ P_{\psi^0} (u_i = j) = \psi^0_j $ and
+                        $$
+                        P_{\psi^0} (y_i | u_i = j) = f_j (y_i)
+                        $$
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Example 2</h2>
+                <ul>
+                    <li>If $f_j$ is Gaussian with mean $\mu_j$ and known variance $\sigma^2$</li>
+                    <li> Then
+                        $$
+                        \log f_c = \sum_i \sum_j I(u_i = j) [\log \psi_j + \log f_j (y_i)]
+                        $$
+                    </li>
+                    <li>where conditional expectation
+                        $$
+                        \sum_j P_{\psi^0}(u_i = j | y_i ) [\log \psi_j - \frac{ (y_i - \mu_j)^2 }{2\sigma^2 } ]
+                        $$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <ul>
+                    <li>Find $\mu_j$ by solving zero derivative
+                        $$
+                        \sum_i P_{\psi^0}(u_i = j | y_i ) y_i = \mu_j \sum_i P_{\psi^0}(u_i = j | y_i )
+                        $$
+                    </li>
+                    <li>Finding $\psi^1$ is the same as before</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    set.seed(100)
+                    myP &lt;- 0.3
+                    myMu1 &lt;- 1; myMu2 &lt;- 4
+                    mySigmaSq &lt;- 0.5
+                    nsub &lt;- 5000
+                    Y &lt;- NULL
+                    for (i in 1:nsub) {
+                       if (rbinom(1, 1, myP) == 1) {
+                         Y &lt;- c(Y, rnorm(1, mean = myMu1, sd = sqrt(mySigmaSq)))
+                       } else {
+                         Y &lt;- c(Y, rnorm(1, mean = myMu2, sd = sqrt(mySigmaSq)))
+                       }
+                    }
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    plot(density(Y))
+                </code></pre>
+                <img src="img/mixture.png" alt="" width="80%">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    myEM &lt;- function(Y, tol=1e-6, maxit=1000){
+                        counter &lt;- 0
+                        myP &lt;- 0.5
+                        cat("iter = ", counter, "P = ", myP, "\n")
+                        while (counter &lt;= maxit) {
+                          counter &lt;- counter + 1
+                          denominator &lt;- (myP*dnorm(Y, mean=myMu1, sd=sqrt(mySigmaSq))
+                                          + (1-myP)*dnorm(Y, mean=myMu2, sd=sqrt(mySigmaSq)))
+                          myP.new &lt;- sum(myP*dnorm(Y, mean=myMu1, sd=sqrt(mySigmaSq))/denominator)/nsub
+                          cat("iter = ", counter, "P = ", myP.new, "\n")
+                          
+                          if (abs(myP.new-myP) &lt; tol){  # calculate the l1 norm
+                            cat("\nSuccessfully Converged\n")
+                            cat("iter = ", counter, "P = ", myP.new, "\n")
+                            return(list(P = myP))
+                          } else {
+                            myP &lt;- myP.new
+                          }
+                        }
+                        print("Convergence Failed")
+                        return(list(P = myP))
+                      }  
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Output</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                &gt; myEM(Y)
+                iter =  0 P =  0.5 
+                iter =  1 P =  0.3046136 
+                iter =  2 P =  0.2948544 
+                iter =  3 P =  0.294315 
+                iter =  4 P =  0.2942849 
+                iter =  5 P =  0.2942832 
+                iter =  6 P =  0.2942831 
+
+                Successfully Converged
+                iter =  6 P =  0.2942831 
+                $P
+                [1] 0.2942832
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Summary</h2>
+                <ul>
+                    <li>Very stable under broad conditions</li>
+                    <li>Simpler to compute complete data likelihood</li>
+                    <li>Easy to program</li>
+                    <li>Cost per iteration is low</li>
+                    <li>Likelihood non-decreasing per iteration</li>
+                </ul>
+            </section>
+            <!-- <section>
+                <h2>References</h2>
+                <ul>
+                    <li>R for DS: ch 5 - 16</li>
+                    <li>https://r4ds.had.co.nz/</li>
+                    <li>https://exts.ggplot2.tidyverse.org/gallery/</li>
+                    <li>https://www.rstudio.com/resources/cheatsheets/</li>
+                </ul>
+            </section> -->
+
+        </div>
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
