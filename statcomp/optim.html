@@ -58,208 +58,98 @@
             </section>
 
 
-
             <section>
-                <h2>Examples</h2>
-                <ul>
-                    <li>Suppose observed data $Y_o$ and unobserved information $Y_m$ together form complete data $Y_c =
-                        (Y_o, Y_m)$
-                    </li>
-                    <li>Let $f_o(Y_o | \theta)$ be the observed data likelihood, and $f_c(Y_o, Y_m | \theta)$ </li>
-                    <li>Want to find the MLE
-                        $$
-                        \mbox{arg max}_\theta f_o (y_o | \theta)
-                        $$
-                    </li>
-                    <li>Clearly
-                        $$
-                        f_o = \int f_c (y_o, y_m | \theta ) dy_m
-                        $$
-                    </li>
-                </ul>
+                <pre><code data-trim data-noescape class="language-r">
+                    soft_thresholding &lt;- function(x,a){
+                        ## This could be done more efficiently using vector multiplication
+                        ## See the forumula in slides
+                        ##  sign(x)*pmax(abs(x) - a, 0)
+                        result &lt;- numeric(length(x))
+                        result[which(x > a)] &lt;- x[which(x > a)] - a
+                        result[which(x &lt; -a)] &lt;- x[which(x < -a)] + a
+                        return(result)
+                    }                    
+                </code></pre>
             </section>
 
 
             <section>
-                <ul>
-                    <li>Had we known $y_m$, it would be easier to work on $f_c$, e.g. easier to compute</li>
-                    <li>EM consists of two iterative steps:
-                        <ul>
-                            <li>Expectation of the complete data log-likelihood, using $\theta$ computed from the
-                                previous iteration
-                                $$
-                                Q(\theta | \theta^{prev} ) = E_{\theta^{prev} } [ \log f_c (Y_c | \theta ) | Y_o,
-                                \theta^{prev} ]
-                                $$
-                            </li>
-                            <li>Maximization: maximize $ Q(\theta | \theta^{prev} ) $ over $\theta$ </li>
-                        </ul>
-                    </li>
-                    <li>Sequence $ Q(\theta | \theta^{prev} ) $ is non-decreasing</li>
-                </ul>
+                <pre><code data-trim data-noescape class="language-r">
+                    lasso_kkt_check &lt;- function(X,y,beta,lambda, tol=1e-3){
+                        ## check convergence 
+                        beta &lt;- as.matrix(beta); X &lt;- as.matrix(X)
+                        ## Assuming no intercepts 
+                        G &lt;- t(X)%*%(y-X%*%beta)/length(y)
+                        ix &lt;- which(beta == 0 )
+                        iy &lt;- which(beta != 0)
+                        if (any(abs(G[ix]) > (lambda + tol) )) { return(pass=0) }
+                        if (any(abs( G[iy] - lambda*sign(beta[iy] ) ) > tol)) { return(pass=0) }  
+                        return(pass=1)
+                    }                                      
+                </code></pre>
             </section>
 
             <section>
-                <h2>Example: Mixture Distribution</h2>
-                <ul>
-                    <li>Suppose iid $Y_i \sim \sum_1^k \psi_j f_j (y)$. Each $f_j$ is PDF and $\sum \psi_j = 1$</li>
-                    <li>Suppose we had known which $f_j$ that $y_i$ came from $u_i$, then we have the complete data
-                    </li>
-                    <li>Distribution should be easy to compute</li>
-                    <li>Need to estimate $\psi$</li>
-                </ul>
+                <pre><code data-trim data-noescape class="language-r">
+                    lasso.cd &lt;- function(X,y,beta,lambda,tol=1e-6,maxiter=1000,quiet=FALSE){
+                        # note that the LS part  in this function is the one in slides divided by length(y) = n 
+                        ## Or equivalently  lambda here = n * lambda in class
+                        beta &lt;- as.matrix(beta); X &lt;- as.matrix(X)
+                        obj &lt;- numeric(length=(maxiter+1))
+                        betalist &lt;- list(length=(maxiter+1))
+                        betalist[[1]] &lt;- beta
+                        for (j in 1:maxiter){
+                            for (k in 1:length(beta)){
+                                r &lt;- y - X[,-k]%*%beta[-k]
+                                beta[k] &lt;- (1/norm(as.matrix(X[,k]),"F")^2)*soft_thresholding(t(r)%*%X[,k],length(y)*lambda)
+                            }
+                            betalist[[(j+1)]] &lt;- beta
+                            obj[j] &lt;- (1/2)*(1/length(y))*norm(y - X%*%beta,"F")^2 + lambda*sum(abs(beta))
+                            if (norm(betalist[[j]] - beta,"F") &lt; tol) { break }
+                        } 
+                        check &lt;- lasso_kkt_check(X,y,beta,lambda) 
+                        if (quiet==FALSE){
+                            if (check==1) {
+                                cat(noquote("Minimum obtained.\n"))
+                            }
+                          else { cat(noquote("Minimum not obtained.\n")) } 
+                        }
+                        return(list(obj=obj[1:j],beta=beta)) 
+                    }                                   
+                </code></pre>
             </section>
 
             <section>
-                <h2>EM: E step</h2>
-                <ul>
-                    <li>Let previous $\psi^0$</li>
-                    <li>E step:
-                        $$
-                        Q(\psi | \psi^0 ) = \sum_i \sum_j E_{\psi^0 } [ I(u_i = j) | y_i ] \log \psi_j + const
-                        $$
-                    </li>
-                    <li>Reduces to
-                        $$
-                        Q(\psi | \psi^0 ) = \sum_j \log \psi_j \sum_i P_{\psi^0} (u_i = j | y_i )
-                        $$
-                    </li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>EM: M step</h2>
-                <ul>
-                    <li>M step: max $Q$ simply by
-                        $$
-                        \psi^1_j =(1/n) \sum_i P_{\psi^0} (u_i = j | y_i )
-                        $$
-                    </li>
-                    <li>And easy to compute
-                        $$
-                        P_{\psi^0} (u_i = j | y_i ) = [ P_{\psi^0} (y_i | u_i = j) P_{\psi^0} (u_i = j) ] / P_{\psi^0}
-                        (y_i)
-                        $$
-                    </li>
-                    <li>Easy to see $ P_{\psi^0} (u_i = j) = \psi^0_j $ and
-                        $$
-                        P_{\psi^0} (y_i | u_i = j) = f_j (y_i)
-                        $$
-                    </li>
-                </ul>
-            </section>
-
-
-            <section>
-                <h2>Example 2</h2>
-                <ul>
-                    <li>If $f_j$ is Gaussian with mean $\mu_j$ and known variance $\sigma^2$</li>
-                    <li> Then
-                        $$
-                        \log f_c = \sum_i \sum_j I(u_i = j) [\log \psi_j + \log f_j (y_i)]
-                        $$
-                    </li>
-                    <li>where conditional expectation
-                        $$
-                        \sum_j P_{\psi^0}(u_i = j | y_i ) [\log \psi_j - \frac{ (y_i - \mu_j)^2 }{2\sigma^2 } ]
-                        $$
-                    </li>
-                </ul>
-            </section>
-
-            <section>
-                <ul>
-                    <li>Find $\mu_j$ by solving zero derivative
-                        $$
-                        \sum_i P_{\psi^0}(u_i = j | y_i ) y_i = \mu_j \sum_i P_{\psi^0}(u_i = j | y_i )
-                        $$
-                    </li>
-                    <li>Finding $\psi^1$ is the same as before</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Example</h2>
                 <pre><code data-trim data-noescape class="language-r">
                     set.seed(100)
-                    myP &lt;- 0.3
-                    myMu1 &lt;- 1; myMu2 &lt;- 4
-                    mySigmaSq &lt;- 0.5
-                    nsub &lt;- 5000
-                    Y &lt;- NULL
-                    for (i in 1:nsub) {
-                       if (rbinom(1, 1, myP) == 1) {
-                         Y &lt;- c(Y, rnorm(1, mean = myMu1, sd = sqrt(mySigmaSq)))
-                       } else {
-                         Y &lt;- c(Y, rnorm(1, mean = myMu2, sd = sqrt(mySigmaSq)))
-                       }
-                    }
+                    n <- 50
+                    p <- 400
+                    X <- matrix(rnorm(n*p), n, p)
+                    b <- rep(0, 400)
+                    b[301:305] <- c(5:1)*2
+                    y <-  X%*%b + rnorm(n)
+                    ynew <-  X%*%b + rnorm(n)                               
                 </code></pre>
             </section>
 
             <section>
                 <pre><code data-trim data-noescape class="language-r">
-                    plot(density(Y))
-                </code></pre>
-                <img src="img/mixture.png" alt="" width="80%">
-            </section>
-
-            <section>
-                <pre><code data-trim data-noescape class="language-r">
-                    myEM &lt;- function(Y, tol=1e-6, maxit=1000){
-                        counter &lt;- 0
-                        myP &lt;- 0.5
-                        cat("iter = ", counter, "P = ", myP, "\n")
-                        while (counter &lt;= maxit) {
-                          counter &lt;- counter + 1
-                          denominator &lt;- (myP*dnorm(Y, mean=myMu1, sd=sqrt(mySigmaSq))
-                                          + (1-myP)*dnorm(Y, mean=myMu2, sd=sqrt(mySigmaSq)))
-                          myP.new &lt;- sum(myP*dnorm(Y, mean=myMu1, sd=sqrt(mySigmaSq))/denominator)/nsub
-                          cat("iter = ", counter, "P = ", myP.new, "\n")
-                          
-                          if (abs(myP.new-myP) &lt; tol){  # calculate the l1 norm
-                            cat("\nSuccessfully Converged\n")
-                            cat("iter = ", counter, "P = ", myP.new, "\n")
-                            return(list(P = myP))
-                          } else {
-                            myP &lt;- myP.new
-                          }
-                        }
-                        print("Convergence Failed")
-                        return(list(P = myP))
-                      }  
+                    > system.time( re <- lasso.cd(X, y, rep(0, 400), 1) ) 
+                    Minimum obtained.
+                       user  system elapsed 
+                      1.812   0.673   2.492 
+                    > 
+                    > system.time( re <- lasso.cd(X, y, re$beta, 0.9) ) 
+                    Minimum obtained.
+                       user  system elapsed 
+                      1.310   0.496   1.805       
+                    > system.time( fit <- glmnet(X, y, intercept=F, standardize=F, lambda=1) ) 
+                      user  system elapsed 
+                     0.014   0.001   0.016                     
                 </code></pre>
             </section>
 
-            <section>
-                <h2>Output</h2>
-                <pre><code data-trim data-noescape class="language-r">
-                &gt; myEM(Y)
-                iter =  0 P =  0.5 
-                iter =  1 P =  0.3046136 
-                iter =  2 P =  0.2948544 
-                iter =  3 P =  0.294315 
-                iter =  4 P =  0.2942849 
-                iter =  5 P =  0.2942832 
-                iter =  6 P =  0.2942831 
 
-                Successfully Converged
-                iter =  6 P =  0.2942831 
-                $P
-                [1] 0.2942832
-                </code></pre>
-            </section>
-
-            <section>
-                <h2>Summary</h2>
-                <ul>
-                    <li>Very stable under broad conditions</li>
-                    <li>Simpler to compute complete data likelihood</li>
-                    <li>Easy to program</li>
-                    <li>Cost per iteration is low</li>
-                    <li>Likelihood non-decreasing per iteration</li>
-                </ul>
-            </section>
             <!-- <section>
                 <h2>References</h2>
                 <ul>
