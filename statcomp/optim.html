@@ -134,16 +134,16 @@
 
             <section>
                 <pre><code data-trim data-noescape class="language-r">
-                    > system.time( re <- lasso.cd(X, y, rep(0, 400), 1) ) 
+                    &gt; system.time( re &lt;- lasso.cd(X, y, rep(0, 400), 1) ) 
                     Minimum obtained.
                        user  system elapsed 
                       1.812   0.673   2.492 
-                    > 
-                    > system.time( re <- lasso.cd(X, y, re$beta, 0.9) ) 
+                    &gt; 
+                    &gt; system.time( re &lt;- lasso.cd(X, y, re$beta, 0.9) ) 
                     Minimum obtained.
                        user  system elapsed 
                       1.310   0.496   1.805       
-                    > system.time( fit <- glmnet(X, y, intercept=F, standardize=F, lambda=1) ) 
+                    &gt; system.time( fit &lt;- glmnet(X, y, intercept=F, standardize=F, lambda=1) ) 
                       user  system elapsed 
                      0.014   0.001   0.016                     
                 </code></pre>
