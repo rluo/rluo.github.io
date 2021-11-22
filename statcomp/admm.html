@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <!-- <style>
+                .rds_db credit:after {
+                    content: "https://r4ds.had.co.nz/relational-data.html";
+                }
+            </style> -->
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>ADMM</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    softThresh &lt;- function(x, lambda) {
+                        sign(x)*pmax(0, abs(x) - lambda)
+                    }                  
+                </code></pre>
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    admmLasso &lt;- function(X, y, tau, maxit = 1000, tol=1e-4) {
+                        XX &lt;- t(X) %*% X
+                        Xy &lt;- t(X) %*% y
+                        p &lt;- ncol(X)
+                        lambda &lt;- rep(0, p)
+                        maxRho &lt;- 5
+                        rho &lt;- 4
+                        z0 &lt;- z &lt;- beta0 &lt;- beta &lt;- rep(0, p)
+                        Sinv &lt;- solve(XX + rho*diag(rep(1, p)) )
+                        for (it in 1:maxit) {
+                            ## update beta
+                            ## beta &lt;- solve(XX + rho*diag(rep(1, p)) ) %*% (Xy + rho * z - lambda)
+                            beta &lt;- Sinv %*% (Xy + rho * z - lambda)
+                            ## update z
+                            z &lt;- softThresh(beta + lambda/rho, tau/rho)
+                            ## update lambda
+                            lambda &lt;- lambda + rho* (beta - z ) 
+                            ## increase rho
+                            ## rho &lt;- min(maxRho, rho*1.1)
+                            change &lt;- max(  c( base::norm(beta - beta0, "F"),
+                                          base::norm(z - z0, "F") ) )
+                            if (change &lt; tol || it > maxit) {
+                                break
+                            }
+                            beta0 &lt;-  beta
+                            z0 &lt;-  z
+                        }
+                        return(z)
+                    }                                  
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    set.seed(100)
+                    n <- 50
+                    p <- 400
+                    X <- matrix(rnorm(n*p), n, p)
+                    b <- rep(0, 400)
+                    b[301:305] <- c(5:1)*2
+                    y <-  X%*%b + rnorm(n)
+                    ynew <-  X%*%b + rnorm(n)                               
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+&gt; system.time( re.cd &lt;- lasso.cd(X, y, rep(0, 400), 1) ) 
+Minimum obtained.
+user  system elapsed 
+1.794   0.689   2.466 
+&gt; system.time( re &lt;- admmLasso(X, y, 1*n) )
+   user  system elapsed 
+  0.160   0.003   0.163 
+&gt; library(glmnet)
+Loading required package: Matrix
+Loading required package: foreach
+Loaded glmnet 2.0-18
+&gt; system.time(fit &lt;- glmnet(X, y, lambda = 1, standardize  = F, intercept = F))
+    user  system elapsed 
+0.017   0.002   0.018                
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; re.glmnet &lt;- as.numeric( coef(fit) )[-1]
+                    &gt; betamat &lt;-  cbind(re, re.cd$beta, re.glmnet)
+                    &gt; betamat
+                                                     re.glmnet
+                    [300,]  0.00000000  0.00000000  0.00000000
+                    [301,]  8.57130533  8.57216672  8.57086844
+                    [302,]  6.81617251  6.81850114  6.81748225
+                    [303,]  3.94929976  3.95289837  3.95151067
+                    [304,]  0.78410625  0.79345728  0.79189060
+                    [305,]  0.82013007  0.82141849  0.82053480
+                    [306,]  0.00000000  0.00000000  0.00000000             
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; obj &lt;- function(beta, X, y, tau) {
+                        +     0.5*base::norm(y - X%*%beta, "F")**2 + tau*sum(abs(beta))
+                        + }
+                    &gt; 
+                    &gt; apply(betamat, 2, function(b) obj(b, X, y, 1*n))
+                                        re.glmnet 
+                        1300.848  1300.847  1300.847         
+                </code></pre>
+            </section>
+            <!-- <section>
+                <h2>References</h2>
+                <ul>
+                    <li>R for DS: ch 5 - 16</li>
+                    <li>https://r4ds.had.co.nz/</li>
+                    <li>https://exts.ggplot2.tidyverse.org/gallery/</li>
+                    <li>https://www.rstudio.com/resources/cheatsheets/</li>
+                </ul>
+            </section> -->
+
+        </div>
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
