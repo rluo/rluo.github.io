@@ -195,7 +195,7 @@ html {
     position: relative;
     width: 70%;
     font-style: italic;
-    background-color: #c4def7;
+    background-color: #ececec;
 /*    background-color: #289dcc;*/
     box-shadow: 10px 10px 5px #888888;
     font-size: 0.8em;
@@ -214,7 +214,7 @@ html {
     width: 70%;
     font-style: italic;
 /*    background: rgba(255, 255, 255, 0.05);*/
-    background-color: #e2e2e2;
+    background-color: #ebebeb;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
     border-left: 12px solid #4d4d4d;
 }
@@ -233,7 +233,7 @@ html {
 }
 .reveal div.thm {
     border: 1px solid #4d4d4d;
-    border-left: 12px solid navy;
+    border-left: 12px solid #689ec2;
 /*
     background-color: #289dcc;
     color: white;
