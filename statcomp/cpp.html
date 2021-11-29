@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <!-- <style>
+                .rds_db credit:after {
+                    content: "https://r4ds.had.co.nz/relational-data.html";
+                }
+            </style> -->
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>Calling C++</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+            <section>
+                <h2>R System</h2>
+                <img src="img/r_system_arch.png" alt="" width="100%">
+                <p>Time spent outside computing in R</p>
+            </section>
+
+            <section>
+                <h2>Compiled Programs</h2>
+                <img src="img/c_compile.png" alt="" width="100%">
+                <p>No middle part (compile/interpret) to waste time</p>
+            </section>
+
+            <section>
+                <h2>Core R</h2>
+                <img src="https://librestats.files.wordpress.com/2011/08/pct_r_code.png" alt="" width="100%">
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <p>Run the following in terminal</p>
+                <pre><code data-trim data-noescape class="language-bash">
+                    docker run -ti --rm -v "$PWD":/root -w /root -u root r-base /bin/bash
+                </code></pre>
+                <p>Then check you can see the cpp file admm_lasso.cpp</p>
+                <pre><code data-trim data-noescape class="language-bash">
+                    root@0a42fd60ff43:~# ls
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>C++ Header</h2>
+                <pre><code data-trim data-noescape class="language-cpp">
+                    #include <RcppArmadillo.h>
+                    // [[Rcpp::depends(RcppArmadillo)]]
+                        
+                    arma::colvec soft_thresh(arma::colvec x, double tau) {
+                        int p = x.n_rows;
+                        return( arma::sign(x)%arma::max(arma::zeros<arma::colvec>(p), arma::abs(x) - tau ) );
+                    }
+                    // [[Rcpp::export]]
+                    arma::colvec  admm_lasso(arma::mat X, arma::colvec y, double tau, int maxit, double tol) ... 
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>C++ Core</h2>
+                <pre><code data-trim data-noescape class="language-cpp">
+                    #include <RcppArmadillo.h>
+
+                        // [[Rcpp::depends(RcppArmadillo)]]
+                        
+                        
+                        arma::colvec soft_thresh(arma::colvec x, double tau) {
+                            int p = x.n_rows;
+                            return( arma::sign(x)%arma::max(arma::zeros<arma::colvec>(p), arma::abs(x) - tau ) );
+                        }
+                        
+                        
+                        
+                        // [[Rcpp::export]]
+                        arma::colvec  admm_lasso(arma::mat X, arma::colvec y, double tau, int maxit, double tol) {
+                            arma::mat XX = X.t() * X;
+                            arma::mat Xy = X.t() * y;
+                            int p = X.n_cols;
+                            arma::colvec  lambda = arma::zeros<arma::colvec>(p);
+                            //double maxRho = 5.0;
+                            double rho = 4.0;
+                            arma::colvec  z0 = arma::zeros<arma::colvec>(p);
+                            arma::colvec  z = arma::zeros<arma::colvec>(p);
+                            arma::colvec  beta0 = arma::zeros<arma::colvec>(p);
+                            arma::colvec  beta = arma::zeros<arma::colvec>(p);
+                            arma::mat Sinv = arma::inv( XX + arma::eye(p, p) * rho );
+                            for (int i = 1; i <= maxit; i++ ) {
+                                beta =  Sinv * (Xy + rho * z - lambda);
+                                z = soft_thresh(beta + lambda * (1/rho), tau * (1/rho) );
+                                lambda = lambda + rho * (beta - z);
+                                double change = std::max(arma::norm(beta - beta0, 2), arma::norm(z - z0, 2));
+                                if (change < tol || i > maxit ) {
+                                    break;
+                                }
+                                beta0 = beta;
+                                z0 = z;
+                        
+                            }
+                            return(z);
+                        }                        
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Install Pkgs</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    install.packages("Rcpp")
+                    install.packages("RcppArmadillo")
+                    install.packages("glmnet")
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Simulate Data</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    n &lt;- 50
+                    p &lt;- 400
+                    set.seed(100)
+                    X &lt;- matrix(rnorm(n*p), n, p)
+                    b &lt;- rep(0, 400)
+                    b[301:305] &lt;- c(5:1)*2
+                    y &lt;-  X%*%b + rnorm(n)
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Compile C++ </h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    library(Rcpp)
+                    library(RcppArmadillo)
+                    sourceCpp("admm_lasso.cpp")
+                    admm_lasso
+                    function (X, y, tau, maxit, tol) 
+                    .Call(&lt;pointer: 0x7f18d74485a0&gt;, X, y, tau, maxit, tol)
+                    &lt;bytecode: 0x55ce6c88d358&gt;
+                </code></pre>
+                <p>Note: an R function admm_lasso was expored to R from C++ using the same name</p>
+            </section>
+
+
+            <section>
+                <h2>Compare with glmnet</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    system.time(re.cpp &lt;-  admm_lasso(X, y, 1*n, 1000, 1e-4))
+                    user  system elapsed 
+                    0.039   0.014   0.013
+                    system.time(fit &lt;- glmnet(X, y, lambda = 1, standardize  = F, intercept = F))
+                    user  system elapsed 
+                    0.017   0.000   0.026
+                    re.glmnet <- as.numeric( coef(fit) )[-1]
+                    obj(re.glmnet, X, y, 1*n)
+                    1300.847
+                    obj(re.cpp, X, y, 1*n)
+                    1300.848
+                    max(abs(  re.glmnet - re.cpp ))
+                    0.007784352
+                </code></pre>
+                <p>Small difference in beta</p>
+            </section>
+
+
+
+
+            <section>
+                <h2>References</h2>
+                <ul>
+                    <li>AoRP: ch 14</li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>

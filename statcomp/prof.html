@@ -94,6 +94,12 @@
 
 
             <section>
+                <h2>For Loop</h2>
+
+            </section>
+
+
+            <section>
                 <h2>Example</h2>
                 <pre><code data-trim data-noescape class="language-r">
                     z &lt;- x + y
@@ -143,9 +149,67 @@
             </section>
 
             <section>
-                <h2></h2>
+                <h1>Profiling</h1>
+                <ul>
+                    <li>To improve speed, you may want to use <emphcode>Rprof</emphcode>
+                    </li>
+                    <li>Profiling finds the bottle neck or functions that use the most time</li>
+                    <li>You may want to focus on optimizing the functions that use the most</li>
+                </ul>
             </section>
 
+            <section>
+                <h2>Example: Matrix Power</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    powers1 &lt;- function(x,dg) {
+                        pw &lt;- matrix(x,nrow=length(x))
+                        prod &lt;- x  # current product
+                        for (i in 2:dg) {
+                           prod &lt;- prod * x
+                           pw &lt;- cbind(pw,prod)
+                        }
+                        return(pw)
+                    }
+                &gt; x &lt;- runif(1e6)
+                &gt; Rprof()
+                &gt; invisible(powers1(x, 8))
+                &gt; Rprof(NULL)
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Example: Matrix Power</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; summaryRprof()
+                    $by.self
+                            self.time self.pct total.time total.pct
+                    "cbind"         0.26    81.25       0.26     81.25
+                    "powers1"       0.04    12.50       0.32    100.00
+                    "makeCenv"      0.02     6.25       0.02      6.25
+
+                    $by.total
+                                        total.time total.pct self.time self.pct
+                    "powers1"                    0.32    100.00      0.04    12.50
+                    "cbind"                      0.26     81.25      0.26    81.25
+                    "makeCenv"                   0.02      6.25      0.02     6.25
+                    ...
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Rprof</h2>
+                <ul>
+                    <li>
+                        <emphcode>Rprof</emphcode> saves the function calls in effect every 0.02 (default) seconds
+                    </li>
+                    <li>
+                        <emphcode>summaryRprof</emphcode> counts the number of times each function was detected
+                    </li>
+                    <li>This can be challenging if calling too many functions</li>
+                    <li>Alternative packages for visualizing Rprof: <emphcode>profr, proftools</emphcode>
+                    </li>
+                </ul>
+            </section>
 
             <section>
                 <h2>References</h2>
