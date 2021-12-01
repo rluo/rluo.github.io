@@ -95,12 +95,68 @@
 
             <section>
                 <h2>For Loop</h2>
-
+                <pre><code data-trim data-noescape class="language-r">
+                    f_for &lt;- function(k) {
+                        re &lt;- rep(0, k)
+                        for (i in 1:k) {
+                           re[i] &lt;- i^1.5
+                        }
+                        return(re)
+                     }                     
+                     f_apply &lt;- function(k) {
+                        return(sapply(1:k, function(i) i^1.5))
+                     }
+                </code></pre>
             </section>
 
+            <section>
+                <h2>For vs Apply</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    library(ggplot2)
+                    library(microbenchmark)
+                    mb &lt;- microbenchmark(f_for(1e5), f_apply(1e5))
+                    autoplot(mb)
+                </code></pre>
+            </section>
 
             <section>
-                <h2>Example</h2>
+                <img src="img/for_vs_apply.png" alt="" width="60%">
+            </section>
+
+            <section>
+                <h2>R System</h2>
+                <img src="img/r_system_arch.png" alt="" width="100%">
+            </section>
+
+            <section>
+                <h2>Compiling</h2>
+                <pre><code data-trim data-noescape class="language-r">
+                    library(compiler)
+                    f_for_cmp &lt;- cmpfun(f_for)
+                </code></pre>
+            </section>
+
+            <section>
+                <img src="img/for_cmp.png" alt="" width="70%">
+            </section>
+
+            <section>
+                <p>Modern R version actually tries to compile your functions automatically</p>
+                <pre><code data-trim data-noescape class="language-r">
+                    &gt; f_for
+                    function(k) {
+                       re &lt;- rep(0, k)
+                       for (i in 1:k) {
+                          re[i] &lt;- i^1.5
+                       }
+                       return(re)
+                    }
+                    &lt;bytecode: 0x7f9cd5aaa240&gt;                    
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Vectorization</h2>
                 <pre><code data-trim data-noescape class="language-r">
                     z &lt;- x + y
                     for (i in 1:10000) z[i] &lt;- x[i] + y[i]
@@ -146,6 +202,130 @@
                     0.08    0.00    0.08 
                 </code></pre>
                 <p>Large mem for sotring the matrix, but fast exec</p>
+            </section>
+
+            <section>
+                <h2>Simpler Data Structure</h2>
+                <ul>
+                    <li>Complex data structures (e.g. class) requires more time </li>
+                    <li>Simpler data structure requires less work for type checking, formatting, and etc</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Direct Function Calls</h2>
+                <ul>
+                    <li>S3/S4 systems can add some computation time</li>
+                    <li>R offers various functions for the same purpose
+                    </li>
+                    <li>Some functions are slower (for generic data structures) and some are faster (for specific and
+                        simpler data structures)</li>
+                </ul>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    m &lt;- matrix(rnorm(1e4 * 100), 1e4, 100)
+                    mb &lt;- microbenchmark(apply(m, 1, mean),  rowMeans(m))
+                    autoplot(mb)                    
+                </code></pre>
+            </section>
+
+            <section>
+                <img src="img/rowmeans_vs_apply.png" alt="" width="60%">
+            </section>
+
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    m &lt;-  rnorm(1e4) 
+                    mb &lt;- microbenchmark(mean(m),  sum(m)/length(m))
+                    autoplot(mb)                                   
+                </code></pre>
+            </section>
+
+            <section>
+                <img src="img/sum_vs_mean.png" alt="" width="60%">
+            </section>
+
+            <section>
+                <h2>Pre-allocation</h2>
+                <ul>
+                    <li>Most R data structures are copy-on-modify</li>
+                    <li>Concatenation crreates multiple copies</li>
+                    <li>Pre-allocation usually avoid potential copy-on-modify</li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Parallel</h1>
+            </section>
+
+            <section>
+                <h2>Parallel</h2>
+                <ul>
+                    <li>Modern R includes pkg parallel by default</li>
+                    <li>Many other parallel mechanisms possible via other pkgs
+                        <ul>
+                            <li>snow, Rmpi, multicore, ...</li>
+                        </ul>
+                    </li>
+                    <li>Microsoft R Open has parallel R enabled by default, but may not always improve speed</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Types of Parallelism</h2>
+                <ul>
+                    <li>Shared mem, multiple cores, usually a single machine
+                        <ul>
+                            <li>Open MP</li>
+                        </ul>
+                    </li>
+                    <li>Multiple machines linked by network
+                        <ul>
+                            <li>MPI, message passing</li>
+                        </ul>
+                    </li>
+                    <li>Parallel frameworks: Hadoop</li>
+                </ul>
+            </section>
+
+            <section data-state='para'>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Shared_memory.svg/1920px-Shared_memory.svg.png"
+                    alt="" width="100%">
+                <style>
+                    .para credit:after {
+                        content: "https://en.wikipedia.org/wiki/Shared_memory";
+                    }
+                </style>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                    simu &lt;- function(k) {
+                        set.seed(k)
+                        X &lt;- matrix(rnorm(1e2*1e4), 1e2, 1e4)
+                        b &lt;- rnorm(1e4)
+                        return( sum(X%*%b) )
+                    }
+                    system.time(lapply(1:200, simu))
+                    library(parallel)
+                    system.time(mclapply(1:200, simu, mc.cores = 3))
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape class="language-r">
+                 &gt; system.time(lapply(1:200, simu))
+                    user  system elapsed 
+                  12.523   0.229  12.760 
+                 &gt; 
+                 &gt; library(parallel)
+                 &gt; system.time(mclapply(1:200, simu, mc.cores = 3))
+                    user  system elapsed 
+                   4.181   0.400   4.511 
+                </code></pre>
             </section>
 
             <section>
@@ -214,7 +394,7 @@
             <section>
                 <h2>References</h2>
                 <ul>
-                    <li>AoRP: ch 14</li>
+                    <li>AoRP: ch 13, 14, 16</li>
                 </ul>
             </section>
 

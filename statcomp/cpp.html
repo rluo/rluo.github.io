@@ -71,7 +71,44 @@
 
             <section>
                 <h2>Core R</h2>
-                <img src="https://librestats.files.wordpress.com/2011/08/pct_r_code.png" alt="" width="100%">
+                <img src="https://librestats.files.wordpress.com/2011/08/pct_r_code.png" alt="" width="50%">
+                <style>
+                    .pct credit:after {
+                        content: "TODO";
+                    }
+                </style>
+            </section>
+
+            <section>
+                <h2>Why C/C++/Fortran</h2>
+                <ul>
+                    <li>Loops that cannot be vectorized</li>
+                    <li>Avoid various function search in R</li>
+                    <li>Replace bottle-neck functions found by profiling</li>
+                    <li>Better management of mem, avoid copy-on-modify</li>
+                    <li>Existing optimized algorithms and packages for computing
+                        <ul>
+                            <li>STL, GSL, BLAS, Lapack, Boost, Atlas, Eigen, ... </li>
+                            <li>Intel MKL</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>R System</h2>
+                <img src="img/r_system_arch.png" alt="" width="100%">
+                <p>Time spent outside computing in R</p>
+            </section>
+
+            <section>
+                <h2>Calling C</h2>
+                <img src="img/calling_c.png" alt="">
+            </section>
+
+            <section>
+                <h2>Pipeline</h2>
+                <img src="img/calling_c_pipeline.png" alt="">
             </section>
 
 
@@ -90,60 +127,60 @@
             <section>
                 <h2>C++ Header</h2>
                 <pre><code data-trim data-noescape class="language-cpp">
-                    #include <RcppArmadillo.h>
-                    // [[Rcpp::depends(RcppArmadillo)]]
-                        
-                    arma::colvec soft_thresh(arma::colvec x, double tau) {
-                        int p = x.n_rows;
-                        return( arma::sign(x)%arma::max(arma::zeros<arma::colvec>(p), arma::abs(x) - tau ) );
-                    }
-                    // [[Rcpp::export]]
-                    arma::colvec  admm_lasso(arma::mat X, arma::colvec y, double tau, int maxit, double tol) ... 
+                #include <RcppArmadillo.h>
+                // [[Rcpp::depends(RcppArmadillo)]]
+                    
+                arma::colvec soft_thresh(arma::colvec x, double tau) {
+                    int p = x.n_rows;
+                    return( arma::sign(x)%arma::max(arma::zeros<arma::colvec>(p), arma::abs(x) - tau ) );
+                }
+                // [[Rcpp::export]]
+                arma::colvec  admm_lasso(arma::mat X, arma::colvec y, double tau, int maxit, double tol) ... 
                 </code></pre>
             </section>
 
             <section>
                 <h2>C++ Core</h2>
                 <pre><code data-trim data-noescape class="language-cpp">
-                    #include <RcppArmadillo.h>
+                #include <RcppArmadillo.h>
 
-                        // [[Rcpp::depends(RcppArmadillo)]]
-                        
-                        
-                        arma::colvec soft_thresh(arma::colvec x, double tau) {
-                            int p = x.n_rows;
-                            return( arma::sign(x)%arma::max(arma::zeros<arma::colvec>(p), arma::abs(x) - tau ) );
+                // [[Rcpp::depends(RcppArmadillo)]]
+                
+                
+                arma::colvec soft_thresh(arma::colvec x, double tau) {
+                    int p = x.n_rows;
+                    return( arma::sign(x)%arma::max(arma::zeros<arma::colvec>(p), arma::abs(x) - tau ) );
+                }
+                
+                
+                
+                // [[Rcpp::export]]
+                arma::colvec  admm_lasso(arma::mat X, arma::colvec y, double tau, int maxit, double tol) {
+                    arma::mat XX = X.t() * X;
+                    arma::mat Xy = X.t() * y;
+                    int p = X.n_cols;
+                    arma::colvec  lambda = arma::zeros<arma::colvec>(p);
+                    //double maxRho = 5.0;
+                    double rho = 4.0;
+                    arma::colvec  z0 = arma::zeros<arma::colvec>(p);
+                    arma::colvec  z = arma::zeros<arma::colvec>(p);
+                    arma::colvec  beta0 = arma::zeros<arma::colvec>(p);
+                    arma::colvec  beta = arma::zeros<arma::colvec>(p);
+                    arma::mat Sinv = arma::inv( XX + arma::eye(p, p) * rho );
+                    for (int i = 1; i <= maxit; i++ ) {
+                        beta =  Sinv * (Xy + rho * z - lambda);
+                        z = soft_thresh(beta + lambda * (1/rho), tau * (1/rho) );
+                        lambda = lambda + rho * (beta - z);
+                        double change = std::max(arma::norm(beta - beta0, 2), arma::norm(z - z0, 2));
+                        if (change < tol || i > maxit ) {
+                            break;
                         }
-                        
-                        
-                        
-                        // [[Rcpp::export]]
-                        arma::colvec  admm_lasso(arma::mat X, arma::colvec y, double tau, int maxit, double tol) {
-                            arma::mat XX = X.t() * X;
-                            arma::mat Xy = X.t() * y;
-                            int p = X.n_cols;
-                            arma::colvec  lambda = arma::zeros<arma::colvec>(p);
-                            //double maxRho = 5.0;
-                            double rho = 4.0;
-                            arma::colvec  z0 = arma::zeros<arma::colvec>(p);
-                            arma::colvec  z = arma::zeros<arma::colvec>(p);
-                            arma::colvec  beta0 = arma::zeros<arma::colvec>(p);
-                            arma::colvec  beta = arma::zeros<arma::colvec>(p);
-                            arma::mat Sinv = arma::inv( XX + arma::eye(p, p) * rho );
-                            for (int i = 1; i <= maxit; i++ ) {
-                                beta =  Sinv * (Xy + rho * z - lambda);
-                                z = soft_thresh(beta + lambda * (1/rho), tau * (1/rho) );
-                                lambda = lambda + rho * (beta - z);
-                                double change = std::max(arma::norm(beta - beta0, 2), arma::norm(z - z0, 2));
-                                if (change < tol || i > maxit ) {
-                                    break;
-                                }
-                                beta0 = beta;
-                                z0 = z;
-                        
-                            }
-                            return(z);
-                        }                        
+                        beta0 = beta;
+                        z0 = z;
+                
+                    }
+                    return(z);
+                }                        
                 </code></pre>
             </section>
 
@@ -182,7 +219,7 @@
                     .Call(&lt;pointer: 0x7f18d74485a0&gt;, X, y, tau, maxit, tol)
                     &lt;bytecode: 0x55ce6c88d358&gt;
                 </code></pre>
-                <p>Note: an R function admm_lasso was expored to R from C++ using the same name</p>
+                <p>Note: an R function admm_lasso was exported to R from C++ using the same name</p>
             </section>
 
 
