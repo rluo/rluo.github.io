@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Statistical Computing</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js.4.1.3/dist/reveal.css">
+    <!-- <link rel="stylesheet" href="reveal.js.4.1.3/dist/theme/white.css" id="theme"> -->
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js.4.1.3/plugin/highlight/github-dark-dimmed.min.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+            <!--      place holder for credits: empty for now -->
+            <credit></credit>
+            <!-- <style>
+                .rds_db credit:after {
+                    content: "https://r4ds.had.co.nz/relational-data.html";
+                }
+            </style> -->
+            <section>
+                <h1><strong>
+                        <highlight>Statistical</highlight>
+                        <emph>Computing</emph>
+                    </strong></h1>
+                <br>
+                <h2>Create R Pkg</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+            <section>
+                <h2>R Pkg</h2>
+                <ul>
+                    <li>DESCRIPTION: meta-data about your pkg, authors, imports, and etc</li>
+                    <li>NAMESPACE: what functions exported</li>
+                    <li>R folder: your R files</li>
+                    <li>man folder: documentation for your R files</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Create Skeleton</h2>
+                <pre><code data-trim data-noescape class="language-r">   
+                    &gt; library(devtools)           
+                    &gt; create_package('admmlasso')
+                    ✔ Creating './'
+                    ✔ Creating 'R/'
+                    ✔ Writing 'DESCRIPTION'
+                    Package: admmlasso
+                    Title: What the Package Does (One Line, Title Case)
+                    Version: 0.0.0.9000
+                    Authors@R (parsed):
+                        * First Last &lt;first.last@example.com&gt; [aut, cre] (&lt;https://orcid.org/YOUR-ORCID-ID&gt;)
+                    Description: What the package does (one paragraph).
+                    License: What license it uses
+                    Encoding: UTF-8
+                    LazyData: true
+                    ✔ Writing 'NAMESPACE'
+                    ✔ Changing working directory to 'admmlasso/'
+                </code></pre>
+                <p>C++ can be vectorized as well, and modern CPU supports vectorized computing natively</p>
+            </section>
+
+            <section>
+                <h2>Edit DESCRIPTION</h2>
+                <pre><code data-trim data-noescape class="language-r">   
+                    Package: admmlasso
+                    Title: ADMM Algorithm for LASSO
+                    Version: 0.1.1.1000
+                    Authors@R: 
+                        person(given = "Xi",
+                               family = "Luo",
+                               role = c("aut", "cre"),
+                               email = "xi.luo@uth.tmc.edu")
+                    Description: This package implements the ADMM algorithm for solving the LASSO regression problem.
+                    License: GPL-3
+                    Encoding: UTF-8
+                    LazyData: true
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Add R Functions</h2>
+                <ul>
+                    <li>We used the admm lasso function in this example</li>
+                    <li>We exported only the admm_lasso function only</li>
+                    <li>Don't use library or require in these R files, but rather add these dependent packages in
+                        DESCRIPTION</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Add Documentation</h2>
+                <ul>
+                    <li>Can do this manually using .Rd files</li>
+                    <li>We will use roxygen2 for auto documentation generation</li>
+                </ul>
+                <pre><code data-trim data-noescape class="language-r"> 
+                #' ADMM LASSO Algorithm
+                #'
+                #' This function implements the ADMM algorithm for solving LASSO.
+                #'
+                #' @param X design matrix (n x p)
+                #' @param y outcome matrix (n x 1)
+                #' @param tau tuning parameter &gt; 0
+                #' @param maxit maximum number of iterations allowed
+                #' @param tol tolerance
+                #' @return beta vector of length p
+                #' @export
+            </code></pre>
+            </section>
+
+
+            <section>
+                <h2>Generate Documentations</h2>
+                <pre><code data-trim data-noescape class="language-r">   
+                    &gt; document()
+                    Updating admmlasso documentation
+                    Loading admmlasso
+                    Writing NAMESPACE
+                    Writing NAMESPACE
+                </code></pre>
+                <p>This also crates man folder containing the documentations (compiled to PDF)</p>
+            </section>
+
+            <section>
+                <h2>Build to Tar Ball</h2>
+                <p>In Terminal, run the following above the folder admmlasso to generate the tar file</p>
+                <pre><code data-trim data-noescape class="language-bash">   
+                    ╰─$ R CMD build  admmlasso                                                  1 ↵
+                    * checking for file ‘admmlasso/DESCRIPTION’ ... OK
+                    * preparing ‘admmlasso’:
+                    * checking DESCRIPTION meta-information ... OK
+                    * checking for LF line-endings in source and make files and shell scripts
+                    * checking for empty or unneeded directories
+                    * building ‘admmlasso_0.1.1.1000.tar.gz’
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Check Your Package</h2>
+                <p>In Terminal, run the following on the tar file</p>
+                <pre><code data-trim data-noescape class="language-bash">   
+                    ╰─$ R CMD check admmlasso_0.1.1.1000.tar.gz 
+                    ...
+                    * checking S3 generic/method consistency ... OK
+                    * checking replacement functions ... OK
+                    * checking foreign function calls ... OK
+                    * checking R code for possible problems ... OK
+                    * checking Rd files ... OK
+                    * checking Rd metadata ... OK
+                    * checking Rd cross-references ... OK
+                    * checking for missing documentation entries ... OK
+                    * checking for code/documentation mismatches ... OK
+                    * checking Rd \usage sections ... OK
+                    * checking Rd contents ... OK
+                    * checking for unstated dependencies in examples ... OK
+                    * checking examples ... NONE
+                    * checking PDF version of manual ... OK
+                    * DONE
+                    
+                    Status: OK
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Read Generated Manual</h2>
+                <p>Read the PDF manual automatically generated under admmlasso.Rcheck, and make sure that you fix typos
+                    and etc</p>
+            </section>
+
+            <section>
+                <h2>Test Install</h2>
+                <p>In Terminal, run the following on the tar file</p>
+                <pre><code data-trim data-noescape class="language-bash">   
+                    ╰─$ R CMD INSTALL admmlasso_0.1.1.1000.tar.gz 
+                    * installing *source* package ‘admmlasso’ ...
+                    ** R
+                    ** byte-compile and prepare package for lazy loading
+                    ** help
+                    *** installing help indices
+                    ** building package indices
+                    ** testing if installed package can be loaded
+                    * DONE (admmlasso)
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Load Your Package</h2>
+                <p>In R, load and test run the function</p>
+                <pre><code data-trim data-noescape class="language-r">   
+                    &gt; library(admmlasso)
+                    &gt; admmlasso::admmLasso
+                    &gt; admmlasso::admmLasso(X, y, 1*n)                    
+                </code></pre>
+            </section>
+
+            <section>
+                <h1>And, That's it! ... The basic R pkg building</h1>
+            </section>
+
+            <section>
+                <h2>Extensions</h2>
+                <ul>
+                    <li>Include example codes</li>
+                    <li>Add to github</li>
+                    <li>Check with CRAN: R CMD check --as-cran ...</li>
+                    <li>Add binary data</li>
+                    <li>Add Vignettes</li>
+                    <li>Add C++ files using template folders by Rcpp.package.skeleton()</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>References</h2>
+                <ul>
+                    <li>https://cran.r-project.org/doc/manuals/r-release/R-exts.html</li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js.4.1.3/dist/reveal.js"></script>
+    <script src="reveal.js.4.1.3/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js.4.1.3/plugin/notes/notes.js"></script>
+    <script src="reveal.js.4.1.3/plugin/search/search.js"></script>
+    <script src="reveal.js.4.1.3/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js.4.1.3/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js.4.1.3/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
