@@ -1,0 +1,11 @@
+---
+layout: news
+title:  Yi's R01 Method Grant Funded
+author: Xi Luo
+previewimage:  abcd700x400.jpg
+tags: news
+externallink:  https://reporter.nih.gov/search/WndkZZ07xEKmedHqBeTNMQ/project-details/10445698
+
+---
+
+Congratulations to Yi Zhao for the 5-year NIH R01 grant on method development (https://reporter.nih.gov/search/WndkZZ07xEKmedHqBeTNMQ/project-details/10445698). Awesome news for the future collaborations with you and Brian!
