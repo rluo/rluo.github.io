@@ -3,37 +3,37 @@
 layout: default
 
 carousel:
-- img: MyImages/ResearchProject/Headslides.001.gif
-text: Big Data Inference
-caption:
-- img: MyImages/ResearchProject/Headslides.002.gif
-text: Network Models
-caption:
-- img: MyImages/ResearchProject/Headslides.003.gif
-text: Predictive Systems
-caption:
-- img: MyImages/ResearchProject/Headslides.004.gif
-text: Optimization
-caption:
-- img: MyImages/ResearchProject/Headslides.005.gif
-text: Method and Theory
-caption:
+  - img: MyImages/ResearchProject/Headslides.001.gif
+    text: Big Data Inference
+    caption:
+  - img: MyImages/ResearchProject/Headslides.002.gif
+    text: Network Models
+    caption:
+  - img: MyImages/ResearchProject/Headslides.003.gif
+    text: Predictive Systems
+    caption:
+  - img: MyImages/ResearchProject/Headslides.004.gif
+    text: Optimization
+    caption:
+  - img: MyImages/ResearchProject/Headslides.005.gif
+    text: Method and Theory
+    caption:
 
 portfolio:
-heading: Research Projects
-items:
-- link: /dimensional_inferencing.html
-img: MyImages/research/dimensional.jpg
-alt: High Dimensional Inference/Big Data Analytics
-- link: /casual_inference.html
-img: MyImages/research/brain.jpg
-alt: Casual Inference
+  heading: Research Projects
+  items:
+    - link: /dimensional_inferencing.html
+      img: MyImages/research/dimensional.jpg
+      alt: High Dimensional Inference/Big Data Analytics
+    - link: /casual_inference.html
+      img: MyImages/research/brain.jpg
+      alt: Casual Inference
 
 script: |
-<!-- Script to Activate the Carousel -->
-$('.carousel').carousel({
-interval: 5000 //changes the speed
-})
+  <!-- Script to Activate the Carousel -->
+  $('.carousel').carousel({
+      interval: 5000 //changes the speed
+  })
 
 ---
 
@@ -51,7 +51,7 @@ interval: 5000 //changes the speed
     <div class="col-md-4">
         <div class="panel panel-default">
 
-            <div class="panel-heading" style="height: 70px; text-overflow: ellipsis; overflow: hidden;">
+            <div class="panel-heading">
                 <h4>{{ news_post.title }}</h4>
             </div>
             <div class="panel-body">
@@ -79,17 +79,16 @@ interval: 5000 //changes the speed
     {% assign talk_post = site.categories.talks[i] %}
 
 
-    <div class="col-md-4">
+     <div class="col-md-4">
         <div class="panel panel-default">
 
             <div class="panel-heading" style="height: 70px; text-overflow: ellipsis; overflow: hidden;">
                 <h4>{{ talk_post.excerpt }}</h4>
             </div>
             <div class="panel-body">
-                <a href="/slides/{{talk_post.externallink}}" target="_blank">
-                    <img class="img-responsive img-portfolio img-hover"
-                        src="/img/talkScreenshots/{{talk_post.externallink}}.png" alt="{{ talk_post.excerpt }}">
-                </a>
+                    <a href="/slides/{{talk_post.externallink}}" target="_blank">
+                <img class="img-responsive img-portfolio img-hover" src="/img/talkScreenshots/{{talk_post.externallink}}.png" alt="{{ talk_post.excerpt }}">
+                    </a>
                 <a href="/slides/{{talk_post.externallink}}" class="btn btn-default">Learn More</a>
             </div>
         </div>
