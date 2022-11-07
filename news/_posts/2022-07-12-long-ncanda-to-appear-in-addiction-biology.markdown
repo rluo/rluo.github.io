@@ -1,6 +1,6 @@
 ---
 layout: news
-title: Alcohol paper to Appear in Addiction Biology
+title: Alcohol paper in Addiction Biology
 author: Xi Luo
 previewimage:  abcd700x400.jpg
 tags: news

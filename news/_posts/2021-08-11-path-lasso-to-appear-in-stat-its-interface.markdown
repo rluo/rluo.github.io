@@ -1,6 +1,6 @@
 ---
 layout: news
-title: Pathway Lasso Paper to Appear in Stat and Its Interface
+title: Pathway Lasso in Stat and Its Interface
 author: Xi Luo
 previewimage:  abcd700x400.jpg
 tags: news

@@ -1,6 +1,6 @@
 ---
 layout: news
-title: PRS paper to Appear in BMC Bioinformatics
+title: PRS paper in BMC Bioinfo
 author: Xi Luo
 previewimage:  abcd700x400.jpg
 tags: news

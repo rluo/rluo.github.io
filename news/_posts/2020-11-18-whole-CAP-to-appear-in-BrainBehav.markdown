@@ -1,6 +1,6 @@
 ---
 layout: news
-title: Big CAP Paper to Appear in Brain and Behavior
+title: Big CAP paper in Brain and Behavior
 author: Xi Luo
 previewimage:  CAPexample.png
 tags: news
