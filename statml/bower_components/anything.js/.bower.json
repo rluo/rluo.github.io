@@ -1,0 +1,29 @@
+{
+  "name": "anything.js",
+  "main": "anything.js",
+  "homepage": "https://github.com/Rabrennie/anything.js",
+  "authors": [
+    "everyone"
+  ],
+  "description": "It can do anything!",
+  "moduleType": [],
+  "keywords": [
+    "anything"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/*",
+    "!dist/*"
+  ],
+  "version": "7.0.0",
+  "_release": "7.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v7.0.0",
+    "commit": "9edc415acfa980350d73fe53ed3c9ca9d04aa0a4"
+  },
+  "_source": "https://github.com/Rabrennie/anything.js.git",
+  "_target": "^7.0.0",
+  "_originalSource": "anything.js",
+  "_direct": true
+}
