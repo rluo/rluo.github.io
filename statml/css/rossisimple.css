@@ -13,51 +13,62 @@ body {
     background: #fff;
     background-color: #fff;
 }
+
 body:-webkit-full-screen {
     background-color: white;
 }
+
 body:-moz-full-screen {
     background-color: white;
 }
+
 body:-ms-fullscreen {
     background-color: white;
 }
+
 body:fullscreen {
     background-color: white;
 }
+
 body:-webkit-full-screen,
 body:-webkit-full-screen,
 body:-moz-full-screen {
     background-color: white;
 }
+
 body:fullscreen,
 body:-webkit-full-screen,
 body:-moz-full-screen {
     background-color: white;
 }
+
 .reveal {
     font-family: 'Arial', sans-serif;
     font-size: 40px;
     font-weight: normal;
     color: #000;
 }
+
 ::-moz-selection {
     color: #fff;
     background: rgba(0, 0, 0, 0.99);
     text-shadow: none;
 }
+
 ::selection {
     color: #fff;
     background: rgba(0, 0, 0, 0.99);
     text-shadow: none;
 }
-.reveal .slides > section,
-.reveal .slides > section > section {
+
+.reveal .slides>section,
+.reveal .slides>section>section {
     line-height: 1.2;
     font-weight: inherit;
-/*                border: 1px black solid;*/
+    /*                border: 1px black solid;*/
     /*    For debuging purpuses */
 }
+
 html {
     background-color: inherit;
 }
@@ -65,8 +76,9 @@ html {
 /* For debuging purpuses */
 
 .reveal .slides {
-/*            border: 1px black solid;*/
+    /*            border: 1px black solid;*/
 }
+
 .reveal aside.notes {
     font-size: 4em;
     color: navy;
@@ -93,25 +105,32 @@ html {
     text-shadow: none;
     word-wrap: break-word;
 }
+
 .reveal h1 {
     font-size: 2.2em;
 }
+
 .reveal h2 {
     font-size: 1.5em;
     margin: 0 0 0.4em 0;
 }
+
 .reveal h3 {
     font-size: 1em;
 }
+
 .reveal h4 {
     font-size: 0.8em;
 }
+
 .reveal h5 {
     font-size: 0.6em;
 }
+
 .reveal h6 {
     font-size: 0.6em;
 }
+
 .reveal h1 {
     text-shadow: none;
 }
@@ -134,13 +153,16 @@ html {
     max-width: 95%;
     max-height: 95%;
 }
+
 .reveal strong,
 .reveal b {
     font-weight: bold;
 }
+
 .reveal em {
     font-style: italic;
 }
+
 .reveal ol,
 .reveal dl,
 .reveal ul {
@@ -148,25 +170,32 @@ html {
     text-align: left;
     margin: 0.1em 1em 0.1em 1em;
 }
+
 .reveal ol {
     list-style-type: decimal;
 }
-.reveal ul{
+
+.reveal ul {
     list-style-type: disc;
 }
-.reveal ul, .reveal ol{
+
+.reveal ul,
+.reveal ol {
     font-size: 1em;
 }
+
 .reveal ul ul {
     font-size: 0.75em;
     list-style-type: circle;
     margin-top: 0.3em;
     margin-bottom: 1em;
 }
+
 .reveal ul ul ul {
     font-size: 0.6em;
     list-style-type: circle;
 }
+
 .reveal ul ul,
 .reveal ul ol,
 .reveal ol ol,
@@ -174,12 +203,15 @@ html {
     display: block;
     margin-left: 40px;
 }
+
 .reveal dt {
     font-weight: bold;
 }
+
 .reveal dd {
     margin-left: 40px;
 }
+
 .reveal q,
 .reveal blockquote {
     quotes: none;
@@ -196,7 +228,7 @@ html {
     width: 70%;
     font-style: italic;
     background-color: #ececec;
-/*    background-color: #289dcc;*/
+    /*    background-color: #289dcc;*/
     box-shadow: 10px 10px 5px #888888;
     font-size: 0.8em;
     text-align: left;
@@ -210,18 +242,21 @@ html {
     -moz-border-radius-bottomleft: 25px;
     -webkit-border-bottom-left-radius: 25px;
 }
+
 .reveal blockquote {
     width: 70%;
     font-style: italic;
-/*    background: rgba(255, 255, 255, 0.05);*/
+    /*    background: rgba(255, 255, 255, 0.05);*/
     background-color: #ebebeb;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
     border-left: 12px solid #4d4d4d;
 }
+
 .reveal blockquote p:first-child,
 .reveal blockquote p:last-child {
     display: inline-block;
 }
+
 .reveal blockquote:before {
     display: block;
     height: 0;
@@ -231,18 +266,21 @@ html {
     color: #4d4d4d;
     float: left;
 }
+
 .reveal div.thm {
     border: 1px solid #4d4d4d;
     border-left: 12px solid #689ec2;
-/*
+    /*
     background-color: #289dcc;
     color: white;
 */
     /*    border-top: 4px solid Cornflowerblue;*/
 }
+
 .reveal q {
     font-style: italic;
 }
+
 .reveal pre {
     display: block;
     position: relative;
@@ -255,24 +293,26 @@ html {
     word-wrap: break-word;
     box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
 }
+
 .reveal code {
-    font-family: monospace;
+    /* font-family: monospace; */
 }
+
 .reveal pre code {
     display: block;
     padding: 5px;
     overflow: auto;
-    max-height: 400px;
+    max-height: 500px;
     word-wrap: normal;
-    background: #3F3F3F;
-    color: #DCDCDC;
+    /* background: #3F3F3F;
+    color: #DCDCDC; */
 }
 
 /*********************************************
  * Table
  *********************************************/
 
-.reveal table {
+.reveal table .rtab {
     margin: auto;
     border-collapse: collapse;
     border-spacing: 0;
@@ -281,36 +321,42 @@ html {
     font-size: 0.5em;
     /*    font-size: 2vw;*/
 }
-.reveal table th {
+
+.reveal table th .rtab {
     font-weight: bold;
 }
+
 .reveal table th,
-.reveal table tr {
+.reveal table tr .rtab {
     text-align: center;
     vertical-align: middle;
     padding: 0.2em 0.5em 0.2em 0.5em;
     border-bottom: 1px solid #000;
     border-top: 1px solid #000;
 }
-.reveal table tr:nth-child(even) {
+
+.reveal table tr:nth-child(even) .rtab {
     background-color: #f2f2f2;
 }
-.reveal table th[align="center"],
-.reveal table td[align="center"] {
+
+.reveal table th[align="center"] .rtab,
+.reveal table td[align="center"] .rtab {
     text-align: center;
 }
 
-.reveal tabel td {
-    width:10px;
-    word-wrap:break-word;
+.reveal tabel td .rtab {
+    width: 10px;
+    word-wrap: break-word;
 }
-.reveal table td {
+
+.reveal table td .rtab {
     text-align: center;
     vertical-align: middle;
     padding: 0.1em 0.1em 0.1em 0.1em;
 }
+
 .reveal table th[align="right"],
-.reveal table td[align="right"] {
+.reveal table td[align="right"] .rtab {
     text-align: right;
 }
 
@@ -322,22 +368,27 @@ html {
 .reveal sup {
     vertical-align: super;
 }
+
 .reveal sub {
     vertical-align: sub;
 }
+
 .reveal small {
     display: inline-block;
     font-size: 0.6em;
     line-height: 1.2em;
     vertical-align: top;
 }
+
 .reveal small * {
     vertical-align: top;
 }
+
 .reveal .MathJax *,
 .reveal .MathJax_Display * {
     vertical-align: baseline;
 }
+
 .reveal medium {
     display: inline-block;
     font-size: 0.8em;
@@ -355,11 +406,13 @@ html {
     -webkit-transition: color 0.15s ease;
     transition: color 0.15s ease;
 }
+
 .reveal a:hover {
     color: #0000f1;
     text-shadow: none;
     border: none;
 }
+
 .reveal .roll span:after {
     color: #fff;
     background: #00003f;
@@ -377,14 +430,17 @@ html {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 */
 }
+
 .reveal .imgborder {
     border: 4px solid #000;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
+
 .reveal a img {
     -webkit-transition: all 0.15s linear;
     transition: all 0.15s linear;
 }
+
 .reveal a:hover img {
     background: rgba(255, 255, 255, 0.2);
     border-color: #00008B;
@@ -399,27 +455,34 @@ html {
 .reveal .controls div.navigate-left.enabled {
     border-right-color: #00008B;
 }
+
 .reveal .controls div.navigate-right,
 .reveal .controls div.navigate-right.enabled {
     border-left-color: #00008B;
 }
+
 .reveal .controls div.navigate-up,
 .reveal .controls div.navigate-up.enabled {
     border-bottom-color: #00008B;
 }
+
 .reveal .controls div.navigate-down,
 .reveal .controls div.navigate-down.enabled {
     border-top-color: #00008B;
 }
+
 .reveal .controls div.navigate-left.enabled:hover {
     border-right-color: #0000f1;
 }
+
 .reveal .controls div.navigate-right.enabled:hover {
     border-left-color: #0000f1;
 }
+
 .reveal .controls div.navigate-up.enabled:hover {
     border-bottom-color: #0000f1;
 }
+
 .reveal .controls div.navigate-down.enabled:hover {
     border-top-color: #0000f1;
 }
@@ -431,6 +494,7 @@ html {
 .reveal .progress {
     background: rgba(0, 0, 0, 0.2);
 }
+
 .reveal .progress span {
     background: #00008B;
     -webkit-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
@@ -457,6 +521,7 @@ html {
     border: 0px solid #000;
     box-shadow: 0 0 0px rgba(0, 0, 0, 0.15);
 }
+
 .reveal section img.fragment {
     border: 0px solid #000;
     box-shadow: 0 0 0px rgba(0, 0, 0, 0.15);
@@ -480,16 +545,19 @@ html {
     text-align: center;
     display: inline-block;
 }
+
 .reveal .threecol {
     width: 30%;
     text-align: center;
     display: inline-block;
 }
+
 .reveal .topright {
     position: absolute;
     right: 1%;
     top: 1%;
 }
+
 .reveal figure {
     border-style: none;
     display: inline-block;
@@ -497,34 +565,43 @@ html {
     width: 50%;
     height: 50%;
 }
+
 .reveal table caption {
     margin: 10px 0px 10px 0px;
     font-size: 1.2em;
     width: 100%;
 }
+
 .reveal table>tbody {
     font-size: 1em;
     text-align: center;
     vertical-align: middle;
 }
+
 .reveal thead {
     background-color: lightskyblue;
     font-size: 1em;
 }
+
 .reveal li {
     margin-bottom: 0.4em;
 }
-.reveal ul ul>li:first-child, .reveal ol ul>li:first-child {
+
+.reveal ul ul>li:first-child,
+.reveal ol ul>li:first-child {
     margin-top: 0em;
 }
+
 .reveal div.fbox {
     display: inline-block;
 }
+
 .reveal p.fbox {
     margin: 0px 0 0 0;
     line-height: 1.2;
     font-size: 0.8em;
 }
+
 .reveal credit {
     /*    display: inline-block;*/
     font-size: 0.3em;
@@ -536,6 +613,7 @@ html {
     left: 10px;
     font-style: italic;
 }
+
 .reveal cite {
     display: inline-block;
     font-size: 0.3em;
@@ -544,16 +622,20 @@ html {
     color: darkgray;
     margin: 0em 0.1em 0em 0.1em;
 }
+
 .reveal cite:before {
     content: '['
 }
+
 .reveal cite:after {
     content: ']'
 }
+
 .reveal highlight {
     font-weight: bold;
     color: crimson;
 }
+
 .reveal emph {
     font-weight: bold;
     color: #0072bd;
@@ -567,34 +649,43 @@ html {
 .reveal .myblue {
     color: #0072bd;
 }
+
 .reveal .myorange {
     color: #d95319;
 }
+
 .reveal .myyellow {
     color: #edb120;
 }
+
 .reveal .mypurple {
     color: #7e2f8e;
 }
+
 .reveal .mygreen {
     color: #77ac30;
 }
+
 .reveal .mysky {
     color: #4dbeee;
 }
+
 .reveal .myred {
     color: #a3142e;
 }
 
-.reveal .mypink{
+.reveal .mypink {
     color: #D78FB6;
 }
+
 .reveal figcaption {
     margin-top: 0em;
 }
+
 .reveal noline {
     display: inline-block;
 }
+
 .reveal .inlinemiddle {
     display: inline-block;
     vertical-align: middle;
@@ -608,8 +699,8 @@ html {
 
 /* Clip images for Personnel mostly*/
 .clip-ellipse {
-  -webkit-clip-path: ellipse(40% 50% at 50% 50%);
-  clip-path: ellipse(40% 50% at 50% 50%);
+    -webkit-clip-path: ellipse(40% 50% at 50% 50%);
+    clip-path: ellipse(40% 50% at 50% 50%);
 }
 
 
@@ -619,7 +710,7 @@ html.opaqueBackImg .slide-background {
 
 
 #venn {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 25px;
     fill: #000;
     font-weight: 900;
