@@ -43,9 +43,8 @@
                         <emph>Predictions</emph>
                     </strong></h2>
                 <br>
-                <h2>Lec01 Introduction</h2>
+                <h2>Introduction</h2>
                 <br>
-
                 <h3>Xi (Rossi) <strong>LUO</strong></h3>
                 <br>
                 <p><small>Department of Biostatistics and Data Science<br>
@@ -111,6 +110,7 @@
                     </li>
                     <li>Unsupervised learning: Clustering
                     </li>
+                    <li>Semi-supervised, Reinforcement</li>
                 </ul>
             </section>
 
@@ -295,7 +295,7 @@
                     <li><code>&lt;-</code> and <code>=</code> for <strong>local</strong> variable assignment</li>
                     <li><code>&lt;&lt;-</code> for <strong>global</strong> variable
                         assignment</li>
-                    <li><code>=</code> for passing values by function variable names</li>
+                    <li><code>=</code> for passing values to function variables by name</li>
                 </ul>
             </section>
 
@@ -364,7 +364,7 @@
                     # Create a new column based on the values of other columns
                     df6 &lt;- mutate(df, col4 = col2 * col3)          
                     # Group data and calculate summary statistics
-                    df7 &lt;- group_by(df, col1) %>%
+                    df7 &lt;- group_by(df, col1) %&gt;%
                         summarize(mean = mean(col2))          
                     # Join two data frames
                     df9 &lt;- left_join(df, df6, by = "col1")                    

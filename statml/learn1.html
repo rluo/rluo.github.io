@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Machine Learning 1</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+
+
+            <section>
+                <h2>Outline</h2>
+                <ul>
+                    <li>What is learning?</li>
+                    <li>Theory (How to do it)</li>
+                    <li>How to do it well?</li>
+                </ul>
+            </section>
+
+
+
+
+            <section>
+                <h2>Machine Learning, Statistical Learning</h2>
+                <ul>
+                    <li>Machine learning: Field of study interested in the development of computer algorithms to
+                        transform data into intelligent action. Learn some task from experience and improve with
+                        experience. Predict with models.</li>
+                    <li>Statistical learning: a statistical model-based learning instead of an algorithm-based learning
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Data Mining, AI</h2>
+                <ul>
+                    <li>Artificial intelligence: uses models built by machine and statistical learning to give rise to
+                        intelligent behavior. Uses the predictions to choose <emph>actions</emph> to achieve a goal
+                        (programming
+                        based)</li>
+                    <li>Data mining: systematic hunt for actionable intelligence in existing data, done by a person, in
+                        a specific situation, on a particular data set, with a goal in mind. E.g. using pattern
+                        recognition techniques to discover/generate some <emph>preliminary</emph> insights. Get insight
+                        to explain
+                        patterns.</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Examples</h2>
+                <ul>
+                    <li>Netflix
+                        <ul>
+                            <li>Movies likely to be watched together by customers</li>
+                            <li>Predict the next movie that customers would like to watch</li>
+                        </ul>
+                    </li>
+                    <li>Finance
+                        <ul>
+                            <li>Trading bot</li>
+                        </ul>
+                    </li>
+                    <li>Medical tests, personalized medicine
+                        <ul>
+                            <li>Likelihood to develop severe illness due to COVID</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>What We Need</h2>
+                <ul>
+                    <li>A pattern exists</li>
+                    <li>We cannot pin down the pattern mathematically, so going to depend on data to learn</li>
+                    <li>We have data on it</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <ul>
+                    <li>Credit approval. Bank deciding to give you credit card when you apply. They use data to decide
+                    </li>
+                    <li>Factors:
+                        <ul>
+                            <li>Age</li>
+                            <li>Gender</li>
+                            <li>Annual salary</li>
+                            <li>Years in residence</li>
+                            <li>Etc.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Formalization of Learning</h2>
+                <ul>
+                    <li>Input: $X$ (e.g., customer application, $d$-dimensional vector)</li>
+                    <li>Output: $y$ (e.g., decision to extend credit or not, good/bad customer)</li>
+                    <li>
+                        Target function: $f: X \rightarrow y$. The function $f$ maps from domain $X$ (set of vectors of
+                        $d$
+                        dimension)
+                        to $y$
+                        (binary)
+                    </li>
+                    <li>Data: $(X_1,𝑦_1 ),(X_2,𝑦_2 ),…,(X_𝑁,𝑦_𝑁 )$</li>
+                    <li>
+                        If someone has these same attributes and made the bank money, they want to approve these people.
+                        For
+                        people who didn’t do well, would want to avoid those characteristics.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Learning Objective</h2>
+                <ul>
+                    <li> Hypothesis: $g: X \rightarrow y$, where $g$ approximates $f$, hopefully well
+                    </li>
+                    <li>Unknown target function $f$
+                    </li>
+                    <li>Training examples
+                    </li>
+                    <li>Use learning algorithm (which we determine from a hypothesis set or set of candidate formulas)
+                    </li>
+                    <li>Then final hypothesis $g$ which approximates, most likely not identical to, $f$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Simple Model</h2>
+                <ul>
+                    <li>$x=(x_1,…,x_𝑑 )$</li>
+                    <li>Approve credit if sum of $\sum_i^d w_i x_i$ &gt; threshold.</li>
+                    <li>Deny credit if this is &lt; threshold. </li>
+                    <li>
+                        The linear formula $h$ can be written as $h(X) = sign( w^T x - threshold) $
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Draw a Boundary to Separate Two Types of Points</h2>
+                <img src="img/separate_data_points.png" alt="">
+            </section>
+
+            <section>
+                <h2>Types of Learning</h2>
+                <ul>
+                    <li>Supervised Learning</li>
+                    <li>Unsupervised Learning</li>
+                    <li>Reinforcement Learning</li>
+                    <li>Semi-supervised Learning</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Supervised Learning</h2>
+                <ul>
+                    <li>Using a set of observations to uncover an underlying process (the target function)</li>
+                    <li>As if a supervisor is helping you out to learn how to classify</li>
+                    <li>Example: Vending machine coin recognition
+                        <ul>
+                            <li>Size and mass, scatter plot, determine if nickel, penny, etc.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Coin Example 1</h2>
+                <img src="img/coin1.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Coin Example 2</h2>
+                <img src="img/coin2.png" alt="">
+            </section>
+
+            <section>
+                <h2>Coin Example 3</h2>
+                <img src="img/coin3.png" alt="">
+            </section>
+
+            <section>
+                <h2>Outcome</h2>
+                <ul>
+                    <li>Continuous: regression</li>
+                    <li>Categorical: classification</li>
+                    <li>No concerns about the predictors/inputs</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Unsupervised Learning</h2>
+                <ul>
+                    <li>Instead of (input, correct output), only have input!</li>
+                    <li>Is there any information in the $X$’s that is useful in the absence of $y$?</li>
+                    <li>Example: patient clustering</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Semi-supervised Learning</h2>
+                <ul>
+                    <li>Some obs have (input, output), and some obs only have (input)</li>
+                    <li>Measuring output can be costy</li>
+                    <li>Beyond the scope of this course</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Reinforcement Learning</h2>
+                <ul>
+                    <li>Instead of (input, correct output), have (input, some output, grade for this output)</li>
+                    <li>Often our human experience for learning
+                        <ul>
+                            <li>Toddler</li>
+                            <li>Animal training</li>
+                        </ul>
+                    </li>
+                    <li>Won’t cover much of this topic in this course</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Review</h2>
+                <ul>
+                    <li>For learning:
+                        <ul>
+                            <li>Pattern exists</li>
+                            <li>Cannot pin down mathematically</li>
+                            <li>Have data on it</li>
+                        </ul>
+                    </li>
+                    <li>In supervised learning, the target function $y=f(X)$ is unknown and we have a dataset</li>
+                    <li>The learning algorithm picks $g$ which approximates $f$ from a hypothesis set $H$</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Review 2</h2>
+                <ul>
+                    <li>We cannot <emph>REALLY</emph> learn the unknown function</li>
+                    <li>You will only have a finite set, which does not cover $f$</li>
+                    <li>How will the function behave outside of the range of the data?</li>
+                    <li>Probability to the rescue
+                        <ul>
+                            <li>Just as a sample proportion approximates the true population proportion (with some
+                                probability)</li>
+                            <li>$g$ function will approximate the true $f$ target function
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/EDRlSuntvVk4u7Q3mxYLt?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/SsirFrLXFg4E8aCwKmKg6?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
