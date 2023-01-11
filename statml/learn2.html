@@ -482,9 +482,14 @@
                 </ul>
             </section>
 
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/23X1DMEIAfmTiO18bG2HS?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
 
             <section>
-                <h2>Nearest Neighbor —1</h2>
+                <h2>Nearest Neighbor</h2>
                 <ul>
                     <li>Memory-based (no model is fit)</li>
                     <li>Use points closest in the predictor space $X$ to obtain an estimate of $Y$.</li>
@@ -498,7 +503,7 @@
 
 
             <section>
-                <h2>Nearest Neighbor —2</h2>
+                <h2>Nearest Neighbor</h2>
                 <ul>
                     <li>Typically standardize the variables to have mean 0, variance 1.</li>
                     <li>$\hat{f}(x)=Ave(y_i|x_i\in N_k(x))$ estimates the regression function $E(Y|X=x)$</li>
@@ -513,25 +518,25 @@
 
             <section>
                 <h2>Nearest Neighbor Example</h2>
-                <img src="img/lecture03_3.png" alt="">
+                <img src="img/lecture03_3.png" width="70%" alt="">
             </section>
 
 
             <section>
                 <h2>Nearest Neighbor Example</h2>
-                <img src="img/lecture03_4.png" alt="">
+                <img src="img/lecture03_4.png" width="70%" alt="">
             </section>
 
 
             <section>
                 <h2>Nearest Neighbor Example</h2>
-                <img src="img/lecture03_5.png" alt="">
+                <img src="img/lecture03_5.png" width="70%" alt="">
             </section>
 
 
             <section>
                 <h2>Nearest Neighbor Example</h2>
-                <img src="img/lecture03_6.png" alt="">
+                <img src="img/lecture03_6.png" width="70%" alt="">
             </section>
 
 
@@ -556,11 +561,6 @@
 
 
             <section>
-                <iframe src="" width="1024px" height="768px"></iframe>
-            </section>
-
-
-            <section>
                 <h2>Neighborhood in High Dimensions</h2>
                 <ul>
                     <li>Imagine we have equally spaced data and that each covariate is in $[0,1]$.</li>
@@ -573,20 +573,20 @@
 
 
             <section>
-                <h2>Effects of Increasing Dimensionality —1</h2>
+                <h2>Effects of Increasing Dimensionality</h2>
                 <ul>
-                    <li>If have 2 covariates, the length of cube is $l^2=0.10$, so $l=0.316$.</li>
+                    <li>2 covariates, $l^2=0.10$, so $l=0.316$.</li>
                     <img src="img/lecture03_7.png" alt="">
-                    <li>If have 3 covariates:</li>
+                    <li>If have 3 covariates: $l = 0.46$</li>
                     <img src="img/lecture03_8.png" alt="">
                 </ul>
             </section>
 
 
             <section>
-                <h2>Effects of Increasing Dimensionality —2</h2>
+                <h2>Effects of Increasing Dimensionality</h2>
                 <ul>
-                    <li>If have 10 covariates, the length of the cube is $l=0.1^\frac{1}{10}=0.8$.</li>
+                    <li>If have 10 covariates, $l=0.1^\frac{1}{10}=0.8$.</li>
                     <li>If we use only 1% of the data that is local:
                         <ul>
                             <li>If have 10 covariates, $l=0.01^\frac{1}{10}=0.63$</li>
@@ -594,6 +594,7 @@
                         </ul>
                     </li>
                     <li><strong>Curse of Dimensionality!</strong></li>
+                    <li>Almost all points on the boundary</li>
                 </ul>
             </section>
 
@@ -605,12 +606,21 @@
                         method.</li>
                     <li>As flexibility (model complexity) increases, the test set error decreases, but then starts to
                         increase. Finding the “sweet spot” will be a main task in this course.</li>
+                    <li>Test MSE/error vs flexibility usually U-shaped</li>
                 </ul>
             </section>
 
 
             <section>
-                <iframe src="" width="1024px" height="768px"></iframe>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/PuRVcf58QIfQawEKJQkpQ?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/fxen3BXLhOTDSUAATBdSf?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
             </section>
 
         </div>
