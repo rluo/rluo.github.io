@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Statistical Learning 2</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+
+
+            <section>
+                <h2>Outline</h2>
+                <ul>
+                    <li>Inference vs. Prediction</li>
+                    <li>How to estimate $f$</li>
+                    <li>Assessing Model Accuracy</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Prediction vs. Inference</h2>
+                <ul>
+                    <li>We often want to estimate the target function $f(X)$ either for prediction of $y$ or for
+                        inference
+                    </li>
+                    <li>Prediction: predicting (future) $y$ for new $X$</li>
+                    <li>Inference: understand relationships between $X$ and $y$
+                        <ul>
+                            <li>Examples: major risk factors for COVID death</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Prediction</h2>
+                <ul>
+                    <li>When the inputs $X$ are available but the output $Y$ is hard to obtain (or will happen
+                        sometime
+                        in the future): $\hat Y=\hat f(X)$, where $\hat f$ represents our estimate for $f$, and
+                        $\hat Y$ is the prediction for $Y$</li>
+                    <li>Note: The goal is to estimate $f$, given that there will be some error that will exist that
+                        we cannot
+                        reduce (e.g., some important variables that predict $Y$ are not measured at all or measured
+                        imperfectly)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Prediction Examples</h2>
+                <ul>
+                    <li>$X_1, ..., X_p$ are characteristics of a patient when they come into the ICU after a traumatic
+                        brain
+                        injury; $Y$ is whether the patient will survive at discharge. Having a prediction of whether the
+                        patient will survive can change the management of those patients.</li>
+                    <li>Have data of patient's blood sample that can be easily measured in a lab, $Y$ is a variable
+                        encoding
+                        the patient's risk for a severe adverse reaction to a particular drug. Can avoid giving the drug
+                        in
+                        question to patients who are at high risk of an adverse reaction.
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Inference</h2>
+                <ul>
+                    <li>Interested in understanding the way that $Y$ is affected as $X_1, ..., X_p$ change
+                        <ul>
+                            <li>Which predictors are associated with the response?</li>
+                            <li>What is the relationship between the response and each predictor?</li>
+                            <li>Can the relationship between $Y$ and each predictor be adequately summarized
+                                using a linear equation, or is the relationship more complicated?</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Inference Examples</h2>
+                <ul>
+                    <li>In a hypertension study, demographic and clinical characteristics are collected and we may
+                        study whether blood pressure will increase or decrease at a follow-up date.
+                        <ul>
+                            <li>Which demographic variables contribute to blood pressure increase?</li>
+                            <li>Is there a difference by race or gender?</li>
+                            <li>In the branding of a product that a customer might purchase based on variables such as
+                                price, store location, discount levels, competition price, etc., the store might be
+                                interested in how an individual variable (price of product) has on the sales.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Prediction vs. Inference</h2>
+                <ul>
+                    <li>Different methods for estimating $f$ may be more appropriate for each goal
+                        <ul>
+                            <li>For <strong>inference</strong>, linear models allow for relatively simple and
+                                interpretable inference, but may not be as accurate for predictions</li>
+                            <li>For <strong>prediction</strong>, non-linear models often give more accurate
+                                predictions, but at the expense of a less interpretable model</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/CgYT295KfYaH6t069thhD?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>How to estimate $f$</h2>
+                <ul>
+                    <li>Assume we have data on $n$ data points:</li>
+                    <ul>
+                        <li>$x_{ij}$ for the $i^{th}$ observation and $j^{th}$ predictor, where $i=1, ..., n$
+                            and $j=1, ..., p$;</li>
+                        <li>$y_i$ represents the response variable for the $i^{th}$ observation</li>
+                    </ul>
+                    <li>Often refer to this data as the training data</li>
+                    <li>Goal: apply a statistical learning method to the training data to estimate the unknown
+                        function $f$. These methods can be characterized as <strong>parametric</strong> or
+                        <strong>nonparametric</strong>.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Notations</h2>
+                $$
+                X = \begin{pmatrix}
+                x_{11} & x_{12} & ... & x_{1p}\\
+                x_{21} & x_{22} & ... & x_{2p}\\
+                & & \vdots \\
+                x_{n1} & x_{n2} & ... & x_{np}\\
+                \end{pmatrix}
+                $$
+                <ul>
+                    <li>Rows: observations. Cols: variables</li>
+                    <li>Row vector $x_i$ for the $i$th obs, $(x_i, y_i)$ for both input and output data from obs $i$
+                    </li>
+                    <li>Random variable $X_j$ for the $j$th variable</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Parametric Methods</h2>
+                <ul>
+                    <li>Assume the functional form of $f$ is linear. For example, linear in $X$:
+                        $f(X)=\beta_0+\beta_1X_1+\beta_2X_2+...+\beta_pX_p$
+                    </li>
+                    <li>Using the training data, have to fit the model</li>
+                    <ul>
+                        <li>e.g. in linear regression, can use ordinary least squares or other methods to estimate the
+                            coefficients</li>
+                    </ul>
+                    <li>Advantage:</li>
+                    <ul>
+                        <li>Simplifies the problem and interpretation</li>
+                    </ul>
+                    <li>Disadvantage:</li>
+                    <ul>
+                        <li>May oversimplify the problem where the model doesn't match the true unknown form of $f
+                            \rightarrow$ poor estimate</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Non-parametric Methods</h2>
+                <ul>
+                    <li>Do not make explicit assumptions about the functional form of f. Instead, find a function that
+                        gets as close to the
+                        data points as possible without being too rough or wiggly.</li>
+                    <li>Advantage:</li>
+                    <ul>
+                        <li>Have the potential to accurately fit a wider range of possible shapes for $f$.</li>
+                    </ul>
+                    <li>Disadvantage:</li>
+                    <ul>
+                        <li>A very large number of observations is required in order to obtain an accurate estimate for
+                            $f$.</li>
+                        <li>Not easily interpretable as the parametric methods</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example</h2>
+                <ul>
+                    <li>Can fit a thin-plate spline to go through all of the data points exactly, but at the expense
+                        of being a rougher
+                        surface of the $X$ space. However, we can vary the amount of smoothness.</li>
+                    <li>ISL Figure 2.4 vs 2.5 vs 2.6</li>
+                </ul>
+                <aside class="notes">Draw this example</aside>
+            </section>
+
+            <section>
+                <h2>Trade-off between Prediction Accuracy and Model Interpretability</h2>
+                <img src="img/lecture03_1.png" alt="">
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/QHp7atsDoaUDanqtNbDi3?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/MCSWwdeZOm8bE65FyElQb?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/vYDZMxRDeoxfD876LA2Nb?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>Assessing Model Accuracy</h2>
+                <ul>
+                    <li>Not one method dominates all others over all possible data sets. Therefore, important to have a
+                        set of tools and be
+                        able to assess which works best on a particular dataset</li>
+                    <li>The assessment of model accuracy is different for the <strong>regression</strong> setting versus
+                        for the <strong>classification</strong> setting</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Measuring the Quality of Fit: Regression Setting</h2>
+                <ul>
+                    <li>Most commonly-used measure is the mean squared error (MSE), given by
+                        $MSE=\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{f}(x_i))^2$
+                    </li>
+                    <li>If the predicted responses are very close to the true responses, the MSE will be small</li>
+                    <li>Note: We are most interested in MSE for future patients, not for the training data</li>
+                    <li>Typical data-generating model: $y = f(x) + \epsilon$</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Training vs Testing</h2>
+                <ul>
+                    <li>Training data: a subset of observations used for fitting the model parameters</li>
+                    <li>Testing data: a different subset not used for fitting the model</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Measuring the Quality of Fit: Regression Setting</h2>
+                <ul>
+                    <li>What if have 10 different models and have the MSE on the <emph>training</emph> set. Would you
+                        choose the one
+                        that has the lowest MSE as your best model?</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <img src="img/lecture03_2.png" alt="" height="650px">
+                <p>Training MSE (gray), <highlight>testing</highlight> (red), underlying relationship
+                    non-lineear, orange square-linear reg, blue/green-splines, cf Fig 2.10 </p>
+            </section>
+
+
+            <section>
+                <h2>Bias and Var Trade-off</h2>
+                <ul>
+                    <li>On testing data point $x_0$</li>
+                    $$
+                    \begin{multline*}
+                    E (y_0 - \hat{f}(x_0))^2 = \mbox{Var}(\hat{f}(x_0) ) \\ + [\mbox{Bias}(\hat{f}(x_0))]^2 +
+                    \mbox{Var}(\epsilon)
+                    \end{multline*}
+                    $$
+                    <li>Ideally, expect $\hat{f}$ not varying too much across different training</li>
+                    <li>$\mbox{Var}(\epsilon)$ cannot be reduced, irreducible error</li>
+                    <li>Goal to reduce the sum of the first two</li>
+                    $$
+                    \mbox{Var}(\hat{f}(x_0) ) + [\mbox{Bias}(\hat{f}(x_0))]^2
+                    $$
+                </ul>
+            </section>
+
+            <section>
+                <h2>Intuition</h2>
+                <ul>
+                    <li>Bias: difference between your model $\hat{f}$ and true $f$</li>
+                    <li>Variance: changes due to training data change</li>
+                    <li>In general, more flexible, more variance, less bias</li>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/0GpOWtQZrZEc1E2qx7IMl?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <h2>Measuring the Quality of Fit: Regression Setting</h2>
+                <ul>
+                    <li>We will discuss different ways to choose models in future lectures. They include:</li>
+                    <ul>
+                        <li>Having a test set</li>
+                        <li>cross-validation</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/m6GR9tGAgV4B11bSNPUTU?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>Measuring the Quality of Fit: Classification Setting</h2>
+                <ul>
+                    <li>In classification, $y_i$ is categorical (qualitative)</li>
+                    $$
+                    \mbox{Training error rate} = \frac{1}{n}\sum_{i=1}^{n}I(y_i\not=\hat{y}_i)
+                    $$
+                    <li>Compute the fraction of incorrect classifications in training data. More interested in test
+                        error rate</li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Measuring the Quality of Fit: Classification Setting</h2>
+                $$
+                \mbox{Test error rate}=Ave(I(y_0\not=\hat{y}_0))
+                $$
+                <p>Average over a reasonable size of testing data while the model is fixed</p>
+            </section>
+
+
+            <section>
+                <h2>Example</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Predicted</th>
+                            <th>Actual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>L</td>
+                            <td>L</td>
+                        </tr>
+                        <tr>
+                            <td>M</td>
+                            <td>H</td>
+                        </tr>
+                        <tr>
+                            <td>M</td>
+                            <td>M</td>
+                        </tr>
+                        <tr>
+                            <td>H</td>
+                            <td>H</td>
+                        </tr>
+                        <tr>
+                            <td>L</td>
+                            <td>M</td>
+                        </tr>
+                        <tr>
+                            <td>H</td>
+                            <td>M</td>
+                        </tr>
+                        <tr>
+                            <td>M</td>
+                            <td>M</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Respond at <emph>PollEv.com/rossiluo765</emph> <br> or text <emph>ROSSILUO765</emph> to <emph>37607
+                    </emph>
+                </p>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/vwC8TXluW0YITlWtlpxTR?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/7BXXk7PtmjsXDvpRi5E5V?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>Bayes Classifier</h2>
+                <ul>
+                    <li>The minimum test error rate is given by Bayes classifier:
+                        Assign a test observation with predictor vector $x_0$ to the class $j$ for which $Pr(Y=j|X=x_0)$
+                        is largest
+                    </li>
+                    <li>If have a simulated data set, can compute the minimum error using the Bayes error rate. However,
+                        for real data we do not know the conditional distribution of $Y$ given $X$, so cannot
+                        compute the Bayes classifier (theoretical minimum).</li>
+                    <li>However, many methods try to emulate this process by estimating $Pr(Y=j|X=x_0)$ and then
+                        classifying the observation to the class with highest probability.</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Nearest Neighbor —1</h2>
+                <ul>
+                    <li>Memory-based (no model is fit)</li>
+                    <li>Use points closest in the predictor space $X$ to obtain an estimate of $Y$.</li>
+                    <li>K Nearest Neighbor method (KNN): $Pr(Y=j|X=x_0)=\frac{1}{K}\sum_{i\in N_k(x)}{}I(y_i=j)$</li>
+                    <ul>
+                        <li>Where $N_k(x)$ is a neighborhood containing the k-nearest points to $x$.</li>
+                        <li>Majority class rules.</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Nearest Neighbor —2</h2>
+                <ul>
+                    <li>Typically standardize the variables to have mean 0, variance 1.</li>
+                    <li>$\hat{f}(x)=Ave(y_i|x_i\in N_k(x))$ estimates the regression function $E(Y|X=x)$</li>
+                    <li>Can use Euclidean distance in the feature space to define the distance from some point $x_0$ to
+                        all other points in the training set:
+                        $d_{(i)}=\lVert x_{(i)}-x_0 \rVert=\sqrt{(x_{(i)}-x_0)^2}$
+                    </li>
+                    <li>Other distance measures appropriate for qualitative and ordinal data</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Nearest Neighbor Example</h2>
+                <img src="img/lecture03_3.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Nearest Neighbor Example</h2>
+                <img src="img/lecture03_4.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Nearest Neighbor Example</h2>
+                <img src="img/lecture03_5.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Nearest Neighbor Example</h2>
+                <img src="img/lecture03_6.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>How do we choose k?</h2>
+                <ul>
+                    <li>Smaller k</li>
+                    <ul>
+                        <li>Give more flexible estimates</li>
+                        <li>Too much flexibility can result in over-fitting</li>
+                        <li>More variance of estimates</li>
+                    </ul>
+                    <li>Larger k</li>
+                    <ul>
+                        <li>More stable estimates</li>
+                        <li>Not as flexible (biased)</li>
+                    </ul>
+                    <li>Smallest choice is 1-nearest neighbor</li>
+                    <li>Largest choice is N-nearest neighbor</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe src="" width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>Neighborhood in High Dimensions</h2>
+                <ul>
+                    <li>Imagine we have equally spaced data and that each covariate is in $[0,1]$.</li>
+                    <li>If want to use an algorithm like kNN, focusing on the points that are local to where we want to
+                        predict, could use the $10\%$ of the data that is local.</li>
+                    <li>If we have $p$ covariate and are forming $p$-dimensional cubes, then each side of the cube must
+                        have size $l$ determined by $l\times l\times ...\times l=l^p=0.10$.</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Effects of Increasing Dimensionality —1</h2>
+                <ul>
+                    <li>If have 2 covariates, the length of cube is $l^2=0.10$, so $l=0.316$.</li>
+                    <img src="img/lecture03_7.png" alt="">
+                    <li>If have 3 covariates:</li>
+                    <img src="img/lecture03_8.png" alt="">
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Effects of Increasing Dimensionality —2</h2>
+                <ul>
+                    <li>If have 10 covariates, the length of the cube is $l=0.1^\frac{1}{10}=0.8$.</li>
+                    <li>If we use only 1% of the data that is local:
+                        <ul>
+                            <li>If have 10 covariates, $l=0.01^\frac{1}{10}=0.63$</li>
+                            <li>If have 50 covariates, $l=0.1^\frac{1}{50}=0.91$</li>
+                        </ul>
+                    </li>
+                    <li><strong>Curse of Dimensionality!</strong></li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Summary</h2>
+                <ul>
+                    <li>Choosing the amount of flexibility is critical to the success of any statistical learning
+                        method.</li>
+                    <li>As flexibility (model complexity) increases, the test set error decreases, but then starts to
+                        increase. Finding the “sweet spot” will be a main task in this course.</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe src="" width="1024px" height="768px"></iframe>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
