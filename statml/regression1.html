@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Regression 1</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>Outline</h2>
+                <ul>
+                    <li>Regression Analysis History</li>
+                    <li>Simple Linear Regression Overview</li>
+                    <li>Multiple Linear Regression</li>
+                    <li> Other Considerations In The Regression Context</li>
+                </ul>
+            </section>
+
+
+
+
+            <section>
+                <h2>Review of types of Statistical Learning</h2>
+                <ul>
+                    <li>Supervised learning</li>
+                    <li>Unsupervised learning</li>
+                    <li>Semi-supervised learning</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Review of types of Statistical Learning</h2>
+                <ul>
+                    <li>
+                        <emph>Input</emph> variables: predictors, covariates, independent variables
+                    </li>
+                    <li>
+                        <emph>Output</emph> variables: outcome, responses, dependent variables
+                    </li>
+                    <li>Supervised learning: Use the inputs to predict the output values based on the training data
+
+                    </li>
+                    <li>Unsupervised learning: No response variable, e.g., clustering—more challenging
+
+                    </li>
+                    <li>Semi-supervised learning: Some cases with response variables and some cases are not
+
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Supervised Learning</h2>
+                <ul>
+                    <li>Variable types:
+                        <ul>
+                            <li>Quantitative measurement variables
+                            </li>
+                            <li>Qualitative variables: categorical or discrete variables </li>
+                            <li>Ordered categorical variables: Ordinal variables
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Prediction tasks
+                        <ul>
+                            <li>Regression: mainly predict quantitative outputs
+                            </li>
+                            <li>Classification: predict qualitative outputs
+                            </li>
+                            <li>Regression can also be used to predict qualitative outputs—perform clustering.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Regression Analysis: Definition</h2>
+                <ul>
+                    <li>Investigate relationships between a dependent variable (response) and independent variables
+                        (covariates, predictors):
+                        $$
+                        𝑦=𝑓(𝑥_1,𝑥_2,…𝑥_𝑝;𝛽)
+                        $$
+                        <ul>
+                            <li>Association: Existing X
+                            </li>
+                            <li>Prediction and forecasting: New X
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Why Linear Regression In This Course?</h2>
+                <ul>
+                    <li>Still useful and widely used for prediction</li>
+                    <li> Lays foundation for many more advanced methods that we will learn about later in the course
+                    </li>
+                    <li> Can sometimes outperform fancier nonlinear models, especially in situations with small numbers
+                        of training cases, low signal-to-noise ratio or sparse data</li>
+                    <li>Finally, linear methods can be applied to transformations of the inputs and this considerably
+                        expands their scope</li>
+
+                    </li>
+
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Regression Analysis History—1</h2>
+                <ul>
+                    <li>Roger Cotes, 1722
+                        The combination of different observations as being the best estimate of the true value; errors
+                        decrease with aggregation rather than increase
+                    </li>
+                    <li>Pierre-Simon Laplace, 1788
+                        The combination of different observations as being the best estimate of the true value; errors
+                        decrease with aggregation rather than increase (explaining the differences in motion of Jupiter
+                        and Saturn)
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Regression Analysis History—2</h2>
+                <ul>
+                    <li> Adrien-Marie Legendre, 1805
+                        First clear and concise exposition of the method of least squares; algebraic procedure for
+                        fitting linear equations to data
+                    </li>
+                    <li>Carl Friedrich Gauss , 1809, but claimed to have it since 1795
+                        Least Squares, showed arithmetic mean is best estimate of location parameter; then asked what
+                        form the density should have and what method of estimation to get arithmetic mean.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Regression Analysis History—3 </h2>
+                <ul>
+                    <li>Laplace: proved the central limit theorem in 1810 (give a large sample justification for the
+                        method of least square and the normal distribution)
+                    </li>
+                    <li>The LS idea was independently formulated by the American Robert Adrain in 1808
+                    </li>
+
+                </ul>
+            </section>
+
+            <section>
+                <h2>Regression Analysis History—4</h2>
+                <ul>
+                    <li>The term “regression” was coined by Francis Galton in 19th century</li>
+                    <ul>
+                        <li>English statistician
+                        </li>
+
+                    </ul>
+                    <li>Udny G. Yule and Karl Pearson: 1897, 1903</li>
+                    <li>R.A. Fisher: 1922-1955
+                    </li>
+                    <li>Research in regression models: still popular
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Types of Regression Models—1</h2>
+                <ul>
+                    <li>Linear models</li>
+                    <li>Nonlinear models
+                    </li>
+                    <li>Nonparametric models
+                    </li>
+                    <li>Semiparametric models
+                    </li>
+                    <li>Generalized regression models: non-normal response data
+                    </li>
+                    <li>Regression models for survival data
+                    </li>
+                    <li>Regression for time series data</li>
+                    <li>Regression for longitudinal data
+                    </li>
+                    <li>Regression for new types of data: curves, functional data, network, graphs, images, object data
+                        etc.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Types of Regression Methods—2</h2>
+                <ul>
+                    <li>Robust regression
+                    </li>
+                    <li>Multivariate regression
+
+                    </li>
+                    <li>Stepwise regression
+
+                    </li>
+                    <li>Bayesian regression
+
+                    </li>
+                    <li>Regression with missing data
+
+                    </li>
+                    <li>Regression with errors in covariates
+
+                    </li>
+
+
+                </ul>
+            </section>
+
+            <section>
+                <h2>Motivating Example</h2>
+
+                <p>The data for this example come from a study by Stamey et al. (1989). They examined the correlation
+                    between the level of prostate-specific antigen and a number of clinical measures in men who were
+                    about to receive a radical prostatectomy. The variables are log cancer volume (lcavol), log prostate
+                    weight (lweight), age, log of the amount of benign prostatic hyperplasia (lbph), seminal vesicle
+                    invasion (svi), log of capsular penetration (lcp), Gleason score (gleason), and percent of Gleason
+                    scores 4 or 5 (pgg45).</p>
+
+            </section>
+
+
+
+            <section>
+                <h2>TODO: Go to R</h2>
+            </section>
+
+            <section>
+                <h2>Linear Regression </h2>
+                <ul>
+                    <li>Simple Linear Model
+                    </li>$Y=\beta_0+\beta_1X+\epsilon$
+                    <li>Error: Mean 0 and variance $\sigma^2$
+                    </li>
+                    <li>Can also write as $Y\approx\beta_0+\beta_1X$</li>
+                    <li>Use the training data to estimate the parameters:
+                    </li>$\hat{y}\approx\hat{\beta_0}+\hat{\beta_1}X$
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Simple Linear Model</h2>
+                <ul>
+                    <li>Given n points ($x_1$, $y_1$), ($x_2$, $y_2$), … , we want to determine a function y=f(x) that
+                        is close to them.
+                    </li>
+                    <img src="img/simple_linearreg.png">
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Simple Linear Model: LSE</h2>
+                <ul>
+                    <li>Given n points (x1, y1), (x2, y2), … , we will fit them to a line $y=\beta_0+\beta_1x$</li>
+
+                    <ul>
+                        <li>Predicted y values:$\hat{y_i}=\beta_0+\beta_1x_i$
+                        </li>
+                        <li>Data: $y_i=\beta_0+\beta_1x_i+\epsilon_i$</li>
+                        <li>Residual:$\epsilon_i=y_i-\hat{y_i}=y_i-(\beta_0+\beta_1x_i)$, data vs estimates
+                        </li>
+                    </ul>
+                    <li>We will use the least squares method: pick parameters that minimize the sum of squares of the
+                        residuals
+                    </li>
+                    $$
+                    L=\sum_{i=1}^{n}(y_i-(\beta_0+\beta_1x_i))^2
+                    $$
+                    <li>In other words, minimize RSS=$\epsilon_1^2+\epsilon_2^2+...+\epsilon_n^2$</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Simple Linear Model: Coefficients</h2>
+                <ul>
+                    <li>Using calculus, can solve for the best estimates for $\beta_0$ and $\beta_1$:</li>
+                </ul>
+                <img src="img/contour.png" class="twocol" width="100%">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="img/reg_3d.png" class="twocol" width="100%">
+                $$
+                \hat{\beta_1}=\frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y})}{\sum_{i=1}^{n}(x_i-\bar{x})^2}
+                \quad \hat{\beta_0}=\bar{y}-\hat{\beta_1}\bar{x}
+                $$
+            </section>
+
+            <section>
+                <h2>Assessing the Accuracy of Model Coefficient Estimates</h2>
+                <ul>
+                    <li>$\beta_0$ - intercept term (expected value of Y when X=0)
+                    </li>
+                    <li>$\beta_1$- slope term (average increase in Y for a unit increase in X)
+                    </li>
+                    <li>Note that our estimates $\beta_0$ and $\beta_1$ are based on a random sample (our
+                        training set)
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <img src="img/reg_example.png">
+                <ul>
+                    <li>Simulation Model
+                        $Y=2+3X+\epsilon$ </li>
+                    <li>Red line: True model
+                        $f(x)=2+3X$ </li>
+                    <li>Blue line: LS estimate
+                        $Y=\beta_0+\beta_1X+\epsilon$ </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Estimation Error Example</h2>
+                <br>
+                <img class="twocol" src="img/reg_error1.png">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <img class="twocol" src="img/reg_error1.png">
+            </section>
+
+            <section>
+                <h2>Simple Linear Model: Estimation Error</h2>
+                <ul>
+                    <li>LS fitting is not perfect due to errors in parameter estimates
+
+                    </li>
+                    <li>How to evaluate the goodness-of-fit?
+
+                    </li>
+                    <li>Estimation standard error (SE):
+                    </li>
+                    <ul>
+                        <li>$SE(\hat{\beta_0})^2=\sigma^2[\frac{1}{n}+\frac{\bar{x}^2}{\sum_{i=1}^{n}(x_i-\bar{x}^2)}]$
+                        </li>
+                        <li>$SE(\hat{\beta_1})^2=\frac{\sigma^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}$</li>
+                        <li>where $\sigma^2=Var(\epsilon)$</li>
+                    </ul>
+                    <li>95% CIs: $\hat{\beta_0}{\displaystyle \pm }2SE(\hat{\beta_0})$,
+                        $\hat{\beta_1}{\displaystyle \pm
+                        }2SE(\hat{\beta_1})$</li>
+                </ul>
+
+            </section>
+
+            <section>
+                <h2>Simple Linear Model: Fitting Error—1</h2>
+                <ul>
+                    <li>Prediction value based on $x_i$(the i th value of X):
+                        $\hat{y_i}=\hat{\beta_0}+\hat{\beta_1}x_i$
+                    </li>
+                    <li>Residual: $\epsilon_i=y_i-\hat{y_i}$
+                    </li>
+                    <li>Residual sum of squares (RSS):
+                    </li>
+                    $\epsilon_1^2+\epsilon_2^2+...+\epsilon_n^2=(y_1-\hat{\beta_0}-\hat{\beta_1}x_1)^2+(y_2-\hat{\beta_0}-\hat{\beta_1}x_2)^2+...+(y_n-\hat{\beta_0}-\hat{\beta_1}x_n)^2$
+                    <li>Residual standard error (RSE): </li>
+                    $\sqrt{\frac{1}{n-2}RSS}=\sqrt{\frac{1}{n-2}\sum_{i=1}^{n}(y_i-\hat{y_i})^2}$
+                </ul>
+            </section>
+            <section>
+                <h2>Simple Linear Model: Fitting Error—2 </h2>
+                <ul>
+                    <li>RSE: An absolute measure of lack of fit
+
+                    </li>
+                    <li>An alternative measure is $R^2$: The proportion of variance explained by predictors:
+                    </li>
+                    $$
+                    R^2=\frac{TSS-RSS}{TSS}=1-\frac{RSS}{TSS}
+                    $$
+                    $TSS=\sum(y_i-\bar{y_i})^2$ is the total sum of squares
+                    <li>$R^2$: between 0 and 1
+
+                    </li>
+                    <li>Residual plots and other tools
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Simple Linear Model: Hypothesis Testing</h2>
+                <ul>
+                    <li>$H_0$ : No relationship between X and Y
+
+                    </li>
+                    $$H_0:\beta_1=0$$
+                    <li>$H_1$ : Some relationship between X and Y
+                    </li>
+                    $$H_1:\beta_1\neq0$$
+                    <li>T-statistic:
+                    </li>
+                    $$t=\frac{\hat{\beta_1}-0}{SE(\hat{\beta_1})}$$
+                </ul>
+            </section>
+
+            <section>
+                <h2>Simple Linear Model: Prediction</h2>
+                <ul>
+                    <li>Learn from a training data set: ($x_1$,$y_1$ ),($x_2$,$y_2$ ), …,($x_n$,$y_n$)
+                    </li>
+                    <li>Association: $Y=\beta_0+\beta_1$X
+                    </li>
+                    <li>Establish: $\hat{Y}=\hat{\beta_0}+\hat{\beta_1}X$
+                    </li>
+                    <li>For a given new $X^*$, predict the mean response:
+                        $\hat{Y^*}=\hat{\beta_0}+\hat{\beta_1}X^*=\bar{Y}+\hat{\beta_1}(X^*-\bar{X})$
+                    </li>
+                    <li>Prediction error for mean response:
+                        $Var(\hat{Y}^*)=Var(\bar{Y})+(X^*-\bar{X})^2Var(\hat{\beta_1})=\frac{\sigma^2}{n}+\frac{(X^*-\bar{x})^2\sigma^2}{\sum_{i=1}^{n}(X_i-\bar{X})^2}$
+                    </li>
+                    <li>Estimated SE of mean response:
+                        $ESst.SE(\hat{Y^*})=\hat{\sigma}({\frac{1}{n}+(X^*-\bar{X})^2/\sum_{i=1}^{n}(X_i-\bar{X})^2}^1/2)$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Simple Linear Model: Individual Response Prediction</h2>
+                <ul>
+                    <li>Predicted value of an individual response
+
+
+                    </li>$\hat{Y}^*=\hat{\beta_0}+\hat{\beta_1}X^*=\bar{Y}+\hat{
+                    \beta_1}(X^*-\bar{X})$
+                    <li>The variance for predicted value of an individual response: the actual observed
+                        value of Y
+                        varies about its true mean with variance $\sigma^2$
+
+
+                    </li>
+                    $Var(\hat{Y}^*)={\color{blue}
+                    { \sigma^2} }+\frac{\sigma^2}{n}+\frac{(x^*-\bar{x})^2\sigma^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}$
+                    <li>Estimated SE of individual response:
+
+                    </li>$Est
+                    SE(\hat{Y}^*)=\hat{\sigma}\sqrt{1+\frac{1}{n}+\frac{(x^*-\bar{x})^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}}$
+                </ul>
+            </section>
+
+            <section>
+                <h2>Simple Linear Model: Mean and Individual Response</h2>
+                <ul>
+                    <li>Predicted value of mean response and an individual response: the same
+                    </li>
+                    <li>The variance is different by $\sigma^2$
+                    </li>
+                    <li>100(1-$\alpha$)% prediction interval:
+                    </li>
+                    $$
+                    \hat{Y}^*{\displaystyle \pm }t_{n-2,\alpha/2}(Est.SE(\hat{Y}^*))
+                    $$
+                </ul>
+            </section>
+            <section>
+                <h2>Multiple Linear Regression</h2>
+                <ul>
+                    <li>In practice, we often have more than one predictor.
+                    </li>
+                    <li>In the prostate cancer data, we also have other information that may help in the
+                        prediction of
+                        the log PSA level.
+                    </li>
+                    <ul>
+                        <li>Log prostate weight</li>
+                        <li>Age (years)
+                        </li>
+                        <li>Log of the amount of benign prostatic hyperplasia
+                        </li>
+                        <li>Seminal vesicle invation
+                        </li>
+                        <li>Log of capsular penetration
+                        </li>
+                        <li>Gleason score
+                        </li>
+                        <li>Percent of Gleason score 4 or 5
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Extending Simple Linear Regression</h2>
+                <ul>
+                    <li>Extend the simple linear regression for p variables:
+                    </li>
+                    $$
+                    Y=\beta_0+\beta_1X_1+...+\beta_pX_p+\epsilon
+                    $$
+                    <ul>
+                        <li>where $X_j$ represents the jth predictor and $\beta_j$ quantifies the
+                            association between
+                            that predictor and the response (the average effect on Y of a one unit increase
+                            in $X_j$,
+                            holding all other predictors fixed).
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Matrix Notation</h2>
+                <ul>
+                    <li>The ith observation is ($x_{i1}$, $x_{i2}$,…, $x_{ip}$,$y_j$), leading to
+                    </li>
+                    $$
+                    𝑦_𝑖=𝛽_0+𝛽_1 𝑥_{𝑖1}+𝛽_2 𝑥_{𝑖2}+…+𝛽_𝑝 𝑥_{𝑖𝑝}+𝜖_𝑖
+                    $$
+                    <li>Matrix notation:
+                    </li>
+                    $$
+                    𝑦 ⃗=𝑋 𝛽 + 𝜖
+                    $$
+                    <li>MLE point estimate of $\overrightarrow{\beta}$ is
+                        $\hat{\overrightarrow{{\beta}}} =(𝑋^T 𝑋)^{-1}
+                        𝑋^{T} 𝑦 ⃗$
+                    </li>
+                    <li>Need $X^T X$ to be non-singular and $n ≥ p+1$ (usually a lot bigger)
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>MLR Estimation</h2>
+                <ul>
+                    <li>Using Matrix notation: $y = X \beta + \epsilon$
+
+
+
+                    </li>
+                    <li>Estimation of 𝛽 (LSE or MLE):
+
+
+
+
+                    </li>$$\hat{\beta}=(X^TX )^{-1} 𝑋^𝑇 𝑦 $$
+
+                    <li>Hypothesis testing:
+                    </li>
+                    $$𝐻_0:𝛽_1=𝛽_2=⋯𝛽_𝑝=0 $$ vs $$𝐻_𝐴: \mbox{at least one } 𝛽_𝑗 \mbox{ is non-zero}$$
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/free_text_polls/RENJIAGUNjyQAD8Wvadt2?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+            <section>
+                <h2>F-test</h2>
+                <ul>
+                    <li>The F-test for $H_0$ is based on the decomposition
+                    </li>
+                    $$𝑅𝑆𝑆_0=(𝑅𝑆𝑆_0−𝑅𝑆𝑆_1 )+𝑅𝑆𝑆_1$$
+                    <li>It can be shown that
+                    </li>
+                    $$𝑅𝑆𝑆_1∕\sigma^2\sim \chi^2 (n-d)$$
+                    <li> Under H0
+                    </li>
+                    $$(RSS_0-RSS_1)/\sigma^2 \sim\chi^2(q)$$
+                    <li>And is independent of $𝑅𝑆𝑆_1∕\sigma^2$ </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>F-Test</h2>
+                <ul>
+                    $$\frac{RSS_0-RSS_1/q}{RSS_1/{n-d}}\sim F_{q,n-d}$$
+                    <li>An alternative approach to F-test is the likelihood ratio test (LRT)
+                    </li> $$\lambda=2((l(H_1)-l(H_0))→\chi^2(q)$$
+                    <li>It can be proved that $\lambda=2log(RSS_0/RSS_1)$
+                    </li>
+                    <li>Which is a monotone increasing function of $RSS_0/RSS_1$ , so is F-test. Thus, the
+                        LRT is
+                        equivalent to F-test
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/NonxjKKnIbKBPNqppvnXP?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+            <section>
+                <h2>Mean and Individual Responses</h2>
+                <ul>
+                    <li> Prediction for the true <emph>mean</emph> response at $x_0^T$
+                    </li>
+                    $100(1−\alpha$)%$ CI: $$\hat{Y_0}\pm t_{n-k-1,\alpha/2}\sigma
+                    \sqrt{X_0^T(X^TX)^{-1}x_0}$$
+
+                    <li>Prediction for an <emph>individual</emph> response at $x_0T$
+                    </li>$100(1−\alpha$)%$ CI: $$\hat{Y_0}\pm t_{n-k-1,\alpha/2}\sigma
+                    \sqrt{ {\color{red} 1 } +X_0^T(X^TX)^{-1}x_0}$$
+                </ul>
+            </section>
+
+            <section>
+                <h2>Linear in Parameters</h2>
+                <ul>
+                    <li>Even though there may be a strong relationship between $X$s and $Y$, the linearity
+                        assumption may
+                        not hold for a lot of problems. However, transformations of the data can help the
+                        linearity
+                        assumption to be mostly satisfied.
+                    </li>
+                    <li>Can use knowledge of the underlying problem or use graphical methods to visualize
+                        the data to
+                        get an idea of the general form of the function.
+                    </li>
+                    <li>Example:
+                        <ul>
+                            <li>Line: $y=\beta_0+\beta_1x$</li>
+                            <li>Polynomial: $y=\beta_0+\beta_1x+\beta_2x^2+\beta_3x^2$</li>
+                            <li>Exponential: $y=Ae^{Bx}$</li>
+                            <li>Sinusoidal: $y=A+B\cos(x)+C\sin(x)$</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Linear Regression: Other Issues—1</h2>
+                <ul>
+                    <li>Qualitative predictors: Use of “dummy variables”
+                    </li>
+                    <li>Transformation: Log, Exponential, square-root, Box-Cox transformation, etc.
+                    </li>
+                    <ul>
+                        <li>Convert nonlinear models into linear models
+                        </li>
+                        <li>Random error: more like a normal distribution
+                        </li>
+                        <li>Stabilize variance
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Linear Regression: Other Issues—2</h2>
+                <ul>
+                    <li>Standardization of your data and coefficients
+                    </li>
+                    $$y_i=\beta_0+\beta_1X_{1i}+\beta_2X_{2i}+\beta_3X_{3i}+\epsilon$$
+                    $$\frac{y_i-\bar{y}}{s_y}=\beta_1^*\frac{x_{1i}-\bar{x_1}}{s_{x1}}+\beta_2^*\frac{x_{2i}-\bar{x_2}}{s_{x2}}+\beta_3^*\frac{x_{3i}-\bar{x_3}}{s_{x3}}+\epsilon_i$$
+                    <li>Better to evaluate relative importance of predictors
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Linear Regression: Other Issues—3 </h2>
+                <ul>
+                    <li>Correlated errors or non-constant variance of errors: Time series regression,
+                        Longitudinal data
+                        models, etc.
+                    </li>
+
+                    <li>Multiple response variables: Multivariate regression
+                    </li>
+
+
+                    <li>Collinearity: Covariates are correlated
+                    </li>
+
+                    <li>Model selection or variable selection
+                    </li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
