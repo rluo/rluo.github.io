@@ -697,6 +697,27 @@ html {
     top: 10px;
 }
 
+
+.reveal .rbtn {
+    background-color: DodgerBlue;
+    /* Blue background */
+    border: none;
+    /* Remove borders */
+    color: white;
+    /* White text */
+    padding: 18px 18px;
+    /* Some padding */
+    font-size: 64px;
+    /* Set a font size */
+    cursor: pointer;
+    /* Mouse pointer on hover */
+}
+
+/* Darker background on mouse-over */
+.reveal .rbtn:hover {
+    background-color: RoyalBlue;
+}
+
 /* Clip images for Personnel mostly*/
 .clip-ellipse {
     -webkit-clip-path: ellipse(40% 50% at 50% 50%);

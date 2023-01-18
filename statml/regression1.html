@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
 
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
 
     <!-- Theme used for syntax highlighting of code -->
     <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
@@ -131,9 +133,9 @@
                         𝑦=𝑓(𝑥_1,𝑥_2,…𝑥_𝑝;𝛽)
                         $$
                         <ul>
-                            <li>Association: Existing X
+                            <li>Association: Existing $X$
                             </li>
-                            <li>Prediction and forecasting: New X
+                            <li>Prediction and forecasting: New $X$
                             </li>
                         </ul>
                     </li>
@@ -278,7 +280,17 @@
 
 
             <section>
-                <h2>TODO: Go to R</h2>
+                <h2>Go to R</h2>
+                <br>
+                <div>
+                    <a href="https://github.com/rluo/rluo.github.io/blob/master/statml/regression1.ipynb">
+                        <i class="fas fa-hammer fa-spin fa-2x" style="color: RoyalBlue;"></i>
+                        &nbsp; &nbsp;
+                        <span class="rbtn">
+                            code
+                        </span>
+                    </a>
+                </div>
             </section>
 
             <section>
@@ -309,7 +321,8 @@
             <section>
                 <h2>Simple Linear Model: LSE</h2>
                 <ul>
-                    <li>Given n points (x1, y1), (x2, y2), … , we will fit them to a line $y=\beta_0+\beta_1x$</li>
+                    <li>Given n points ($x_1$, $y_1$), ($x_2$, $y_2$), … , we will fit them to a line
+                        $y=\beta_0+\beta_1x$</li>
 
                     <ul>
                         <li>Predicted y values:$\hat{y_i}=\beta_0+\beta_1x_i$
@@ -318,7 +331,7 @@
                         <li>Residual:$\epsilon_i=y_i-\hat{y_i}=y_i-(\beta_0+\beta_1x_i)$, data vs estimates
                         </li>
                     </ul>
-                    <li>We will use the least squares method: pick parameters that minimize the sum of squares of the
+                    <li>The least squares method: pick parameters that minimize the sum of squares of the
                         residuals
                     </li>
                     $$
@@ -340,6 +353,32 @@
                 \hat{\beta_1}=\frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y})}{\sum_{i=1}^{n}(x_i-\bar{x})^2}
                 \quad \hat{\beta_0}=\bar{y}-\hat{\beta_1}\bar{x}
                 $$
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/CUfTA1aqVpdTUDKXhhmqF?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <div>
+                    <iframe
+                        src="https://embed.polleverywhere.com/multiple_choice_polls/QA76Hkh1fWP0lWmBc02y6?controls=none&short_poll=true"
+                        width="1024px" height="768px"></iframe>
+                </div>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/RbAlg9FG7oifYdrnmHwse?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/RJv2FhDo6TmUtuIZzKjU1?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
             </section>
 
             <section>
@@ -402,14 +441,17 @@
             <section>
                 <h2>Simple Linear Model: Fitting Error—1</h2>
                 <ul>
-                    <li>Prediction value based on $x_i$(the i th value of X):
+                    <li>Prediction value based on $x_i$($i$th row):
                         $\hat{y_i}=\hat{\beta_0}+\hat{\beta_1}x_i$
                     </li>
                     <li>Residual: $\epsilon_i=y_i-\hat{y_i}$
                     </li>
                     <li>Residual sum of squares (RSS):
                     </li>
-                    $\epsilon_1^2+\epsilon_2^2+...+\epsilon_n^2=(y_1-\hat{\beta_0}-\hat{\beta_1}x_1)^2+(y_2-\hat{\beta_0}-\hat{\beta_1}x_2)^2+...+(y_n-\hat{\beta_0}-\hat{\beta_1}x_n)^2$
+                    $$
+                    \epsilon_1^2+\epsilon_2^2+...+\epsilon_n^2=(y_1-\hat{\beta_0}-\hat{\beta_1}x_1)^2 \\ +
+                    (y_2-\hat{\beta_0}-\hat{\beta_1}x_2)^2+...+(y_n-\hat{\beta_0}-\hat{\beta_1}x_n)^2
+                    $$
                     <li>Residual standard error (RSE): </li>
                     $\sqrt{\frac{1}{n-2}RSS}=\sqrt{\frac{1}{n-2}\sum_{i=1}^{n}(y_i-\hat{y_i})^2}$
                 </ul>
@@ -457,16 +499,16 @@
                     </li>
                     <li>Association: $Y=\beta_0+\beta_1$X
                     </li>
-                    <li>Establish: $\hat{Y}=\hat{\beta_0}+\hat{\beta_1}X$
-                    </li>
                     <li>For a given new $X^*$, predict the mean response:
                         $\hat{Y^*}=\hat{\beta_0}+\hat{\beta_1}X^*=\bar{Y}+\hat{\beta_1}(X^*-\bar{X})$
                     </li>
                     <li>Prediction error for mean response:
-                        $Var(\hat{Y}^*)=Var(\bar{Y})+(X^*-\bar{X})^2Var(\hat{\beta_1})=\frac{\sigma^2}{n}+\frac{(X^*-\bar{x})^2\sigma^2}{\sum_{i=1}^{n}(X_i-\bar{X})^2}$
+                        $$ \scriptsize Var(\hat{Y}^*)=Var(\bar{Y})+(X^*-\bar{X})^2Var(\hat{\beta_1})
+                        =\frac{\sigma^2}{n}+\frac{(X^*-\bar{x})^2\sigma^2}{\sum_{i=1}^{n}(X_i-\bar{X})^2}$$
                     </li>
                     <li>Estimated SE of mean response:
-                        $ESst.SE(\hat{Y^*})=\hat{\sigma}({\frac{1}{n}+(X^*-\bar{X})^2/\sum_{i=1}^{n}(X_i-\bar{X})^2}^1/2)$
+                        $\scriptsize Est.SE(\hat{Y}^*
+                        )=\hat{\sigma}\sqrt{\frac{1}{n}+(X^*-\bar{X})^2/\sum_{i=1}^{n}(X_i-\bar{X})^2} $
                     </li>
                 </ul>
             </section>
@@ -489,7 +531,7 @@
                     { \sigma^2} }+\frac{\sigma^2}{n}+\frac{(x^*-\bar{x})^2\sigma^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}$
                     <li>Estimated SE of individual response:
 
-                    </li>$Est
+                    </li>$Est.
                     SE(\hat{Y}^*)=\hat{\sigma}\sqrt{1+\frac{1}{n}+\frac{(x^*-\bar{x})^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}}$
                 </ul>
             </section>
@@ -601,7 +643,7 @@
             <section>
                 <iframe
                     src="https://embed.polleverywhere.com/free_text_polls/RENJIAGUNjyQAD8Wvadt2?controls=none&short_poll=true"
-                    width="800px" height="600px"></iframe>
+                    width="1024px" height="768px"></iframe>
             </section>
 
             <section>
@@ -638,20 +680,20 @@
             <section>
                 <iframe
                     src="https://embed.polleverywhere.com/multiple_choice_polls/NonxjKKnIbKBPNqppvnXP?controls=none&short_poll=true"
-                    width="800px" height="600px"></iframe>
+                    width="1024px" height="768px"></iframe>
             </section>
 
             <section>
                 <h2>Mean and Individual Responses</h2>
                 <ul>
-                    <li> Prediction for the true <emph>mean</emph> response at $x_0^T$
+                    <li> Prediction for the true <emph>mean</emph> response at $x_0$ (row)
                     </li>
                     $100(1−\alpha$)%$ CI: $$\hat{Y_0}\pm t_{n-k-1,\alpha/2}\sigma
-                    \sqrt{X_0^T(X^TX)^{-1}x_0}$$
+                    \sqrt{x_0 (X^TX)^{-1}x_0^T}$
 
-                    <li>Prediction for an <emph>individual</emph> response at $x_0T$
+                    <li>Prediction for an <emph>individual</emph> response at $x_0$
                     </li>$100(1−\alpha$)%$ CI: $$\hat{Y_0}\pm t_{n-k-1,\alpha/2}\sigma
-                    \sqrt{ {\color{red} 1 } +X_0^T(X^TX)^{-1}x_0}$$
+                    \sqrt{ {\color{red} 1 } +x_0(X^TX)^{-1}x_0^T}$
                 </ul>
             </section>
 
