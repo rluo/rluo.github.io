@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Regression II</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at
+                        Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>Outline</h2>
+                <ul>
+                    <li>Overall test vs. individual tests</li>
+                    <li>Variable selection</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Linear Regression Inference</h2>
+                <ul>
+                    <li>Assessment of significance of any predictor vs. individual predictors</li>
+                    <ul>
+                        <li>Assessment of significance of <emph>any</emph> predictor corresponds to the null
+                            hypothesis:</li>
+                        <li>Assessment of significance of <emph>an</emph> individual predictor corresponds to the null
+                            hypothesis:</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Simulation</h2>
+                <ul>
+                    <li>Simulated $p=100$ variables from $N(0,1)$ distribution</li>
+                    <li>$Y\thicksim N(0,1)$</li>
+                    <li>Simulated $n=1000$ patients</li>
+                    <li>Repeated the simulation 1000 times</li>
+                    <li>Want to see:</li>
+                    <ul>
+                        <li>Of the 1000 simulations, was the overall F test p value significant?</li>
+                        <li>Of the 1000 simulations, how often the p value of any single covariate is
+                            significant</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Simulation Results</h2>
+                <img src="img/lecture05_1.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Simulation Results</h2>
+                <ul>
+                    <li>Of the 1000 simulations, 5.1% had an overall F statistic p value $ < 0.05$. Is this
+                            surprising?</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/44JGH8vsc1u20nM0HV7WR?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h1>Model Selection: Bias Variance Trade Off</h1>
+            </section>
+
+
+            <section>
+                <h2>Model Selection Questions</h2>
+                <ul>
+                    <li>If many predictors/covariates available, do we need to include all of
+                        them in the model?</li>
+                    <li>If not all, which one should or should not be included? How to
+                        determine?</li>
+                    <li>If too many predictors/covariates included, what is the consequence?</li>
+                    <li>If too few predictors/covariates included, what is the consequence?</li>
+                    <li>How to build a model that is parsimonious and biologically relevant?</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Importance: Model Selection</h2>
+                <ul>
+                    <li>Too many possible predictors in Big Data</li>
+                    <li>Bias variance tradeoff:</li>
+                    <ul>
+                        <li>Include too many predictors: small bias but big variance</li>
+                        <li>Include too few predictors: small variance but large bias</li>
+                        <li>Best trade off?</li>
+                        <li>Two competing goals:</li>
+                        <ol>
+                            <li>The model should be complex enough to fit the data well.</li>
+                            <li>The model should be relatively simple to interpret,
+                                smoothing rather than overfitting the data.</li>
+                        </ol>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Bias Variance Trade off</h2>
+                <div class="twocol" style="width: 60%;">
+                    <ul>
+                        <li>Bias: the difference between the
+                            expected (average) prediction
+                            value and the true value</li>
+                        <li>Variance: the variability of the
+                            prediction if repeat the prediction
+                            many times</li>
+                    </ul>
+
+                </div>
+                <div class="twocol" style="width: 35%;">
+                    <img src="img/lecture05_2.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Bias Variance Trade off -1</h2>
+                <ul>
+                    <li>For a regression model $y=f(x)+\epsilon, \epsilon\thicksim N(0,\sigma^2)$
+                    </li>
+                    <li>Prediction of $y$: $\hat f(x)$</li>
+                    <li>Expected mean square error (MSE) of predicted value:</li>
+                    <small>
+                        $E[y-\hat{f}(x)^2] \\ =\lbrace E[\hat{f}(x)]-f(x) \rbrace^2+E\lbrace
+                        (\hat{f}(x)-E[f(x)])^2\rbrace+\sigma^2
+                        \\ =Bias[\hat{f}(x)]^2+Var[\hat{f}(x)]+\sigma^2$
+                        <br>
+                        where
+                        $Bias[\hat{f}(x)]=E[\hat{f}(x)]-f(x) \\ Var[\hat{f}(x)]=E\lbrace
+                        (\hat{f}(x)-E[\hat{f}(x)])^2\rbrace$
+                    </small>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Bias Variance Trade off -2</h2>
+                <img src="img/lecture05_3.png" alt="" height="768px">
+            </section>
+
+
+            <section>
+                <h2>Bias Variance Trade off -3</h2>
+                <img src="img/lecture05_4.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Model Selection</h2>
+                <ul>
+                    <li>Bias variance trade off:</li>
+                    <ul>
+                        <li>Include too many predictors: small bias, but big variance</li>
+                        <ul>
+                            <li>Overfit the data</li>
+                            <li>Numerically unstable estimates</li>
+                        </ul>
+                        <li>Include too few predictors: small variance, but large bias</li>
+                        <ul>
+                            <li>May omit important predictors or confounders</li>
+                        </ul>
+                    </ul>
+                    <li>What is the best trade off?</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <img src="img/lecture05_5.png" alt="" height="700px">
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/pnJULJCFG08arFelriUms?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/JXiQx620ce3HopjqBt4JE?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h1>Variable Selection</h1>
+            </section>
+
+
+            <section>
+                <h2>Variable Selection</h2>
+                <ul>
+                    <li>Traditional variable selection methods</li>
+                    <ul>
+                        <li>Best subset</li>
+                        <li>Forward</li>
+                        <li>Backward</li>
+                        <li>Stepwise</li>
+                        <li>Purposeful selection (Hosmer, Lemeshow, Sturdivant)</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Best Subset Selection</h2>
+                <ul>
+                    <li>Total $p$ predictors: $X_1, X_2, ..., X_p$</li>
+                    <li>For $k=1,…,p$, fit all possible models $p \choose k$ for each $k$</li>
+                    <li>Pick the best model based on a model evaluation criterion</li>
+                    <ul>
+                        <li>Adjusted $R^2$</li>
+                        <li>AIC, BIC</li>
+                        <li>Mallows' $C_p$</li>
+                        <li>Cross-validated prediction error</li>
+                    </ul>
+                    <li>Computational problem: Total $2^p$ models</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Forward Selection</h2>
+                <ul>
+                    <li>1. Start from 0 predictors in the model</li>
+                    <li>2. Find the most significant (important) predictor using F-test or other criteria, add the
+                        predictor in the model</li>
+                    <ul>
+                        <li>Importance measure: F-test $p < 0.05-0.20$</li>
+                        <li>AIC (to be introduced later, smaller is better)</li>
+                    </ul>
+                    <li>3. Repeat until no further predictor can be added</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Backward Selection</h2>
+                <ul>
+                    <li>1. Start from all predictors in the model</li>
+                    <li>2. Find the least significant (important) predictor using F-test or other criteria, drop the
+                        predictor from the model</li>
+                    <ul>
+                        <li>Importance measure: F-test $p > 0.05-0.20$</li>
+                        <li>AIC (smaller is better)</li>
+                    </ul>
+                    <li>3. Repeat until no further predictor can be dropped</li>
+                    <li>Problem: Need to fit a large model with all predictors</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Stepwise Selection</h2>
+                <ul>
+                    <li>1. Start from 0 predictor in the model</li>
+                    <li>2. Do one step of forward selection</li>
+                    <ul>
+                        <li>F-test, $p < 0.05$</li>
+                        <li>or AIC (smaller is better)</li>
+                    </ul>
+                    <li>3. Do one step of backward elimination</li>
+                    <ul>
+                        <li>F-test, $p > 0.20$</li>
+                        <li>or AIC (smaller is better)</li>
+                    </ul>
+                    <li>4. Repeat Steps 2-3 until no further predictor can be added or dropped</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Forward/Backward Selection</h2>
+                <ul>
+                    <li>Better than the exhaustive “best subset selection” in computational efficiency</li>
+                    <li>Price to pay: may not produce the best model</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/iTurbyC50pwyNOqCfgKJT?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/m6da1zPHrcVRglCZHxnYO?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>$R^2$</h2>
+                <ul>
+                    <li>Many variable selection criteria are built on RSS</li>
+                    <ul>
+                        <li>Suppose that $(x_i, y_i), i=1, ..., n$ $iid \thicksim y=x^T\beta+\epsilon $</li>
+                    </ul>
+                    <li>RSS is defined as: $RSS=\sum_{i=1}^{n}(y_i-\hat y_i)^2$</li>
+                    <ul>
+                        <li>$RSS_p$: RSS with p variable $1 ≤ p ≤ s$ and a constant in the model</li>
+                        <li>$RSS_0$: RSS when a constant is being fitted</li>
+                    </ul>
+                    <li>R-squared is defined as $R_p^2=1-\frac{RSS_p}{RSS_0}$</li>
+                    <li>$R_p^2$ measures how well the fitting of the p variables is</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Adjusted $R^2$</h2>
+                <ul>
+                    <li>$R_p^2$ always increases when a variable is added to a model</li>
+                    <ul>
+                        <li>It cannot serve as a criterion for model selection</li>
+                    </ul>
+                    <li>Adjust the $R_p^2$ for df to get the adjusted $R^2$-statistic</li>
+                    $A_p=R_a^2=1-\frac{RSS_p/(n-p)}{RSS_0/(n-1)}=1-(1-R_p^2)\frac{n-1}{n-p}$
+                    <ul>
+                        <li>Also termed as Fisher's A-statistic</li>
+                        <li>$A_p$ does not necessarily increase when a variable is added to a model</li>
+                    </ul>
+                    <li>Maximizing $A_p$ w.r.t. $p \equiv minimizing$</li>
+                    $s_p^2=\frac{RSS_p}{n-p}$
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>PRESS and Cross Validation</h2>
+                <ul>
+                    <li>Prediction sum of squares (PRESS, Allen 1974)</li>
+                    <ul>
+                        <li>Let $y_{(i)}$ be the predicted value for $y_i$ based using $n-1$ observations other than the
+                            $i$th one.
+                            The PRESS statistic for the subset of p-variables is defined as</li>
+                        $PRESS_p=\sum_{i=1}^{n}(y_i-\hat y_{(i)})^2$
+                    </ul>
+                    <li>Cross Validation (CV):</li>
+                    <ul>
+                        <li>In practice, the cross-validation approach may be used to estimate the PRESS statistic</li>
+                        <li>Leave one observation or a small part of observation data when performing model fitting</li>
+                        <li>Predicted these data using the rest of the data</li>
+                        <li>Calculate the prediction sum of squares: PRESS</li>
+                        <li>Repeat many times</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Generalized Validation Score GCV</h2>
+                <ul>
+                    <li>It can be shown that under certain mild conditions, the PRESS statistic can be asymptotically
+                        approximated by the below equation if $n$ is much larger than $p$</li>
+                    $PRESS_p \approx \frac{n^2}{(n-p)^2}RSS_p$
+                    <li>The right-hand side is closely related with the well-known <strong>generalized validation
+                            score</strong> (GCV) for a linear regression model (Craven and Wahba, 1979)</li>
+
+                    $GCV=\frac{1}{n}\sum_{i}(\frac{y_i-\hat y_i}{1-tr(\textbf{H}/n)})^2$
+                    <li>GCV: computationally convenient and popularly used in nonparametric regression for smoothing
+                        parameter selection</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>$C_p$</h2>
+                <ul>
+                    <li>The $C_p$ statistic (Mallows, 1973) is defined as</li>
+                    $C_p=\frac{RSS_p}{\sigma^2}-(n-2p)$
+                    <li>In practice, $\sigma^2$ is replaced with the unbiased estimate</li>
+                    $\hat \sigma^2=\frac{RSS_d}{(n-d)}$, the residual mean squares under the full model
+                    <li>$C_p$is closely related to $R_2$ and adjusted $R_2$</li>
+                    <li>An adequate model: $E(C_p)=p$</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>AIC</h2>
+                <ul>
+                    <li>Akaike's Information Criterion (AIC, Akaike, 1973, 1974) is defined as</li>
+                    $AIC_p=RSS_p+2p\sigma^2$
+                    <ul>
+                        <li>Thus, $AIC_p=C_p$</li>
+                    </ul>
+                    <li>Many classical variable selection criteria is of the form where c is a regularization parameter
+                    </li>
+                    $RSS_p+cp\sigma^2$
+                    <li>In practice, $\sigma^2$ is replaced with the unbiased estimate</li>
+                    $\hat \sigma^2=\frac{RSS_d}{(n-d)}$
+                    <li>The residual mean squares under the full model</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Model Selection Criteria: BIC and RIC</h2>
+                <ul>
+                    <li>Bayesian information criterion (BIC, Schwarz, 1978)</li>
+                    $BIC_p=RSS_p+\log(n)p\sigma^2$
+                    <li>$\phi$-criterion (Shibata, 1984):</li>
+                    $\phi_p=RSS_p+\log(\log(n))p\sigma^2$
+                    <li>Risk information criterion (RIC, Foster and George, 1994)</li>
+                    $RIC_p=RSS_p+2\log(d)p\sigma^2$
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Model Selection Criteria</h2>
+                <ul>
+                    <li>Notice that BIC replaces the $2d\hat \sigma^2$ used by $C_p$ with a $\log(n)d\hat \sigma^2$,
+                        where $n$ is the number of observations</li>
+                    <li>Since $\log n> 2$ for any $n> 7$, the BIC statistic generally places a heavier penalty on models
+                        with many variables, and hence results in the selection of smaller models than $C_p$</li>
+                    <li>CV: Compared to AIC, BIC, $C_p$ and adjusted $R^2$</li>
+                    <ul>
+                        <li>Advantage: Direct estimate of prediction error</li>
+                        <li>Disadvantage: Computationally expensive</li>
+                        <li>GCV can be used to overcome the disadvantage</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/DOaKtayJHe4Wm3BZs8OaL?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/xK9b50Lbmj9imCITL6tZ6?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>Problems with Traditional Variable Selection</h2>
+                <ul>
+                    <li>Computationally expensive</li>
+                    <li>Difficult to deal with high-dimensional covariates and collinearity</li>
+                    <li>Clinically or biologically relevant variables may not be selected if the selection is only based
+                        on p-values</li>
+                    <li>Motivate the new approaches</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h3>Purposeful Variable Selection Method—1</h3>
+                <ul>
+                    <li>
+                        <emph>Book</emph>: Hosmer, Lemeshow, and Sturdivant, Applied Logistic Regression, 3rd
+                        Edition: Chapter 4.2
+                    </li>
+                    <li>Hosmer and Lemeshow: Two earlier books (1999, 2000)</li>
+                    <li>Not only select statistically significant covariates, but also possible confounders</li>
+                    <li>Trade-off: Statistical significance vs. scientific relevance</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h3>Purposeful Variable Selection Method—2</h3>
+                <small>
+                    <ol>
+                        <li>Perform univariate analysis: <highlight>Initial Screening</highlight>
+                        </li>
+                        <li>Fit the multivariable model containing all possibly-important covariates identified from
+                            Step
+                            1, then drop “insignificant” covariates based on the fitting $\rightarrow$ <highlight>a
+                                Reduced/Smaller Model</highlight>
+                        </li>
+                        <li>Compare the estimated coefficients from the larger model and the smaller model to
+                            identify
+                            “high-impact” covariates or confounding variables, and add them back to the model. Repeat
+                            Steps
+                            2 and 3 until satisfactory</li>
+                        <li>Add each variable not selected in Step 1 to the model from Step 3, and include the
+                            significant variables back to the model $\rightarrow$ <highlight>Preliminary Main Effects
+                                Model
+                            </highlight>
+                        </li>
+                        <li>Check the linear assumption and other assumptions of regression models for the entered
+                            continuous variables in Step 4, and revised the model if necessary $\rightarrow$ <highlight>
+                                Main
+                                Effects Model</highlight>
+                        </li>
+                        <li>Check for interactions in the model and include important interaction terms in the model
+                            $\rightarrow$ <highlight>Preliminary Final Model</highlight>
+                        </li>
+                        <li>Check model fitting: if good $\rightarrow$ <highlight>Final Model</highlight>
+                        </li>
+                    </ol>
+                </small>
+            </section>
+
+
+            <section>
+                <h3>Purposeful Variable Selection —Step 1</h3>
+                <ul>
+                    <li>Use univariate analysis to identify important covariates: <highlight>Initial screening
+                        </highlight>
+                    </li>
+                    <ul>
+                        <li>Run a separate regression analysis for each variable (univariate analysis)</li>
+                    </ul>
+                    <li>Remarks</li>
+                    <ul>
+                        <li>Can use F-test, Wald or LR test for continuous and dichotomous variables</li>
+                        <li>Use LR test for categorical variables (testing all dummy variables at once)</li>
+                        <li>Significance level: $p=0.20-0.25$</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h3>Purposeful Variable Selection —Step 2</h3>
+                <ul>
+                    <li>Fit the multivariable model containing all possibly-important covariates identified from Step 1,
+                        then drop “insignificant” covariates based on the fitting $\rightarrow$ <highlight>a
+                            Reduced/Smaller Model</highlight>
+                    </li>
+                    <ul>
+                        <li>Fit the multivariable model containing all possibly-important covariates identified from
+                            Step 1</li>
+                        <li>Perform backward variable selection:</li>
+                        <ul>
+                            <li>Can we eliminate any covariate?</li>
+                            F-test or Wald test: $p\gt0.05$ or $0.10$, remove
+                            <li>Compare the smaller model vs. the large model using one model comparison criterion</li>
+                        </ul>
+                        <li>Confirm and result in a reduced/smaller model</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h3>Purposeful Variable Selection —Step 3</h3>
+                <ul>
+                    <li>Compare the estimated coefficients from the larger model and the smaller model to identify
+                        “high-impact” covariates or confounding variables, and add them back to the model. Repeat Steps
+                        2 and 3</li>
+                    <ul>
+                        <li>Based on the model from Step 2, add each dropped variable back to the model:</li>
+                        <ul>
+                            <li>Is this change the magnitude of any other coefficient estimates by 20%? If yes, add this
+                                dropped variable back to the model</li>
+                        </ul>
+                        <li>You may try to add back one or a few dropped variables back to the model at a time</li>
+                        <li>Repeat Steps 2 and 3 until satisfactory</li>
+                        <ul>
+                            <li>All the included variables are important</li>
+                            <li>All the dropped variables are clinically and/or statistically unimportant</li>
+                        </ul>
+                        <li>Steps 2-3: Similar to the “stepwise variable selection” approach</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h3>Purposeful Variable Selection —Step 4</h3>
+                <ul>
+                    <li>Add each variable not selected in Step 1 to the model from Step 3, and include the significant
+                        variables back to the model $\rightarrow$ <highlight>Preliminary Main Effects Model</highlight>
+                    </li>
+                    <ul>
+                        <li>Forward variable selection for those variables dropped in Step 1: Some of these dropped
+                            variables may have a significant effect for the model from Step 3</li>
+                        <li>Use F-test, Wald test or LR test: $p < 0.05-0.20$ </li>
+                        <li>Result in the “Preliminary Main Effects Model”</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h3>Purposeful Variable Selection —Step 5</h3>
+                <ul>
+                    <li>Check the linear assumption and other assumptions of regression models for the entered
+                        continuous variables in Step 4, and revised the model if necessary $\rightarrow$ <highlight>Main
+                            Effects Model</highlight>
+                    </li>
+                    <ul>
+                        <li>Check linearity:</li>
+                        <ul>
+                            <li>Smoothed scatterplot (to find a transformation of the variable)</li>
+                        </ul>
+                    </ul>
+                    <li>Alternative models for non-linear associations</li>
+                    <ul>
+                        <li>What do you do if your continuous variable does not appear linear?</li>
+                        <ul>
+                            <li>Appropriate nonlinear functions: e.g., fractional polynomials</li>
+                            <li>Splines</li>
+                            <li>Other nonparametric regression models (generalized additive models)</li>
+                        </ul>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h3>Purposeful Variable Selection —Step 6</h3>
+                <ul>
+                    <li>Check for interactions in the model and include important interaction terms in the model
+                        $\rightarrow$ <highlight>Preliminary Final Model</highlight>
+                    </li>
+                    <li>Do we need to include the interaction term of two factors? $x_ix_j$</li>
+                    <ul>
+                        <li>A list of all interactions if the main effects are included in the model in Step 5</li>
+                        <li>A list of all clinically plausible interactions</li>
+                        <li>Add the interaction terms one by one: Use F-test, Wald-test or LR test to determine the
+                            significance, $p=0.05$ or $0.10$</li>
+                        <li>Repeat similar strategies as Steps 2-3</li>
+                        <li>Result in the “Preliminary Final Model”</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h3>Purposeful Variable Selection —Step 7</h3>
+                <ul>
+                    <li>Check model fitting: if good $\rightarrow$ <highlight>Final Model</highlight>
+                    </li>
+                    <ul>
+                        <li>Use all goodness-of-fit approaches to check the final fit of the model in Step 6.</li>
+                        <ul>
+                            <li>Residual plots</li>
+                            <li>Visualization tools</li>
+                            <li>Goodness-of-fit tests</li>
+                        </ul>
+                        <li>Everything is good $\rightarrow$ Final Model</li>
+                        <li>Otherwise, revise the model and repeat above steps</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Summary</h2>
+                <ul>
+                    <li>There are many variable selection methods. Each has advantages and disadvantages over other
+                        methods. The choice should be related to your goals in finding a prediction model and how
+                        important the clinical relevance is for your model.</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/fnVuHs3GgqNL6xTnUT9XN?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/zDwWMkYd9WvVdbyvFeWOl?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
