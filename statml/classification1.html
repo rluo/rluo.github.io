@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Classification</h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>Classification & Regression</h2>
+                <div class="twocol" style="width: 58%;">
+                    <ul>
+                        <li>
+                            Classification: predict a class label; a choice from a predefined list of possibilities
+                        </li>
+                        <ul>
+                            <li>Binary classification
+                            </li>
+                            <li>Multiclass classification
+                            </li>
+                        </ul>
+                        <li>Regression: predict a continuous number
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 40%;">
+                    <img src="img/class_supervised.png">
+                </div>
+            </section>
+
+            <section>
+                <h2>Examples of Classification Problems </h2>
+                <div class="twocol" style="width: 40%; font-size: 70%; vertical-align: middle;">
+                    <ul>
+                        <li>Electronic Health Records (EHR)
+                        </li>
+                        <ul>
+                            <li>Predict patient status (sick or not)
+                            </li>
+                        </ul>
+                        <li>Image Classification
+                        </li>
+                        <ul>
+                            <li>Cancer imaging: malignant or benign
+                            </li>
+                            <li>Fun applications: dogs or cats
+                            </li>
+                        </ul>
+                        <li>R: quick review</li>
+                        <ul>
+                            <li>Emails: spam or not
+                            </li>
+                            <li>Tweets: offensive or not
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 57%; vertical-align: middle;">
+                    <img src="img/classification_examples.png" alt="">
+                </div>
+            </section>
+
+
+
+
+            <section>
+                <h3>Can we predict whether a customer will buy a boat?</h3>
+                <img src="img/example_buyboat.png" alt="" style="width: 90%;">
+                <p>
+                    Goal is to send out promotional emails to people who are likely to actually make a purchase, but
+                    not bother those customers who won’t be interested!
+                </p>
+
+            </section>
+
+            <section>
+                <h2>Classical Example: Classifying Iris Species</h2>
+                <div class="twocol" style="width: 40%; font-size: 70%;">
+                    <ul>
+                        <li>Meet the Data
+                        </li>
+                        <li> Measuring Success: Training and Testing Data
+                        </li>
+                        <li> First Things First: Look at Your Data
+                        </li>
+                        <li> Building Your First Model (e.g. k-NN)
+                        </li>
+                        <li> Making Predictions
+                        </li>
+                        <li> Evaluating the Model
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 55%;">
+                    <img src="img/example_iris.png">
+                </div>
+            </section>
+
+            <section>
+                <h2>Classification Problems</h2>
+                <ul>
+                    <li>Here the response variable $Y$ is qualitative. Our goals are to:
+
+                        <ul>
+                            <li>Build a classifier $C(X)$ that assigns a class label from $C$ to a future unlabeled
+                                observation $X$
+                            </li>
+                            <ul>
+                                <li>Given a feature vector $X$ and a qualitative response $Y$ taking values in the set
+                                    $C$,
+                                    the classification task is to build a function $C(X)$ that takes as input the
+                                    feature
+                                    vector $X$ and predicts its value for $Y$
+                                </li>
+                            </ul>
+                            <li>Assess the uncertainty in each classification
+                            </li>
+                            <ul>
+                                <li>Often, we are more interested in estimating the probabilities that $X$ belongs to
+                                    each
+                                    category in $C$
+                                </li>
+                                <li>For example, it is more valuable to have an estimate of the probability that an
+                                    insurance claim is fraudulent, than a classification fraudulent or not
+                                </li>
+                            </ul>
+                            <li>Understand the roles of the different predictors among $𝑋=(𝑋_1,𝑋_2, …, 𝑋_𝑝)$
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/vycre25Mjda1Gm2ZckVxF?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <h2>Example: Credit Card Default</h2>
+                <img src="img/credit_example1.png" alt="" class="twocol" style="width: 50%;">
+                <img src="img/credit_example2.png" alt="" class="twocol" style="width: 38%;">
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/dr3aT7voiYpKO7qnTx7On?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <h2>Can We Use Linear Regression?</h2>
+                <img src="img/credit_linear1.png" alt="" class="twocol" style="width: 44%;">
+                <img src="img/credit_linear2.png" alt="" class="twocol" style="width: 50%;">
+            </section>
+
+            <section>
+                <h2>Linear vs. Logistic Regression—1 </h2>
+
+                <img src="img/linear_logistic.png" alt="">
+
+                <ul>
+                    <li>Linear regression does not estimate $Pr(Y = 1|X)$ well.
+                    </li>
+                    <li> Logistic regression seems well suited to the task.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Linear vs. Logistic Regression—2 </h2>
+                <ul>
+                    <li>Now suppose we have a response variable with three possible values. At ER, we must classify them
+                        according to their symptoms.
+                    </li>
+                    $$
+                    Y = \begin{cases} 1 \quad & \text{if stroke} \\
+                    2 \quad & \text{if drug overdose} \\
+                    3 \quad & \text{if epilipetic seizure}
+                    \end{cases}
+                    $$
+
+                    <ul>
+                        <li>This coding suggests an ordering, and in fact implies that the difference between stroke and
+                            drug overdose is the same as between drug overdose and epileptic seizure.
+                        </li>
+                    </ul>
+                    <li>Linear regression is not appropriate here.
+                    </li>
+                    <li>Multiclass Logistic Regression or Discriminant Analysis are more appropriate
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Logistic Regression—1 </h2>
+                <ul>
+                    <li>Let’s write $p(X) = Pr(Y = 1|X)$. Logistic regression uses the form
+                    </li>$$p(x)=\frac{e^{\beta_0+\beta_1x}}{1+e^{\beta_0+\beta_1x}}$$
+                    <p>
+                        e ≈ 2.71828 is a
+                        mathematical constant [Euler’s number]
+                    </p>
+                    <li>It is easy to see that no matter what values $𝛽_0, 𝛽_1$ or X take, p(X) will have values
+                        between 0 and 1
+                    </li>
+                    <li>This transformation is called the log odds or logit transformation of p(X)
+                    </li>$$log⁡(\frac{p(𝑋)}{1−p(𝑋)} )=𝛽_0+𝛽_1 𝑋$$
+                </ul>
+            </section>
+
+            <section>
+                <h2>Logistic Regression—2
+                </h2>
+                <ul>
+                    <li>Logistic regression ensures that our estimate for p(X) lies between 0 and 1
+                    </li>
+                </ul>
+                <img src="img/linear_logistic.png" alt="">
+            </section>
+
+            <section>
+                <h2>Maximum Likelihood</h2>
+                <ul>
+                    <li>We use maximum likelihood to estimate the parameters,
+                    </li>$𝑙(𝛽_0+𝛽)=∏_{i:y_i=1}𝑝(𝑥_𝑖) \prod_{i:y_i=0}{1-p(x_i)}$
+                    <li>This likelihood gives the probability of the observed zeros and ones in the data. We pick 0 and
+                        1 to maximize the likelihood of the observed data
+                    </li>
+                    <li>Most statistical packages can fit linear logistic regression models by maximum likelihood.
+                    </li>
+                    <li>In R we use the glm function</li>
+                    <li>For Default credit card example, fit logistic regression
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Making Predictions</h2>
+                <img src="img/logistic_coef1.png" alt="" class="topright" style="width: 20%;">
+                <ul>
+                    <li>What is our estimated probability of default for someone with a credit card balance of $1000?
+                    </li>
+                    $\hat{p}(x)=\frac{e^{\beta_0+\beta_1x}}{1+e^{\beta_0+\beta_1x}}=\frac{e^{-10.6513+0.0055\cdot1000}}{1+e^{-10.6513+0.0055\cdot1000}}=0.006$
+
+                    <li>With a balance of $2000</li>
+                    $\hat{p}(x)=\frac{e^{\beta_0+\beta_1x}}{1+e^{\beta_0+\beta_1x}}=\frac{e^{-10.6513+0.0055\cdot2000}}{1+e^{-10.6513+0.0055\cdot2000}}=0.586$
+                </ul>
+
+            </section>
+
+            <section>
+                <h2>Making Predictions</h2>
+                <ul>
+                    <li>Let’s do it again, using student as the predictor</li>
+                    <ul>
+                        <li> $\hat{p}(𝑑𝑒𝑓𝑎𝑢𝑙𝑡=𝑌𝑒𝑠|𝑠𝑡𝑢𝑑𝑒𝑛𝑡=𝑌𝑒𝑠)=\frac{e^{−3.5041+0.4049\cdot1}}{1+e^{−3.5041+0.4049\cdot1}}=0.0431$
+                        </li>
+                        <li>$\hat{p}(𝑑𝑒𝑓𝑎𝑢𝑙𝑡=𝑌𝑒𝑠|𝑠𝑡𝑢𝑑𝑒𝑛𝑡=No)=\frac{e^{−3.5041+0.4049\cdot0}}{1+e^{−3.5041+0.4049\cdot0}}=0.0292$
+                        </li>
+                    </ul>
+                </ul>
+                <img src="img/logistic_coef2.png" alt="" style="width: 50%;">
+            </section>
+
+            <section>
+                <h2>Logistic Regression With Several Variables</h2>
+                $$log⁡(\frac{p(𝑋)}{1−p(𝑋)} )=𝛽_0+𝛽_1 𝑋_1+...\beta_pX_p$$
+                $$p(x)=\frac{e^{\beta_0+\beta_1x_1+...\beta_px_p}}{1+e^{\beta_0+\beta_1x_1+...\beta_px_p}}$$
+
+                <div class="twocol">
+                    <ul>
+                        <li>The Default credit card example
+                        </li>
+                        <ul>
+                            <li>Using balance, income, and student
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+                <div class="twocol">
+                    <img src="img/logistic_coef3.png" alt="">
+                </div>
+            </section>
+
+            <section>
+                <h2>Confounding</h2>
+                <img src="img/logistic_confounding.png">
+                <ul>
+                    <li>Students tend to have higher balances than non-students, so their marginal default rate is
+                        higher than for non-students
+
+                    </li>
+                    <li>But for each level of balance, students default less than non-students
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Logistic Regression With Multiple Classes</h2>
+                <ul>
+                    <li>Also known as multinomial regression
+                    </li>
+                    <li>
+                        It is easily generalized to more than two classes
+
+                    </li>
+                    $p(Y=k|X)=\frac{e^{\beta_{0k}+\beta_{1k}x_1+...\beta_{pk}x_p}}{\sum_{l=1}^{k}e^{\beta_{0l}+\beta_{1l}x_1+...\beta_{pl}x_p}}$
+                    <li>Here there is a linear function for each class.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/deAl5xHRUxvWxaf7Q2Nhd?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
