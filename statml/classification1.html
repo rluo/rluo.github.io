@@ -13,14 +13,15 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" href="reveal.js/dist/reset.css">
-    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
-    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/reset.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/reveal.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/theme/white.min.css" id="theme">
 
 
 
     <!-- Theme used for syntax highlighting of code -->
-    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <link rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/tomorrow-night-blue.min.css">
     <!--
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
 -->
@@ -367,14 +368,13 @@
         </div>
     </div>
 
-    <script src="reveal.js/dist/reveal.js"></script>
-    <script src="reveal.js/plugin/zoom/zoom.js"></script>
-    <script src="reveal.js/plugin/notes/notes.js"></script>
-    <script src="reveal.js/plugin/search/search.js"></script>
-    <script src="reveal.js/plugin/markdown/markdown.js"></script>
-    <script src="reveal.js/plugin/highlight/highlight.js"></script>
-    <script src="reveal.js/plugin/math/math.js"></script>
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/reveal.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/plugin/zoom/zoom.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/plugin/notes/notes.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/plugin/search/search.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/plugin/markdown/markdown.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/plugin/highlight/highlight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/4.4.0/plugin/math/math.min.js"></script>
     <script>
         // Also available as an ES module, see:
         // https://revealjs.com/initialization/
@@ -394,6 +394,7 @@
 
             math: {
                 // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                // mathjax: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.min.js",
                 config: 'TeX-AMS_HTML-full',
                 TeX: {
                     Macros: {
@@ -402,7 +403,15 @@
                     }
                 }
             },
-
+            // mathjax3: {
+            //     mathjax: '//cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js',
+            //     tex: {
+            //         inlineMath: [['$', '$'], ['\\(', '\\)']]
+            //     },
+            //     options: {
+            //         skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            //     },
+            // },
             // Learn about plugins: https://revealjs.com/plugins/
             plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
         });
