@@ -223,12 +223,11 @@
                         according to their symptoms.
                     </li>
                     $$
-                    Y = \begin{cases} 1 \quad & \text{if stroke} \\
+                    Y = \begin{cases}1 \quad & \text{if stroke} \\
                     2 \quad & \text{if drug overdose} \\
                     3 \quad & \text{if epilipetic seizure}
                     \end{cases}
                     $$
-
                     <ul>
                         <li>This coding suggests an ordering, and in fact implies that the difference between stroke and
                             drug overdose is the same as between drug overdose and epileptic seizure.
@@ -392,7 +391,7 @@
 
             pdfSeparateFragments: false,
 
-            math: {
+            math: { // mathjax2 as default
                 // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
                 // mathjax: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.min.js",
                 config: 'TeX-AMS_HTML-full',
@@ -404,9 +403,9 @@
                 }
             },
             // mathjax3: {
-            //     mathjax: '//cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js',
+            //     mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js',
             //     tex: {
-            //         inlineMath: [['$', '$'], ['\\(', '\\)']]
+            //         inlineMath: [['$', '$'], ['\\(', '\\)']],
             //     },
             //     options: {
             //         skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
