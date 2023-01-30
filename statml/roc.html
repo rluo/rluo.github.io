@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Fundamentals of Data Analytics and Predictions</title>
+
+  <meta name="author" content="Xi (Rossi) LUO">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="reveal.js/dist/reset.css">
+  <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+  <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+  <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+  <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+  <div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+
+
+      <section>
+        <h2><strong>
+            Fundamentals of
+            <highlight>Data Analytics</highlight> and
+            <emph>Predictions</emph>
+          </strong>
+        </h2>
+        <br />
+        <h2>ROC</h2>
+        <br />
+        <h3>Xi (Rossi) <strong>LUO</strong></h3>
+        <br>
+        <p><small>Department of Biostatistics and Data Science<br>
+            School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+      </section>
+
+      <section>
+        <h2>ROC-Receiver Operator Characteristic Analysis</h2>
+
+        <div class="twocol" style="width: 55%; vertical-align: middle;">
+          <ul style="font-size: 80%;">
+            <li>The statistical evaluation of medical tests for Classification & Prediction (Pepe)</li>
+            <li>$D$ = outcome (disease)</li>
+            <li>$Y$ = test result (can be output from classifier)</li>
+            <ul>
+              <li>TPF = true positive fraction =</li>
+              <li>FPF = false positive fraction =</li>
+              <li>FNF = false negative fraction =</li>
+              <li>TNF = true negative fraction =</li>
+            </ul>
+          </ul>
+        </div>
+        <div class="twocol" style="width: 40%; vertical-align: middle;">
+          <img src="img/lecture09_1.png">
+        </div>
+      </section>
+
+
+      <section>
+        <h2>Sensitivity and Specificity Example</h2>
+        <div class="twocol" style="width: 55%; vertical-align: middle;">
+          <ul style="font-size: 80%;">
+            <li>Let $D = 1$ if patient has a positive biopsy.</li>
+            <li>Sensitivity = 16/30 = 53%</li>
+            <li>Specificity = 900/1000 = 90%</li>
+          </ul>
+        </div>
+        <div class="twocol" style="width: 40%; vertical-align: middle;">
+          <img src="img/lecture09_2.png">
+        </div>
+      </section>
+
+
+
+      <section>
+        <iframe
+          src="https://embed.polleverywhere.com/multiple_choice_polls/ViDY3SAuOoOeiQjfJXMjB?controls=none&short_poll=true"
+          width="1024px" height="768px"></iframe>
+        <aside class="notes">
+          True positive fraction, true negative fraction
+        </aside>
+      </section>
+
+      <section>
+        <h2>ROC Curve</h2>
+        <ul>
+          <li>Let Y be a continuous test where larger Y more indicative of disease</li>
+          <li>$P(D=1\mid Y)$ increasing in $Y$</li>
+          <li>Looks at (specificity, sensitivity) pairs for all thresholds on $Y$ where + test is $Y \ge C$</li>
+          <li>TPF(c) = $P(Y \ge C\mid D=1)$</li>
+          <li>FPF(c) = $P(Y \ge C\mid D=0)$</li>
+          <li>ROC(c) = $\{$(FPF(c), TPF(c)); $c \in (-\infty, \infty)\}$</li>
+        </ul>
+      </section>
+
+
+      <section>
+        <h2>ROC Demo</h2>
+
+        <div class="twocol" style="width: 55%; vertical-align: middle;">
+          <ul style="font-size: 80%;">
+            <li>Puts different biomarkers on a common relevant scale</li>
+            <li>Invariant to monotone increasing transformations of $Y$</li>
+            <li>Shown entire range of possible performance</li>
+          </ul>
+        </div>
+        <div class="twocol" style="width: 40%; vertical-align: middle;">
+          <img src="img/roc_atlas.png">
+        </div>
+      </section>
+
+      <section>
+        <iframe
+          src="https://embed.polleverywhere.com/multiple_choice_polls/GzAXINNjek6DQEjklxggY?controls=none&short_poll=true"
+          width="1024px" height="768px"></iframe>
+      </section>
+
+      <section>
+        <iframe
+          src="https://embed.polleverywhere.com/multiple_choice_polls/JQdhEc6T8IhbKtASNcv2q?controls=none&short_poll=true"
+          width="1024px" height="768px"></iframe>
+      </section>
+
+
+      <section>
+        <h2>Summary Statistics of ROC Curves</h2>
+        <ul>
+          <li>AUC</li>
+          <li>ROC (t) at a t of interest (FPF)</li>
+          <li>Partial AUC</li>
+        </ul>
+      </section>
+
+
+      <section>
+        <h2>Area Under The ROC Curve</h2>
+        <div class="twocol" style="width: 55%; vertical-align: middle;">
+          <ul style="font-size: 70%;">
+            $AUC=\int_{0}^{1} ROC(t)dt=average(TPF)$
+            <li>Ideal: $AUC=$</li>
+            <li>Useless: $AUC=$</li>
+            <li>$AUC=P(Y_D \ge Y_{\bar D})$</li>
+            $=P$(correct ordering for random case and control pair), where $Y_D=Y$ of cases,$Y_{\bar D} =Y$ of
+            controls
+            <br>
+            <br>
+            Wilcoxon-type concordance probability can calculate confidence interval using Somers' $D_{xy}$ Rank
+            correlation
+          </ul>
+        </div>
+        <div class="twocol" style="width: 40%; vertical-align: middle;">
+          <img src="img/lecture09_4.png">
+        </div>
+      </section>
+
+
+      <section>
+        <h2>ROC(t) at a t of Interest</h2>
+        <ul>
+          <li>(also could be specificity at a sensitivity of interest)</li>
+          <h4>$var(\widehat {ROC}_e(t))=\frac{ROC(t)\{1-ROC(t)\}}{n_D}+(ROC'(t))^2 \frac{t(1-t)}{n_{\bar D}}$</h4>
+        </ul>
+      </section>
+
+
+      <section>
+        <h2>C.I. for ROC(t)</h2>
+        <ul>
+          <li>1. $\widehat {ROC}_e(t) \pm z_{\frac{\alpha}{2}} \sqrt{\widehat {var}}$</li>
+          <li>2. Use Bootstrap</li>
+          <ul>
+            <li>Resample with replacement $n_D$ cases and $n_{\bar D}$ controls</li>
+            <li>Calculate $\widehat {ROC}(t)$ for new data</li>
+            <li>Repeat $B$ times $\{ \widehat {ROC}^1(t), \dots, \widehat {ROC}^B(t) \}$</li>
+            <li>C.I. are the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles</li>
+          </ul>
+          <br>
+          Note: if several observations come from the same unit (e.g. patient), cluster by that unit (sample patient,
+          not observation)
+        </ul>
+      </section>
+
+
+      <section>
+        <h2>$\rho AUC$</h2>
+        <ul>
+          $\rho AUC(a,b)=\int_{a}^{b} ROC(f)df$
+          <li>$\frac{\rho AUC}{t}=$ TPF averaged over FPF$\in (a,b)$, where $(a,b)$ is a clinically relevant range of
+            FPFs</li>
+          <li>Compromise between $AUC$ & $ROC(t)$</li>
+          <li>Can use bootstrap to compute confidence intervals</li>
+        </ul>
+      </section>
+
+
+      <section>
+        <h2>Comparison of ROC Summary Statistics</h2>
+        <ul>
+          <li>AUC is widely used, but not clinically relevant and hard to show an increase in AUC for another test</li>
+          <br>
+          <li>$ROC(t)$ is very interpretable, but does not use all of ROC curve data</li>
+          <br>
+          <li>$\rho AUC$ is a compromise</li>
+        </ul>
+      </section>
+
+
+      <section>
+        <iframe
+          src="https://embed.polleverywhere.com/multiple_choice_polls/lMKpUle6Se3E81QxEuHGT?controls=none&short_poll=true"
+          width="1024px" height="768px"></iframe>
+      </section>
+
+      <section>
+        <iframe
+          src="https://embed.polleverywhere.com/multiple_choice_polls/1TCJ0EE5DR28uSahR24py?controls=none&short_poll=true"
+          width="1024px" height="768px"></iframe>
+      </section>
+
+
+      <section>
+        <h2>Binormal ROC curve</h2>
+        <ul>
+          <li>Fit a binormal distribution to the ROC curve</li>
+          $Y_{\bar D} \sim N(\mu_{\bar D}, \sigma_{\bar D}^2), Y_D \sim N(\mu_D, \sigma_D^2)$
+          $ROC(t)=\Phi (a+b\Phi^{-1}(t))$
+          <br>
+          where $a=\frac{(\mu_D-\mu_{\bar D})}{\sigma_D}$, $b=\frac{\sigma_{\bar D}}{\sigma_D}$
+          <br>
+          Binormal assumption:
+          <br>
+          $g(Y_{\bar D}) \sim $ Normal
+          <br>
+          $g(Y_D) \sim $ Normal for some transformation $g$
+        </ul>
+      </section>
+
+
+      <section>
+        <h2>Area Under The ROC Curve</h2>
+        <div class="twocol" style="width: 40%; vertical-align: middle;">
+          <img src="img/lecture09_5.png">
+        </div>
+        <div class="twocol" style="width: 55%; vertical-align: middle;">
+          <ul style="font-size: 70%;">
+            <li>$t_k$: 1-specificity</li>
+            <li>$y_k$: threshold</li>
+            <li>$ROC(t_k)=\Phi (a+b\Phi^{-1}(t_k))$</li>
+            <ul>
+              <li>$=P(Y_D>y_k)$</li>
+            </ul>
+            <li>Can fit with probitregression with response $U_k=I(Y>y_k)$ and covariate $\Phi ^{-1} (t_k)$</li>
+          </ul>
+        </div>
+      </section>
+
+
+
+      <section>
+        <h2>Binormal vs. Empirical ROC Curve</h2>
+        <ul>
+          <li>Binormal is smooth, statistically more efficient, but depends on (weak) assumptions</li>
+          <li>If marker is ordinal $\rightarrow$ binormal</li>
+          <li>To compute sample for a study $\rightarrow$ binormal</li>
+          <li>ROC regression analysis (w/covariates) $\rightarrow$ binormal</li>
+          <li>ROC curve for continuous data $\rightarrow$ empirical</li>
+        </ul>
+      </section>
+
+
+      <section>
+        <h2>ROC Curve</h2>
+        <img src="img/lecture09_6.png" alt="">
+      </section>
+
+
+      <section>
+        <h2>Software for ROC Analyses</h2>
+        <ul>
+          <li>In R, pROCpackage</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <script src="reveal.js/dist/reveal.js"></script>
+  <script src="reveal.js/plugin/zoom/zoom.js"></script>
+  <script src="reveal.js/plugin/notes/notes.js"></script>
+  <script src="reveal.js/plugin/search/search.js"></script>
+  <script src="reveal.js/plugin/markdown/markdown.js"></script>
+  <script src="reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="reveal.js/plugin/math/math.js"></script>
+
+  <script>
+    // Also available as an ES module, see:
+    // https://revealjs.com/initialization/
+    Reveal.initialize({
+      controls: false,
+      progress: true,
+      center: true,
+      hash: true,
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+      width: 1024,
+      height: 768,
+
+      slideNumber: 'c/t',
+
+      pdfSeparateFragments: false,
+
+      math: {
+        // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+        config: 'TeX-AMS_HTML-full',
+        TeX: {
+          Macros: {
+            R: '\\mathbb{R}',
+            set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+          }
+        }
+      },
+
+      // Learn about plugins: https://revealjs.com/plugins/
+      plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+    });
+
+  </script>
+
+</body>
+
+</html>
