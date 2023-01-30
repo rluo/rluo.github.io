@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Cross Validation</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+
+
+            <section>
+                <h2>Model Assessment</h2>
+                <ul>
+                    <li>So far, we learned about methods in regression and classification for making predictions on our
+                        data
+                    </li>
+                    <ul>
+                        <li>How do we test these methods?
+                        </li>
+                    </ul><img src="img/train_test.png">
+                </ul>
+            </section>
+
+
+
+
+            <section>
+                <h2>Training vs. Test Error—1 </h2>
+                <ul>
+                    <li>Recall the distinction between the test error and the training error:
+                    </li>
+                    <ul>
+                        <li>Test error is the average error that results from using a statistical learning method to
+                            predict the response on a new observation, one that was not used in training the method
+                        </li>
+                        <li>Training error is calculated by applying the statistical learning method to the observations
+                            used in its training
+                        </li>
+                    </ul>
+                    <li>The training error rate often underestimates the test error rate
+
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Training vs. Test Error—2</h2>
+                <img src="img/train_test_error.png">
+            </section>
+
+
+            <section>
+                <h2>Prediction-Error Estimate</h2>
+                <ul>
+                    <li>Estimate the test error by holding out a subset of the training observations from the fitting
+                        process, and then applying the statistical learning method to those held out observations
+
+                    </li>
+                </ul>
+                <img src="img/train_val_test.png" alt="">
+            </section>
+
+
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/fq0IGfRFfoAPfYJxLiLHV?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/sm7UN9LVzHFzKxNEQYyCp?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/CbtW5h9OOTx19YsQ6rrrc?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/eEzmZoV8DdiRfw0oXcPVX?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+            <section>
+                <h2>K-fold Cross-Validation—1 </h2>
+                <ul>
+                    <li>Instead of a single 50/50 split,</li>
+
+                    <ul>
+                        <li> Divide data into K equal-sized parts (K=5 here)</li>
+                    </ul>
+                    <li>Train using parts (2, 3, 4, and 5) combined, validate on 1</li>
+                    <li> Repeat 5 times each with different validation part</li>
+                </ul>
+                <img src="img/k_fold_cv.png" alt="">
+            </section>
+
+            <section>
+                <h2>K-fold Cross-Validation—2</h2>
+                <ul>
+                    <li>Widely used approach for estimating test error</li>
+                    <li> Estimates can be used to select best model, and to give an idea of the test error of the final
+                        chosen model</li>
+                    <li>Idea is to randomly divide the data into K equal-sized parts. We leave out part k, fit the model
+                        to the other K − 1 parts (combined), and then obtain predictions for the left-out kth part</li>
+                    <li> This is done in turn for each part k = 1, 2, . . . K, and then the results are combined</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>K-fold Validation—3 </h2>
+                <img src="img/strat_k_fold_cv.png" alt="">
+            </section>
+
+            <section>
+                <h2>Leave-One Out Cross-Validation </h2>
+                <ul>
+
+                    <li>Setting K=n yields n-fold or leave-one out cross-validation (LOOCV)</li>
+                    <li>Sometimes useful, but typically doesn’t shake up the data enough
+                    </li>
+                    <li> The estimates from each fold are highly correlated and hence their average can have high
+                        variance
+                    </li>
+                    <li> A better choice is K=5 or 10
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Benefits of Cross-Validation</h2>
+                <ul>
+                    <li>Avoid random (lucky/unlucky) single split
+                    </li>
+                    <ul>
+                        <li>Each example will be in the training set exactly once: each example is in one of the folds,
+                            and each fold is in the test set once
+                        </li>
+                    </ul>
+                    <li>Tells us how sensitive our model is to the selection of the training dataset
+                    </li>
+                    <li>Use our data more effectively
+                    </li>
+                    <ul>
+                        <li>5-fold, in each iteration we can use four-fifths of the data (80%) to fit the model
+                        </li>
+                        <li>10-fold, we can use nine-tenths of the data (90%) to fit the model
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Issues with Cross Validation</h2>
+                <ul>
+                    <li>Since each training set is only (K − 1)/K as big as the original training set, the estimates of
+                        prediction error will typically be biased upward
+                    </li>
+                    <ul>
+                        <li>This bias is minimized when K = n (LOOCV), but this estimate has high variance
+                        </li>
+                        <li>K = 5 or 10 provides a good compromise for this bias-variance tradeoff
+                        </li>
+                    </ul>
+                    <li>Computational cost
+                    </li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Linear Discriminant Analysis<h2>
+                        <br>
+
+                        <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                        <br>
+                        <p><small>Department of Biostatistics and Data Science<br>
+                                School of Public Health<br>The University of Texas Health Science Center at
+                                Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>Linear Methods for Prediction —1</h2>
+                <ul>
+                    <li>Let $\hat G(x)$ be the prediction. Note that we can always divide the input space into a
+                        collection of regions taking the same predicted values</li>
+                    <li>How to best divide the input space?</li>
+                    <li>The class of procedures where the decision boundaries are linear are referred to as linear
+                        methods for classification</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Linear Methods for Prediction —2</h2>
+                <ul>
+                    <li>Suppose that we have $K$ classes $(1,2,…,K)$, and we fit a linear model for the $kth$ indicator
+                        response variable $\hat f_k(x)=\hat \beta _{k0} + \hat \beta _k ^Tx$</li>
+                    <li>The decision boundary between class $k$ and $l$ is the set of points for which $\hat f_k(x)=
+                        \hat f_l(x)$.</li>
+                    <li>General class of methods model the discriminant function $\delta _k(x)$ for each class, then
+                        classify $x$ to the class with the largest value for its discriminant function</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Bayes Rule and Decision Theory —1</h2>
+                <ul>
+                    <li>Decision theory for classification tells us that we just need to know the class posteriors $Pr(G
+                        \mid X)$ for optimal classification</li>
+                    <li>Using Bayes theorem:</li>
+                    $Pr(G=k \mid X=x)=\frac{Pr(X=x \mid G=k)Pr(G=k)}{\sum_{l=1}^{K}Pr(X=x \mid G=l)Pr(G=l)}$
+                    <br>
+                    <br>
+                    $Pr(G=k \mid X=x)=\frac{f_k(x)\pi_k}{\sum_{l=1}^{K}f_l(x)\pi_l }$, where
+                    <br>
+                    $f_k(x)=$ the class conditional density of $X$ in a class $G=k$
+                    <br>
+                    $\pi_k$ be the prior probability of class $k$, with $\sum_{i=1}^{K}\pi_k=1$
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Bayes Rule and Decision Theory —2</h2>
+                <ul>
+                    $Pr(G=k \mid X=x)=\frac{f_k(x)\pi_k}{\sum_{l=1}^{K}f_l(x)\pi_l'}$
+                    <li>Model each class density as a multivariate Gaussian:</li>
+                    $f_k(x)=\frac{1}{(2\pi)^{p/2} \mid \sum_{k} \mid ^{1/2}} exp \lbrace - \frac{1}{2}(x-\mu_k)'
+                    \sum_{k}^{-1}(x-\mu_k) \rbrace$
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Linear Discriminant Analysis —1</h2>
+                <ul>
+                    <li>If we assume the covariance structure is the same for all classes $\sum_{k}=\sum $, $\forall k$,
+                        we have linear discriminant analysis (LDA)</li>
+                    <ul>
+                        <li>Let's first assume that we only have one variable $(p=1)$; then the Gaussian density has the
+                            form</li>
+                        $f_k(x)=\frac{1}{\sqrt{2\pi} \sigma_k}e^{- \frac{1}{2}(\frac{x-\mu_k}{\sigma_k})^2}$
+                        <li>Where $\mu_k$ is the mean and $\sigma_k^2$ the variance in class $k$. If the covariance
+                            structure is the same for all classes, then $\sigma_k=\sigma$ for all classes.</li>
+                        <li>Plugging this into Bayes formula, we get:</li>
+                        <br>
+                        $Pr(G=k)=\frac{\pi_k \frac{1}{\sqrt{2\pi} \sigma_k}e^{-
+                        \frac{1}{2}(\frac{x-\mu_k}{\sigma_k})^2}}{\sum_{l=1}^{K} \pi_l \frac{1}{\sqrt{2\pi}
+                        \sigma_k}e^{- \frac{1}{2}(\frac{x-\mu_l}{\sigma})^2}}$
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Linear Discriminant Analysis —2</h2>
+                <ul>
+                    <li>To classify to one of two classes at the value $X=x$, we need to see which of the
+                        $Pr(G=k)$ is largest. It is sufficient to look at the log-ratio:</li>
+                </ul>
+                $$
+                \log \frac{Pr(G=k \mid X=x)}{Pr(G=l \mid X=x)}= \log \frac{\pi_k}{\pi_l} + \log \frac{f_k(x)}{f_l(x)}
+                $$
+            </section>
+
+
+            <section>
+                <h2>Linear Discriminant Analysis —3</h2>
+                <ul>
+                    <li>Equivalently, the discrimination function is simply (for one variable):</li>
+                    $\delta_k(x)=\frac{x \mu_k}{\sigma^2}- \frac{\mu_k}{2\sigma^2}+\log \pi_k$
+                    <li>or for more than one variable:</li>
+                    $\delta_k(x)=x' \sum_{}^{-1} \mu_k - \frac{1}{2} \mu_k \sum_{}^{-1} \mu_k +\log \pi_k$
+                    <li>With $G(x)=arg\,max_k \delta_k(x)$</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/j7mmBykTBB17in7LnyCLG?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>Linear Discriminant Analysis —4</h2>
+                <img src="img/lecture07_1.png" alt="" style="width: 90%;">
+                <ul>
+                    <li>Example with $\mu_1=-1.5$, $\mu_2=1.5$, $\pi_1=\pi_2=0.5$ and $\sigma^2=1$</li>
+                    <li>Typically, we don't know these parameters; we just have the training data</li>
+                    <li>In that case we simply estimate the parameters and plug them into the rule</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Estimating LDA parameters</h2>
+                <ul>
+                    <li>Use the training set to estimate the parameters.</li>
+                    <br>
+                    <br>
+                    <ul>
+                        <li>$\hat \pi_k= \frac{N_k}{N}$, where $N_k$ is the observed number of subjects in class $k$.
+                        </li>
+                        <li>$\hat \mu_k=\sum_{g_{i=k}}^{} \frac{x_i}{N_k}$</li>
+                        <li>$\hat {\sum}= \sum_{k=1}^{K} \sum_{g_{i=k}}^{} (x_i- \hat \mu_k)(x_i-\hat \mu_k)'/(N-k)$
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Linear Discriminant Analysis when $p>1$</h2>
+                <img src="img/lecture07_2.png" alt="">
+                <ul>
+                    <li>Density: $f(x)= \frac{1}{(2\pi)^{p/2} \mid \sum \mid ^{1/2}}e^{- \frac{1}{2}(x-\mu)^T
+                        \sum^{-1}(x-\mu)}$</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Illustration $p=2$ and $K=3$</h2>
+                <div class="twocol" style="width: 35%; vertical-align: middle;">
+                    <ul style="font-size: 80%;">
+                        <li>Here $\pi_1=\pi_2=\pi_3=\frac{1}{3}$</li>
+                        <li>The dashed lines are known as the Bayes decision boundaries</li>
+                        <li>Were they known, they would yield the fewest misclassification errors, among all
+                            classifiers</li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <img src="img/lecture07_3.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Illustration $p=2$ and $K=3$</h2>
+                <div class="twocol" style="width: 35%; vertical-align: middle;">
+                    <ul style="font-size: 80%;">
+                        <li>4 variables</li>
+                        <li>3 species</li>
+                        <li>50 samples/class</li>
+                        <li>LDA classifies all but 3 of the 150 training samples correctly</li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <img src="img/lecture07_4.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Fisher's Discriminant Plot</h2>
+                <img src="img/lecture07_5.png" alt="" width="85%">
+                <ul>
+                    <li>When there are $K$ classes, linear discriminant analysis can be viewed exactly in a $K-1$
+                        dimensional plot</li>
+                    <li>Why? Because it essentially classifies to the closest centroid, and they span a $K-1$
+                        dimensional plane</li>
+                    <li>Even when $K>3$, we can find the 'best' 2-dimensional plane for visualizing the discriminant
+                        risk</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>From $\delta_x(x)$ to probabilities</h2>
+                <ul>
+                    <li>Once we have estimates $\hat \delta_x(x)$, we can turn these into estimates for class
+                        probabilities</li>
+                    $\widehat {Pr}(G=k \mid X=x)= \frac{e^{\hat \delta_k(x)}}{\sum_{l=1}^{K}e^{\hat \delta_l(x)}}$
+                    <br>
+                    <br>
+                    <li>Classifying to the largest $e^{\hat \delta_k(x)}$ amounts to classifying to the class for which
+                        $\widehat {Pr}(G=k \mid X=x)$ is largest</li>
+                    <li>When $K=2$, we classify to class 2 if $\widehat {Pr}(G=k \mid X=x) \ge 0.5$, else to class 1
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Quadratic Discriminant Analysis</h2>
+                <ul>
+                    <li>If we assume that each class has its own correlation structure ($\sum_{k}$ are no longer equal
+                        for all $k$), then we no longer get a linear estimate</li>
+                    <li>Quadratic discriminant functions (QDA):</li>
+                    <h4>$\delta_k(x)=\frac{1}{2}\log\mid k\mid -\frac{1}{2}(x-\mu_k) \sum_k\, ^{-1} (x-\mu_k)+\log
+                        \pi_k$</h4>
+                    <li>The decision boundary is now described with a quadratic function.</li>
+                    <ul>
+                        <li>Note: Both LDA and QDA are finding the centroid of classes and then finding the closest
+                            centroid to the new data point. Correlation structure is taken into consideration when
+                            defining distance.</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>LDA Example</h2>
+                <img src="img/lecture07_6.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Comments on QDA and LDA</h2>
+                <ul>
+                    <li>You can get similar results to QDA using LDA with an enlarged quadratic polynomial space. QDA is
+                        preferred although LDA is a convenient alternative</li>
+                    <li>Parameter estimates are generally similar except that separate covariance matrices must be
+                        estimated for each class for QDA</li>
+                    <li>These methods generally work very well, probably because</li>
+                    <ul>
+                        <li>The data can only support simple decision boundaries such as linear or quadratic</li>
+                        <li>Estimates provided via the Gaussian models are stable</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/HEUUWrd7ktrEemBynMeP3?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/Re0PujSvS4PJ7Z59ShXOs?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/WTgJtOuQXpblJ12KUA4lG?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/e209DTXnXrPX597UJQln4?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>R Session</h2>
+                <br>
+                <div>
+                    <a href="https://github.com/rluo/rluo.github.io/blob/master/statml/classification.ipynb">
+                        <i class="fa-solid fa-person-digging fa-beat-fade fa-2x"></i>
+                        &nbsp; &nbsp;
+                        <span class="rbtn">
+                            code
+                        </span>
+                    </a>
+                </div>
+            </section>
+
+
+            <section>
+                <h2>LDA versus Logistic Regression —1</h2>
+                <ul>
+                    <li>For LDA: $logit = \log(\pi_k/\pi_l) + ... + x^T \Sigma^{-1}(\mu_k - \mu_l)$</li>
+                    <li>For Logistic Regression: $logit = \beta_0 + x^T \beta$</li>
+                    <li>Very similar! Difference comes from how the parameters are estimated</li>
+                    <ul>
+                        <li>Logistic model is more general, makes less assumptions. The marginal density $Pr(X)$ is
+                            fully nonparametric, using the empirical distribution function which places mass $1/N$ at
+                            each observation</li>
+                        <li>In LDA, fit the parameters by maximizing the full log-likelihood using the Gaussian
+                            assumption for $X$</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>LDA versus Logistic Regression —2</h2>
+                <ul>
+                    <li>LDA imposes a distribution assumption on $X$ which, if good, will result in more efficient
+                        estimates. If the assumption is true, the estimates will be 30% more efficient. LDA not robust
+                        to gross outliers.</li>
+                    <li>Logistic regression is conditional methodology. We condition on $X$ and do not specify any
+                        distribution. Big advantage where we know that $X$ can't be normal (e.g., categorical
+                        variables).</li>
+                    <li>However, in practice they both perform similarly, even in extreme cases with categorical
+                        covariates</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Why discriminant analysis?</h2>
+                <ul>
+                    <li>When the classes are well-separated, the parameter estimates for the logistic regression model
+                        are surprisingly unstable. Linear discriminant analysis does not suffer from this problem.</li>
+                    <li>If $n$ is small and the distribution of the predictors $X$ is approximately normal in each of
+                        the classes, the linear discriminant model is again more stable than the logistic regression
+                        model</li>
+                    <li>Linear discriminant analysis is popular when we have more than two response classes, because it
+                        also provides low-dimensional views of the data</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Other Forms of Discriminant Analysis</h2>
+                <ul>
+                    <li>With $f_k(x)=\Pi_{j=1}^{p} f_{jk}(x_j)$ (conditional independence model) in each class we get
+                        naïve Bayes. For Gaussian this means the $\sum_k$ are diagonal.</li>
+                    <li>Many other forms, by proposing specific density models for $f_k(x)$, including nonparametric
+                        approaches.</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Naïve Bayes</h2>
+                <ul>
+                    <li>Assumes features are independent in each class.</li>
+                    <li>Useful when p is large, and so multivariate methods like QDA and even LDA break down.</li>
+                    <ul>
+                        <li>Gaussian naïve Bayes assumes each $\sum_k$ is diagonal:</li>
+                        <h4>$\delta_k(x) \propto \log (\pi_k \Pi_{j=1}^{p}f_{kj}(x_j))=-
+                            \frac{1}{2}\sum_{j=1}^{p}[\frac{(x_j-\mu_{kj})^2}{\sigma_{kj}^2}+\log \sigma_{kj}^2]+\log
+                            \pi_k$</h4>
+                        <li>Can use for mixed feature vectors (qualitative and quantitative). If $X_j$ is qualitative,
+                            replace $f_{kj}(x_j)$ with the probability mass function (histogram) over discrete
+                            categories.</li>
+                    </ul>
+                    <li>Note that Naïve Bayes has very strong assumptions! Regardless, it often produces good
+                        classification results.</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Summary</h2>
+                <ul>
+                    <li>Logistic regression is very popular for classification, especially when $G=2$</li>
+                    <li>LDA is useful when $n$ is small, or the classes are well separated, and Gaussian assumptions are
+                        reasonable. Also when $G>2$.</li>
+                    <li>Naïve Bayes is useful when $p$ is very large</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
