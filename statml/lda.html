@@ -44,14 +44,14 @@
                         <emph>Predictions</emph>
                     </strong></h2>
                 <br>
-                <h2>Linear Discriminant Analysis<h2>
-                        <br>
+                <h2>Linear Discriminant Analysis</h2>
+                <br>
 
-                        <h3>Xi (Rossi) <strong>LUO</strong></h3>
-                        <br>
-                        <p><small>Department of Biostatistics and Data Science<br>
-                                School of Public Health<br>The University of Texas Health Science Center at
-                                Houston</small></p>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at
+                        Houston</small></p>
             </section>
 
 
@@ -101,7 +101,7 @@
             <section>
                 <h2>Bayes Rule and Decision Theory —2</h2>
                 <ul>
-                    $Pr(G=k \mid X=x)=\frac{f_k(x)\pi_k}{\sum_{l=1}^{K}f_l(x)\pi_l'}$
+                    $Pr(G=k \mid X=x)=\frac{f_k(x)\pi_k}{\sum_{l=1}^{K}f_l(x)\pi_l}$
                     <li>Model each class density as a multivariate Gaussian:</li>
                     $f_k(x)=\frac{1}{(2\pi)^{p/2} \mid \sum_{k} \mid ^{1/2}} exp \lbrace - \frac{1}{2}(x-\mu_k)'
                     \sum_{k}^{-1}(x-\mu_k) \rbrace$
@@ -122,7 +122,7 @@
                             structure is the same for all classes, then $\sigma_k=\sigma$ for all classes.</li>
                         <li>Plugging this into Bayes formula, we get:</li>
                         <br>
-                        $Pr(G=k)=\frac{\pi_k \frac{1}{\sqrt{2\pi} \sigma_k}e^{-
+                        $Pr(G=k | X = x)=\frac{\pi_k \frac{1}{\sqrt{2\pi} \sigma_k}e^{-
                         \frac{1}{2}(\frac{x-\mu_k}{\sigma_k})^2}}{\sum_{l=1}^{K} \pi_l \frac{1}{\sqrt{2\pi}
                         \sigma_k}e^{- \frac{1}{2}(\frac{x-\mu_l}{\sigma})^2}}$
                     </ul>
@@ -134,7 +134,7 @@
                 <h2>Linear Discriminant Analysis —2</h2>
                 <ul>
                     <li>To classify to one of two classes at the value $X=x$, we need to see which of the
-                        $Pr(G=k)$ is largest. It is sufficient to look at the log-ratio:</li>
+                        $Pr(G=k | X = x)$ is largest. It is sufficient to look at the log-ratio:</li>
                 </ul>
                 $$
                 \log \frac{Pr(G=k \mid X=x)}{Pr(G=l \mid X=x)}= \log \frac{\pi_k}{\pi_l} + \log \frac{f_k(x)}{f_l(x)}
@@ -267,7 +267,8 @@
                     <li>If we assume that each class has its own correlation structure ($\sum_{k}$ are no longer equal
                         for all $k$), then we no longer get a linear estimate</li>
                     <li>Quadratic discriminant functions (QDA):</li>
-                    <h4>$\delta_k(x)=\frac{1}{2}\log\mid k\mid -\frac{1}{2}(x-\mu_k) \sum_k\, ^{-1} (x-\mu_k)+\log
+                    <h4>$\delta_k(x)=- \frac{1}{2}\log\mid \Sigma_k \mid -\frac{1}{2}(x-\mu_k) \sum_k\, ^{-1}
+                        (x-\mu_k)+\log
                         \pi_k$</h4>
                     <li>The decision boundary is now described with a quadratic function.</li>
                     <ul>
@@ -300,6 +301,12 @@
                 </ul>
             </section>
 
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/xU8rHCPaKNUhMsusDOYgv?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
 
             <section>
                 <iframe
@@ -349,7 +356,9 @@
                 <ul>
                     <li>For LDA: $logit = \log(\pi_k/\pi_l) + ... + x^T \Sigma^{-1}(\mu_k - \mu_l)$</li>
                     <li>For Logistic Regression: $logit = \beta_0 + x^T \beta$</li>
-                    <li>Very similar! Difference comes from how the parameters are estimated</li>
+                    <li>
+                        <emph>Very similar!</emph> Difference comes from how the parameters are estimated
+                    </li>
                     <ul>
                         <li>Logistic model is more general, makes less assumptions. The marginal density $Pr(X)$ is
                             fully nonparametric, using the empirical distribution function which places mass $1/N$ at
@@ -394,7 +403,8 @@
                 <h2>Other Forms of Discriminant Analysis</h2>
                 <ul>
                     <li>With $f_k(x)=\Pi_{j=1}^{p} f_{jk}(x_j)$ (conditional independence model) in each class we get
-                        naïve Bayes. For Gaussian this means the $\sum_k$ are diagonal.</li>
+                        <emph>naïve Bayes</emph>. For Gaussian this means the $\sum_k$ are diagonal.
+                    </li>
                     <li>Many other forms, by proposing specific density models for $f_k(x)$, including nonparametric
                         approaches.</li>
                 </ul>
@@ -420,6 +430,11 @@
                 </ul>
             </section>
 
+            <section>
+                <h2>Explain Possible Reasons</h2>
+                <img src="img/lda_naive_compare_scenario2.png" alt="" width="50%">
+                <p>More from ISL 4.5</p>
+            </section>
 
             <section>
                 <h2>Summary</h2>
