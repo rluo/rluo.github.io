@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Non-Linear Models</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at
+                        Houston</small></p>
+            </section>
+
+            <section>
+                <h2>Moving Beyond Linearity</h2>
+                <ul>
+                    <li>The truth is never linear! Or almost never!</li>
+                    <li>But often the linearity assumption is good enough
+                    </li>
+                    <li>When its not . . .
+                    </li>
+                    <ul>
+                        <li>Polynomials</li>
+                        <li>Step functions
+                        </li>
+                        <li>Splines</li>
+                        <li>Generalized additive models
+                        </li>
+                    </ul>
+                    <li>Offer a lot of flexibility, without losing the ease and interpretability of linear models
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Example Wage Dataset</h2>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>Mid-Atlantic Wage Data: Wage and other data for a group of 3000 male workers in the
+                            Mid-Atlantic region</li>
+                        <li>plot(age, wage, main="Wage-data", xlab="age", ylab="wage", col="darkgrey")</li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 40%; vertical-align: middle">
+                    <img src="img/lecture13_1.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Polynomial Regression —1</h2>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <ul style="font-size: 70%">
+                        <li>fit=lm(wage~poly(age,4), data=Wage), or
+                        </li>
+                        <li>fit=lm(wage~age+I(age^2)+I(age^3)+I(age^4), data=Wage)
+                        </li>
+                        <li>In the figure, we have computed the fit and pointwise standard errors on a grid of values
+                            for Age
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 40%; vertical-align: middle">
+                    <img src="img/lecture13_2.png">
+                </div>
+                $$y_i=\beta_0+\beta_1x_i+\beta_2x_i^2+\beta_3x_i^3+\dots+\beta_dx_i^d+\epsilon$$
+
+            </section>
+
+
+            <section>
+                <h2>Polynomial Regression —2</h2>
+                <ul>
+                    <li>Create new variables $X_1 = X, X_2 = X^2$, etc. and then treat as multiple linear regression
+                    </li>
+                    <li>Not really interested in the coefficients; more interested in the fitted function values at any
+                        value $x_0$: $\hat
+                        f(x_0)=\hat\beta_0+\hat\beta_1x_0+\hat\beta_2x_0^2+\hat\beta_3x_0^3+\hat\beta_4x_0^4$</li>
+                    <li>How to choose polynomial degree d ?
+                    </li>
+                    <ul>
+                        <li>Use cross-validation to choose d
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Polynomial Logistic Regression</h2>
+                <ul>
+                    <li>Logistic regression follows naturally, for example
+                    </li>
+                    $P(y_i \gt 250\mid
+                    x_i)=\frac{\exp(\beta_0+\beta_1x_i+\beta_2x_i^2+\beta_3x_i^3+\dots+\beta_dx_i^d)}{1+\exp(\beta_0+\beta_1x_i+\beta_2x_i^2+\beta_3x_i^3+\dots+\beta_dx_i^d)}$
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Polynomial Regression Tail Behaviors</h2>
+                <div class="twocol" style="width: 50%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>Using polynomial functions of the features as predictors in a linear model imposes a
+                            <strong>global</strong> structure on the non-linear function of X
+                        </li>
+                        <li>Polynomials have notorious tail behavior $-$ very bad for extrapolation
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 45%; vertical-align: middle">
+                    <img src="img/lecture13_3.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Step Function -1</h2>
+                <div class="twocol" style="width: 50%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>In order to avoid imposing such a global structure, we can instead use step functions
+                        </li>
+                        <li>Here we break the range of X into bins, and fit a different constant in each bin
+                        </li>
+                        <ul>
+                            <li>A way of creating transformations of a variable — cut the variable into distinct regions
+                            </li>
+                        </ul>
+                        $C_1(X)=I(X\lt 25)$,
+                        <br>
+                        $C_2(X)=I(25 \le X\lt 40)$,
+                        <br>
+                        $\dots$
+                        <br>
+                        $C_4(X)=I(X\ge 65)$
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 45%; vertical-align: middle">
+                    <img src="img/lecture13_4.png" alt="">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Step Functions —2</h2>
+                <ul>
+                    <li>Easy to work with,
+                    </li>
+                    <ul>
+                        <li>Create a series of dummy variables representing each group
+                        </li>
+                    </ul>
+                    <li>Useful for creating summary reports
+                    </li>
+                    <li>Useful for creating interactions,
+                    </li>
+                    <ul>
+                        <li>For example, interaction effect of Year and Age: $I(Year \lt 2005)*Age, I(Year \ge
+                            2005)*Age$
+                        </li>
+                        would allow for different linear functions in each age category
+                    </ul>
+                    <li>In R: $I(year\lt 2005)$. You can also use cut(age, c(18, 25, 40, 65, 90))
+                    </li>
+                    <li>Choice of cutpoints or knots can be problematic
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Piecewise Polynomials —1</h2>
+                <img src="img/lecture13_5.png" alt="" width="50%">
+                <ul>
+                    <li>Instead of a single polynomial in X over its whole domain, we can rather use different
+                        polynomials in regions defined by knots
+                    </li>
+                    <h4>$y_i= \begin{cases}
+                        \beta_{01}+\beta_{11}x_i+\beta_{21}x_i^2+\beta_{31}x_i^3+\dots+\beta_{d1}x_i^d+\epsilon_i, if
+                        x_i \lt c \\
+                        \beta_{02}+\beta_{12}x_i+\beta_{22}x_i^2+\beta_{32}x_i^3+\dots+\beta_{d2}x_i^d+\epsilon_i, if
+                        x_i \gt c\end{cases} $</h4>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Piecewise Polynomials —2</h2>
+                <img src="img/lecture13_6.png" alt="">
+                <ul>
+                    <li>Better to add constraints to the polynomials, e.g. continuity & smoothness
+                    </li>
+                    <li> <strong>Splines</strong>: continuity with smoothness
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/v40RKnsr7SNtGY2iLosXt?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/Q4HMIZrLD4WOk7isLduxC?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <h1>Splines</h1>
+            </section>
+
+
+            <section>
+                <h2>Splines</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul style="font-size: 70%">
+                        <li>A cubic spline with knots at $\epsilon_k, k = 1, . . . , K$ is a piecewise cubic polynomial
+                            with continuous derivatives up to order 2 at each knot.
+                        </li>
+                        <li>Linear Spline
+                        </li>
+                        <ul>
+                            <li>fit=lm(wage~bs(age,knots=c(50), degree=1), data=Wage)
+                            </li>
+                        </ul>
+                        <br>
+                        <li>Cubic Spline
+                        </li>
+                        <ul>
+                            <li>fit=lm(wage~bs(age,knots=c(25,40,65)), data=Wage)
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle">
+                    <img src="img/lecture13_7.png" alt="">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Natural Splines</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>A natural cubic spline extrapolates linearly beyond the boundary knots.
+                        </li>
+                        <li>Fitting splines in R is easy: bs(x, ...) for any degree splines, and ns(x, ...) for natural
+                            cubic splines, in package splines.
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle">
+                    <img src="img/lecture13_8.png" alt="">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Knot Placement —1</h2>
+                <ul style="font-size: 90%">
+                    <li>One strategy is to decide K, the number of knots, and then place them at appropriate quantiles
+                        of the observed X
+                    </li>
+                    <ul>
+                        <li>It is common to place knots in a uniform fashion
+                        </li>
+                        <li>Have R automatically place the corresponding number of knots at uniform quantiles of the
+                            data
+                        </li>
+                    </ul>
+                    <li>Another strategy; place more knots in places where you feel the function might vary most
+                        rapidly, and place fewer knots where it seems more stable
+                    </li>
+                    <ul>
+                        <li>degrees of freedom = coefs + knots
+                        </li>
+                    </ul>
+                    <li>A cubic spline with K knots has K + 4 parameters (DoF)
+                    </li>
+                    <li>A natural spline with K knots has K DoF.
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Knot Placement -2</h2>
+                <ul>
+                    <li>How many knots should we use, or equivalently how many degrees of freedom should our spline
+                        contain?
+                    </li>
+                    <ul>
+                        <li>Try out different numbers of knots and see which produces the best looking curve (use
+                            cross-validation)
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Splines vs. Polynomials</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>Regression splines often give superior results to polynomial regression
+                        </li>
+                        <li>Splines introduce flexibility by increasing the number of knots but keeping the degree fixed
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle">
+                    <img src="img/lecture13_9.png" alt="">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Smoothing Splines —1</h2>
+                <ul>
+                    <li>A natural spline, with a knot at every unique value of $x_i$</li>
+                    <ul>
+                        <li>avoid the knot-selection issue, leaving a single $\lambda$ to be chosen</li>
+                        ($\lambda$: tuning parameter controls smoothness)
+                        <li>In R, the function smooth.spline() will fit a smoothing spline
+                        </li>
+                    </ul>
+                    <li>We can also specify df rather than $\lambda$
+                    </li>
+                    <ul>
+                        <li>smooth.spline(age, wage, df=16)
+                        </li>
+                    </ul>
+                    <li>The leave-one-out (LOO) cross-validated error
+                    </li>
+                    <ul>
+                        <li>smooth.spline(age, wage, cv=TRUE)
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Smoothing Splines —2</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>smooth.spline(age, wage, df=16)
+                        </li>
+                        <li>smooth.spline(age, wage, cv=TRUE)
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle">
+                    <img src="img/lecture13_10.png" alt="">
+                </div>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/QbdeOvikgv8wsOF3kFvAy?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/JQSKMJplKJNxKWe4lF6J6?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <h1>Generalized Additive Models</h1>
+            </section>
+
+
+            <section>
+                <h2>Generalized Additive Models —1</h2>
+                <ul>
+                    <li>Allows for flexible nonlinearities in several variables but retains the additive structure of
+                        linear models
+                    </li>
+                    <ul>
+                        <li>$y_i=\beta_0+f_1(x_{i1})+f_2(x_{i2})+\dots+f_p(x{ip})+\epsilon_i$</li>
+                    </ul>
+                </ul>
+                <img src="img/lecture13_11.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Generalized Additive Models —2</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>Fit a GAM, for example using natural splines,
+                        </li>
+                        <ul>
+                            <li>lm(wage ~ ns(year, df = 5) + ns(age, df = 5)) or
+                            </li>
+                            <li>gam(wage ~ ns(year, df = 5) + ns(age, df = 5))
+                            </li>
+                        </ul>
+                        <li>Can mix terms - some linear, some nonlinear
+                        </li>
+                        <li>Can use smoothing splines as well
+                        </li>
+                        <ul>
+                            <li>gam(wage ~ s(year, df = 5) + s(age, span = .5))
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle">
+                    <img src="img/lecture13_12.png" alt="">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Pros and Cons of GAMs</h2>
+                <ul>
+                    <li>Pros:
+                    </li>
+                    <ul>
+                        <li>Can fit a non-linear $f_j$ to each $x_j$ so haven't go manually try many different
+                            transformations on each variable individually
+                        </li>
+                        <li>Can get more accurate predictions of Y if the relationship is nonlinear
+                        </li>
+                        <li>Can examine the effect of each $x_j$ on Y individually while holding other variables fixed.
+                            This is useful for inference
+                        </li>
+                    </ul>
+                    <li>Cons:
+                    </li>
+                    <ul>
+                        <li>Restricted to be additive
+                        </li>
+                        <li>Interactions may be missed (but can add interactions)
+                        </li>
+                        <li>May be too many parameters to estimate given size of data
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/UhusMqIVqpQYXug2ITStq?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>

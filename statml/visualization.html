@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Visualization</h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>Introducing Visualizations</h2>
+                <ul>
+                    <li>“The simple graph has brought more information to the data analyst’s mind than any other device”
+                        – John Tukey
+                    </li>
+                    <li>Data sets are increasingly complicated
+                    </li>
+                    <li>When no parametric models can be proposed a priori, visualization techniques can be very
+                        important
+                    </li>
+                    <li>Visualization can be used to find some regularity in the data strong enough that modeling can
+                        say something about it
+
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <div class="twocol" style="width: 35%; vertical-align: middle;">
+                    <ul>
+                        <li>Say we have 97 pairs (x,y)
+                        </li>
+                        <li>What kind of model could you build to predict Y?
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <img src="img/visa_pic1.png">
+                </div>
+
+            </section>
+
+
+
+
+            <section>
+                <h1>Initial Example w/ Regression—1 </h1>
+                <ul>If fit a linear regression, we get R-squared = 0.80, p-value < 0.001. Seems like a good fit! </ul>
+            </section>
+
+            <section>
+                <h2>Initial Example w/ Regression—2 </h2>
+                <img src="img/vis_pic2.png">
+            </section>
+
+            <section>
+                <h2>Initial Example w/ Regression—3 </h2>
+                <img src="img/vis_pic3.png">
+
+            </section>
+
+            <section>
+                <h2>Initial Example w/ Regression—4</h2>
+                <ul>
+                    <li>There appear to be two clusters in the data and the regression line doesn’t fit either of them
+                        very well!
+                    </li>
+                    <li>In practice, hopefully would be able to use clustering to identify two clusters and fit a model
+                        to each cluster
+                    </li>
+                    <li>Be careful: inference after data snooping by visualization, like those after dimension reduction
+                        and clustering, will necessarily be much weaker
+                    </li>
+                    <li>Looking at the data uses up degrees of freedom
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Visualization Considerations</h2>
+                <ul>
+                    <li>Can look at data to underscore key qualitative features
+                    </li>
+                    <ul>
+                        <li>Data continuous or categorical? </li>
+                        <li>Ordered or unordered
+                        </li>
+                        <li>Dependent or independent
+                        </li>
+
+                    </ul>
+                    <li>General rule for constructing graphs: Choices of how to plot should not lead to incorrect
+                        inferences
+                    </li>
+                    <ul>
+                        <li>Position along a scale (common or not, aligned or not)
+                        </li>
+                        <li>Coloring, choice of symbol, motion, and adjacency on the page of different components affect
+                            the message a viewer will perceive
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Data Exploration</h2>
+                <ul>
+                    <li>Profiles and Stars
+                    </li>
+                    <ul>
+                        <li>Profiles: Representation of a vector of the form (𝑥_1,..,𝑥_𝑝) in which values 𝑥_𝑗 are
+                            plotted adjacent to each other.
+                        </li>
+                        <li>Stars: representation of the p-dimensional vector which the values 𝑥_𝑗 are plotted on axes
+                            drawn from a center point. They are connected to form a p-gon for each observation.
+                        </li>
+                    </ul>
+                </ul>
+
+            </section>
+
+            <section>
+                <h2>Heat Maps</h2>
+                <ul>
+                    <li>Matrix of values that have been color coded (higher values are brighter and lower values are
+                        darker, like temperature)
+                    </li>
+                    <li>Can suggest patterns in the data
+                    </li>
+                    <li>Car data:
+                    </li>
+                    <ul>
+                        <li>Data from 1974 US magazine Motor Trend
+                        </li>
+                        <li> 11 aspects of automobile design and performance</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Chernoff Faces</h2>
+                <ul>
+                    <li>Chernoff (1973) recognized that people are sensitive to small differences in faces
+                    </li>
+                    <li>To visualize high-dimensional data
+                    </li>
+                    <li>P-dimensional data point is converted to a list of values that specify features of a human face.
+                    </li>
+                    <ul>
+                        <li>E.g., height of a face, width of a face, etc.
+                        </li>
+                    </ul>
+                    <li>Subjective and depends on how the columns of X are converted to facial features.
+                    </li>
+                    <li>R allows a maximum of 15 variables
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>rattle</h2>
+                <ul>
+                    <li>install.packages("rattle")</li>
+                    <li>Used for data manipulation, exploration, analysis, and evaluation in Data Mining
+                    </li>
+
+                </ul>
+            </section>
+
+            <section>
+                <h2>ggobi</h2>
+                <ul>
+                    <li>Install ggobi onto your computer
+                    </li>
+                    <li> <a href="//www.ggobi.org">www.ggobi.org</a>
+                    </li>
+                    <li>Then in R, you can access it via the library “rggobi”
+                    </li>
+                    <li>This is used in other packages as well. Currently rggobi is not available in CRAN, possibly due
+                        to some issues with bugs.
+                    </li>
+                    <li>Outdated though</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>ggplot2</h2>
+                <ul>
+                    <li>Extremely popular way to conduct graphics. It has its own grammar.
+                    </li>
+                    <li>A nice website that has examples of visualizations with code
+                    </li>
+                    <li><a href="url"> http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html</a>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>plotly</h2>
+                <ul>
+                    <li>Free and commercial versions available
+                    </li>
+                    <li>Good integration of colors, themes, interactions
+                    </li>
+                    <li>Gaining a lot of popularity recently</li>
+                    <li><a href="https://plotly.com/">https://plotly.com/</a>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Animation</h2>
+                <ul>
+                    <li>gganimate package</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>R Session</h2>
+                <br>
+                <div>
+                    <a href="https://github.com/rluo/rluo.github.io/blob/master/statml/visualization.ipynb">
+                        <i class="fa-solid fa-person-digging fa-beat-fade fa-2x"></i>
+                        &nbsp; &nbsp;
+                        <span class="rbtn">
+                            code
+                        </span>
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
