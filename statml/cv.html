@@ -163,6 +163,18 @@
             </section>
 
             <section>
+                <h2>K-fold CV Error</h2>
+                <ul>
+                    <li>Averaging over K folds to produce the estimate</li>
+                    $$
+                    CV_k = \frac{1}{k} \sum_i Err_i
+                    $$
+                    <li>The error metrics can be MSE, likelihood, and etc, depending on whether regression or
+                        classification problems</li>
+                </ul>
+            </section>
+
+            <section>
                 <h2>K-fold Validation—3 </h2>
                 <img src="img/strat_k_fold_cv.png" alt="">
             </section>
@@ -180,6 +192,14 @@
                     <li> A better choice is K=5 or 10
                     </li>
                 </ul>
+            </section>
+
+            <section>
+                <h2>CV Estimate of Test Error</h2>
+                <img src="img/cv_est_test_error.png" alt="">
+                <p>ISL Fig 5.6, true model: medium flexibility (left), low flexibility (middle), high flexibility
+                    (right)
+                </p>
             </section>
 
             <section>
