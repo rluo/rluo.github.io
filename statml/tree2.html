@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Tree-Based Methods (Part 2)</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>Bagging —1</h2>
+                <ul>
+                    <li><strong>Bootstrap aggregation</strong>, or <strong>bagging</strong>, is a general-purpose
+                        procedure for reducing the variance of a statistical learning method;</li>
+                    <ul>
+                        <li>It is particularly useful and frequently used in the context of decision trees</li>
+                    </ul>
+                    <li>Given a set of n independent observations $Z_1$, $Z_2$, $\dots$ $Z_n$, each with variance
+                        $\sigma^2$, the variance of the mean $Z'$ of the observations is given by $\frac{\sigma^2}{n}$
+                    </li>
+                    <ul>
+                        <li>In other words, averaging a set of observations reduces variance
+                        </li>
+                    </ul>
+                    <li>So, if we have more than one training set, we could grow a tree on each set and take the average
+                        tree
+                    </li>
+                    <ul>
+                        <li>But we generally do not have access to multiple training sets!
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Bagging —2</h2>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>Instead, we bootstrap, by taking repeated samples from the training dataset
+                        </li>
+                        <li>Generate B different bootstrapped training sets
+                        </li>
+                        <li>Then train our method on the $b^{th}$ bootstrapped training set in order to get
+                            $\hat{f}^{*b}(x)$, the prediction at a point x
+                        </li>
+                        <li>Then average all the predictions to obtain
+                        </li>
+                        $\hat{f}_{bag}(x)=\frac{1}{B}\sum_{b=1}^{B}\hat{f}^{*b}(x)$
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 40%; vertical-align: middle">
+                    <img src="img/lecture15_1.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Bagging —3</h2>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>For classification trees: for each test observation, we record the class predicted by each
+                            of the B trees and take a <strong>majority vote</strong>
+                        </li>
+                        <li>The overall prediction is the most commonly occurring class among the B predictions.
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 40%; vertical-align: middle">
+                    <img src="img/lecture15_2.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Random Forests</h2>
+                <ul style="font-size: 90%">
+                    <li><strong>Random forests</strong> provide an improvement over bagged trees by way of a small tweak
+                        that <strong>decorrelates</strong> the trees
+                    </li>
+                    <ul>
+                        <li>To further reduces the variance when we average the trees
+                        </li>
+                    </ul>
+                    <li>We build a number of decision trees on the bootstrapped training samples
+                    </li>
+                    <li>But when building these trees, each time a split in a tree is considered, a random selection of
+                        m predictors is chosen as split candidates from the full set of p predictors
+                    </li>
+                    <ul>
+                        <li>The split is allowed to use only one of those m predictors
+                        </li>
+                    </ul>
+                    <li>A fresh selection of m predictors is taken at each split (typically we choose $m\approx
+                        \sqrt{p}$)
+                    </li>
+                    <ul>
+                        <li>That is, the number of predictors considered at each split is approximately equal to the
+                            square root of the total number of predictors.
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Example: The Heart Dataset</h2>
+                <div class="twocol" style="width: 50%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>Bagging and random forest results
+                        </li>
+                        <ul>
+                            <li>The test error (black and orange) is shown as a function of B, the number of
+                                bootstrapped training sets used
+                            </li>
+                            <li>Random forests were applied with $m\approx \sqrt{p}$ (4 of the 13 for the Heart data)
+                            </li>
+                            <li>The dashed line indicates the test error resulting from a single classification tree.
+                            </li>
+                        </ul>
+                        <li>The green and blue traces show the OOB error
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 45%; vertical-align: middle">
+                    <img src="img/lecture15_3.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Out-of-Bag Error Estimation</h2>
+                <ul style="font-size: 80%;">
+                    <li>It turns out that there's a straightforward way to estimate the test error of a bagged model
+                    </li>
+                    <li>Recall that the key to bagging is that trees are repeatedly fit to bootstrapped subsets of the
+                        observations
+                    </li>
+                    <li>The remaining observations not used to fit a given bagged tree are referred to as the
+                        <strong>out-of-bag</strong> (OOB) observations
+                    </li>
+                    <li>We can predict the response for the $i^{th}$ observation using each of the trees in which that
+                        observation was OOB
+                    </li>
+                    <li>This estimate is essentially the LOO cross-validation error for bagging, if B is large
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/EsN2EAWGTuvyXaGysuzPe?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/qOIVv505KTpQnWhQEvFZx?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h1>Boosting</h1>
+            </section>
+
+
+            <section>
+                <h2>Boosting</h2>
+                <ul>
+                    <li>Like bagging, boosting is a general approach that can be applied to many statistical learning
+                        methods for regression or classification
+                    </li>
+                    <li>Recall that bagging involves creating multiple copies of the original training data set using
+                        the bootstrap, fitting a separate decision tree to each copy, and then combining all of the
+                        trees in order to create a single predictive model
+                    </li>
+                    <li>Notably, each tree is built on a bootstrap data set, independent of the other trees
+                    </li>
+                    <li>Boosting works in a similar way, except that the trees are grown <strong>sequentially</strong>:
+                        each tree is grown using information from previously grown trees
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Boosting Algorithm</h2>
+                <ul>
+                    <li>1. Set $\hat{f}(x)=0$ and $r_i=y_i$ for all i in the training set
+                    </li>
+                    <li>2. For $b=1,2,\dots,B$, repeat:
+                    </li>
+                    <ul>
+                        <li>Fit a tree $\hat{f}(x)$ with d splits (d+1 terminal nodes) to the training data (X, r)
+                        </li>
+                        <li>Update $\hat{f}$ by adding in a shrunken version of the new tree: $\hat{f}(x)\leftarrow
+                            \hat{f}(x)+\lambda\hat{f}^b(x)$
+                        </li>
+                        <li>Update the residuals $r_i\leftarrow r_i-\hat{f}^b(x_i)$</li>
+                    </ul>
+                    <li>3. Output the boosted model,
+                    </li>
+                    $\hat{f}(x)=\sum_{b=1}^{B}\lambda\hat{f}^b(x)$
+                </ul>
+                <br>
+                <p>
+                    <emph> What is the idea behind this procedure?
+                    </emph>
+                </p>
+            </section>
+
+
+            <section>
+                <h2>Boosting Continued</h2>
+                <ul style="font-size: 90%">
+                    <li>Unlike fitting a single large decision tree to the data, which amounts to <strong>fitting the
+                            data hard</strong> and potentially overfitting, the boosting approach instead <strong>learns
+                            slowly</strong>
+                    </li>
+                    <li>Given the current model, we fit a decision tree to the residuals from the model
+                    </li>
+                    <li>We then add this new decision tree into the fitted function in order to update the residuals
+                    </li>
+                    <li>Each of these trees can be rather small, with just a few terminal nodes
+                    </li>
+                    <li>By fitting small trees to the residuals, we slowly improve $\hat{f}$ in areas where it does not
+                        perform well
+                    </li>
+                    <li>The shrinkage parameter $\lambda$ slows the process down even further, allowing more and
+                        different shaped trees to attack the residuals
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Boosting for Classification</h2>
+                <ul>
+                    <li>Boosting for classification is similar to boosting for regression
+                    </li>
+                    <li>The R package gbm (gradient boosted models) handles a variety of regression and classification
+                        problems
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Example: Gene Expression Data</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul style="font-size: 70%">
+                        <li>Results from performing boosting and random forests on the fifteen-class gene expression
+                            data set in order to predict cancer versus normal
+                        </li>
+                        <li>The test error is displayed as a function of the number of trees. For the two boosted
+                            models, $\lambda=0.01$. Depth-1 trees slightly outperform depth-2 trees, and both outperform
+                            the random forest, although the standard errors are around 0.02, making none of these
+                            differences significant
+                        </li>
+                        <li>The test error rate for a single tree is 24%.
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle">
+                    <img src="img/lecture15_4.png" alt="">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Tuning Parameters for Boosting</h2>
+                <ul style="font-size: 80%;">
+                    <li>The number of trees B
+                    </li>
+                    <ul>
+                        <li>Unlike bagging and random forests, boosting can overfit if B is too large, although this
+                            overfitting tends to occur slowly if at all; use cross-validation to find B
+                        </li>
+                    </ul>
+                    <li>The shrinkage parameter $\lambda$
+                    </li>
+                    <ul>
+                        <li>A small positive number. This controls the rate at which boosting learns
+                        </li>
+                        <li>Typical values are 0.01 or 0.001; the right choice can depend on the problem
+                        </li>
+                        <li>Very small $\lambda$ can require using a large value of B to achieve good performance
+                        </li>
+                    </ul>
+                    <li>The number of splits in each tree d
+                    </li>
+                    <ul>
+                        <li>Controls the complexity of the boosted ensemble.
+                        </li>
+                        <li>d=1 often works well, in which case each tree is a stump, consisting of a single split and
+                            resulting in an additive model
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Variable Importance Measure</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>For bagged/RF regression trees, we record the total amount that the RSS is decreased due to
+                            splits over a given predictor, averaged over all B trees.
+                        </li>
+                        <ul>
+                            <li>A large value indicates an important predictor.
+                            </li>
+                        </ul>
+                        <li>Similarly, for bagged/RF classification trees, we add up the total amount that the Gini
+                            index is decreased by splits over a given predictor, averaged over all B trees
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle">
+                    <img src="img/lecture15_5.png" alt="">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Summary</h2>
+                <ul>
+                    <li>Decision trees are simple and interpretable models for regression and classification
+                    </li>
+                    <li>However, they are often not competitive with other methods in terms of prediction accuracy
+                    </li>
+                    <li>Bagging, random forests and boosting are good methods for improving the prediction accuracy of
+                        trees
+                    </li>
+                    <ul>
+                        <li>They work by growing many trees on the training data and then combining the predictions of
+                            the resulting ensemble.
+                        </li>
+                    </ul>
+                    <li>Random forests and boosting are among the state-of-the-art methods for supervised learning
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/lAOH7petQJzzLarRdUjdf?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/lExSNsPHmg66d1ZBf84XO?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
