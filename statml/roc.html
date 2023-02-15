@@ -52,19 +52,30 @@
             School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
       </section>
 
+
+      <section>
+        <h2>TP, TN, FP, FN</h2>
+        <ul>
+          <li>TP: predicted positive (1) and indeed true positive (1)</li>
+          <li>TN: predicted negative (0) and indeed true negative (0)</li>
+          <li>FP: predicted positive but actually true negative</li>
+          <li>FN: predicted negative but actually true positive</li>
+        </ul>
+      </section>
+
       <section>
         <h2>ROC-Receiver Operator Characteristic Analysis</h2>
-
         <div class="twocol" style="width: 55%; vertical-align: middle;">
           <ul style="font-size: 80%;">
-            <li>The statistical evaluation of medical tests for Classification & Prediction (Pepe)</li>
-            <li>$D$ = outcome (disease)</li>
-            <li>$Y$ = test result (can be output from classifier)</li>
+            <li>The statistical evaluation of medical tests for Classification & Prediction</li>
+            <li>$D$ = outcome (disease) or true outcome</li>
+            <li>$Y$ = test result (can be output from classifier) or prediction</li>
             <ul>
-              <li>TPF = true positive fraction =</li>
-              <li>FPF = false positive fraction =</li>
-              <li>FNF = false negative fraction =</li>
-              <li>TNF = true negative fraction =</li>
+              <li>TPF = true positive fraction = TP/P = TP /(TP + FN)</li>
+              <li>FPF = false positive fraction = FP/N = FP / (FP + TN)</li>
+              <li>FNF = false negative fraction = FN/P = 1 - TPF </li>
+              <li>TNF = true negative fraction = TN/N = 1 - FPF</li>
+              <li>aka: TPR, FPR, FNR, TNR, R=rate</li>
             </ul>
           </ul>
         </div>
@@ -267,7 +278,7 @@
             <ul>
               <li>$=P(Y_D>y_k)$</li>
             </ul>
-            <li>Can fit with probitregression with response $U_k=I(Y>y_k)$ and covariate $\Phi ^{-1} (t_k)$</li>
+            <li>Can fit with probit regression with response $U_k=I(Y>y_k)$ and covariate $\Phi ^{-1} (t_k)$</li>
           </ul>
         </div>
       </section>
