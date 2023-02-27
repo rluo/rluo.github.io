@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>SVM</h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>Linear Separator—1</h2>
+                <img src="img/l16_pic1.png">
+
+            </section>
+
+            <section>
+                <h2>Linear Separator—2 </h2>
+                <img src="img/l16_pic2.png">
+            </section>
+
+
+
+
+            <section>
+                <h1>Linear Separator—3 </h1>
+                <img src="img/l16_pic3.png">
+            </section>
+
+            <section>
+                <h2>Support Vector Machines</h2>
+                <ul>
+                    <li>Here we approach the two-class classification problem in a direct way:
+                    </li>
+                    <ul>
+                        <li>We try and find a plane that separates the classes in feature space
+                        </li>
+                    </ul>
+                    <li>If we cannot, we get creative in two ways:
+                    </li>
+                    <ul>
+                        <li>We soften what we mean by “separates”, and
+                        </li>
+                        <li>We enrich and enlarge the feature space so that separation is possible
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>What is a Hyperplane?</h2>
+                <ul>
+                    <li>A hyperplane in p dimensions is a flat affine subspace of dimension p − 1
+                    </li>
+                    <li>In general the equation for a hyperplane has the form
+                    </li>$\beta_0+\beta_1X_1+\beta_2X_2+...\beta_pX_p=0$
+                    <li>In p = 2 dimensions a hyperplane is a line
+                    </li>
+                    <li>If $\beta_0$=0, the hyperplane goes through the origin
+                    </li>
+                    <li>The vector $\beta$=($\beta_1,\beta_2...\beta_p$) is called the normal vector
+                    </li>
+                    <ul>
+                        <li>It points in a direction orthogonal to the surface of a hyperplane
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Hyperplane in 2 Dimensions</h2>
+                <img src="img/l16_pic4.png">
+
+            </section>
+
+            <section>
+                <h2>Separating Hyperplanes</h2>
+                <img src="img/l16_pic5.png">
+                <ul style="font-size: 70%;">
+                    <li>If $f(x)=\beta_0+\beta_1X_1+\beta_2X_2+...\beta_pX_p$, then $f(X) \gt 0$ for points on one side
+                        of
+                        the hyperplane, and $f(X) \lt 0$ for points on the other </li>
+                    <li>If we code the colored points as $Y_i=+1$ for blue, say, and $Y_i=−1$ for mauve, then if
+                        $Y_i∙f(𝑋)\gt 0$ for all i, $f(𝑋)=0$ defines a separating hyperplane
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Maximal Margin Classifier</h2>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <ul style="font-size: 80%;">
+                        <li>Among all separating hyperplanes, find the one that makes the biggest gap or margin between
+                            the two classes
+                        </li>
+                        <ul>
+                            <li>Constrained optimization problem
+                            </li>
+                            $$ \max_{\beta_0,\beta_1,...\beta_p} M $$ subject to
+                            $\sum_{j=1}^{p}{\beta_j}^2=1, y_i(\beta_0+\beta_1x_{i1}+...\beta_px_{ip})\geq M $for all i
+                            =1,...M
+                        </ul>
+                        <li>The function svm() in package e1071 solves this problem efficiently
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width:30%; vertical-align: middle;">
+                    <img src="img/l16_pic6.png">
+                </div>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/tzXJEKKCzjvQh4XS2svRG?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+            <section>
+                <h2>Non-Separable Data</h2>
+                <ul>
+                    <li>What if the data are not separable by a linear boundary?
+                    </li>
+                </ul>
+                <img src="img/l16_pic7.png" width="60%">
+            </section>
+
+            <section>
+                <h2>Noisy Data</h2>
+                <img src="img/l16_pic8.png">
+                <ul>
+                    <li>
+                        Sometimes the data are separable, but noisy leads to poor solution for the maximal-margin
+                        classifier
+                    </li>
+                    <li>The support vector classifier maximizes a soft margin.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Support Vector Classifier</h2>
+                <img src="img/l16_pic9.png" , width="70%">
+                $$ \max_{\beta_0,\beta_1,...\beta_p} M \quad
+                \text{subject to:}
+                \sum_{j=1}^{p}{\beta_j}^2=1 \\
+                y_i(\beta_0+\beta_1x_{i1}+...\beta_px_{ip})\geq M(1-\epsilon_i) \\
+                \epsilon\geq0, \quad \sum_{i=1}^{n}{\epsilon_i}\le C
+                $$
+            </section>
+
+            <section>
+                <h2>C is a Regularization Parameter</h2>
+                <img src="img/l16_pic10.png">
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/zo5PaHOf8KeA5d3uWYs2Q?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+            <section>
+                <h2>Linear Parameter Can Fail</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul>
+                        <li>Sometimes a linear boundary simply won’t work, no matter what value of C
+
+
+                        </li>
+                        <li>What to do?
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <img src="img/l16_pic11.png">
+                </div>
+            </section>
+
+            <section>
+                <h2>Feature Expansion</h2>
+                <ul>
+                    <li>
+                        Enlarge the space of features by including transformations;
+                        e.g. $𝑋^2,𝑋^3, 𝑋_1 𝑋_2,𝑋_1 𝑋^2$...
+
+                    </li>
+                    <li>Fit a support-vector classifier in the enlarged space
+                    </li>
+                    <ul>
+                        <li>This results in non-linear decision boundaries in the original space
+                        </li>
+                    </ul>
+                    <li>Example: </li>
+                    <ul>
+                        <li>Suppose we use $(X_1,X_2,X_1^2,X_2^2,X_1X_2)$ instead of just $(X_1,X_2)$ then the decision
+                            boundary would be of the form,
+                        </li>$\beta_0+\beta_1X_1+\beta_2X_2+\beta_3X_1^2+\beta_4X_2^2+\beta_5X_1X_2=0$
+                        <li>This leads to nonlinear decision boundaries in the original space
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Feature Expansion</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul>
+                        <li>Datasets that are linearly separable work out great:
+                        </li>
+                        <li>But what are we going to do if the dataset is just too hard?
+
+                        </li>
+                        <li>How about … mapping data to a higher-dimensional space:
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <img src="img/l16_pic12.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Non-Linear SVMs: Feature Spaces</h2>
+                <ul>
+                    <li>General idea: the original feature space can always be mapped to some higher-dimensional feature
+                        space where the training set is separable:
+                    </li>
+
+                </ul>
+                <img src="img/l16_pic13.png">
+            </section>
+
+            <section>
+                <h2>Cubic Polynomials</h2>
+                <ul style="font-size: 80%;">
+                    <li>Here we use a basis expansion of cubic polynomials
+                    </li>
+                    <ul>
+                        <li>From 2 variables to 9
+                        </li>
+                    </ul>
+                    <li>The support-vector classifier in the enlarged space solves the problem in the lower-dimensional
+                        space
+                    </li>
+                    <li>
+                        $\beta_0+\beta-1X_1+\beta_2X_2+\beta_3X_1^2+\beta_5X_1X_2+\beta_6X_1^3+$$\beta_7X_2^3+\beta_8X_1X_2^2+\beta_9X_1^2X_2$
+                    </li>
+                </ul>
+                <img src="img/l16_pic14.png" width="35%">
+            </section>
+
+            <section>
+                <h2>Nonlinearities and Kernels</h2>
+                <ul>
+                    <li>Polynomials (high-dimensional) </li>
+                    <li>There is a more elegant and controlled way to introduce nonlinearities in support-vector
+                        classifiers — through the use of kernels </li>
+                    <li>Before we discuss these, we must understand the role of inner products in support-vector
+                        classifiers.
+                    </li>
+                </ul>
+            </section>
+
+
+
+
+            <section>
+                <h2>Inner Products and Support Vectors</h2>
+                <ul>
+                    <li>
+                        &lt;$x_i,x_{i'}$&gt;=$\sum_{j=1}^{p}x_{ij}x_{i'j}$-inner product between vectors </li>
+                    <li>The linear support vector classifier can be represented as</li>
+                    $f(x)=\beta_0+\sum_{i=1}^{n}\alpha_i$ &lt;$x,x_i$&gt; -n parameters
+                    <li>To estimate the parameters $\alpha-1,...\alpha_n$ and $\beta_0$, all we need are the ${n
+                        \choose 2}$ inner products ($x,x_i$) between all pairs of training observations
+                    </li>
+                    <li>It turns out that most of the 𝛼 ̂_𝑖 can be zero: $f(x)=\beta_0+\sum_{i \in
+                        S}^{n}\hat{\alpha_i}$&lt;$x,x_i$&gt;
+                    </li>
+                    <ul>
+                        <li>where S is the support set of indices i such that $\hat{\alpha_i}>0$</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Kernels and Support Vector Machines</h2>
+                <ul>
+                    <li>If we can compute inner-products between observations, we can fit a SV classifier
+                    </li>
+                    <li>Some special kernel functions can do this for us e.g.
+                    </li>$K(x_i,x_{i'})={(1+\sum_{j=1}^{p}x_{ij}x_{i'j})^d}$
+                    <ul>
+                        <li>Computes the inner-products needed for d dimensional polynomials</li>
+                    </ul>
+                    <li>The solution has the form
+                    </li>$f(x)=\beta_0+\sum_{i \in S}\hat{\alpha_i}K(x,x_i)$
+                </ul>
+            </section>
+
+            <section>
+                <h2>The Radial Kernel</h2>
+                <ul>
+                    <li>Implicit feature space; very high dimensional
+                    </li>$K(x_i,x_{i'})=e^{-\gamma\sum_{j=1}^{p}(x_{ij}-x_{i'j})^2}$
+                    $f(x)=\beta_0+\sum_{i \in S}\hat{\alpha_i}K(x,x_i)$
+                </ul>
+                <img src="img/l16_pic15.png" width="50%">
+            </section>
+
+            <section>
+                <h2>Example: Heart Data</h2>
+                <img src="img/l16_pic16.png">
+                <ul>
+                    <li>ROC curve is obtained by changing the threshold 0 to threshold t in 𝑓 ̂(𝑋)>𝑡 and recording
+                        false positive and true positive rates as t varies
+                    </li>
+                    <li>Here we see ROC curves on training data</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example Continued: Heart Data</h2>
+                <img src="img/l16_pic17.png">
+                <ul>
+                    <li>Here we see ROC curves on testing data
+                    </li>
+                </ul>
+
+            </section>
+
+            <section>
+                <h2>SVMs: More than 2 classes?</h2>
+                <ul>
+                    <li>The SVM as defined works for K = 2 classes. What do we do if we have K > 2 classes?
+                    </li>
+                    <ul>
+                        <li>One versus All: </li>
+                        <ul>
+                            <li>Fit K different 2-class SVM classifiers $f_k(x),k=1,...K$; each class versus the rest
+                            </li>
+                            <li>Classify $X^*$ to the class for which $\hat{f_k}(x^*)$ is largest
+                            </li>
+                        </ul>
+                        <li>One versus One: Fit all ${k\choose 2}$ pairwise classifiers $\hat{f_k}(x)$
+                            <ul>
+                                <li>Classify $x^*$ to the class that wins the most pairwise competitions
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <li>Which to choose?
+                    </li>
+                    <ul>
+                        <li>If K is not too large, use One versus One
+                        </li>
+                    </ul>
+
+                </ul>
+            </section>
+
+            <section>
+                <h2>Which to Use: SVM or Logistic Regression?</h2>
+                <ul>
+                    <li>When classes are (nearly) separable, SVM does better than Logistic Regression. So does LDA
+                    </li>
+                    <li>When not, Logistic Regression (with ridge penalty) and SVM are very similar
+                    </li>
+                    <li>If you wish to estimate probabilities, Logistic Regression is the choice
+                    </li>
+                    <li>For nonlinear boundaries, kernel SVMs are popular
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/GpqlRC3IP9tZfHwImZODn?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/23lqbuSblfXrnVOd0q4NC?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/pBnEq3QtiOV5d1akTPTnZ?controls=none&short_poll=true"
+                    width="800px" height="600px"></iframe>
+            </section>
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>

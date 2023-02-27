@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Tree Methods</h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>Tree-Based Methods</h2>
+                <ul>
+                    <li>Tree-based methods for regression and classification
+                    </li>
+                    <li>These involve stratifying or segmenting the predictor space into a number of simple regions.
+                    </li>
+                    <li>Since the set of splitting rules used to segment the predictor space can be summarized in a
+                        tree, these types of approaches are known as decision-tree methods.
+                    </li>
+                    <li>Tree-based methods are simple and useful for interpretation
+                    </li>
+                    <ul>
+                        <li>
+                            very “natural” constructs
+                        </li>
+                        <li>particularly when the explanatory variables are categorical (and even better, when they are
+                            binary)
+                        </li>
+                        <li>very easy to explain to non-statisticians
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Tree Example: What to do on a weekend?</h2>
+                <img src="img/lec14_pic1.png">
+
+            </section>
+
+
+
+
+            <section>
+                <h2>Tree-Based Methods Cont.</h2>
+                <ul>
+                    <li>However, they typically are not competitive with the best supervised learning approaches in
+                        terms of prediction accuracy
+                    </li>
+                    <li>Hence, we will also discuss
+                    </li>
+                    <ul>
+                        <li>Bagging</li>
+                        <li>Random forests</li>
+                        <li>Boosting</li>
+                    </ul>
+                    <li>These methods grow multiple trees which are then combined to yield a single consensus prediction
+                    </li>
+                    <li>Combining a large number of trees can often result in dramatic improvements in prediction
+                        accuracy
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Decision Tree Example: Hitters Dataset</h2>
+                <div class="twocol" style="width: 40%; vertical-align: middle;">
+                    <ul>
+                        <li>Baseball players salary
+
+                        </li>
+                        <ul>
+                            <li>How would you stratify it?
+                            </li>
+                        </ul>
+                        <li>Salary is color-coded
+
+                        </li>
+                        <ul>
+                            <li>Low: (blue, green)
+                            </li>
+                            <li>High: (yellow, red)
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <img src="img/lec14_pic2.png">
+                </div>
+            </section>
+
+            <section>
+                <h2>Decision Tree for the Hitters Dataset—1 </h2>
+
+                <img src="img/lec14_pic3.png">
+
+            </section>
+
+            <section>
+                <h2>Decision Tree for the Hitters Dataset—2</h2>
+                <ul style="font-size: 80%;">
+                    <li>For the Hitters data, a regression tree for predicting the salary of a baseball player, based on
+                        the number of years that he has played in the major leagues and the number of hits that he made
+                        in the previous year</li>
+                    <li>Be able to solve real-world data problems using software tools</li>
+                    <li>At a given internal node, the label (of the form $X_j \lt t_k$) indicates the left-hand branch
+                        emanating from that split, and the right-hand branch corresponds to $X_j \ge t_k$. For instance,
+                        the split at the top of the tree results in two large branches. The left-hand branch
+                        corresponds to Years &lt; 4.5, and the right-hand branch corresponds to Years &ge; 4.5 </li>
+                    <li>The tree has two internal nodes and three terminal nodes, or leaves
+                    </li>
+                    <li>The number in each leaf is the mean of the response for the observations that fall there
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Decision Tree for the Baseball Salary Data—3 </h2>
+
+                <ul style="font-size: 80%;">
+                    <li>Overall, the tree stratifies (or segments) the players into three regions of predictor space:
+                    </li>
+                    <ul>
+                        <li>$R_1=${X|Years &lt; 4.5}</li>
+                        <li>$R_2=${X|Years &ge; 4.5, Hits &lt; 117.5}</li>
+                        <li>$R_3=${X|Years &ge; 4.5, Hits &ge; 117.5}</li>
+                    </ul>
+                </ul>
+                <img src="img/lec14_pic4.png" width="40%">
+            </section>
+
+            <section>
+                <h2>Terminology for Trees</h2>
+                <ul>
+                    <li>In keeping with the tree analogy, the regions R1, R2, and R3 are known as terminal nodes
+                    </li>
+                    <li>Decision trees are typically drawn upside down, in the sense that the leaves are at the bottom
+                        of the tree
+                    </li>
+                    <li>The points along the tree where the predictor space is split are referred to as internal nodes
+                    </li>
+                    <ul>
+                        <li>In the hitters tree, the two internal nodes are indicated by the text Years < 4.5 and Hits <
+                                117.5 </li>
+
+                    </ul>
+
+                </ul>
+            </section>
+
+            <section>
+                <h2>Interpretation of Tree Results</h2>
+                <ul style="font-size: 80%;">
+                    <li>Years is the most important factor in determining Salary, and players with less experience earn
+                        lower salaries than more experienced players
+                    </li>
+                    <li>Given that a player is less experienced, the number of Hits that he made in the previous year
+                        seems to play little role in his Salary
+                    </li>
+                    <li>But among players who have been in the major leagues for five or more years, the number of Hits
+                        made in the previous year does affect Salary, and players who made more Hits last year tend to
+                        have higher salaries.
+                    </li>
+                    <li>Surely an over-simplification, but compared to a regression model, it is easy to display,
+                        interpret and explain
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Olive Oil Example—1 (From Ruczinski & Irizarry Notes)</h2>
+                <ul>
+                    <li>572 olive oils were analyzed for their content of eight fatty acids
+                    </li>
+                    <ul>
+                        <li>(palmitic, palmitoleic, stearic, oleic, linoleic, arachidic, linolenic, and eicosenoic)</li>
+                    </ul>
+                    <li>9 collection areas:</li>
+                    <ul>
+                        <li>4 from Southern Italy (North and South Apulia, Calabria, Sicily),
+                        </li>
+                        <li>2 from Sardinia (Inland and Coastal) and
+                        </li>
+                        <li>
+                            3 from Northern Italy (Umbria, East and West Liguria)
+                        </li>
+                    </ul>
+                    <li>The concentrations of different fatty acids vary from up to 85% for oleic acid to as low as
+                        0.01% for eicosenoic acid.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Olive Oil Example—2</h2>
+                <img src="img/lec14_pic5.png">
+
+            </section>
+
+            <section>
+                <h2>Iris Data Example</h2>
+                <img src="img/lec14_pic6.png">
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/9U6Vdo4dLbhHDAfTTtl6R?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/zHwqjAUfQE7nv9NOENGgz?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <h2>Tree-Building Process</h2>
+                <ul>
+                    <li>We divide the predictor space — that is, the set of possible values for $X_1$,$X_2$ ... $X_p$ —
+                        into $J$ distinct and non-overlapping regions, $R_1$, $R_2$....$R_j$</li>
+                    <li>For every observation that falls into the region $R_j$ , we make the same prediction, which is
+                        simply the mean of the response values for the training observations in $R_j$
+                    </li>
+                </ul>
+
+            </section>
+
+            <section>
+                <h2>Details of the Tree-Building Process—1 </h2>
+
+                <ul>
+                    <li>
+                        In theory, the regions could have any shape. However, we choose to divide the predictor space
+                        into high-dimensional rectangles, or boxes, for simplicity and for ease of interpretation of the
+                        resulting predictive model
+
+                    </li>
+                    <li>The goal is to find boxes $R_1$, $R_2$....$R_j$ that minimize the RSS, given by
+                    </li>
+                    $\sum_{j=1}^{J}\sum_{i\in R_j}{(yi-\hat{y_{R_j}})^2}$
+                    <li>where $\hat{y_{R_j}}$ is the mean response for the training observations within the jth box</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Details of the Tree-Building Process—2
+                </h2>
+                <ul>
+                    <li>
+                        Unfortunately, it is computationally infeasible to consider every possible partition of the
+                        feature space into J boxes
+                    </li>
+                    <li>For this reason, we take a top-down, greedy approach that is known as recursive binary splitting
+                    </li>
+                    <ul>
+                        <li>The approach is top-down because it begins at the top of the tree and then successively
+                            splits the predictor space; each split is indicated via two new branches further down on the
+                            tree
+                        </li>
+                        <li>It is greedy because at each step of the tree-building process, the best split is made at
+                            that particular step, rather than looking ahead and picking a split that will lead to a
+                            better tree in some future step
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Details of the Tree-Building Process—3</h2>
+                <ul style="font-size: 80%;">
+                    <li>
+                        We first select the predictor Xj and the cut point s such that splitting the predictor space
+                        into the regions {X|Xj &lt; s} and {X|Xj ≥ s} leads to the greatest possible reduction in RSS
+                    </li>
+                    <li>Next, we repeat the process, looking for the best predictor and best cut point in order to split
+                        the data further so as to minimize the RSS within each of the resulting regions
+                    </li>
+                    <li>However, this time, instead of splitting the entire predictor space, we split one of the two
+                        previously identified regions. We now have three regions
+                    </li>
+                    <li>
+                        Again, we look to split one of these three regions further, so as to minimize the RSS. The
+                        process continues until a stopping criterion is reached; for instance, we may continue until no
+                        region contains more than five observations
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Predictions</h2>
+                <ul>
+                    We predict the response for a given test observation using the mean of the training observations in
+                    the region to which that test observation belongs
+
+                </ul>
+            </section>
+
+            <section>
+                <h2>Visualizing Tree Splitting</h2>
+                <img src="img/lec14_pic7.png">
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/Bp2Gv8JXNnPF0ylYuP0xh?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>Pruning a Tree—1 </h2>
+                <ul style="font-size: 80%;">
+                    <li>The process described previously may produce good predictions on the training set, but is likely
+                        to overfit the data, leading to poor test set performance
+                    </li>
+                    <li>A smaller tree with fewer splits (that is, fewer regions $𝑅_1$ ... $𝑅_𝐽$) might lead to lower
+                        variance and better interpretation at the cost of a little bias
+                    </li>
+                    <li>One possible alternative to the process described above is to grow the tree only so long as the
+                        decrease in the RSS due to each split exceeds some (high) threshold
+                    </li>
+                    <li>This strategy will result in smaller trees, but is too short-sighted: a seemingly worthless
+                        split early on in the tree might be followed by a very good split — that is, a split that leads
+                        to a large reduction in RSS later on
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Pruning a Tree—2 </h2>
+                <ul style="font-size: 80%;">
+                    <li>
+                        A better strategy is to grow a very large tree T0, and then prune it back in order to obtain a
+                        subtree
+
+                    </li>
+                    <li>Cost complexity pruning; also known as weakest link pruning, is used to do this, consider a
+                        sequence of trees indexed by a nonnegative tuning parameter 𝛼, for each value of α there
+                        corresponds a subtree $𝑇 ⊂ 𝑇_0$ such that the below equation is is as small as possible
+                    </li>$$\sum_{m=1}^{|T|}\sum_{i\in x_iR_j}{(y_i-\hat{y}_{R_m})^2}+a|T|$$
+                    <li>Here |𝑇| indicates the number of terminal nodes of the tree T, $𝑅_𝑚$ is the rectangle (i.e.
+                        the subset of predictor space) corresponding to the mth terminal node, and $\hat{y_{Rm}}$ is the
+                        mean of the training observations in $𝑅_𝑚$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Choosing the Best Subtree</h2>
+                <ul>
+                    <li>The tuning parameter $\alpha$ controls a trade-off between the subtree’s complexity and it’s fit
+                        to
+                        the training data
+                    </li>
+                    <li>
+                        We select an optimal value $\hat{\alpha}$ using cross-validation
+                    </li>
+                    <li>
+                        We then return to the full data set and obtain the subtree corresponding to $\hat{\alpha}$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Tree Algorithm</h2>
+                <ul style="font-size: 80%;">
+                    <ol>
+                        <li>Use recursive binary splitting to grow a large tree on the training data, stopping only when
+                            each terminal node has fewer than some minimum number of observations</li>
+                        <li>Apply cost complexity pruning to the large tree in order to obtain a sequence of best
+                            subtrees, as a function of 𝛼
+                        </li>
+                        <li>Use K-fold cross-validation to choose 𝛼. For each k = 1, . . . , K:
+                        </li>
+                        <ul>
+                            <ol>
+                                <li>Repeat Steps 1 and 2 on the (k-1)/kth fraction of the training data, excluding the
+                                    kth fold
+                                </li>
+                                <li>Evaluate the mean squared prediction error on the data in the left-out kth fold, as
+                                    a function of 𝛼
+                                </li>
+
+                            </ol>
+
+                        </ul>
+                        <li>Return subtree from Step 2 that corresponds to the chosen value of 𝛼
+                        </li>
+                    </ol>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Baseball Example</h2>
+                <ul>
+                    <li>First, we randomly divided the data set in half, yielding 132 observations in the training set
+                        and 131 observations in the test set
+                    </li>
+                    <li>We then built a large regression tree on the training data and varied α in order to create
+                        subtrees with different numbers of terminal nodes
+                    </li>
+                    <li>Finally, we performed six-fold cross-validation in order to estimate the cross-validated MSE of
+                        the trees as a function of $\alpha$
+                    </li>
+                </ul>
+            </section>
+
+
+
+            <section>
+                <h2>Baseball Example Tree</h2>
+                <img src="img/lec14_pic8.png">
+            </section>
+            <section>
+                <h2>Baseball Example Tree Size</h2>
+                <img src="img/lec14_pic9.png">
+            </section>
+
+            <section>
+                <h2>Quiz—1 </h2>
+                <ul>
+                    <li>Pruning leads to a tree with fewer splits this leads to a model with _____ variance and _______
+                        interpretability
+                    </li>
+                    <ol>
+                        <li>higher, worse</li>
+                        <li>higher, better</li>
+                        <li>lower, worse</li>
+                        <li>lower, better</li>
+                    </ol>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/DNVCKmfXRoHgBmipxRYAW?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <h2>Classification Trees—1 </h2>
+                <ul>
+                    <li>Very similar to a regression tree, except that it is used to predict a qualitative response
+                        rather than a quantitative one
+
+                    </li>
+                    <li>For a classification tree, we predict that each observation belongs to the most commonly
+                        occurring class of training observations in the region to which it belongs
+
+                    </li>
+                    <li>Just as in the regression setting, we use recursive binary splitting to grow a classification
+                        tree
+
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Classification Trees—2 </h2>
+                <ul>
+                    <li>In the classification setting, RSS cannot be used as a criterion for making the binary splits
+                    </li>
+                    <li>A natural alternative to RSS is the classification error rate; this is simply the fraction of
+                        the training observations in that region that do not belong to the most common class:
+                    </li>$$E=1-\max_{k}(\hat{p_{mk}})$$
+                    <ul>
+                        <li>$\hat{p_{mk}}$ represents the proportion of training observations in the mth region that are
+                            from the kth class
+                        </li>
+                    </ul>
+                    <li>Other measures: Gini index and Deviance
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Gini and Cross-Entropy</h2>
+                <ul style="font-size: 80%;">
+                    <li>The Gini index is defined by
+                    </li>$$G=\sum_{k=1}^{K}\hat{p_{mk}}(1-\hat{p_{mk}})$$
+                    <ul>
+                        <li>
+                            A measure of total variance across the K classes
+
+                        </li>
+                        <li>Gini index takes on a small value if all of the $\hat{p_{mk}}$ 's are close to zero or one
+                        </li>
+                        <li>Gini index is referred to as a measure of node purity — a small value indicates that a node
+                            contains predominantly observations from a single class
+                        </li>
+                    </ul>
+                    <li>An alternative to the Gini index is cross-entropy, given by
+                    </li>$$D=-\sum_{k=1}^{K}\hat{p_{mk}}(log\hat{p_{mk}})$$
+
+                    <li>It turns out that the Gini index and the cross-entropy are very similar numerically
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Heart Data Example—1 </h2>
+                <ul>
+                    <li>These data contain a binary outcome HD for 303 patients who presented with chest pain
+                    </li>
+                    <li>An outcome value of Yes indicates the presence of heart disease based on an angiographic test,
+                        while No means no heart disease
+                    </li>
+                    <li>There are 13 predictors including Age, Sex, Chol (a cholesterol measurement), and other heart
+                        and lung function measurements
+                    </li>
+                    <li>Cross-validation yields a tree with six terminal nodes; see next figure
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Heart Data Example—2</h2>
+                <img src="img/lec14_pic10.png">
+
+            </section>
+
+            <section>
+                <h2>Heart Data Example—3 </h2>
+                <img src="img/lec14_pic11.png">
+            </section>
+
+            <section>
+                <h2>Trees vs. Linear Models </h2>
+                <img src="img/lec14_pic12.png">
+            </section>
+
+            <section>
+                <h2>Advantages and Disadvantages of Trees </h2>
+                <ul style="font-size: 80%;">
+                    <li>Trees are very easy to explain to people
+                    </li>
+                    <li>Trees are closely mirror human decision-making than do the regression and classification
+                        approaches
+                    </li>
+                    <li>Trees can be displayed graphically, and are easily interpreted even by a non-expert (especially
+                        if they are small)
+                    </li>
+                    <li>Trees can easily handle qualitative predictors without the need to create dummy variables
+                    </li>
+                    <li>Unfortunately, trees generally do not have the same level of predictive accuracy as some of the
+                        other regression and classification approaches seen before
+                    </li>
+                    <li>However, by aggregating many decision trees, the predictive performance of trees can be
+                        substantially improved
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/PQZiI99pNA300odyeWvLg?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
