@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Unsupervised</h2>
+                <br>
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>Unsupervised vs. Supervised Learning</h2>
+                <ul>
+                    <li>Most of this course focuses on supervised learning methods such as regression and classification
+                    </li>
+                    <li>In that setting we observe both a set of features $X_1,X_2,...,X_p$ for each object, as well as
+                        a response or outcome variable $Y$. The goal is then to predict $Y$ using $X_1,X_2,...,X_p$
+                    </li>
+                    <li>Here we instead focus on unsupervised learning, where we observe only the features
+                        $X_1,X_2,...,X_p$. We are not interested in prediction, because we do not have an associated
+                        response variable Y
+                    </li>
+
+                </ul>
+            </section>
+
+            <section>
+                <h2>The Goals of Unsupervised Learning</h2>
+                <ul>
+                    <li>The goal is to discover interesting things about the measurements: Can we discover subgroups
+                        among the variables or among the observations?
+                    </li>
+                    <ul>
+                        <li>Principle component analysis, a tool used for data visualization or data pre-processing
+                            before applying supervised learning
+                        </li>
+                        <li>
+                            Clustering, a broad class of methods for discovering unknown subgroups in data
+                        </li>
+                    </ul>
+                    <li>It is often easier to obtain unlabeled data - from a lab instrument or a computer - than labeled
+                        data, which can require human intervention
+                    </li>
+
+                </ul>
+            </section>
+
+
+
+
+            <section>
+                <h2>The Challenge of Unsupervised Learning</h2>
+                <ul>
+                    <li>Unsupervised learning is more subjective than supervised learning, as there is no simple goal
+                        for the analysis, such as prediction of a response
+                    </li>
+                    <li>But techniques for unsupervised learning are of growing importance in a number of fields:
+                    </li>
+                    <ul>
+                        <li>Subgroups of breast cancer patients grouped by their gene expression measurements,
+                        </li>
+                        <li>
+                            Groups of shoppers characterized by their browsing and purchase histories
+                        </li>
+                        <li>Movies grouped by the ratings assigned by movie viewers.
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/qwN8Y04H2HeIDrlCAU3SU?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h2>Clustering</h2>
+                <ul>
+                    <li>Clustering refers to a very broad set of techniques for finding subgroups, or clusters, in a
+                        data set
+                    </li>
+                    <li>We seek a partition of the data into distinct groups so that the observations within each group
+                        are quite similar to each other
+                    </li>
+                    <li>We must define what it means for two or more observations to be similar or different
+                    </li>
+                    <li>This is often a domain-specific consideration that must be made based on knowledge of the data
+                        being studied
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Example: Clustering for Market Segmentation</h2>
+                <ul>
+                    <li>Supervised learning:
+                        Suppose we have access to a large number of measurements (e.g. median household income,
+                        occupation, distance from nearest urban area, and so forth) for a large number of people
+                    </li>
+                    <li>Our goal is to perform market segmentation by identifying subgroups of people who might be more
+                        receptive to a particular form of advertising, or more likely to purchase a particular product
+
+                    </li>
+                    <li>The task of performing market segmentation amounts to clustering the people in the data set
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Clustering Methods</h2>
+                <ul>
+                    <li>K-means clustering:
+                    </li>
+                    <ul>
+                        <li>partition the observations into a pre-specified number of clusters
+                        </li>
+                    </ul>
+                    <li>Hierarchical clustering</li>
+                    <ul>
+                        <li>We do not know in advance how many clusters we want
+                        </li>
+                        <li>We end up with a tree-like visual representation of the observations, called a dendrogram,
+                            that allows us to view the clusterings obtained for each possible number of clusters, from 1
+                            to n
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>K-means Clustering</h2>
+                <img src="img/l18_pic1.png">
+            </section>
+
+            <section>
+                <h2>Details of K-means Clustering—1 </h2>
+                <ul>
+                    <li>Let $C_1, . . . , C_K$ denote sets containing the indices of the observations in each cluster.
+                        These sets satisfy two properties:
+                    </li>
+                    <ul>
+                        <li>$C_1 \cup C_2 \cup . . . \cup C_K $= {1, . . . , n}. Each observation belongs to at least
+                            one of the K clusters
+                        </li>
+                        <li>$C_k \cup C_{k'} =\emptyset$ for all $ k \neq k'$. The clusters are non-overlapping: no
+                            observation belongs to more than one cluster
+                        </li>
+                    </ul>
+                    <li>For instance, if the ith observation is in the kth cluster, then $i \in C_k$
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Details of K-means Clustering—2 </h2>
+                <ul>
+                    <li>The idea behind K-means clustering is that a good clustering is one for which the within-cluster
+                        variation is as small as possible
+                    </li>
+                    <li>The within-cluster variation for cluster Ck is a measure WCV(Ck) of the amount by which the
+                        observations within a cluster differ from each other
+                    </li>
+                    <ul>
+                        <li>Hence, we want to solve the problem: </li>
+                        $$ \min_{C_1,...,C_k} {\sum_{k-1}^{K}{WCV(C_K)}}$$
+                        <li>This formula says that we want to partition the observations into K clusters such that the
+                            total within-cluster variation, summed over all K clusters, is as small as possible
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>How to Define Within Cluster Variation?</h2>
+                <ul>
+                    <li>Typically, we use Euclidean distance</li>
+                    $$WCV(C_K)=\frac{1}{|C_k|}\sum_{i,i' \in C_K}\sum_{j=1}^{p}(x_{ij}-x_{i'j})^2$$
+                    where |Ck| denotes the number of observations in the kth cluster
+
+                    <li>Hence, the optimization problem that defines K-means clustering,
+                    </li> $$ \min_{C_1,...,C_k} ({\frac{1}{|C_k|}\sum_{i,i' \in C_K}\sum_{j=1}^{p}(x_{ij}-x_{i'j})^2})$$
+                </ul>
+            </section>
+
+            <section>
+                <h2>K-Means Clustering Algorithm</h2>
+                <ul>
+                    <li>Initial cluster assignments; randomly assign a number, from 1 to K, to each of the observations
+                    </li>
+                    <li>Iterate until the cluster assignments stop changing:
+
+                        <ul>
+                            <li>For each of the K clusters, compute the cluster centroid. The kth cluster centroid is
+                                the vector of the p feature means for the observations in the kth cluster.
+                            </li>
+                            <li>Assign each observation to the cluster whose centroid is closest (where closest is
+                                defined using Euclidean distance).
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>K-Means Example</h2>
+                <img src="img/l18_pic2.png">
+
+            </section>
+
+            <section>
+                <h2>K-Means Example Step 1 </h2>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic3.png">
+                </div>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul>
+                        <li>The observations are shown.
+                        </li>
+
+                        <li>In Step 1 of the algorithm, each observation is randomly assigned to a cluster.
+                        </li>
+                    </ul>
+                </div>
+
+            </section>
+
+
+            <section>
+                <h2>K-Means Example Step 2a</h2>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic4.png">
+                </div>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul>
+                        <li>In Step 2(a), the cluster centroids are computed.</li>
+                        <li>These are shown as large colored disks </li>
+                        <li>Initially the centroids are almost completely overlapping because the initial cluster
+                            assignments were chosen at random
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>K-Means Example Step 2b</h2>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic5.png">
+                </div>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul>
+                        <li>In Step 2(b), each observation is assigned to the nearest centroid.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+
+
+            <section>
+                <h3>K-Means Example Iterations and Final Result</h3>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic6.png">
+                </div>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul>
+                        <li>Step 2(a) is once again performed, leading to new cluster centroids</li>
+                        <li>The results obtained after 10 iterations.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h3>K-Means Differing Starting Points—1 </h3>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic7.png">
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle;">
+                    <ul>
+                        <li>K-means clustering performed six times on the data from previous figure with K = 3, each
+                            time with a different random assignment of the observations in Step 1
+                        </li>
+                        <li>Above each plot is the value of the objective function
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h3>K-Means Differing Starting Points—2</h3>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic8.png">
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle;">
+                    <ul>
+                        <li>Three different local optima were obtained, one of which resulted in a smaller value of the
+                            objective and provides better separation between the clusters
+                        </li>
+                        <li>Those labeled in red all achieved the same best solution, with an objective value of 235.8
+
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/zFmSVuqNZytXaiI28KI6f?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/9gW66188Yb1wkVe1JaTHF?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/1OOgBLatVBKY7a0PFFKcw?controls=none&short_poll=true"
+                    width="1024px" height="768px"></iframe>
+            </section>
+
+            <section>
+                <h2>Hierarchical Clustering</h2>
+                <ul>
+                    <li>K-means clustering requires us to pre-specify the number of clusters K </li>
+                    <ul>
+                        <li>This can be a disadvantage</li>
+                    </ul>
+                    <li>Hierarchical clustering is an alternative approach which does not require that we commit to a
+                        particular choice of K
+                    </li>
+                    <li>In this section, we describe bottom-up clustering </li>
+                    <ul>
+                        <li>This is the most common type of hierarchical clustering and refers to the fact that a
+                            dendrogram is built starting from the leaves and combining clusters up to the trunk
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Hierarchical Clustering: The Idea</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul>
+                        <li>Builds a hierarchy in a “bottom-up” fashion... </li>
+
+                    </ul>
+                </div>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic9.png">
+                </div>
+            </section>
+
+            <section>
+                <h2>Hierarchical Clustering Algorithm</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul>
+                        <li>Start with each point in its own cluster
+                        </li>
+                        <li>Identify the closest two clusters and merge them
+                        </li>
+                        <li>Repeat</li>
+                        <li>Ends when all points are in a single cluster
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic10.png">
+                </div>
+            </section>
+
+            <section>
+                <h2>Hierarchical Example—1</h2>
+                <div class="twocol" style="width: 50%; vertical-align: middle;">
+                    <ul style="font-size: 80%;">
+                        <li>45 observations generated in 2D space
+                        </li>
+                        <li>There are three distinct classes, shown in separate colors
+
+                        </li>
+                        <li>However, we will treat these class labels as unknown and will seek to cluster the
+                            observations in order to discover the classes from the data
+                        </li>
+
+
+                    </ul>
+                </div>
+                <div class="twocol" style="width:25%; vertical-align: middle;">
+                    <img src="img/l18_pic11.png">
+                    <img src="img/l18_pic12.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h1>Hierarchical Example—2 </h1>
+                <img src="img/l18_pic13.png">
+            </section>
+
+
+
+            <section>
+                <h2>Hierarchical Example—3</h2>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic14.png">
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle; font-size: 80%;">
+                    <ul>
+                        <li>Left: Dendrogram obtained from hierarchically clustering the data from previous slide, with
+                            complete linkage and Euclidean distance
+                        </li>
+                        <li>Right: The dendrogram from the left-hand panel, cut at a height of 9 (indicated by the
+                            dashed line). This cut results in two distinct clusters, shown in different colors.
+                        </li>
+
+                    </ul>
+                </div>
+
+            </section>
+
+            <section>
+                <h2>Hierarchical Example—3</h2>
+                <div class="twocol" style="width:45%; vertical-align: middle;">
+                    <img src="img/l18_pic15.png">
+                </div>
+                <div class="twocol" style="width: 50%; vertical-align: middle; font-size: 80%;">
+                    <ul>
+                        <li>Left: Dendrogram obtained from hierarchically clustering the data from previous slide, with
+                            complete linkage and Euclidean distance
+                        </li>
+                        <li>Right: The dendrogram from the left-hand panel, now cut at a height of 5. This cut results
+                            in three distinct clusters, shown in different colors. Note that the colors were not used in
+                            clustering, but are simply used for display purposes in this figure
+                        </li>
+
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>Types of Linkage—1 </h2>
+                <table style="font-size: 80%;">
+                    <tr>
+                        <th>Linkage</th>
+                        <th>Discription</th>
+
+                    </tr>
+                    <tr>
+                        <td>Complete</td>
+                        <td>Maximal inter-cluster dissimilarity. Compute all pairwise dissimilarities between the
+                            observations in cluster A and the observations in cluster B and record the largest of these
+                            dissimilarities.
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>Single</td>
+                        <td>Minimal inter-cluster dissimilarity. Compute all pairwise dissimilarities between the
+                            observations in cluster A and the observations in cluster B and record the smallest of these
+                            dissimilarities
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Average</td>
+                        <td>Mean inter-cluster dissimilarity. Compute all pairwise dissimilarities between the
+                            observations in cluster A and the observations in cluster B and record the average of these
+                            dissimilarities.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Centroid</td>
+                        <td>Dissimilarity between the centroid for cluster A (a mean vector of length p) and the
+                            centroid for cluster B.
+                        </td>
+                    </tr>
+                </table>
+            </section>
+
+            <section>
+                <h2>Types of Linkage—2</h2>
+                <img src="img/l18_pic16.png">
+            </section>
+
+
+            <section>
+                <h2>Choice of Dissimilarity Measure</h2>
+                <div class="twocol" style="width: 45%; vertical-align: middle;">
+                    <ul>
+                        <li>Euclidean distance
+                        </li>
+                        <li>An alternative is correlation-based distance which considers two observations to be similar
+                            if their features are highly correlated
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width:50%; vertical-align: middle;">
+                    <img src="img/l18_pic17.png">
+                </div>
+            </section>
+            <section>
+                <h2>Practical Issues</h2>
+                <ul>
+                    <li>Scaling of the variables
+                    </li>
+                    <li>In the case of hierarchical clustering,
+                    </li>
+                    <ul>
+                        <li>What dissimilarity measure should be used?
+                        </li>
+                        <li>What type of linkage should be used?
+                        </li>
+                    </ul>
+                    <li>How many clusters to choose?
+                    </li>
+                    <ul>
+                        <li>K-means, value of k?
+                        </li>
+                        <li>Hierarchical clustering, where to cut?
+                        </li>
+                    </ul>
+                    <li>Which features should we use to drive the clustering?
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>Example: Breast Cancer Microarray Study</h2>
+                <ul>
+                    <li>“Repeated observation of breast tumor subtypes in independent gene expression data sets;” Sorlie
+                        at el, PNAS 2003
+                    </li>
+                    <li>Gene expression measurements for about ∼ 8000 genes, for 88 breast cancer patients
+                    </li>
+
+                    <li>Clustered samples using 500 intrinsic genes:
+                    </li>
+                    <ul>
+                        <li>Each woman was measured before and after chemotherapy
+
+                        </li>
+                        <li>Intrinsic genes have smallest within/between variation
+                        </li>
+                    </ul>
+                    <li>Hierarchical clustering with average linkage and correlation as dissimilarity metric
+
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <img src="img/l18_pic18.png">
+
+            </section>
+
+            <section>
+                <h2>Conclusions </h2>
+                <ul>
+                    <li>Unsupervised learning is important for understanding the variation and grouping structure of a
+                        set of unlabeled data
+                    </li>
+                    <li>It is intrinsically more difficult than supervised learning
+                    </li>
+                    <ul>
+                        <li>no gold standard (like an outcome variable)
+                        </li>
+                        <li>no single objective (like test set accuracy)
+                        </li>
+                    </ul>
+                    <li>It is an active field of research
+                    </li>
+                </ul>
+
+            </section>
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>

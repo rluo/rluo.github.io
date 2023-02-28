@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Fundamentals of Data Analytics and Predictions</title>
+
+    <meta name="author" content="Xi (Rossi) LUO">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/white.css" id="theme">
+
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/tomorrow-night-blue.css">
+    <!--
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+-->
+    <link rel="stylesheet" href="./css/rossisimple.css" id="theme">
+    <!--    <link rel="stylesheet" href="./css/brightRoom.css" id="theme">-->
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+
+
+            <section>
+                <h2><strong>
+                        Fundamentals of
+                        <highlight>Data Analytics</highlight> and
+                        <emph>Predictions</emph>
+                    </strong></h2>
+                <br>
+                <h2>Neural Networks and Deep Learning</h2>
+                <br>
+
+                <h3>Xi (Rossi) <strong>LUO</strong></h3>
+                <br>
+                <p><small>Department of Biostatistics and Data Science<br>
+                        School of Public Health<br>The University of Texas Health Science Center at Houston</small></p>
+            </section>
+
+
+            <section>
+                <h2>What is a Neural Network?</h2>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <ul>
+                        <li>Example: Housing Price Prediction
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 40%; vertical-align: middle">
+                    <img src="img/lecture17_1.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Example: Housing Price Prediction</h2>
+                <div class="twocol" style="width: 55%; vertical-align: middle;">
+                    <ul style="font-size: 80%">
+                        <li>More features: size, #bedrooms, zipcode, wealth
+                        </li>
+                        <li>Predict price
+                        </li>
+                    </ul>
+                </div>
+                <div class="twocol" style="width: 40%; vertical-align: middle">
+                    <img src="img/lecture17_2.png">
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Housing Price Prediction—2</h2>
+                <ul>
+                    <img src="img/lecture17_3.png" alt="">
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Supervised Learning with Neural Networks</h2>
+                <ul>
+                    <img src="img/lecture17_4.png" alt="">
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Types of Neural Networks</h2>
+                <ul>
+                    <img src="img/lecture17_5.png" alt="">
+                </ul>
+                <br>
+                <p>More recently, transformers</p>
+            </section>
+
+
+            <section>
+                <h2>Types of Data</h2>
+                <ul>
+                    <img src="img/lecture17_6.png" alt="">
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Why is Deep Learning Taking Off?</h2>
+                <ul>
+                    <li>Scale drives deep learning progress
+                    </li>
+                    <ul>
+                        <li>Data, computation, algorithms
+                        </li>
+                    </ul>
+                </ul>
+                <img src="img/lecture17_7.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Non-Linear [Big] Problems</h2>
+                <ul style="font-size: 80%">
+                    <img src="img/lecture17_8.png" alt="">
+                    <li>Classification/Regression
+                    </li>
+                    <li>Large number of features ($x_1, x_2, x_3, \dots, x_{1000}, \dots, x_{10000}$)
+                    </li>
+                    <li>Large number of observations (big datasets)
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/4wC9hzedYUkmaaM1yG5LD?controls=none&short_poll=true"
+                    width="1028px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/wzpgpm8YXgCGCz4PIe96D?controls=none&short_poll=true"
+                    width="1028px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h1>Computer Vision Examples</h1>
+            </section>
+
+            <section>
+                <h2>Car Detection</h2>
+                <img src="img/lecture17_9.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Camera's Point of View</h2>
+                <img src="img/lecture17_10.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>RGB</h2>
+                <img src="img/lecture17_11.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Car vs. Not Car</h2>
+                <img src="img/lecture17_12.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Pixel Model —1</h2>
+                <img src="img/lecture17_13.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Pixel Model —2</h2>
+                <img src="img/lecture17_14.png" alt="">
+            </section>
+
+
+            <section>
+                <h1>Artificial Neural Network</h1>
+            </section>
+
+            <section>
+                <h2>Neural Networks Representation</h2>
+                <ul>
+                    <li>Neurons and the brain
+                    </li>
+                    <li>Origins: Algorithms that try to mimic the brain
+                    </li>
+                    <ul>
+                        <li>Human brain; highly complex nonlinear and massively parallel network of neurons
+                        </li>
+                    </ul>
+                    <li>Artificial Neural Network (ANN) is a simplified model of the brain
+                    </li>
+                    <ul>
+                        <li>A function approximator that transforms inputs into outputs to the best of its ability
+                        </li>
+                    </ul>
+                    <li>ANNs are used for problems of classification, for example pattern recognition and image matching
+                    </li>
+                    <li>ANNs are also used for regression problems
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Artificial Neural Networks (ANN) -1</h2>
+                <ul style="font-size: 90%;">
+                    <img src="img/lecture17_15.png" alt="">
+                    <li>The first artificial neuron model was introduced by McCulloch and Pitts in 1943
+                    </li>
+                    <li>Input/output signals can be +1 or -1
+                    </li>
+                    <li>The neuron calculates the weighted sum of inputs and compares it to a threshold
+                    </li>
+                    <li>If sum is greater than threshold, then the output is +1 else the output is -1
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Anatomy of a Neuron</h2>
+                <ul>
+                    <li>This simple neuron model consists of:
+                    </li>
+                    <ul>
+                        <li>A set of connections called synapses, which make the links to other neurons to create a
+                            network
+                        </li>
+                        <li>Each synapse has a weight which represents the strength of that connection
+                        </li>
+                        <li>One unity which multiplies each incoming activity by the weight on the connection and adds
+                            together all these weighted inputs to get a total input
+                        </li>
+                        <li>An activation function that transforms the total into an outgoing activity
+                        </li>
+                    </ul>
+                </ul>
+                <img src="img/lecture17_15.png" alt="" width="60%">
+            </section>
+
+
+            <section>
+                <h2>Artificial Neural Networks (ANN) -2</h2>
+                <ul>
+                    <img src="img/lecture17_16.png" alt="">
+                    <li>ANN is a generalization of the simple neuron model with more inputs and a more complicated
+                        activation function
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Artificial Neural Networks (ANN) -3</h2>
+                <ul>
+                    <li>The weights in a neural network are the most important factor in determining its function
+                    </li>
+                    <li>Training is the act of presenting the network with some sample data and modifying the weights to
+                        better approximate the desired function
+                    </li>
+                    <li>We feed the NN with inputs and their corresponding desired output
+                    </li>
+                    <li>The learning algorithm modifies the weights to adapt the obtained output according to the
+                        desired output
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Activation Functions</h2>
+                <ul>
+                    <li>The activation function is a decision function, applied to the weighted sum of the inputs of a
+                        neuron to produce the output</li>
+                    <li>Activation functions:
+                    </li>
+                    <ul>
+                        <li>Threshold function
+                        </li>
+                        <li>Piecewise-linear function
+                        </li>
+                        <li>Sigmoid/Logistic: $\frac{1}{(1+e^{-x})}$</li>
+                        <li>Tanh: $\frac{e^x-e^{-x}}{e^x+e^{-x}}$</li>
+                        <li>Relu: $\max(0,x)$</li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>ANN Architecture: Single Layer Perceptron</h2>
+                <ul>
+                    <li>The network is formed by an assembly of many neurons
+                    </li>
+                    <li><strong>Single-layer perceptron
+                        </strong></li>
+                    <ul>
+                        <li>Input neurons typically have two states: ON and OFF
+                        </li>
+                        <li>Output neurons use a simple threshold activation function
+                        </li>
+                        <li>Used to solve linear problems
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>ANN Architecture: Single Layer Perceptron Example</h2>
+                <ul>
+                    <img src="img/lecture17_17.png" alt="">
+                    <li>If the output is not correct, the weights are adjusted according to the formula:
+                    </li>
+                    $w_{new}=w_{old}+\alpha (desired-output)*input$
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>ANN Architecture: Multiple Layer Perceptron</h2>
+                <ul>
+                    <li>MLP is a generalization of single perceptron with multiple layers. Used for non-linear separable
+                        functions
+                    </li>
+                    <img src="img/lecture17_18.png" alt="">
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>ANN Architecture: Feed Forward</h2>
+                <ul>
+                    <li>Multiple feed-forward networks is the most common MLP types where activation function is usually
+                        a sigmoid function
+                    </li>
+                    <ul>
+                        <li>Information flows in one direction
+                        </li>
+                        <li>The outputs of one layer act as inputs to the next layer (hence the name feed-forward)
+                        </li>
+                        <li>Represented with a directed acyclic graph, in which every neuron of the $i^{th}$ layer is
+                            connected (only) to the neurons of the $(i+1)^{th}$ layer
+                        </li>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Neural Net Training —1</h2>
+                <ul>
+                    <li>We feed the network with input and the desired output
+                    </li>
+                    <li>The connection weights are parameters to be estimated, so the learning algorithm modifies the
+                        weights iteratively
+                    </li>
+                    <ul>
+                        <li>The <strong>error back-propagation algorithm</strong> is the most commonly used algorithm in
+                            NN training, it consists of two phases:
+                        </li>
+                        <ul style="font-size: 90%;">
+                            <li>The forward phase where activations are propagated from input to output layer
+                            </li>
+                            <li>The backward phase, where the error between the observed and the requested value in the
+                                output layer is propagated backwards in order to modify the weights
+                            </li>
+                        </ul>
+                    </ul>
+                    <li>The <strong>gradient descent</strong> is the most known supervised learning algorithm to
+                        estimate weights/coefficients
+                    </li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Neural Net Training —2</h2>
+                <ul>
+                    <li>Training with back propagation is usually implemented by repeating the steps for all the
+                        examples in the training set
+                    </li>
+                    <ul>
+                        <li>The examples are resubmitted iteratively, until a stop condition is reached. (Simple stop
+                            conditions can be a threshold to the error on the training set, or to the number of
+                            iterations
+                        </li>
+                    </ul>
+                    <li>The number of hidden neurons (in hidden layers) is an important parameter when designing an MLP
+                    </li>
+                    <ul>
+                        <li>There is no general rule which tells us the best dimension for the hidden layer
+                        </li>
+                        <li>The ideal number of hidden neurons depends on the complexity of the function
+                        </li>
+                        <ul style="font-size: 90%;">
+                            <li>A small number of hidden neurons are good for simple problems while more neurons are
+                                better for complex problems
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </section>
+
+
+            <section>
+                <iframe
+                    src="https://embed.polleverywhere.com/multiple_choice_polls/4EpbzlLOwKuIPXItdwPg2?controls=none&short_poll=true"
+                    width="1028px" height="768px"></iframe>
+            </section>
+
+
+            <section>
+                <h1>Examples</h1>
+            </section>
+
+
+            <section>
+                <h2>Neuron Model: Logistic Unit</h2>
+                <img src="img/lecture17_19.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Neural Network</h2>
+                <img src="img/lecture17_20.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Neural Network Learning It's Own Features</h2>
+                <img src="img/lecture17_21.png" alt="">
+            </section>
+
+
+            <section>
+                <h2>Deep Network Architecture</h2>
+                <img src="img/lecture17_22.png" alt="">
+                <p>Potentially with many internal layers</p>
+            </section>
+        </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/search/search.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="reveal.js/plugin/math/math.js"></script>
+
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1024,
+            height: 768,
+
+            slideNumber: 'c/t',
+
+            pdfSeparateFragments: false,
+
+            math: {
+                // mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                TeX: {
+                    Macros: {
+                        R: '\\mathbb{R}',
+                        set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+                    }
+                }
+            },
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealMath, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
