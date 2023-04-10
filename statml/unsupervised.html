@@ -204,12 +204,13 @@
                     <li>The idea behind K-means clustering is that a good clustering is one for which the within-cluster
                         variation is as small as possible
                     </li>
-                    <li>The within-cluster variation for cluster Ck is a measure WCV(Ck) of the amount by which the
+                    <li>The within-cluster variation for cluster $C_k$ is a measure $WCV(C_k)$ of the amount by which
+                        the
                         observations within a cluster differ from each other
                     </li>
                     <ul>
                         <li>Hence, we want to solve the problem: </li>
-                        $$ \min_{C_1,...,C_k} {\sum_{k-1}^{K}{WCV(C_K)}}$$
+                        $$ \min_{C_1,...,C_k} {\sum_{k=1}^{K}{WCV(C_k)}}$$
                         <li>This formula says that we want to partition the observations into K clusters such that the
                             total within-cluster variation, summed over all K clusters, is as small as possible
                         </li>
@@ -222,7 +223,7 @@
                 <ul>
                     <li>Typically, we use Euclidean distance</li>
                     $$WCV(C_K)=\frac{1}{|C_k|}\sum_{i,i' \in C_K}\sum_{j=1}^{p}(x_{ij}-x_{i'j})^2$$
-                    where |Ck| denotes the number of observations in the kth cluster
+                    where $|C_k|$ denotes the number of observations in the kth cluster
 
                     <li>Hence, the optimization problem that defines K-means clustering,
                     </li> $$ \min_{C_1,...,C_k} ({\frac{1}{|C_k|}\sum_{i,i' \in C_K}\sum_{j=1}^{p}(x_{ij}-x_{i'j})^2})$$
