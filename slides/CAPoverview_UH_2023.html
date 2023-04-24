@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Fundamentals of Data Analytics and Predictions</title>
+    <title>CAP Regression</title>
 
     <meta name="author" content="Xi (Rossi) LUO">
 
@@ -58,14 +58,16 @@
         <!-- Outline:  -->
         <div class="slides">
             <section>
-                <h2><strong>Covariance/Network Outcome Modeling via <highlight>C</highlight>ovariate <highlight>A</highlight>ssisted
+                <h2><strong>Covariance/Network Outcome Modeling via <highlight>C</highlight>ovariate <highlight>A
+                        </highlight>ssisted
                         <highlight>P</highlight>rincipal (CAP) Regression
                     </strong></h2>
                 <br>
                 <h3>Xi (Rossi) <strong>LUO</strong></h3>
                 <br>
                 <div width="100%">
-                    <p class="inlinemiddle" style="display: inline-block; text-align: right; width:43%; vertical-align: middle;">
+                    <p class="inlinemiddle"
+                        style="display: inline-block; text-align: right; width:43%; vertical-align: middle;">
                         <medium><strong>The University of Texas</strong>
                             <br>Health Science Center
                             <br>School of Public Health
@@ -79,7 +81,7 @@
                 </div>
                 <br>
                 <p>
-                    <medium><strong>Univ of Houston, </strong>
+                    <medium><strong>Univ of Houston, Dept of Mathematics</strong>
                         <br>April 24, 2023
                     </medium>
                 </p>
@@ -92,14 +94,16 @@
             <section>
                 <h2>Major Collaborators</h2>
                 <div style="display:block;">
-                    <div class="fbox"> <img src="./Media/Personnel/YiZhao17.jpg" style="border-radius: 50%" alt="Yi Zhao" width="150" height="150">
+                    <div class="fbox"> <img src="./Media/Personnel/YiZhao17.jpg" style="border-radius: 50%"
+                            alt="Yi Zhao" width="150" height="150">
                         <p class="fbox">Yi Zhao
                             <br>
                             <small>Indiana Univ</small>
                         </p>
                     </div>
                     <span style="display:inline-block; width: 50px;"></span>
-                    <div class="fbox"> <img src="./Media/Personnel/BingkaiWang.jpg" style="border-radius: 50%" alt="Bingkai Wang" width="150" height="150">
+                    <div class="fbox"> <img src="./Media/Personnel/BingkaiWang.jpg" style="border-radius: 50%"
+                            alt="Bingkai Wang" width="150" height="150">
                         <p class="fbox">Bingkai Wang
                             <br>
                             <small>UMich Biostat</small>
@@ -109,7 +113,8 @@
                 <p></p>
                 <p></p>
                 <div style="display:block;">
-                    <div class="fbox"> <img src="./Media/Personnel/rayli.jpg" style="border-radius: 50%" alt="Stewart Mostofsky" width="150" height="150">
+                    <div class="fbox"> <img src="./Media/Personnel/rayli.jpg" style="border-radius: 50%"
+                            alt="Stewart Mostofsky" width="150" height="150">
                         <p class="fbox">
                             <medium>Chiang-shan Ray Li</medium>
                             <br>
@@ -117,8 +122,8 @@
                         </p>
                     </div>
                     <span style="display:inline-block; width: 50px;"></span>
-                    <div class="fbox"> <img src="./Media/Personnel/stewartmostofsky.jpg" style="border-radius: 50%" alt="Stewart Mostofsky" width="150"
-                            height="150">
+                    <div class="fbox"> <img src="./Media/Personnel/stewartmostofsky.jpg" style="border-radius: 50%"
+                            alt="Stewart Mostofsky" width="150" height="150">
                         <p class="fbox">
                             <medium>Stewart Mostofsky</medium>
                             <br>
@@ -126,7 +131,8 @@
                         </p>
                     </div>
                     <span style="display:inline-block; width: 50px;"></span>
-                    <div class="fbox"> <img src="./Media/Personnel/briancaffo.jpg" style="border-radius: 50%" alt="Brian Caffo" width="150" height="150">
+                    <div class="fbox"> <img src="./Media/Personnel/briancaffo.jpg" style="border-radius: 50%"
+                            alt="Brian Caffo" width="150" height="150">
                         <p class="fbox">Brian Caffo
                             <br>
                             <small>Johns Hopkins Biostat</small>
@@ -138,7 +144,7 @@
 
             <section>
                 <h1>Slides viewable on web: <br>
-                    <emph>bit.ly</emph>/<highlight>connreg21</highlight>
+                    <emph>bit.ly</emph>/<highlight>capuh23</highlight>
                 </h1>
             </section>
 
@@ -157,9 +163,9 @@
                     { sets: ['Model'], "label": "Model", "size": 100 },
                     { sets: ['Application'], "label": "Application", "size": 100 },
                     { sets: ['Science'], "label": "Science", "size": 100 },
-                    { sets: ['This Talk', 'Theory'], "size": 5 },
+                    { sets: ['This Talk', 'Theory'], "size": 10 },
                     { sets: ['This Talk', 'Method'], "size": 20 },
-                    { sets: ['This Talk', 'Model'], "size": 50 },
+                    { sets: ['This Talk', 'Model'], "size": 45 },
                     { sets: ['This Talk', 'Application'], "size": 20 },
                     { sets: ['This Talk', 'Science'], "size": 5 }];
 
@@ -204,6 +210,26 @@
                 </style>
             </section>
 
+            <section data-background-iframe="Media/fMRI/ThreeJSBrainMaskColor.html">
+                <img src="Media/Brain/brainICBMcut.png" alt="" class="noborder topright" width="20%">
+                <!--                <h2>fMRI Data</h2>-->
+                <!--                <iframe id="brainCube" src="Media/fMRI/ThreeJSBrainMaskColor.html" frameborder="0" width="800" height="600" name="brainCube"></iframe>-->
+                <p style="margin-bottom: 650px;"></p>
+                <p><strong>fMRI data</strong>: blood-oxygen-level dependent (BOLD) signals from each
+                    <highlight>cube</highlight>. Each subject: observe matrix regions $\times$ time
+                </p>
+                <aside class="notes">
+                    <ul>
+                        <li>visualization is big challenge, too</li>
+                        <li>Lego brain of real brain</li>
+                        <li>red cube is a voxel</li>
+                        <li>track activity from each cube at each time vector</li>
+                        <li>dimension: address temporal separately</li>
+                    </ul>
+                </aside>
+            </section>
+
+
             <section>
                 <h2>Brain Networks</h2>
                 <ul>
@@ -219,6 +245,7 @@
                     </li>
                     <li>Also on quantifying network info flow <cite>Zhao, L, 2019, Zhao L, 2021</cite></li>
                     <li>On utilization of networks for clustering <cite>Bunea et al, 2020</cite></li>
+                    <li>Tree-like networks and regression <cite>Wang et al, 2022; Zhao et al, In Press</cite></li>
                     <!--                    <li>Excellent work by others on prediction or explaining phenotypes using networks <cite>   Chen, Jiang, Kong, Li, Ogden...</cite> </li>-->
                     <li>This talk: explaining network differences</li>
                 </ul>
@@ -241,25 +268,52 @@
                 </style>
             </section>
 
-
             <section>
+                <h2>Our Idea</h2>
                 $$\textrm{function}(\textbf{graph}) = \textbf{age}\times \beta_1 + \textbf{sex}\times \beta_2 + \cdots
                 $$
             </section>
 
-
-
-
-
+            <section>
+                <h2>Other Related Applications</h2>
+                <ul>
+                    <li>Differences in genetic networks
+                        <ul>
+                            <li>Networks by disease/age/sex groups</li>
+                            <li>Single cell sequencing</li>
+                        </ul>
+                    </li>
+                    <li>Covariance modeling
+                        <ul>
+                            <li>Temporal changes in covariance matrices</li>
+                            <li>Spatial-temporal</li>
+                        </ul>
+                    </li>
+                    <li>Theme: <highlight>signals</highlight> in the <emph>second</emph> moment, low/no
+                        signals in
+                        the first moment</li>
+                </ul>
+            </section>
 
             <section>
                 <h2>Mathematical Problem</h2>
                 <ul>
-                    <li>Given $n$ (semi-)positive matrix outcomes, $\Sigma_i\in \real^{p\times p}$</li>
+                    <li>Given $n$ (semi-)positive matrices, $\Sigma_i\in \real^{p\times p}$</li>
                     <li>Given $n$ corresponding vector covariates, $x_i \in \real^{q}$</li>
                     <li>Find function $g(\Sigma_i) = x_i \beta$, $i=1,\dotsc, n$</li>
                     <li>In essense, <emph>regress positive matrices on vectors</emph>
                     </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Other Extensions</h2>
+                <br>
+                <ul>
+                    <li>Linear model formulation, and thus very flexible</li>
+                    <li>Easily extended to big data with 1 million brain regions, Brain and Behavior</li>
+                    <li>High dim cov (later), Electronic J of Stat</li>
+                    <li>Many other extensions under review or preparation: longitudinal, mixed effects, ...</li>
                 </ul>
             </section>
 
@@ -280,10 +334,13 @@
                             <li>Goal: better models for $\Sigma_i$</li>
                         </ul>
                     </li>
-                    <li>Multi-group PCA <cite>Flury, 84, 88; Boik 02; Hoff 09; Franks, Hoff, 16</cite>
+                    <li>Multi-group PCA, (inverse) covariance estimation/testing <cite>Flury,
+                            84, 88; Boik 02; Hoff 09;
+                            Franks,
+                            Hoff, 16, Guo et al, 11; Tsai et al, 22; Cai et al, 13</cite>
                         <ul>
                             <li>No regression model, cannot handle vector $x_i$</li>
-                            <li>Goal: find common/uncommon parts of multiple $\Sigma_i$</li>
+                            <li>Goal: find common/uncommon parts of multiple (inv) $\Sigma_i$</li>
                         </ul>
                     </li>
                     <li>Tensor-on-scalar regression <cite>Li, Zhang, 17; Sun, Li, 17</cite>
@@ -294,15 +351,23 @@
                 </ul>
             </section>
 
+            <section>
+                <h1>CAP for Low-dimensional Cov Outcomes</h1>
+            </section>
 
             <section>
-                <h2>Massive Edgewise Regressions</h2>
+                <h2>Naive: Massive Edgewise Regressions</h2>
                 <ul>
                     <li>Intuitive method by mostly neuroscientists</li>
                     <li>Try $g_{j,k}(\Sigma_i) = \Sigma_{i}[j,k] = x_i \beta$</li>
                     <li>Repeat for all $(j,k) \in \{1,\dotsc, p\}^2$ pairs</li>
                     <li>Essentially $O(p^2)$ regressions for each connection</li>
-                    <li>Limitations: multiple testing $O(p^2)$, failure to accout for dependencies between regressions
+                    <li>Limitations:
+                        <ul>
+                            <li>multiple testing $O(p^2)$</li>
+                            <li>failure to accout for dependencies between regressions</li>
+                            <li>Low signal to noise ratio elementwise, spectral modeling may be more robust</li>
+                        </ul>
                     </li>
                 </ul>
             </section>
@@ -311,10 +376,9 @@
                 <h2>Our CAP in a Nutshell</h2>
                 <br>
                 <h2>
-                    <strong>$\mbox{PCA}(\Sigma_i) = x_i \beta$</strong>
+                    <strong>$\mbox{Modified PCA}(\Sigma_i) = x_i \beta$</strong>
                 </h2>
                 <ul>
-
                     <li>Essentially, we aim to turn unsupervised PCA to a supervised PCA</li>
                     <li>Ours differs from existing PCA methods:
                         <ul>
@@ -322,18 +386,6 @@
                             </li>
                         </ul>
                     </li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Other Extensions</h2>
-                <br>
-                <ul>
-                    <li>Our regression framework for covariance matrix outcomes is flexbile</li>
-                    <li>The framework paper published in Biostatistics 2020</li>
-                    <li>Easily extended to voxel-level covariance matrices Brain and Behavior</li>
-                    <li>High dim cov, Electronic J of Stat</li>
-                    <li>Many other extensions under review or preparation: high dimensional, mixed effects, ...</li>
                 </ul>
             </section>
 
@@ -350,9 +402,11 @@
                         $$ \log({\gamma}^\top\Sigma_{i}{\gamma})=\beta_{0}+x_{i}^\top{\beta}_{1}, \quad i =1,\dotsc, n$$
                     </li>
                 </ul>
-                <img src="Media/CAP/cap2dcontour.png" style="width: 40%" alt="">
-                <p>Example (p=2): PD1 largest variation but not related to $x$</p>
-                <p>PCA selects PD1, Ours selects <highlight>PD2</highlight>
+                <img src="Media/CAP/cap2dcontour.png" style="width: 35%" alt="">
+                <p>Example (p=2): PD1 largest variation in $\Sigma_i$ but not related to $x$</p>
+                <p>
+                    <emph>PCA</emph> selects <emph>PD1</emph>, <highlight>Ours</highlight> selects <highlight>PD2
+                    </highlight>
                 </p>
             </section>
 
@@ -373,13 +427,12 @@
                             </li>
                         </ul>
                     </li>
-                    <li>Applicability: other big data problems besides fMRI</li>
+                    <li>Potential applications in other big data problems besides fMRI</li>
                 </ul>
             </section>
 
             <section>
                 <h2>Method</h2>
-
                 <ul>
                     <li>MLE with constraints:
                         $$\scriptsize \begin{eqnarray}\label{eq:obj_func}
@@ -391,12 +444,14 @@
                         \text{such that} && \boldsymbol{\gamma}^\top H \boldsymbol{\gamma}=1
                         \end{eqnarray}$$
                     </li>
+                    <li>No meaningful solutions without constraints</li>
                     <li>Two obvious constriants:
                         <ul>
                             <li>C1: $H = I$</li>
                             <li>C2: $H = n^{-1} (\Sigma_1 + \cdots + \Sigma_n) $</li>
                         </ul>
                     </li>
+                    <li>The most natural C1 usually does <emph>not</emph> work!</li>
                 </ul>
             </section>
 
@@ -409,14 +464,17 @@
                     $$ \sum_{i=1}^{n}\frac{\Sigma_{i}}{\exp(x_{i}^\top\boldsymbol{\beta})} $$
                 </div>
                 <br>
-                <p>Will focus on the constraint (C2)</p>
+                <ul>
+                    <li>C1 leads to <emph>small</emph> eigen values (potential noises)</li>
+                    <li>Will focus on the constraint (C2)</li>
+                </ul>
             </section>
 
             <section>
                 <h2>Algoirthm</h2>
                 <ul>
                     <li>Iteratively update $\beta$ and then $\gamma$ </li>
-                    <li>Prove explicit updates</li>
+                    <li>Prove explicit updates (see our papers)</li>
                     <li>Extension to multiple $\gamma$:
                         <ul>
                             <li>After finding $\gamma^{(1)}$, we will update $\Sigma_i$ by removing its effect</li>
@@ -426,7 +484,6 @@
                         </ul>
                 </ul>
             </section>
-
 
             <section>
                 <h2>Theory for $\beta$</h2>
@@ -452,7 +509,9 @@
                     $\forall~i\in\{1,\dots,n\}$,
                     $\boldsymbol{\gamma}_{k}^\top\Sigma_{i}\boldsymbol{\gamma}_{k}=\exp(x_{i}^\top\boldsymbol{\beta})$.
                     Let $\hat{\boldsymbol{\gamma}}$ be the maximum likelihood estimator of $\boldsymbol{\gamma}_{k}$ in
-                    Flury, 84. Then assuming that the assumptions are satisfied, $\hat{ \boldsymbol{\beta}}$ from our
+                    Flury, 84. Then assuming that the assumptions are satisfied, <br><br> $\hat{ \boldsymbol{\beta}}$
+                    from
+                    our
                     algorithm is $\sqrt{M_{n}}$-consistent estimator of $\boldsymbol{\beta}$.
                 </div>
             </section>
@@ -466,7 +525,9 @@
             <section>
                 <img src="Media/CAP/simuCompareTable.png" alt="">
                 <br>
-                <p>PCA and common PCA do not find the first principal direction, because they don't model covariates</p>
+                <p>PCA and common PCA do <emph>not</emph> find the first principal direction, because they don't
+                    consider covariates
+                </p>
             </section>
 
 
@@ -491,7 +552,15 @@
                 </div>
                 <br>
                 <br>
-                <p>No statistical significant changes were found by massive edgewise regression</p>
+                <ul>
+                    <li>
+                        <highlight>Ours above</highlight>: <emph>significant</emph> network differences due to age, sex
+                        and their
+                        interactions
+                    </li>
+                    <li>Naive massive edgewise regression: <emph>no</emph> statistical significant changes in cov
+                        entries</li>
+                </ul>
             </section>
 
 
@@ -504,14 +573,15 @@
             <section>
                 <h2>High-Dim Cov Extensions</h2>
                 <ul>
-                    <li> Voxel level connectivity matrices <cite>Zhao et al, 2020</cite>
+                    <li>Voxel level (super-high dim) cov matrices <cite>Zhao et al, 2020</cite>
                         <ul>
+                            <li>Raw cov: $10^6 \times 10^6$=Trillions of cov elements</li>
                             <li>Decompose data/networks via ICA/PCA</li>
                             <li>Explain netowrk diff on reduced dim</li>
                             <li>Reconstruct brain network maps at the voxel level</li>
                         </ul>
                     </li>
-                    <li> Intermediate scale <cite>Zhao et al, 2021</cite>
+                    <li>High dimensional cov <cite>Zhao et al, 2021</cite>
                         <ul>
                             <li>Joint shrinkage <cite>Ledoit, Wolf, 2004</cite> of multiple cov</li>
                             <li>Optimum in theory by our joint shrinkage</li>
@@ -523,23 +593,126 @@
             </section>
 
             <section>
-                <h2>Covariate Assisted Shrinkage</h2>
+                <h1>CAP for High-dimensional Cov Outcomes</h1>
+            </section>
+
+
+            <section>
+                <h2>Challenges in High-dim</h2>
                 <ul>
-                    <li>Consider L-W cov shrinkage <cite>Ledoit, Wolf, 2014</cite>:
-                        $$
-                        \hat{\Sigma}_i = \rho \mu I + (1- \rho) S_i
-                        $$
+                    <li>Sample covariance not full rank in high-dim: when sample size $T_i$ &#8810; variable size $p$
                     </li>
-                    <li>The weights are computed from the following:
-                        $$
-                        \min \sum_{i=1}^n E [\gamma^T \hat{\Sigma}_i \gamma - \exp(x_i^T \beta) ]^2
-                        $$
-                    </li>
-                    <li>The shrinkage weights $\rho$ and $\mu$ depends on $\gamma$ and $\beta$</li>
-                    <li>Classical cov shrinkage does not account for $x_i$</li>
-                    <li>Flip-flop algorithm to optimize all parameters above</li>
-                    <li>Asymptotic theory works out</li>
+                    <li>$p$ fixed in the previous theory</li>
+                    <li>Sample cov is a poor estimator in high dim</li>
+                    <li>Eigenvalues even more dispersed</li>
+                    <li>Regularization <cite>Ledoit, Wolf 04</cite> less optimal</li>
                 </ul>
+            </section>
+
+            <section>
+                <h2>L-W Cov Shrinkage</h2>
+                <ul>
+                    <li>By Ledoit and Wolf (2004), over 2800 citations so far</li>
+                    <li>Given sample cov $S$, find estimator $\Sigma^*$ by
+                        $$
+                        \begin{eqnarray}
+                        \underset{\mu,\rho}{\text{minimize}} &&
+                        \mathbb{E}\left\| \Sigma^{*}- S \right\|^{2}
+                        \nonumber \\
+                        \text{such that} && \Sigma^{*}=\rho\mu\boldsymbol{\mathrm{I}}+(1-\rho)S
+                        \end{eqnarray}
+                        $$
+                    </li>
+                    <li>$\rho$ and $\mu$ can be estimated consistently, and thus $\Sigma^*$ consistently</li>
+                    <li>Limitations: <emph>not</emph> handling multiple covariance matrices jointly, <emph>not</emph>
+                        using the
+                        covariate info
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Our Contributions</h2>
+                <ul>
+                    <li>New <emph>joint</emph> shrinkage estimator for <emph>multiple</emph> covariances</li>
+                    <li>Incorporate covariate info in regression</li>
+                    <li>
+                        <emph>Minimum</emph> quadratic risk asymptotically among all linear combinations, while L-W is
+                        suboptimal
+                    </li>
+                    <li>Also provide consistent estimator for CAP</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Covariate Dependent CAP Shrinkage</h2>
+                <ul>
+                    <li>Propose CAP shrinkage by
+                        $$
+                        \begin{eqnarray}
+                        \underset{\mu,\rho}{\text{minimize}} &&
+                        \frac{1}{n}\sum_{i=1}^{n}\mathbb{E}\left\{\gamma^\top\Sigma_{i}^{*}\gamma-\exp(
+                        x_{i}^\top\beta)\right\}^{2}
+                        \nonumber \\
+                        \text{such that} && \Sigma_{i}^{*}=\rho\mu\boldsymbol{\mathrm{I}}+(1-\rho)S_{i}, \quad
+                        \text{for } i=1,\dots,n.
+                        \end{eqnarray}
+                        $$
+                    </li>
+                    <li>Prove a theorem for solving the optimization and an estimator for $\Sigma_i^*$
+                        $$
+                        S_i^* = \hat{f}(\gamma, x_i, \beta) \boldsymbol{\mathrm{I}} + \hat{g}(\gamma, x_i, \beta)
+                        S_i
+                        $$
+                        where $S_i^* $ is a consistent estimator, $\hat{f}$ and $\hat{g}$ are computed by explicit
+                        formulas from data
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>CS-CAP Algorithm</h2>
+                <img src="Media/CAP/high_dim_cap_algo.png" alt="" width="90%">
+                <p>
+                    Iteratively update $S^*$, $\gamma$, $\beta$ until cconvergence
+                </p>
+            </section>
+
+
+            <section>
+                <div class="thm"><strong>Theorem:</strong>
+                    Assume $(\gamma, \beta)$ is given. With a fixed $n\in\mathbb{N}^{+}$, for <emph>any sequence</emph>
+                    of linear
+                    combinations $\{\hat{\Sigma}_{i}\}_{i=1}^{n}$ of the identity matrix and the sample covariance
+                    matrix, where the combination coefficients are constant over $i\in\{1,\dots,n\}$, the estimator
+                    $ S_{i}^{*}$ verifies:
+                    $$ \tiny
+                    \begin{equation}
+                    \lim_{T\rightarrow\infty}\inf_{T_{i}\geq
+                    T}\left[\frac{1}{n}\sum_{i=1}^{n}\mathbb{E}\left\{\gamma^\top\hat{\Sigma}_{i}\gamma-\exp(\bx_{i}^\top
+                    \beta)\right\}^{2}-\frac{1}{n}\sum_{i=1}^{n}\mathbb{E}\left\{\gamma^\top
+                    S_{i}^{*}\gamma-\exp(\bx_{i}^\top \beta)\right\}^{2}\right]\geq
+                    0.
+                    \end{equation}
+                    $$
+                    In addition, every sequence of $\{\hat{\Sigma}_{i}\}_{i=1}^{n}$ that performs as well as
+                    $\{ S_{i}^{*}\}_{i=1}^{n}$ is <emph>identical</emph> to $\{ S_{i}^{*}\}_{i=1}^{n}$ in the limit:
+                    $$
+                    \tiny
+                    \begin{equation}
+                    \lim_{T\rightarrow\infty}\left[\frac{1}{n}\sum_{i=1}^{n}\mathbb{E}\left\{\gamma^\top\hat{\Sigma}_{i}\gamma-\exp(\bx_{i}^\top
+                    \beta)\right\}^{2}-\frac{1}{n}\sum_{i=1}^{n}\mathbb{E}\left\{\gamma^\top
+                    S_{i}^{*}\gamma-\exp(\bx_{i}^\top \beta)\right\}^{2}\right]=0
+                    \end{equation}
+                    $$
+                    $$ \scriptsize
+                    \begin{equation}
+                    \Leftrightarrow \quad \mathbb{E}\|\hat{\Sigma}_{i}- S_{i}^{*}\|^{2} \rightarrow 0, \quad \text{for
+                    } i=1,\dots,n.
+                    \end{equation}
+                    $$
+                </div>
+                <p>Our Covariate-dependent Shrinkage CAP (CS-CAP) is optimal</p>
             </section>
 
             <section>
@@ -548,11 +721,33 @@
             </section>
 
             <section>
-                <h2>ADNI: APOE Areas by New CS-CAP</h2>
-                <img src="Media/CAP/apoe_cap.png" alt="" width="80%">
+                <h2>Analysis of ADNI Data</h2>
+                <ul>
+                    <li>The Alzheimer’s Disease Neuroimaging Initiative (ADNI): launched in 2003, for studying ADRD</li>
+                    <li>Alzheimer's Disease Related Dementias (ADRD) affects more than 6 million US people, and 55
+                        million worldwide</li>
+                    <li>No known* treatment to stop or prevent ADRD</li>
+                    <li>fMRI and brain connectivity likely to be interrupted prior to dementia</li>
+                    <li>APOE-$\varepsilon$4 gene, strong risk factor and potential treatment target</li>
+                </ul>
             </section>
 
+            <section>
+                <h2>Covariate Implicated Components</h2>
+                <img src="Media/CAP/high_dim_cap_adni_table.png" alt="" width="80%">
+                <br>
+                <ul>
+                    <li>First two components related to age and sex</li>
+                    <li>Last C3 predicted by age and APOE-$\varepsilon$4 gene</li>
+                </ul>
+            </section>
 
+            <section>
+                <h2>C3: APOE Areas Found by CS-CAP</h2>
+                <img src="Media/CAP/high_dim_cap_adni_plot.png" alt="" width="80%">
+                <br>
+                <p>Groups of regions with more or less connections predicted by APOE-$\varepsilon$4 (non)-carriers</p>
+            </section>
 
             <section data-state="flaticon2">
                 <h2>Discussion</h2>
@@ -560,10 +755,12 @@
                     <li>Regress <emph>PD</emph> matrices on vectors</li>
                     <li>Method to identify covariate-related (supervised) directions vs (unsupervised) PCA</li>
                     <li>Theorectical justifications</li>
-                    <li>Papers: Biostatistics (<a href="https://doi.org/10.1093/biostatistics/kxz057">10.1093/biostatistics/kxz057</a>), EJS
+                    <li>Papers: Biostatistics (<a
+                            href="https://doi.org/10.1093/biostatistics/kxz057">10.1093/biostatistics/kxz057</a>), EJS
                         (<a href="https://doi.org/10.1214/21-EJS1887">10.1214/21-EJS1887</a>), Brain Behv (<a
                             href="https://doi.org/10.1002/brb3.1942">10.1002/brb3.1942</a>)</li>
-                    <li>R pkg: <highlight>cap</highlight> <img src="Media/Flaticon/baseball-cap.png" style="width: 5%" alt=""></li>
+                    <li>R pkg: <highlight>cap</highlight> <img src="Media/Flaticon/baseball-cap.png" style="width: 5%"
+                            alt=""></li>
                 </ul>
                 <style>
                     .flaticon2 credit:after {
@@ -591,12 +788,16 @@
                 <h2>
                     OR:
 -->
-                <span style="color: #0072bd;  font-weight: bold;">Big</span><span style="color: crimson;  font-weight: bold;">Complex</span><span
-                    style="color: #7e2f8e;  font-weight: bold;">Data</span><span style="color: grey;  font-weight: bold;">.com</span>
+                <span style="color: #0072bd;  font-weight: bold;">Big</span><span
+                    style="color: crimson;  font-weight: bold;">Complex</span><span
+                    style="color: #7e2f8e;  font-weight: bold;">Data</span><span
+                    style="color: grey;  font-weight: bold;">.com</span>
                 <br>
                 <br> or
-                <span style="color: #0072bd;  font-weight: bold;">Brain</span><span style="color: crimson;  font-weight: bold;">Data</span><span
-                    style="color: #7e2f8e;  font-weight: bold;">Science</span><span style="color: grey;  font-weight: bold;">.com</span>
+                <span style="color: #0072bd;  font-weight: bold;">Brain</span><span
+                    style="color: crimson;  font-weight: bold;">Data</span><span
+                    style="color: #7e2f8e;  font-weight: bold;">Science</span><span
+                    style="color: grey;  font-weight: bold;">.com</span>
 
 
 
@@ -654,6 +855,7 @@
                         R: '\\mathbb{R}',
                         RR: "\\mathbf{R}",
                         real: "\\mathbb{R}",
+                        bx: "x",
                         set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
                     }
                 },
