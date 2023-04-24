@@ -1,0 +1,9 @@
+---
+layout: talks
+title: UH 2023
+author: Xi Luo
+previewimage: CAPoverview_UH_2023.html#/15
+externallink: CAPoverview_UH_2023.html
+
+---
+Covariance/Network Outcome Modeling via CAP
