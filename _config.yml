@@ -11,6 +11,7 @@ github_username:  rluo
 
 # Build settings
 markdown: kramdown
+future: true
 
 # These override Jekyll defaults
 permalink: date
