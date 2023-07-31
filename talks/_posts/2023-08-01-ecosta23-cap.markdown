@@ -1,0 +1,9 @@
+---
+layout: talks
+title: EcoSta 2023
+author: Xi Luo
+previewimage: CAPoverview_EcoSta_2023.html#/5
+externallink: CAPoverview_EcoSta_2023.html
+
+---
+Covariance Outcome Modelling via Covariate Assisted Principal (CAP) Regression
