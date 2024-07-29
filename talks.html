@@ -8,7 +8,7 @@ layout: default
   {% assign url_base = site.url %}
 {% endif %}
 
-{% assign remote_url_base = "rluo.github.io" %}
+{% assign remote_url_base = "https://talks.bigcomplexdata.com" %}
 
 
 <!-- Page Heading/Breadcrumbs -->
@@ -33,20 +33,20 @@ layout: default
         {% if post.previewimage %}
         
         <div>
-            <a href="http://{{remote_url_base}}/slides/{{ post.externallink }}" target="_blank">
+            <a href="http://{{remote_url_base}}/{{ post.externallink }}" target="_blank">
                   <img class="img-responsive img-hover"  src='/img/talkScreenshots/{{post.externallink}}.png'/>
             </a>
-        <!-- <iframe src="http://{{ remote_url_base }}/slides/{{ post.previewimage }}" frameborder="0" width="341" height="256"></iframe> -->
-    <!--<a href="http://{{remote_url_base}}/slides/{{ post.externallink }}" style="position:absolute; top:0; left:0; display:inline-block; width:341px; height:256px; z-index:5;" target="_blank">></a>-->
+        <!-- <iframe src="http://{{ remote_url_base }}/{{ post.previewimage }}" frameborder="0" width="341" height="256"></iframe> -->
+    <!--<a href="http://{{remote_url_base}}/{{ post.externallink }}" style="position:absolute; top:0; left:0; display:inline-block; width:341px; height:256px; z-index:5;" target="_blank">></a>-->
         </div>
         {% else %}
         <img class="img-responsive img-hover" src="http://placehold.it/512x384" alt="">
         {% endif %}
 
 
-                  <h4> <a href="http://{{remote_url_base}}/slides/{{ post.externallink }}" target="_blank"> {{ post.excerpt  | remove: '<p>' | remove: '</p>' }} </a> </h4>
+                  <h4> <a href="http://{{remote_url_base}}/{{ post.externallink }}" target="_blank"> {{ post.excerpt  | remove: '<p>' | remove: '</p>' }} </a> </h4>
         <p><i class="fa fa-clock-o"></i> On {{ post.date | date: "%B %-d, %Y" }}  at {{ post.title }} </p>
-                 <!--<a class="btn btn-primary" href="http://{{remote_url_base}}/slides/{{ post.externallink }}" target="_blank">View Slides <i class="fa fa-angle-right"></i></a>-->
+                 <!--<a class="btn btn-primary" href="http://{{remote_url_base}}/{{ post.externallink }}" target="_blank">View Slides <i class="fa fa-angle-right"></i></a>-->
     </div>
     {% endfor %}
 </div>
